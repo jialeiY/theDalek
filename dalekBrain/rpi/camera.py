@@ -19,11 +19,13 @@ class BaseCamera(object):
     thread=None
     frame=None
     last_access=0
+    condition=None
     
     def __init__(self):
         if BaseCamera.thread is None:
             BaseCamera.last_access=time.time()
 
+            BaseCamera.condition=threading.Condition()
             BaseCamera.thread=threading.Thread(target=self._thread)
             BaseCamera.thread.start()
 
@@ -32,6 +34,8 @@ class BaseCamera(object):
 
     def get_frame(self):
         BaseCamera.last_access=time.time()
+        with BaseCamera.condition:
+            BaseCamera.condition.wait()
         return BaseCamera.frame
 
     @staticmethod
@@ -43,7 +47,10 @@ class BaseCamera(object):
         print('Starting camera thread.')
         frames_iterator=cls.frames()
         for frame in frames_iterator:
-            BaseCamera.frame=frame
+            with BaseCamera.condition:
+
+                BaseCamera.frame=frame
+                BaseCamera.condition.notify_all()
 
             time.sleep(0)
 
