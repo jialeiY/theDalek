@@ -10,6 +10,8 @@ class CameraFactory(object):
             return PiCamera()
         elif name.lower()=="mockcamera":
             return MockCamera()
+        elif name.lower()=="opencvcamera":
+            return OpenCVCamera()
         else:
             raise Exception("no such camera")
 
@@ -17,11 +19,13 @@ class BaseCamera(object):
     thread=None
     frame=None
     last_access=0
+    condition=None
     
     def __init__(self):
         if BaseCamera.thread is None:
             BaseCamera.last_access=time.time()
 
+            BaseCamera.condition=threading.Condition()
             BaseCamera.thread=threading.Thread(target=self._thread)
             BaseCamera.thread.start()
 
@@ -30,6 +34,8 @@ class BaseCamera(object):
 
     def get_frame(self):
         BaseCamera.last_access=time.time()
+        with BaseCamera.condition:
+            BaseCamera.condition.wait()
         return BaseCamera.frame
 
     @staticmethod
@@ -41,7 +47,10 @@ class BaseCamera(object):
         print('Starting camera thread.')
         frames_iterator=cls.frames()
         for frame in frames_iterator:
-            BaseCamera.frame=frame
+            with BaseCamera.condition:
+
+                BaseCamera.frame=frame
+                BaseCamera.condition.notify_all()
 
             time.sleep(0)
 
@@ -58,10 +67,10 @@ class PiCamera(BaseCamera):
     def frames():
         import picamera
 
-        with picamera.PiCamera() as camera:
+        with picamera.PiCamera(resolution='320x240', framerate=24) as camera:
             time.sleep(2)
             stream=io.BytesIO()
-            for _  in camera.capture_continuous(stream,format="mjpeg",use_video_port=True):
+            for _  in camera.capture_continuous(stream,format="jpeg",use_video_port=True):
                 
                 stream.seek(0)
                 yield stream.read()
@@ -69,6 +78,25 @@ class PiCamera(BaseCamera):
                 # reset stream for next frame
                 stream.seek(0)
                 stream.truncate()
+
+
+class OpenCVCamera(BaseCamera):
+
+    @staticmethod
+    def frames():
+        import cv2
+        camera = cv2.VideoCapture(0)
+        camera.set(3,320) # set Width
+        camera.set(4,240) # set Height
+        if not camera.isOpened():
+            raise RuntimeError('Could not start camera.')
+
+        while True:
+            # read current frame
+            _, img = camera.read()
+
+            # encode as a jpeg image and return it
+            yield cv2.imencode('.jpg', img)[1].tobytes()
 
 
 class MockCamera(BaseCamera):
