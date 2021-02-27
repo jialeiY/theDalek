@@ -1,6 +1,11 @@
 //#include <json.hpp>
 #include <iostream>
 #include <fstream>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
 
 using namespace std;
 //using namespace nlohmann;
