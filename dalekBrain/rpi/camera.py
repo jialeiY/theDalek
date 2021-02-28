@@ -2,7 +2,7 @@ import io
 import time
 import threading
 import numpy as np
-import cv2
+from modules.face_recognition import recognize_face
 
 class CameraFactory(object):
 
@@ -86,7 +86,8 @@ class PiCamera(BaseCamera):
                 # reset stream for next frame
                 # stream.seek(0)
                 # stream.truncate()
-                yield output.tobytes()
+                recognized_output=recognize_face(output)
+                yield recognized_output.tobytes()
 
 
 class OpenCVCamera(BaseCamera):
@@ -103,9 +104,9 @@ class OpenCVCamera(BaseCamera):
         while True:
             # read current frame
             _, img = camera.read()
-
+            recognized_output=recognize_face(img)
             # encode as a jpeg image and return it
-            yield cv2.imencode('.jpg', img)[1].tobytes()
+            yield cv2.imencode('.jpg', recognized_output)[1].tobytes()
 
 
 class MockCamera(BaseCamera):
