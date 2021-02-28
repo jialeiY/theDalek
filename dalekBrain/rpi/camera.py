@@ -1,6 +1,8 @@
 import io
 import time
 import threading
+import numpy as np
+import cv2
 
 class CameraFactory(object):
 
@@ -84,7 +86,7 @@ class PiCamera(BaseCamera):
                 # reset stream for next frame
                 # stream.seek(0)
                 # stream.truncate()
-                yield cv2.imencode('.jpg', output)[1].tobytes()
+                yield output.tobytes()
 
 
 class OpenCVCamera(BaseCamera):
@@ -115,4 +117,3 @@ class MockCamera(BaseCamera):
         while True:
             time.sleep(1)
             yield MockCamera.imgs[int(time.time()) % 3]
-
