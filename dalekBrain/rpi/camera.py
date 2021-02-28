@@ -66,18 +66,25 @@ class PiCamera(BaseCamera):
     @staticmethod
     def frames():
         import picamera
+        WIDTH=320
+        HEIGHT=240
 
-        with picamera.PiCamera(resolution='320x240', framerate=24) as camera:
+        with picamera.PiCamera(framerate=10) as camera:
+            camera.resolution = (WIDTH, HEIGHT)
+
             time.sleep(2)
-            stream=io.BytesIO()
-            for _  in camera.capture_continuous(stream,format="jpeg",use_video_port=True):
+            # stream=io.BytesIO()
+
+            output = np.empty((HEIGHT, WIDTH, 3), dtype=np.uint8)
+            for _  in camera.capture_continuous(output,format="jpeg",use_video_port=True):
                 
-                stream.seek(0)
-                yield stream.read()
+                # stream.seek(0)
+                # yield stream.read()
 
                 # reset stream for next frame
-                stream.seek(0)
-                stream.truncate()
+                # stream.seek(0)
+                # stream.truncate()
+                yield cv2.imencode('.jpg', output)[1].tobytes()
 
 
 class OpenCVCamera(BaseCamera):
