@@ -1,6 +1,8 @@
 import io
 import time
 import threading
+import numpy as np
+from modules.face_recognition import recognize_face
 
 class CameraFactory(object):
 
@@ -66,18 +68,26 @@ class PiCamera(BaseCamera):
     @staticmethod
     def frames():
         import picamera
+        WIDTH=320
+        HEIGHT=240
 
-        with picamera.PiCamera(resolution='320x240', framerate=24) as camera:
+        with picamera.PiCamera(framerate=10) as camera:
+            camera.resolution = (WIDTH, HEIGHT)
+
             time.sleep(2)
-            stream=io.BytesIO()
-            for _  in camera.capture_continuous(stream,format="jpeg",use_video_port=True):
+            # stream=io.BytesIO()
+
+            output = np.empty((HEIGHT, WIDTH, 3), dtype=np.uint8)
+            for _  in camera.capture_continuous(output,format="jpeg",use_video_port=True):
                 
-                stream.seek(0)
-                yield stream.read()
+                # stream.seek(0)
+                # yield stream.read()
 
                 # reset stream for next frame
-                stream.seek(0)
-                stream.truncate()
+                # stream.seek(0)
+                # stream.truncate()
+                recognized_output=recognize_face(output)
+                yield recognized_output.tobytes()
 
 
 class OpenCVCamera(BaseCamera):
@@ -94,9 +104,9 @@ class OpenCVCamera(BaseCamera):
         while True:
             # read current frame
             _, img = camera.read()
-
+            recognized_output=recognize_face(img)
             # encode as a jpeg image and return it
-            yield cv2.imencode('.jpg', img)[1].tobytes()
+            yield cv2.imencode('.jpg', recognized_output)[1].tobytes()
 
 
 class MockCamera(BaseCamera):
@@ -108,4 +118,3 @@ class MockCamera(BaseCamera):
         while True:
             time.sleep(1)
             yield MockCamera.imgs[int(time.time()) % 3]
-
