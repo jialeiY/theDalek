@@ -2,8 +2,9 @@
 
 SOURCES += src/main.cpp
 SOURCES += src/sensor/ars4b.cpp
-SOURCES += src/driver/can.cpp
 SOURCES += src/driver/spi.cpp
+SOURCES += src/driver/mcp2515.cpp
+SOURCES += src/driver/can.cpp
 
 BUILD_DIR = build
 TARGET = foot
