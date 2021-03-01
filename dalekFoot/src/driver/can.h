@@ -7,7 +7,8 @@
 
 class Can {
 	public:
-		Spi spi;
+		Can();
+		virtual ~Can();
 };
 
 #endif

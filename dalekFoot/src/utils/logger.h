@@ -2,9 +2,7 @@
 #define __LOGGER_H__
 
 
-
-#include <stdio.h>
-#include "utils/utils.h"
+#include "logger_def.h"
 
 #define ANSI_COLOR_RED "\x1b[31m"
 #define ANSI_COLOR_GREEN "\x1b[32m"
@@ -20,8 +18,8 @@
 
 
 
-#define SET_LOGGER \
-	static Logger logger;
+
+static Logger logger;
 #define Ldebug(format, ...) \
 	logger.write(0, ANSI_COLOR_BLUE "D[%llu %s:%s():%d] " ANSI_COLOR_RESET format "\n",useconds(), __FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__)
 #define Linfo(format, ...) \
@@ -32,15 +30,7 @@
 	logger.write(3, ANSI_COLOR_RED "E[%llu %s:%s():%d] " ANSI_COLOR_RESET format "\n",useconds(), __FILE__, __FUNCTION__, __LINE__, ##__VA_ARGS__)
 
 
-class Logger {
-	public:
-		Logger();
-		void write(int level, const char *format, ...);
-		static void setLogLevel(int ll) {gLogLevel = ll;}
-	private:
-		char *mFilename;
-		static int gLogLevel;
-};
+
 
 #endif
 

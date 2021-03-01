@@ -1,6 +1,8 @@
 
 
 SOURCES += src/main.cpp
+SOURCES += src/utils/logger.cpp
+SOURCES += src/utils/utils.cpp
 SOURCES += src/sensor/ars4b.cpp
 SOURCES += src/driver/spi.cpp
 SOURCES += src/driver/mcp2515.cpp
@@ -23,7 +25,7 @@ CFLAGS = -g -O3
 CXXFLAGS = -std=c++11 $(CFLAGS) $(INCLUDES)
 
 
-$(BUILD_DIR)/%.o: %.cpp
+$(BUILD_DIR)/%.o: %.cpp %.h
 	mkdir -p $(dir $@)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
@@ -35,6 +37,10 @@ all: $(BUILD_DIR)/$(TARGET)
 
 .PHONY: all
 
-run:
+run: $(BUILD_DIR)/$(TARGET)
 	./build/foot
+.PHONY: run
 
+clean:
+	rm -rf $(BUILD_DIR)
+.PHONY: clean
