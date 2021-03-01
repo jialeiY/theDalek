@@ -10,3 +10,10 @@ __pycache__/
 # model & data
 model/
 data/
+
+
+# eagle backup files
+*.s#*
+*.b#*
+
+
