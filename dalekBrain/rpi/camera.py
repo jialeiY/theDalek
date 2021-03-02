@@ -86,7 +86,7 @@ class PiCamera(BaseCamera):
 
                 recognized_output=recognize_face(output)
                 recognized_output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
-                
+
                 yield cv2.imencode(".jpg",recognized_output)[1].tobytes()
 
 
@@ -110,7 +110,7 @@ class OpenCVCamera(BaseCamera):
 
 class MockCamera(BaseCamera):
 
-    imgs = [open(f + '.jpg', 'rb').read() for f in ['1', '2', '3']]
+    imgs = [open("static/"+f + '.jpg', 'rb').read() for f in ['1', '2', '3']]
 
     @staticmethod
     def frames():

@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js">
+        </script>
         <title>Welcome to entering the Dalek's brain!</title>
     </head>
         <body>
             <h1>PiCamera MJPEG Streaming Demo</h1>
             <img src="/index/stream.mjpg" width="320" height="240" />
+
+            <div>
+                <button id="cam_up">CAM UP</button>
+                <button id="cam_down">CAM DOWN</button>
+            </div>
+            <script src="{{ url_for('static', filename='control.js') }}"></script>
         </body>
 </html>
