@@ -2,6 +2,7 @@ import io
 import time
 import threading
 import numpy as np
+import cv2
 from modules.face_recognition import recognize_face
 
 class CameraFactory(object):
@@ -75,26 +76,24 @@ class PiCamera(BaseCamera):
             camera.resolution = (WIDTH, HEIGHT)
 
             time.sleep(2)
-            # stream=io.BytesIO()
 
             output = np.empty((HEIGHT, WIDTH, 3), dtype=np.uint8)
-            for _  in camera.capture_continuous(output,format="jpeg",use_video_port=True):
-                
-                # stream.seek(0)
-                # yield stream.read()
 
-                # reset stream for next frame
-                # stream.seek(0)
-                # stream.truncate()
+            process_this_frame = True
+
+            for _  in camera.capture_continuous(output,format="rgb",use_video_port=True):
+                
+
                 recognized_output=recognize_face(output)
-                yield recognized_output.tobytes()
+                recognized_output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
+                
+                yield cv2.imencode(".jpg",recognized_output)[1].tobytes()
 
 
 class OpenCVCamera(BaseCamera):
 
     @staticmethod
     def frames():
-        import cv2
         camera = cv2.VideoCapture(0)
         camera.set(3,320) # set Width
         camera.set(4,240) # set Height
