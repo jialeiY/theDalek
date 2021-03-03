@@ -3,8 +3,8 @@ import time
 import threading
 import numpy as np
 import cv2
-from modules.face_recognition import recognize_face
-
+from modules.face_recognition import recognize_face,FaceRecognizer
+from config import FACE_ENCODING_PATH
 class CameraFactory(object):
 
     @staticmethod
@@ -23,6 +23,7 @@ class BaseCamera(object):
     frame=None
     last_access=0
     condition=None
+    face_recognizer=FaceRecognizer(FACE_ENCODING_PATH)
     
     def __init__(self):
         if BaseCamera.thread is None:
@@ -84,7 +85,8 @@ class PiCamera(BaseCamera):
             for _  in camera.capture_continuous(output,format="rgb",use_video_port=True):
                 
 
-                recognized_output=recognize_face(output)
+                #recognized_output=recognize_face(output)
+                recognized_output=PiCamera.face_recognizer.recognize(output)
                 recognized_output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
 
                 yield cv2.imencode(".jpg",recognized_output)[1].tobytes()
