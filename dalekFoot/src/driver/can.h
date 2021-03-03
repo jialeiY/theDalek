@@ -28,7 +28,7 @@ class Can {
 			CAN_1000KBPS
 		};
 
-		virtual void sendMessage() = 0;
+		virtual void sendStandardMessage(uint32_t id, const uint8_t *data, uint8_t len) = 0;
 };
 
 #endif

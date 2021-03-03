@@ -12,7 +12,9 @@ int main(void) {
 	try {
 		Radar *ars = new Ars4b();
 
-		while (true) {
+		usleep(1000ULL*1000ULL);
+		ars->work();
+		while (false) {
 			usleep(1000ULL*1000ULL);
 			ars->work();
 		}

@@ -19,7 +19,8 @@ class Ars4b: public Radar {
 		virtual ~Ars4b();
 
 		virtual void work() {
-			mCan->sendMessage();
+			uint8_t data[8] {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08};
+			mCan->sendStandardMessage(0x5A, data, 8);
 		}
 
 	private:
