@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 
 #include <utils/logger.h>
@@ -9,8 +10,16 @@ using namespace std;
 
 int main(void) {
 	try {
-		Radar *ars4b = new Ars4b();
-		delete ars4b;
+		Radar *ars = new Ars4b();
+
+		while (true) {
+			usleep(1000ULL*1000ULL);
+			ars->work();
+		}
+
+
+
+		delete ars;
 	} catch (string e) {
 		Lerror("%s", e.c_str());
 	} catch (const char * e) {

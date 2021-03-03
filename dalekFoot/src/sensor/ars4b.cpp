@@ -4,7 +4,10 @@
 #include <utils/logger.h>
 
 Ars4b::Ars4b() :mCan(nullptr) {
-	mCan = new Mcp2515();
+	Mcp2515 *mcp = new Mcp2515();
+	mcp->setCanSpeed(Can::CAN_500KBPS);
+	mcp->setNormalMode();
+	mCan = mcp;
 }
 
 

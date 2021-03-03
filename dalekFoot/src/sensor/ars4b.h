@@ -8,6 +8,8 @@ class Radar {
 	public:
 		Radar() {}
 		virtual ~Radar() {}
+
+		virtual void work() = 0;
 };
 
 
@@ -15,6 +17,11 @@ class Ars4b: public Radar {
 	public:
 		explicit Ars4b();
 		virtual ~Ars4b();
+
+		virtual void work() {
+			mCan->sendMessage();
+		}
+
 	private:
 		Can *mCan;
 		
