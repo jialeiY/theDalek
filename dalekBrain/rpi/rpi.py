@@ -1,6 +1,7 @@
-from flask import Flask,render_template,Response
+from flask import Flask,render_template,Response,request
 from camera import CameraFactory
 from config import CAMERA_NAME
+from motor import cam_motor_obj
 
 app=Flask(__name__)
 
@@ -13,6 +14,12 @@ def hello_doctor():
 def index():
     return render_template("index.html")
 
+
+@app.route("/index/cam-motor",methods=["POST"])
+def move_camera():
+    move=request.form.get('move')
+    cam_motor_obj.move(move)
+    return "success"
 
 
 def gen(camera):
