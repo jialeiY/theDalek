@@ -11,7 +11,7 @@
 
 #define MCP_8MHz_500kBPS_CFG1 (0x00)
 #define MCP_8MHz_500kBPS_CFG2 (0x90)
-#define MCP_8MHz_500kBPS_CFG3 (0x82)
+#define MCP_8MHz_500kBPS_CFG3 (0x02)
 
 #define MCP_8MHz_250kBPS_CFG1 (0x00)
 #define MCP_8MHz_250kBPS_CFG2 (0xB1)
@@ -201,8 +201,7 @@ Mcp2515::Mcp2515(): mStatus(Status::CONFIGURATION) {
 
 	mSpi.setBaudrate(5000000);
 	this->reset();
-
-
+	this->init();
 }
 Mcp2515::~Mcp2515() {}
 
@@ -218,6 +217,16 @@ void Mcp2515::reset() {
 	if (data != 0x87) throw string("configuration from MCP2515 invalid");
 }
 
+void Mcp2515::init() {
+	// Clear buffers
+	uint8_t txBuf[14] = {0};
+	for (uint8_t highAddr = 0x03; highAddr <= 0x07; highAddr++) {
+		this->writeRegisters((highAddr<<4), txBuf, 14);
+	}
+
+
+
+}
 
 void Mcp2515::setConfigurationMode() {
 	// write 0x87 to 0x0F
@@ -310,13 +319,43 @@ void Mcp2515::writeRegisters(const uint8_t addr, const uint8_t data[], size_t le
 	delete [] rxBuf;	
 }
 
+uint8_t Mcp2515::readStatus() {
+	uint8_t instructument = 0xA0;
+	uint8_t rx = 0x00;
+	mSpi.transfer(&instructument, &rx, 1);
+	return rx;
+}
 
-void Mcp2515::sendMessage() {
+void Mcp2515::sendStandardMessage(uint32_t id, const uint8_t *data, uint8_t len) {
+	id &= 0x07FF;
+	uint8_t txBuf[13] = {0};
+	txBuf[0] = (id >> 3);
+	txBuf[1] = ((id & 0x07) << 5);
+	txBuf[4] = len;
+	memcpy(txBuf+5, data, len);
+
+	writeRegisters(0x31, txBuf, 13);
+
+	for (int i=0; i<13; ++i) {
+		printf("%02X ", txBuf[i]);
+	}
+	printf("\r\n");
+	// request to send
+	uint8_t cmd = 0x81;
+	mSpi.transfer(&cmd, nullptr, 1);
+
+	Ldebug("send mesage");
+
+}
+
+void sendMessage() {
+	/*
 	uint8_t txb0ctl = this->readRegister(0x30);
-
+	uint8_t status = this->readStatus();
 	uint8_t txreq = txb0ctl & (1<<3);
-	Ldebug("txreq: %x", txreq);
-
+	uint8_t b2 = this->readRegister(0x2B);
+	Ldebug("txreq: %x , status: %x, 2B: %X", txreq, status, b2);
+	*/
 	/*
 
 
