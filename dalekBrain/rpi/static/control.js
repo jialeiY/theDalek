@@ -1,7 +1,12 @@
 $("#cam_up").click(function(){
-    $.post("/index/cam-motor", {move:"up"})
+    $.post("/cam-motor", {move:"up"})
 });
 
 $("#cam_down").click(function(){
-    $.post("/index/cam-motor", {move:"down"})
+    $.post("/cam-motor", {move:"down"})
+});
+
+$("#add_face").click(function(){
+    console.log("add")
+    $.post("/faces", {face_name:$("#face_name").val()})
 });

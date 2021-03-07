@@ -3,12 +3,15 @@ import time
 import threading
 import numpy as np
 import cv2
-from modules.face_recognition import recognize_face,FaceRecognizer
-from config import FACE_ENCODING_PATH
+from modules.face_recognition import FaceRecognizer
+from config import FACE_ENCODING_PATH,CAMERA_NAME
+from modules.utils.singleton import singleton
+
 class CameraFactory(object):
 
     @staticmethod
-    def create_camera(name):
+    def create_camera():
+        name=CAMERA_NAME
         if name.lower()=="picamera":
             return PiCamera()
         elif name.lower()=="mockcamera":
@@ -21,9 +24,10 @@ class CameraFactory(object):
 class BaseCamera(object):
     thread=None
     frame=None
+    raw_img=None
     last_access=0
     condition=None
-    face_recognizer=FaceRecognizer(FACE_ENCODING_PATH)
+    face_recognizer=None
     
     def __init__(self):
         if BaseCamera.thread is None:
@@ -41,19 +45,25 @@ class BaseCamera(object):
         with BaseCamera.condition:
             BaseCamera.condition.wait()
         return BaseCamera.frame
+    
+    def get_raw_img(self):
+        with BaseCamera.condition:
+            BaseCamera.condition.wait()
+        return BaseCamera.raw_img
 
-    @staticmethod
-    def frames():
+    @classmethod
+    def frames(cls):
         raise RuntimeError('Must be implemented by subclasses.')
 
     @classmethod
     def _thread(cls):
         print('Starting camera thread.')
         frames_iterator=cls.frames()
-        for frame in frames_iterator:
+        for frame,raw_img in frames_iterator:
             with BaseCamera.condition:
 
                 BaseCamera.frame=frame
+                BaseCamera.raw_img=raw_img
                 BaseCamera.condition.notify_all()
 
             time.sleep(0)
@@ -65,10 +75,13 @@ class BaseCamera(object):
         BaseCamera.thread = None
 
 
+@singleton
 class PiCamera(BaseCamera):
 
-    @staticmethod
-    def frames():
+    face_recognizer=FaceRecognizer(FACE_ENCODING_PATH)
+
+    @classmethod
+    def frames(cls):
         import picamera
         WIDTH=320
         HEIGHT=240
@@ -78,24 +91,29 @@ class PiCamera(BaseCamera):
 
             time.sleep(2)
 
-            output = np.empty((HEIGHT, WIDTH, 3), dtype=np.uint8)
+            output_stream = np.empty((HEIGHT, WIDTH, 3), dtype=np.uint8)
 
             process_this_frame = True
 
-            for _  in camera.capture_continuous(output,format="rgb",use_video_port=True):
+            for _  in camera.capture_continuous(output_stream,format="rgb",use_video_port=True):
                 
+                recognized_output=output_stream
 
-                #recognized_output=recognize_face(output)
-                recognized_output=PiCamera.face_recognizer.recognize(output)
-                recognized_output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
+                if process_this_frame:
 
-                yield cv2.imencode(".jpg",recognized_output)[1].tobytes()
+                    recognized_output=cls.face_recognizer.recognize(output_stream)
+                
+                output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
+                
+                process_this_frame=process_this_frame^True
+
+                yield cv2.imencode(".jpg",output)[1].tobytes(),output_stream
 
 
 class OpenCVCamera(BaseCamera):
 
-    @staticmethod
-    def frames():
+    @classmethod
+    def frames(cls):
         camera = cv2.VideoCapture(0)
         camera.set(3,320) # set Width
         camera.set(4,240) # set Height
@@ -107,15 +125,15 @@ class OpenCVCamera(BaseCamera):
             _, img = camera.read()
             recognized_output=recognize_face(img)
             # encode as a jpeg image and return it
-            yield cv2.imencode('.jpg', recognized_output)[1].tobytes()
+            yield cv2.imencode('.jpg', recognized_output)[1].tobytes(),img
 
 
 class MockCamera(BaseCamera):
 
     imgs = [open("static/"+f + '.jpg', 'rb').read() for f in ['1', '2', '3']]
 
-    @staticmethod
-    def frames():
+    @classmethod
+    def frames(cls):
         while True:
             time.sleep(1)
-            yield MockCamera.imgs[int(time.time()) % 3]
+            yield MockCamera.imgs[int(time.time()) % 3],None

@@ -10,6 +10,18 @@
             <img src="/index/stream.mjpg" width="320" height="240" />
 
             <div>
+                {% if add_face_status=="success" %}
+                    <p>Adding face... Please put face in camera</p>
+                {% elif add_face_status=="failed" %}
+                    <p>Name existed</p>
+                {% endif%}
+                <div>
+                    <input id="face_name" type=text >
+                    <button id="add_face">Add Face</button>
+                <div>
+            </div>
+
+            <div>
                 <button id="cam_up">CAM UP</button>
                 <button id="cam_down">CAM DOWN</button>
             </div>
