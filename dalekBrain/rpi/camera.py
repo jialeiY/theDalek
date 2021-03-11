@@ -18,6 +18,8 @@ class CameraFactory(object):
             return MockCamera()
         elif name.lower()=="opencvcamera":
             return OpenCVCamera()
+        elif name.lower()=="jetsoncamera":
+            return JetsonCamera()
         else:
             raise Exception("no such camera")
 
@@ -75,6 +77,50 @@ class BaseCamera(object):
         BaseCamera.thread = None
 
 
+class JetsonCamera(BaseCamera):
+
+    @staticmethod
+    def _get_jetson_gstreamer_source(capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0):
+        """
+        Return an OpenCV-compatible video source description that uses gstreamer to capture video from the RPI camera on a Jetson Nano
+        """
+        return (
+                f'nvarguscamerasrc ! video/x-raw(memory:NVMM), ' +
+                f'width=(int){capture_width}, height=(int){capture_height}, ' +
+                f'format=(string)NV12, framerate=(fraction){framerate}/1 ! ' +
+                f'nvvidconv flip-method={flip_method} ! ' +
+                f'video/x-raw, width=(int){display_width}, height=(int){display_height}, format=(string)BGRx ! ' +
+                'videoconvert ! video/x-raw, format=(string)BGR ! appsink'
+                )
+
+    @classmethod
+    def frames(cls):
+        WIDTH=320
+        HEIGHT=240
+
+        camera = cv2.VideoCapture(cls._get_jetson_gstreamer_source(), cv2.CAP_GSTREAMER)
+        camera.set(3,320) # set Width
+        camera.set(4,240) # set Height
+        if not camera.isOpened():
+            raise RuntimeError('Could not start camera.')
+
+        process_this_frame = True
+        while True:
+            # read current frame
+            _, output_stream = camera.read()
+            recognized_output=output_stream
+            if process_this_frame:
+                    recognized_output=cls.face_recognizer.recognize(output_stream)
+
+            output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
+                
+            process_this_frame=process_this_frame^True
+
+            yield cv2.imencode(".jpg",output)[1].tobytes(),output_stream
+
+
+
+    
 @singleton
 class PiCamera(BaseCamera):
 
