@@ -33,21 +33,22 @@ class BingImageCrawler(object):
             driver.get(query_url)
 
             
-
-            while len(links)<min_count:
+            image_blocks=[]
+            while len(image_blocks)<min_count:
 
                 driver.execute_script('window.scrollBy(0, 1000000)')
                 time.sleep(1)
 
                 image_blocks=driver.find_elements_by_xpath(self.block_xpath)
+            
 
-                for image_block in image_blocks:
-                    image_item = image_block.get_attribute(self.item)
-                    image_link=json.loads(image_item).get(self.item_attr)
-                    if image_link:
-                        links.append(image_link)
-                    if(len(links)>max_count):
-                        break
+            for image_block in image_blocks:
+                image_item = image_block.get_attribute(self.item)
+                image_link=json.loads(image_item).get(self.item_attr)
+                if image_link:
+                    links.append(image_link)
+                if(len(links)>max_count):
+                    break
                 
             return links
 
