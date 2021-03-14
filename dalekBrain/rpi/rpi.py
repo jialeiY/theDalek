@@ -37,7 +37,7 @@ def add_face():
     except Exception as e:
         status="failed"
 
-    return  return status
+    return status
 
 
 def gen(camera):
