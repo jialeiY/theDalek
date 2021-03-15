@@ -1,4 +1,5 @@
 from flask import Flask,render_template,Response,request
+import camera
 from camera import CameraFactory
 from config import FACE_ENCODING_PATH
 from motor import cam_motor_obj
@@ -13,7 +14,7 @@ def hello_doctor():
 
 @app.route("/index")
 def index():
-    return render_template("index.html")
+    return render_template("index.html",camera={"width":camera.WIDTH,"height":camera.HEIGHT})
 
 
 @app.route("/cam-motor",methods=["POST"])

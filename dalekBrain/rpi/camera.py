@@ -7,6 +7,9 @@ from modules.face_recognition import FaceRecognizer
 from config import FACE_ENCODING_PATH,CAMERA_NAME
 from modules.utils.singleton import singleton
 
+WIDTH=480
+HEIGHT=320
+
 class CameraFactory(object):
 
     @staticmethod
@@ -79,8 +82,10 @@ class BaseCamera(object):
 
 class JetsonCamera(BaseCamera):
 
+    face_recognizer=FaceRecognizer(FACE_ENCODING_PATH)
+
     @staticmethod
-    def _get_jetson_gstreamer_source(capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=60, flip_method=0):
+    def _get_jetson_gstreamer_source(capture_width=640, capture_height=480, display_width=640, display_height=480, framerate=15, flip_method=0):
         """
         Return an OpenCV-compatible video source description that uses gstreamer to capture video from the RPI camera on a Jetson Nano
         """
@@ -93,14 +98,12 @@ class JetsonCamera(BaseCamera):
                 'videoconvert ! video/x-raw, format=(string)BGR ! appsink'
                 )
 
+
     @classmethod
     def frames(cls):
-        WIDTH=320
-        HEIGHT=240
 
-        camera = cv2.VideoCapture(cls._get_jetson_gstreamer_source(), cv2.CAP_GSTREAMER)
-        camera.set(3,320) # set Width
-        camera.set(4,240) # set Height
+        camera = cv2.VideoCapture(cls._get_jetson_gstreamer_source(display_width=WIDTH,display_height=HEIGHT,flip_method=2), cv2.CAP_GSTREAMER)
+
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
 
@@ -108,7 +111,10 @@ class JetsonCamera(BaseCamera):
         while True:
             # read current frame
             _, output_stream = camera.read()
+            output_stream=cv2.cvtColor(output_stream , cv2.COLOR_BGR2RGB)
+
             recognized_output=output_stream
+
             if process_this_frame:
                     recognized_output=cls.face_recognizer.recognize(output_stream)
 
@@ -129,8 +135,6 @@ class PiCamera(BaseCamera):
     @classmethod
     def frames(cls):
         import picamera
-        WIDTH=320
-        HEIGHT=240
 
         with picamera.PiCamera(framerate=10) as camera:
             camera.resolution = (WIDTH, HEIGHT)
@@ -161,8 +165,8 @@ class OpenCVCamera(BaseCamera):
     @classmethod
     def frames(cls):
         camera = cv2.VideoCapture(0)
-        camera.set(3,320) # set Width
-        camera.set(4,240) # set Height
+        camera.set(3,WIDTH) # set Width
+        camera.set(4,HEIGHT) # set Height
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
 
