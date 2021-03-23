@@ -1,0 +1,4 @@
+[submodule "dalekBrain/training/detection"]
+	path = dalekBrain/training/detection/ssd
+	url = https://github.com/jialeiY/pytorch-ssd
+	branch = master
