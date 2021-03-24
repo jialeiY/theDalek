@@ -14,6 +14,7 @@ data/
 # eagle backup files
 *.s#*
 *.b#*
+*.l#*
 
 # FreeCAD
 *.FCStd1

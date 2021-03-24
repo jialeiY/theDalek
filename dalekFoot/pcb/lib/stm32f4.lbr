@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE eagle SYSTEM "eagle.dtd">
+<eagle version="7.2.0">
+<drawing>
+<settings>
+<setting alwaysvectorfont="no"/>
+<setting verticaltext="up"/>
+</settings>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<layers>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="no" active="yes"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="no" active="yes"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="no" active="yes"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="no" active="yes"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="no" active="yes"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="no" active="yes"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="no" active="yes"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="no" active="yes"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="no" active="yes"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="no" active="yes"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="no" active="yes"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="no" active="yes"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
+<layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
+<layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
+<layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
+<layer number="34" name="bFinish" color="6" fill="6" visible="no" active="yes"/>
+<layer number="35" name="tGlue" color="7" fill="4" visible="no" active="yes"/>
+<layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
+<layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
+<layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
+<layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="93" name="Pins" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="94" name="Symbols" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="95" name="Names" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="96" name="Values" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="97" name="Info" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="98" name="Guide" color="6" fill="1" visible="yes" active="yes"/>
+</layers>
+<library>
+<packages>
+</packages>
+<symbols>
+<symbol name="STM32F407">
+<pin name="P$A1" x="-12.7" y="40.64" length="short"/>
+<pin name="P$A2" x="-12.7" y="38.1" length="short"/>
+<pin name="P$A3" x="-12.7" y="35.56" length="short"/>
+<pin name="P$A4" x="-12.7" y="33.02" length="short"/>
+<pin name="P$A5" x="-12.7" y="30.48" length="short"/>
+<pin name="P$A6" x="-12.7" y="27.94" length="short"/>
+<pin name="P$A7" x="-12.7" y="25.4" length="short"/>
+<pin name="P$A8" x="-12.7" y="22.86" length="short"/>
+<pin name="P$A9" x="-12.7" y="20.32" length="short"/>
+<pin name="P$A10" x="-12.7" y="17.78" length="short"/>
+<pin name="P$A11" x="-12.7" y="15.24" length="short"/>
+<pin name="P$A12" x="-12.7" y="12.7" length="short"/>
+<pin name="P$A13" x="-12.7" y="10.16" length="short"/>
+<pin name="P$A14" x="-12.7" y="7.62" length="short"/>
+<pin name="P$A15" x="-12.7" y="5.08" length="short"/>
+<pin name="P$A0" x="-12.7" y="43.18" length="short"/>
+<pin name="P$B1" x="12.7" y="40.64" length="short" rot="R180"/>
+<pin name="P$B2" x="12.7" y="38.1" length="short" rot="R180"/>
+<pin name="P$B3" x="12.7" y="35.56" length="short" rot="R180"/>
+<pin name="P$B4" x="12.7" y="33.02" length="short" rot="R180"/>
+<pin name="P$B5" x="12.7" y="30.48" length="short" rot="R180"/>
+<pin name="P$B6" x="12.7" y="27.94" length="short" rot="R180"/>
+<pin name="P$B7" x="12.7" y="25.4" length="short" rot="R180"/>
+<pin name="P$B8" x="12.7" y="22.86" length="short" rot="R180"/>
+<pin name="P$B9" x="12.7" y="20.32" length="short" rot="R180"/>
+<pin name="P$B10" x="12.7" y="17.78" length="short" rot="R180"/>
+<pin name="P$B11" x="12.7" y="15.24" length="short" rot="R180"/>
+<pin name="P$B12" x="12.7" y="12.7" length="short" rot="R180"/>
+<pin name="P$B13" x="12.7" y="10.16" length="short" rot="R180"/>
+<pin name="P$B14" x="12.7" y="7.62" length="short" rot="R180"/>
+<pin name="P$B15" x="12.7" y="5.08" length="short" rot="R180"/>
+<pin name="P$B0" x="12.7" y="43.18" length="short" rot="R180"/>
+<pin name="P$C0" x="-12.7" y="-5.08" length="short"/>
+<pin name="P$C1" x="-12.7" y="-7.62" length="short"/>
+<pin name="P$C2" x="-12.7" y="-10.16" length="short"/>
+<pin name="P$C3" x="-12.7" y="-12.7" length="short"/>
+<pin name="P$C4" x="-12.7" y="-15.24" length="short"/>
+<pin name="P$C5" x="-12.7" y="-17.78" length="short"/>
+<pin name="P$C6" x="-12.7" y="-20.32" length="short"/>
+<pin name="P$C7" x="-12.7" y="-22.86" length="short"/>
+<pin name="P$C8" x="-12.7" y="-25.4" length="short"/>
+<pin name="P$C9" x="-12.7" y="-27.94" length="short"/>
+<pin name="P$C10" x="-12.7" y="-30.48" length="short"/>
+<pin name="P$C11" x="-12.7" y="-33.02" length="short"/>
+<pin name="P$C12" x="-12.7" y="-35.56" length="short"/>
+<pin name="P$C13" x="-12.7" y="-38.1" length="short"/>
+<pin name="P$C14" x="-12.7" y="-40.64" length="short"/>
+<pin name="P$C15" x="-12.7" y="-43.18" length="short"/>
+<pin name="P$49" x="12.7" y="-5.08" length="short" rot="R180"/>
+<pin name="P$50" x="12.7" y="-7.62" length="short" rot="R180"/>
+<pin name="P$51" x="12.7" y="-10.16" length="short" rot="R180"/>
+<pin name="P$52" x="12.7" y="-12.7" length="short" rot="R180"/>
+<pin name="P$53" x="12.7" y="-15.24" length="short" rot="R180"/>
+<pin name="P$54" x="12.7" y="-17.78" length="short" rot="R180"/>
+<pin name="P$55" x="12.7" y="-20.32" length="short" rot="R180"/>
+<pin name="P$56" x="12.7" y="-22.86" length="short" rot="R180"/>
+<pin name="P$57" x="12.7" y="-25.4" length="short" rot="R180"/>
+<pin name="P$58" x="12.7" y="-27.94" length="short" rot="R180"/>
+<pin name="P$59" x="12.7" y="-30.48" length="short" rot="R180"/>
+<pin name="P$60" x="12.7" y="-33.02" length="short" rot="R180"/>
+<pin name="P$61" x="12.7" y="-35.56" length="short" rot="R180"/>
+<pin name="P$62" x="12.7" y="-38.1" length="short" rot="R180"/>
+<pin name="P$63" x="12.7" y="-40.64" length="short" rot="R180"/>
+<pin name="P$64" x="12.7" y="-43.18" length="short" rot="R180"/>
+<wire x1="-10.16" y1="45.72" x2="10.16" y2="45.72" width="0.254" layer="94"/>
+<wire x1="10.16" y1="45.72" x2="10.16" y2="-55.88" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-55.88" x2="-10.16" y2="-55.88" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-55.88" x2="-10.16" y2="45.72" width="0.254" layer="94"/>
+<pin name="P$65" x="12.7" y="-48.26" length="short" rot="R180"/>
+<pin name="P$66" x="12.7" y="-50.8" length="short" rot="R180"/>
+<pin name="P$67" x="12.7" y="-53.34" length="short" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+</devicesets>
+</library>
+</drawing>
+</eagle>
