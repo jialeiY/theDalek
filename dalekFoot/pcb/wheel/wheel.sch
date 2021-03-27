@@ -12909,6 +12909,21 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <text x="-1.27" y="-2.54" size="1.27" layer="25">&gt;NAME</text>
 <text x="-1.27" y="-3.81" size="1.27" layer="27">&gt;VALUE</text>
 </package>
+<package name="DEBUG-PORT">
+<pad name="P$1" x="-2.54" y="1.27" drill="0.5" diameter="0.8128"/>
+<pad name="P$2" x="-1.27" y="1.27" drill="0.5" diameter="0.8128"/>
+<pad name="P$3" x="-2.54" y="0" drill="0.5" diameter="0.8128"/>
+<pad name="P$4" x="-1.27" y="0" drill="0.5" diameter="0.8128"/>
+<pad name="P$5" x="-2.54" y="-1.27" drill="0.5" diameter="0.8128"/>
+<pad name="P$6" x="-1.27" y="-1.27" drill="0.5" diameter="0.8128"/>
+<pad name="P$7" x="-2.54" y="-2.54" drill="0.5" diameter="0.8128" shape="square"/>
+<pad name="P$8" x="-1.27" y="-2.54" drill="0.5" diameter="0.8128" shape="square"/>
+<wire x1="0" y1="2.54" x2="-2.54" y2="2.54" width="0.127" layer="21"/>
+<wire x1="-2.54" y1="2.54" x2="-3.81" y2="1.27" width="0.127" layer="21" curve="90"/>
+<wire x1="-3.81" y1="1.27" x2="-3.81" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="-3.81" y1="-2.54" x2="-2.54" y2="-3.81" width="0.127" layer="21" curve="90"/>
+<wire x1="-2.54" y1="-3.81" x2="0" y2="-3.81" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="RESISTOR">
@@ -12925,6 +12940,17 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <text x="-2.54" y="-1.905" size="1.27" layer="95">&gt;NAME</text>
 <text x="-2.54" y="-3.175" size="1.27" layer="96">&gt;VALUE</text>
 </symbol>
+<symbol name="DEBUG-PORT">
+<pin name="P$VCC" x="-7.62" y="7.62" visible="pin" length="short"/>
+<pin name="P$TX" x="-7.62" y="5.08" visible="pin" length="short"/>
+<pin name="P$RX" x="-7.62" y="2.54" visible="pin" length="short"/>
+<pin name="P$SDIO" x="-7.62" y="0" visible="pin" length="short"/>
+<pin name="P$SDCLK" x="-7.62" y="-2.54" visible="pin" length="short"/>
+<pin name="P$GND" x="-7.62" y="-5.08" visible="pin" length="short"/>
+<wire x1="-5.08" y1="10.16" x2="-5.08" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="-7.62" x2="2.54" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-5.08" y1="10.16" x2="2.54" y2="10.16" width="0.254" layer="94"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="R-0603" prefix="R" uservalue="yes">
@@ -12936,6 +12962,26 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <connects>
 <connect gate="G$1" pin="P$1" pad="P$1"/>
 <connect gate="G$1" pin="P$2" pad="P$2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="DEBUG-PORT" prefix="J" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="DEBUG-PORT" x="-5.08" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="DEBUG-PORT">
+<connects>
+<connect gate="G$1" pin="P$GND" pad="P$7 P$8"/>
+<connect gate="G$1" pin="P$RX" pad="P$4"/>
+<connect gate="G$1" pin="P$SDCLK" pad="P$3"/>
+<connect gate="G$1" pin="P$SDIO" pad="P$5"/>
+<connect gate="G$1" pin="P$TX" pad="P$6"/>
+<connect gate="G$1" pin="P$VCC" pad="P$1 P$2"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -14268,6 +14314,9 @@ Based on the following sources:
 <part name="JP4" library="pinhead" deviceset="PINHD-2X3" device=""/>
 <part name="R27" library="rcl" deviceset="R-EU_" device="R0402"/>
 <part name="SUPPLY19" library="supply2" deviceset="DGND" device=""/>
+<part name="J1" library="hqc" deviceset="DEBUG-PORT" device=""/>
+<part name="R28" library="rcl" deviceset="R-EU_" device="R0402"/>
+<part name="SUPPLY20" library="supply2" deviceset="DGND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -14344,6 +14393,9 @@ Based on the following sources:
 <instance part="JP4" gate="A" x="68.58" y="-393.7"/>
 <instance part="R27" gate="G$1" x="50.8" y="-391.16"/>
 <instance part="SUPPLY19" gate="G$1" x="93.98" y="-408.94"/>
+<instance part="J1" gate="G$1" x="40.64" y="-439.42"/>
+<instance part="R28" gate="G$1" x="12.7" y="-431.8"/>
+<instance part="SUPPLY20" gate="G$1" x="17.78" y="-454.66"/>
 </instances>
 <busses>
 </busses>
@@ -14587,6 +14639,12 @@ Based on the following sources:
 <pinref part="SUPPLY19" gate="G$1" pin="DGND"/>
 <wire x1="93.98" y1="-396.24" x2="93.98" y2="-406.4" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="J1" gate="G$1" pin="P$GND"/>
+<wire x1="17.78" y1="-444.5" x2="33.02" y2="-444.5" width="0.1524" layer="91"/>
+<wire x1="17.78" y1="-444.5" x2="17.78" y2="-452.12" width="0.1524" layer="91"/>
+<pinref part="SUPPLY20" gate="G$1" pin="DGND"/>
+</segment>
 </net>
 <net name="BAT+" class="0">
 <segment>
@@ -14661,6 +14719,11 @@ Based on the following sources:
 <wire x1="45.72" y1="-391.16" x2="33.02" y2="-391.16" width="0.1524" layer="91"/>
 <label x="30.48" y="-391.16" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R28" gate="G$1" pin="1"/>
+<wire x1="7.62" y1="-431.8" x2="-7.62" y2="-431.8" width="0.1524" layer="91"/>
+<label x="-7.62" y="-431.8" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="VCC-ANALOG" class="0">
 <segment>
@@ -14723,12 +14786,22 @@ Based on the following sources:
 <wire x1="63.5" y1="-287.02" x2="71.12" y2="-287.02" width="0.1524" layer="91"/>
 <label x="66.04" y="-287.02" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="J1" gate="G$1" pin="P$SDIO"/>
+<wire x1="17.78" y1="-439.42" x2="33.02" y2="-439.42" width="0.1524" layer="91"/>
+<label x="17.78" y="-439.42" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="SWCLK" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="P$A14"/>
 <wire x1="63.5" y1="-289.56" x2="71.12" y2="-289.56" width="0.1524" layer="91"/>
 <label x="66.04" y="-289.56" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="J1" gate="G$1" pin="P$SDCLK"/>
+<wire x1="33.02" y1="-441.96" x2="17.78" y2="-441.96" width="0.1524" layer="91"/>
+<label x="17.78" y="-441.96" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -15393,6 +15466,37 @@ Based on the following sources:
 <pinref part="JP4" gate="A" pin="1"/>
 <wire x1="66.04" y1="-391.16" x2="55.88" y2="-391.16" width="0.1524" layer="91"/>
 <pinref part="R27" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="J1" gate="G$1" pin="P$VCC"/>
+<wire x1="33.02" y1="-431.8" x2="17.78" y2="-431.8" width="0.1524" layer="91"/>
+<pinref part="R28" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="PA9" class="0">
+<segment>
+<pinref part="J1" gate="G$1" pin="P$TX"/>
+<wire x1="17.78" y1="-434.34" x2="33.02" y2="-434.34" width="0.1524" layer="91"/>
+<label x="17.78" y="-434.34" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="P$A9"/>
+<wire x1="63.5" y1="-276.86" x2="73.66" y2="-276.86" width="0.1524" layer="91"/>
+<label x="66.04" y="-276.86" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="PA10" class="0">
+<segment>
+<pinref part="J1" gate="G$1" pin="P$RX"/>
+<wire x1="33.02" y1="-436.88" x2="17.78" y2="-436.88" width="0.1524" layer="91"/>
+<label x="17.78" y="-436.88" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="P$A10"/>
+<wire x1="63.5" y1="-279.4" x2="73.66" y2="-279.4" width="0.1524" layer="91"/>
+<label x="66.04" y="-279.4" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
