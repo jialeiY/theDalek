@@ -5,6 +5,7 @@ import time
 import urllib.request
 from PIL import Image
 from io import BytesIO
+import argparse
 
 from urllib.parse import urlparse
 from user_agent import generate_user_agent
@@ -14,41 +15,56 @@ class BingImageCrawler(object):
     def __init__(self):
         
         self.url="https://cn.bing.com/images/search?q={query}"
-        self.block_xpath='//div[@class="imgpt"]/a[@class="iusc"]'
+        self.block_xpath='//ul[@class="dgControl_list"]/li[@data-idx>{data_idx}]'
+        self.image_xpath='.//div[@class="imgpt"]/a[@class="iusc"]'
         self.item="m"
         self.item_attr="murl"
 
 
     def crawl(self,query,output_dir,maxCount):
 
+        try:
+            os.mkdir(output_dir)
+        except:
+            pass
+
         links=self._get_links(query,maxCount)
         self._download(links,output_dir)
         
     
-    def _get_links(self,query,max_count=1000,min_count=100):
+    def _get_links(self,query,max_count=1000):
         links=[]
+        latest_data_idx=0
         try:
             driver=webdriver.Chrome()
             query_url=self.url.format(query=query)
             driver.get(query_url)
 
-            
-            image_blocks=[]
-            while len(image_blocks)<min_count:
+            while len(links)<max_count:
 
-                driver.execute_script('window.scrollBy(0, 1000000)')
-                time.sleep(1)
+                try:
 
-                image_blocks=driver.find_elements_by_xpath(self.block_xpath)
-            
+                    driver.execute_script('window.scrollBy(0, 1000000)')
 
-            for image_block in image_blocks:
-                image_item = image_block.get_attribute(self.item)
-                image_link=json.loads(image_item).get(self.item_attr)
-                if image_link:
-                    links.append(image_link)
-                if(len(links)>max_count):
-                    break
+                    time.sleep(1)
+
+                    image_blocks=driver.find_elements_by_xpath(self.block_xpath.format(data_idx=latest_data_idx))
+
+                    if len(image_blocks)==0:
+                        break
+                    for image_block in image_blocks:
+                        images=image_block.find_elements_by_xpath(self.image_xpath)
+
+                        for image in images:
+                            image_item = image.get_attribute(self.item)
+                            image_link=json.loads(image_item).get(self.item_attr)
+                            if image_link:
+                                links.append(image_link)
+
+                        latest_data_idx=int(image_block.get_attribute("data-idx"))
+                    print(f"Current total link number: {len(links)}")
+                except Exception as e:
+                    print(f"craw image error.",str(e))
                 
             return links
 
@@ -90,5 +106,25 @@ class BingImageCrawler(object):
 
 
 if __name__=="__main__":
-    crawler=BingImageCrawler()
-    crawler.crawl("daleks","/Users/jialeiyang/Documents/projects/theDalek/dalekBrain/data/daleks",1000)
+    parser = argparse.ArgumentParser(description='Image Crawler')
+
+    # Params for datasets
+    parser.add_argument('query', type=str,  help='Search query')
+    parser.add_argument('od', type=str,  help='Output directory path')
+    parser.add_argument('--max-count', type=int,  default=1000,help='max image count')
+    parser.add_argument("--engine", default="bing", type=str, help='select search engine for crawl. Currently support "bing" only')
+
+
+    args = parser.parse_args()
+
+    query=args.query
+    output_dir=args.od
+    max_count=args.max_count
+    engine=args.engine
+
+    crawler=None
+    if engine=="bing":
+        crawler=BingImageCrawler()
+
+    if crawler:
+        crawler.crawl(query,output_dir,max_count)
