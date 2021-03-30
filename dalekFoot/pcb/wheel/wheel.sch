@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="mil" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -13021,30 +13021,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="52.5" y1="17" x2="52.5" y2="-4.8" width="0.127" layer="21"/>
 <text x="-3" y="18.4" size="1.27" layer="25">&gt;NAME</text>
 </package>
-<package name="12X12-TACTILE">
-<wire x1="-6" y1="5" x2="-6" y2="-5" width="0.127" layer="21"/>
-<wire x1="-5" y1="-6" x2="5" y2="-6" width="0.127" layer="21"/>
-<smd name="P$A" x="-7.6" y="2.5" dx="1.5" dy="1.5" layer="1"/>
-<smd name="P$C" x="-7.6" y="-2.5" dx="1.5" dy="1.5" layer="1"/>
-<smd name="P$D" x="7.6" y="-2.5" dx="1.5" dy="1.5" layer="1"/>
-<smd name="P$B" x="7.6" y="2.5" dx="1.5" dy="1.5" layer="1"/>
-<text x="-2.5" y="-7.5" size="1.27" layer="25">&gt;NAME</text>
-<circle x="0" y="0" radius="3.5" width="0.127" layer="21"/>
-<wire x1="6" y1="-5" x2="6" y2="5" width="0.127" layer="21"/>
-<wire x1="5" y1="6" x2="-5" y2="6" width="0.127" layer="21"/>
-<wire x1="-1.9" y1="1.9" x2="1.9" y2="1.9" width="0.127" layer="21"/>
-<wire x1="1.9" y1="1.9" x2="1.9" y2="-1.9" width="0.127" layer="21"/>
-<wire x1="1.9" y1="-1.9" x2="-1.9" y2="-1.9" width="0.127" layer="21"/>
-<wire x1="-1.9" y1="-1.9" x2="-1.9" y2="1.9" width="0.127" layer="21"/>
-<wire x1="-6" y1="5" x2="-5" y2="6" width="0.127" layer="21"/>
-<wire x1="5" y1="6" x2="6" y2="5" width="0.127" layer="21"/>
-<wire x1="-6" y1="-5" x2="-5" y2="-6" width="0.127" layer="21"/>
-<wire x1="5" y1="-6" x2="6" y2="-5" width="0.127" layer="21"/>
-<wire x1="-5.08" y1="2.54" x2="-2.54" y2="2.54" width="0.127" layer="21"/>
-<wire x1="2.54" y1="2.54" x2="5.08" y2="2.54" width="0.127" layer="21"/>
-<wire x1="5.08" y1="-2.54" x2="2.54" y2="-2.54" width="0.127" layer="21"/>
-<wire x1="-2.54" y1="-2.54" x2="-5.08" y2="-2.54" width="0.127" layer="21"/>
-</package>
 <package name="BATTERY_10A">
 <polygon width="0.127" layer="1">
 <vertex x="-2.54" y="7.62"/>
@@ -13193,16 +13169,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="-15.24" y1="1.905" x2="-15.875" y2="1.27" width="0.254" layer="94"/>
 <wire x1="-15.24" y1="1.905" x2="-14.605" y2="1.27" width="0.254" layer="94"/>
 </symbol>
-<symbol name="BUTTON">
-<wire x1="-2.54" y1="0" x2="-1.5875" y2="0" width="0.254" layer="94"/>
-<wire x1="2.54" y1="0" x2="1.5875" y2="0" width="0.254" layer="94"/>
-<circle x="-1.27" y="0" radius="0.3175" width="0.254" layer="94"/>
-<circle x="1.27" y="0" radius="0.3175" width="0.254" layer="94"/>
-<wire x1="-1.27" y1="0" x2="0.6731" y2="1.5367" width="0.254" layer="94"/>
-<pin name="P$1" x="-2.54" y="0" visible="off" length="point" function="dot" swaplevel="1"/>
-<pin name="P$2" x="2.54" y="0" visible="off" length="point" function="dot" swaplevel="1"/>
-<text x="-3.175" y="-1.905" size="1.27" layer="95">&gt;NAME</text>
-</symbol>
 <symbol name="BATTERY-PAD-10A">
 <wire x1="-5.08" y1="2.54" x2="0" y2="2.54" width="0.254" layer="94"/>
 <wire x1="0" y1="2.54" x2="5.08" y2="2.54" width="0.254" layer="94"/>
@@ -13347,22 +13313,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <connect gate="G$1" pin="P$7" pad="P$7"/>
 <connect gate="G$1" pin="P$8" pad="P$8"/>
 <connect gate="G$1" pin="P$9" pad="P$9"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="12X12-TACTILE" prefix="K">
-<gates>
-<gate name="G$1" symbol="BUTTON" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="12X12-TACTILE">
-<connects>
-<connect gate="G$1" pin="P$1" pad="P$A P$B"/>
-<connect gate="G$1" pin="P$2" pad="P$C P$D"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -16516,6 +16466,79 @@ Source: www.kingbright.com</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="switch-tact">
+<description>&lt;b&gt;Diptronics THMD &amp; SMD tact switches&lt;/b&gt;
+&lt;p&gt;&lt;ul&gt;
+&lt;li&gt;DTS-3: 3.5x6mm THMD tact switch
+&lt;li&gt;DTS-6, DTS-64: 6x6mm THMD tact switch
+&lt;li&gt;DTSM-3: 3.5x6mm SMD tact switch
+&lt;li&gt;DTSM-6, DTSM-64: 6x6mm SMD tact switch
+&lt;/ul&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Doublecheck before using!&lt;/b&gt;&lt;/p&gt;</description>
+<packages>
+<package name="DTSM-6">
+<wire x1="-3.1" y1="3.1" x2="3.1" y2="3.1" width="0.2032" layer="51"/>
+<wire x1="3.1" y1="3.1" x2="3.1" y2="-3.1" width="0.2032" layer="51"/>
+<wire x1="3.1" y1="-3.1" x2="-3.1" y2="-3.1" width="0.2032" layer="51"/>
+<wire x1="-3.1" y1="-3.1" x2="-3.1" y2="3.1" width="0.2032" layer="51"/>
+<wire x1="2.75" y1="3.1" x2="-2.75" y2="3.1" width="0.2032" layer="21"/>
+<wire x1="3.1" y1="-1" x2="3.1" y2="1" width="0.2032" layer="21"/>
+<wire x1="2.75" y1="-3.1" x2="-2.75" y2="-3.1" width="0.2032" layer="21"/>
+<wire x1="-3.1" y1="-1" x2="-3.1" y2="1" width="0.2032" layer="21"/>
+<circle x="0" y="0" radius="1.75" width="0.2032" layer="51"/>
+<circle x="0" y="0" radius="1.75" width="0.2032" layer="21"/>
+<smd name="1" x="-3.975" y="2.25" dx="1.55" dy="1.3" layer="1"/>
+<smd name="2" x="3.975" y="2.25" dx="1.55" dy="1.3" layer="1"/>
+<smd name="3" x="-3.975" y="-2.25" dx="1.55" dy="1.3" layer="1"/>
+<smd name="4" x="3.975" y="-2.25" dx="1.55" dy="1.3" layer="1"/>
+<text x="-2.54" y="3.81" size="1.27" layer="25">&gt;NAME</text>
+<text x="-2.54" y="-5.08" size="1.27" layer="27">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="TS2">
+<wire x1="0" y1="1.905" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="1.905" x2="-3.175" y2="1.905" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="-1.905" x2="-3.175" y2="-1.905" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="1.905" x2="-4.445" y2="0" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="0" x2="-4.445" y2="-1.905" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="-1.905" y2="0" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="0" x2="-0.635" y2="0" width="0.1524" layer="94"/>
+<wire x1="-4.445" y1="0" x2="-3.175" y2="0" width="0.1524" layer="94"/>
+<wire x1="2.54" y1="2.54" x2="0" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="2.54" y1="-2.54" x2="0" y2="-2.54" width="0.1524" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-1.27" y2="1.905" width="0.254" layer="94"/>
+<circle x="0" y="-2.54" radius="0.127" width="0.4064" layer="94"/>
+<circle x="0" y="2.54" radius="0.127" width="0.4064" layer="94"/>
+<text x="-6.35" y="-2.54" size="1.778" layer="95" rot="R90">&gt;NAME</text>
+<text x="-3.81" y="3.175" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="1" x="0" y="-5.08" visible="pad" length="short" direction="pas" swaplevel="2" rot="R90"/>
+<pin name="3" x="0" y="5.08" visible="pad" length="short" direction="pas" swaplevel="1" rot="R270"/>
+<pin name="4" x="2.54" y="5.08" visible="pad" length="short" direction="pas" swaplevel="1" rot="R270"/>
+<pin name="2" x="2.54" y="-5.08" visible="pad" length="short" direction="pas" swaplevel="2" rot="R90"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="DTSM-6" prefix="S">
+<gates>
+<gate name="G$1" symbol="TS2" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="DTSM-6">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+<connect gate="G$1" pin="3" pad="3"/>
+<connect gate="G$1" pin="4" pad="4"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -16623,11 +16646,6 @@ Source: www.kingbright.com</description>
 <part name="SUPPLY29" library="supply2" deviceset="DGND" device=""/>
 <part name="J2" library="hqc" deviceset="KF250-2X12P" device=""/>
 <part name="SUPPLY30" library="supply2" deviceset="DGND" device=""/>
-<part name="K1" library="hqc" deviceset="12X12-TACTILE" device=""/>
-<part name="K2" library="hqc" deviceset="12X12-TACTILE" device=""/>
-<part name="K3" library="hqc" deviceset="12X12-TACTILE" device=""/>
-<part name="K4" library="hqc" deviceset="12X12-TACTILE" device=""/>
-<part name="K5" library="hqc" deviceset="12X12-TACTILE" device=""/>
 <part name="SUPPLY31" library="supply2" deviceset="DGND" device=""/>
 <part name="SUPPLY32" library="supply2" deviceset="DGND" device=""/>
 <part name="SUPPLY33" library="supply2" deviceset="DGND" device=""/>
@@ -16646,6 +16664,11 @@ Source: www.kingbright.com</description>
 <part name="JP8" library="pinhead" deviceset="PINHD-1X4" device=""/>
 <part name="SUPPLY39" library="supply2" deviceset="DGND" device=""/>
 <part name="R36" library="rcl" deviceset="R-EU_" device="R0402"/>
+<part name="S1" library="switch-tact" deviceset="DTSM-6" device=""/>
+<part name="S2" library="switch-tact" deviceset="DTSM-6" device=""/>
+<part name="S3" library="switch-tact" deviceset="DTSM-6" device=""/>
+<part name="S4" library="switch-tact" deviceset="DTSM-6" device=""/>
+<part name="S5" library="switch-tact" deviceset="DTSM-6" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -16767,11 +16790,6 @@ Source: www.kingbright.com</description>
 <instance part="SUPPLY29" gate="G$1" x="302.26" y="558.8"/>
 <instance part="J2" gate="G$1" x="365.76" y="596.9" rot="R270"/>
 <instance part="SUPPLY30" gate="G$1" x="353.06" y="568.96"/>
-<instance part="K1" gate="G$1" x="78.74" y="375.92"/>
-<instance part="K2" gate="G$1" x="99.06" y="391.16"/>
-<instance part="K3" gate="G$1" x="121.92" y="375.92"/>
-<instance part="K4" gate="G$1" x="99.06" y="355.6"/>
-<instance part="K5" gate="G$1" x="99.06" y="375.92"/>
 <instance part="SUPPLY31" gate="G$1" x="106.68" y="347.98"/>
 <instance part="SUPPLY32" gate="G$1" x="83.82" y="347.98"/>
 <instance part="SUPPLY33" gate="G$1" x="129.54" y="365.76"/>
@@ -16790,6 +16808,11 @@ Source: www.kingbright.com</description>
 <instance part="JP8" gate="A" x="335.28" y="223.52"/>
 <instance part="SUPPLY39" gate="G$1" x="325.12" y="215.9"/>
 <instance part="R36" gate="G$1" x="312.42" y="228.6"/>
+<instance part="S1" gate="G$1" x="76.2" y="375.92" rot="R270"/>
+<instance part="S2" gate="G$1" x="96.52" y="391.16" rot="R270"/>
+<instance part="S3" gate="G$1" x="121.92" y="375.92" rot="R270"/>
+<instance part="S4" gate="G$1" x="96.52" y="355.6" rot="R270"/>
+<instance part="S5" gate="G$1" x="96.52" y="375.92" rot="R270"/>
 </instances>
 <busses>
 </busses>
@@ -17174,30 +17197,30 @@ Source: www.kingbright.com</description>
 <junction x="353.06" y="584.2"/>
 </segment>
 <segment>
-<pinref part="K4" gate="G$1" pin="P$2"/>
 <wire x1="101.6" y1="355.6" x2="106.68" y2="355.6" width="0.1524" layer="91"/>
 <pinref part="SUPPLY31" gate="G$1" pin="DGND"/>
 <wire x1="106.68" y1="355.6" x2="106.68" y2="350.52" width="0.1524" layer="91"/>
-<pinref part="K5" gate="G$1" pin="P$2"/>
 <wire x1="101.6" y1="375.92" x2="106.68" y2="375.92" width="0.1524" layer="91"/>
 <wire x1="106.68" y1="375.92" x2="106.68" y2="355.6" width="0.1524" layer="91"/>
 <junction x="106.68" y="355.6"/>
-<pinref part="K2" gate="G$1" pin="P$2"/>
 <wire x1="101.6" y1="391.16" x2="106.68" y2="391.16" width="0.1524" layer="91"/>
 <wire x1="106.68" y1="391.16" x2="106.68" y2="375.92" width="0.1524" layer="91"/>
 <junction x="106.68" y="375.92"/>
+<pinref part="S2" gate="G$1" pin="3"/>
+<pinref part="S5" gate="G$1" pin="3"/>
+<pinref part="S4" gate="G$1" pin="3"/>
 </segment>
 <segment>
-<pinref part="K1" gate="G$1" pin="P$2"/>
 <wire x1="81.28" y1="375.92" x2="83.82" y2="375.92" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="375.92" x2="83.82" y2="350.52" width="0.1524" layer="91"/>
 <pinref part="SUPPLY32" gate="G$1" pin="DGND"/>
+<pinref part="S1" gate="G$1" pin="3"/>
 </segment>
 <segment>
-<pinref part="K3" gate="G$1" pin="P$2"/>
-<wire x1="124.46" y1="375.92" x2="129.54" y2="375.92" width="0.1524" layer="91"/>
+<wire x1="127" y1="375.92" x2="129.54" y2="375.92" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="375.92" x2="129.54" y2="368.3" width="0.1524" layer="91"/>
 <pinref part="SUPPLY33" gate="G$1" pin="DGND"/>
+<pinref part="S3" gate="G$1" pin="3"/>
 </segment>
 <segment>
 <pinref part="IC6" gate="G$1" pin="GND"/>
@@ -18690,9 +18713,9 @@ Source: www.kingbright.com</description>
 <label x="378.46" y="104.14" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="K1" gate="G$1" pin="P$1"/>
-<wire x1="76.2" y1="375.92" x2="66.04" y2="375.92" width="0.1524" layer="91"/>
-<label x="66.04" y="375.92" size="1.778" layer="95"/>
+<wire x1="71.12" y1="375.92" x2="58.42" y2="375.92" width="0.1524" layer="91"/>
+<label x="60.96" y="375.92" size="1.778" layer="95"/>
+<pinref part="S1" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="BUT2" class="0">
@@ -18702,9 +18725,9 @@ Source: www.kingbright.com</description>
 <label x="378.46" y="101.6" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="K2" gate="G$1" pin="P$1"/>
-<wire x1="96.52" y1="391.16" x2="81.28" y2="391.16" width="0.1524" layer="91"/>
-<label x="81.28" y="391.16" size="1.778" layer="95"/>
+<wire x1="91.44" y1="391.16" x2="76.2" y2="391.16" width="0.1524" layer="91"/>
+<label x="76.2" y="393.7" size="1.778" layer="95"/>
+<pinref part="S2" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="BUT3" class="0">
@@ -18714,9 +18737,9 @@ Source: www.kingbright.com</description>
 <label x="378.46" y="99.06" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="K3" gate="G$1" pin="P$1"/>
-<wire x1="111.76" y1="375.92" x2="119.38" y2="375.92" width="0.1524" layer="91"/>
+<wire x1="111.76" y1="375.92" x2="116.84" y2="375.92" width="0.1524" layer="91"/>
 <label x="109.22" y="375.92" size="1.778" layer="95"/>
+<pinref part="S3" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="BUT4" class="0">
@@ -18726,9 +18749,9 @@ Source: www.kingbright.com</description>
 <label x="378.46" y="96.52" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="K4" gate="G$1" pin="P$1"/>
-<wire x1="86.36" y1="355.6" x2="96.52" y2="355.6" width="0.1524" layer="91"/>
+<wire x1="86.36" y1="355.6" x2="91.44" y2="355.6" width="0.1524" layer="91"/>
 <label x="86.36" y="355.6" size="1.778" layer="95"/>
+<pinref part="S4" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="BUT5" class="0">
@@ -18738,9 +18761,9 @@ Source: www.kingbright.com</description>
 <label x="378.46" y="93.98" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="K5" gate="G$1" pin="P$1"/>
-<wire x1="96.52" y1="375.92" x2="88.9" y2="375.92" width="0.1524" layer="91"/>
-<label x="88.9" y="375.92" size="1.778" layer="95"/>
+<wire x1="91.44" y1="375.92" x2="86.36" y2="375.92" width="0.1524" layer="91"/>
+<label x="86.36" y="375.92" size="1.778" layer="95"/>
+<pinref part="S5" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="BUZZER" class="0">
