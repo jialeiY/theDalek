@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.2.0">
+<eagle version="8.2.1">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="mil" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -18259,11 +18259,6 @@ Source: www.kingbright.com</description>
 <label x="355.6" y="66.04" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="PWMB"/>
-<wire x1="22.86" y1="607.06" x2="38.1" y2="607.06" width="0.1524" layer="91"/>
-<label x="22.86" y="607.06" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U5" gate="G$1" pin="PWMB"/>
 <wire x1="129.54" y1="607.06" x2="144.78" y2="607.06" width="0.1524" layer="91"/>
 <label x="129.54" y="607.06" size="1.778" layer="95"/>
@@ -18348,6 +18343,11 @@ Source: www.kingbright.com</description>
 <pinref part="U$1" gate="G$1" pin="P$D13"/>
 <wire x1="360.68" y1="71.12" x2="353.06" y2="71.12" width="0.1524" layer="91"/>
 <label x="355.6" y="71.12" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="PWMB"/>
+<wire x1="22.86" y1="607.06" x2="38.1" y2="607.06" width="0.1524" layer="91"/>
+<label x="22.86" y="607.06" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AIN1.1" class="0">
