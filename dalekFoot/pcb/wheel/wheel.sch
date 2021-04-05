@@ -18259,11 +18259,6 @@ Source: www.kingbright.com</description>
 <label x="355.6" y="66.04" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="PWMB"/>
-<wire x1="22.86" y1="607.06" x2="38.1" y2="607.06" width="0.1524" layer="91"/>
-<label x="22.86" y="607.06" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U5" gate="G$1" pin="PWMB"/>
 <wire x1="129.54" y1="607.06" x2="144.78" y2="607.06" width="0.1524" layer="91"/>
 <label x="129.54" y="607.06" size="1.778" layer="95"/>
@@ -18348,6 +18343,11 @@ Source: www.kingbright.com</description>
 <pinref part="U$1" gate="G$1" pin="P$D13"/>
 <wire x1="360.68" y1="71.12" x2="353.06" y2="71.12" width="0.1524" layer="91"/>
 <label x="355.6" y="71.12" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U1" gate="G$1" pin="PWMB"/>
+<wire x1="22.86" y1="607.06" x2="38.1" y2="607.06" width="0.1524" layer="91"/>
+<label x="22.86" y="607.06" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AIN1.1" class="0">
