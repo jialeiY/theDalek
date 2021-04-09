@@ -29,7 +29,7 @@
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
@@ -81,6 +81,22 @@
 <wire x1="100" y1="0" x2="100" y2="100" width="0" layer="20"/>
 <wire x1="100" y1="100" x2="0" y2="100" width="0" layer="20"/>
 <wire x1="0" y1="100" x2="0" y2="0" width="0" layer="20"/>
+<text x="48.895" y="23.97125" size="1.778" layer="21">MOTOR</text>
+<text x="8.41375" y="87.9475" size="1.778" layer="22" rot="MR270">HIGH SPEED ADC</text>
+<text x="13.17625" y="96.2025" size="1.778" layer="22" rot="MR180">SPI</text>
+<text x="7.62" y="97.4725" size="1.778" layer="21">SPI</text>
+<text x="93.50375" y="95.5675" size="1.778" layer="22" rot="MR270">LOW SPEED ADC</text>
+<text x="92.3925" y="29.845" size="1.778" layer="22" rot="MR270">IR TRANSMITTER</text>
+<text x="11.27125" y="69.37375" size="1.778" layer="22" rot="MR90">VCC | SCK | NSS
+--------------------
+MIS | MOS | GND</text>
+<text x="25.87625" y="97.94875" size="1.778" layer="22" rot="MR270">VCC | TX | RX | GND</text>
+<text x="77.1525" y="82.07375" size="1.778" layer="22" rot="MR90">GND 
+SDIO | TX
+SDCK | RX
+VCC</text>
+<text x="59.53125" y="11.27125" size="1.778" layer="22" rot="MR0">MOTOR</text>
+<text x="92.55125" y="48.26" size="1.778" layer="22" rot="MR270">ENCODER</text>
 </plain>
 <libraries>
 <library name="hqc">
@@ -4965,4 +4981,10 @@ einem neuen Namen ab.&lt;br /&gt;
 </signals>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>
