@@ -26,8 +26,8 @@
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="no" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
@@ -36,7 +36,7 @@
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
@@ -2446,48 +2446,45 @@ einem neuen Namen ab.&lt;br /&gt;
 </pass>
 </autorouter>
 <elements>
-<element name="B1" library="hqc" package="BUZZER-12-6.6" value="BUZZER-12-6.6" x="19.05" y="73.66" smashed="yes">
-<attribute name="NAME" x="25.908" y="74.676" size="1.27" layer="25"/>
-<attribute name="VALUE" x="25.908" y="72.644" size="1.27" layer="27"/>
-</element>
+<element name="B1" library="hqc" package="BUZZER-12-6.6" value="BUZZER-12-6.6" x="19.05" y="73.66" smashed="yes"/>
 <element name="C1" library="rcl" package="153CLV-0505" value="10uf" x="7.62" y="34.925" smashed="yes" rot="R270">
-<attribute name="NAME" x="10.6" y="37.665" size="1.27" layer="25" rot="R270"/>
-<attribute name="VALUE" x="3.385" y="37.7" size="1.27" layer="27" rot="R270"/>
+<attribute name="NAME" x="2.49875" y="31.555" size="1.27" layer="25"/>
+<attribute name="VALUE" x="0.87625" y="33.5475" size="1.27" layer="27"/>
 </element>
 <element name="C2" library="rcl" package="153CLV-0605" value="100uf" x="20.32" y="53.34" smashed="yes">
-<attribute name="NAME" x="16.93" y="56.97" size="1.27" layer="25"/>
-<attribute name="VALUE" x="16.895" y="48.455" size="1.27" layer="27"/>
+<attribute name="NAME" x="25.66125" y="53.16" size="1.27" layer="25"/>
+<attribute name="VALUE" x="25.94375" y="55.44" size="1.27" layer="27"/>
 </element>
 <element name="C5" library="rcl" package="153CLV-0505" value="10uf" x="30.48" y="27.94" smashed="yes" rot="R180">
-<attribute name="NAME" x="33.22" y="24.96" size="1.27" layer="25" rot="R180"/>
-<attribute name="VALUE" x="33.255" y="32.175" size="1.27" layer="27" rot="R180"/>
+<attribute name="NAME" x="34.56625" y="25.205" size="1.27" layer="25"/>
+<attribute name="VALUE" x="37.065" y="30.74625" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="C6" library="rcl" package="153CLV-0605" value="100uf" x="7.62" y="53.34" smashed="yes">
-<attribute name="NAME" x="4.23" y="56.97" size="1.27" layer="25"/>
-<attribute name="VALUE" x="4.195" y="48.455" size="1.27" layer="27"/>
+<attribute name="NAME" x="1.69" y="55.54125" size="1.27" layer="25"/>
+<attribute name="VALUE" x="1.49625" y="57.50375" size="1.27" layer="27"/>
 </element>
 <element name="C7" library="hqc" package="0805" value="" x="16.51" y="60.0075" smashed="yes" rot="R90">
-<attribute name="NAME" x="18.7325" y="56.8325" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="13.0175" y="59.3725" size="1.27" layer="25"/>
 <attribute name="VALUE" x="20.32" y="56.515" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="C8" library="rcl" package="153CLV-0505" value="10uf" x="14.605" y="34.925" smashed="yes" rot="R270">
-<attribute name="NAME" x="17.585" y="37.665" size="1.27" layer="25" rot="R270"/>
-<attribute name="VALUE" x="10.37" y="37.7" size="1.27" layer="27" rot="R270"/>
+<attribute name="NAME" x="18.85" y="31.71375" size="1.27" layer="25"/>
+<attribute name="VALUE" x="18.65625" y="33.5475" size="1.27" layer="27"/>
 </element>
 <element name="C9" library="rcl" package="153CLV-0605" value="100uf" x="31.75" y="45.72" smashed="yes">
 <attribute name="NAME" x="28.36" y="49.35" size="1.27" layer="25"/>
 <attribute name="VALUE" x="28.325" y="40.835" size="1.27" layer="27"/>
 </element>
 <element name="D1" library="diode" package="DO-214AC" value="" x="15.875" y="25.4" smashed="yes" rot="R270">
-<attribute name="NAME" x="17.78" y="27.94" size="1.27" layer="25" rot="R270"/>
+<attribute name="NAME" x="14.76375" y="19.20875" size="1.27" layer="25"/>
 <attribute name="VALUE" x="12.7" y="27.94" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="D3" library="diode" package="DO-214AC" value="" x="3.81" y="25.4" smashed="yes" rot="R270">
-<attribute name="NAME" x="5.715" y="27.94" size="1.27" layer="25" rot="R270"/>
+<attribute name="NAME" x="3.01625" y="19.05" size="1.27" layer="25"/>
 <attribute name="VALUE" x="0.635" y="27.94" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="D4" library="diode" package="DO-214AC" value="" x="20.32" y="25.4" smashed="yes" rot="R270">
-<attribute name="NAME" x="22.225" y="27.94" size="1.27" layer="25" rot="R270"/>
+<attribute name="NAME" x="19.3675" y="19.20875" size="1.27" layer="25"/>
 <attribute name="VALUE" x="17.145" y="27.94" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="IC1" library="lm1117" package="SOT223" value="LM1117MP-3.3" x="20.32" y="44.45" smashed="yes">
@@ -2495,210 +2492,188 @@ einem neuen Namen ab.&lt;br /&gt;
 <attribute name="MPN" value="LM1117MP-3.3" x="20.32" y="44.45" size="1.778" layer="27" display="off"/>
 <attribute name="MF" value="Texas Instruments" x="20.32" y="44.45" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="9778195" x="20.32" y="44.45" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="17.78" y="44.5008" size="1.27" layer="25"/>
-<attribute name="VALUE" x="17.78" y="43.1292" size="1.27" layer="27"/>
+<attribute name="NAME" x="14.9225" y="47.6758" size="1.27" layer="25"/>
 </element>
 <element name="IC3" library="lm1117" package="SOT223" value="LM1117MP-3.3" x="9.2075" y="44.45" smashed="yes" rot="R270">
 <attribute name="OC_NEWARK" value="28X3416" x="9.2075" y="44.45" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="LM1117MP-3.3" x="9.2075" y="44.45" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MF" value="Texas Instruments" x="9.2075" y="44.45" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="OC_FARNELL" value="9778195" x="9.2075" y="44.45" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="9.2583" y="46.99" size="1.27" layer="25" rot="R270"/>
-<attribute name="VALUE" x="7.8867" y="46.99" size="1.27" layer="27" rot="R270"/>
+<attribute name="NAME" x="11.58875" y="40.3733" size="1.27" layer="25"/>
 </element>
 <element name="IC4" library="40xx" package="SO16" value="4051D" x="82.55" y="66.51625" smashed="yes" rot="R90">
-<attribute name="VALUE" x="83.185" y="62.45225" size="1.27" layer="27" ratio="10" rot="R90"/>
-<attribute name="NAME" x="84.582" y="61.05525" size="1.27" layer="25" ratio="10" rot="R180"/>
+<attribute name="NAME" x="83.78825" y="60.2615" size="1.27" layer="25" ratio="10" rot="R180"/>
 </element>
 <element name="IC5" library="40xx" package="SO16" value="4051D" x="82.55" y="80.9625" smashed="yes" rot="R90">
-<attribute name="VALUE" x="83.185" y="76.8985" size="1.27" layer="27" ratio="10" rot="R90"/>
-<attribute name="NAME" x="84.582" y="75.5015" size="1.27" layer="25" ratio="10" rot="R180"/>
+<attribute name="NAME" x="83.6295" y="74.549" size="1.27" layer="25" ratio="10" rot="R180"/>
 </element>
 <element name="IC6" library="lm1117" package="SOT223" value="LM1117MP-3.3" x="31.75" y="36.83" smashed="yes" rot="R270">
 <attribute name="OC_NEWARK" value="28X3416" x="31.75" y="36.83" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="LM1117MP-3.3" x="31.75" y="36.83" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MF" value="Texas Instruments" x="31.75" y="36.83" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="OC_FARNELL" value="9778195" x="31.75" y="36.83" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="31.8008" y="39.37" size="1.27" layer="25" rot="R270"/>
-<attribute name="VALUE" x="30.4292" y="39.37" size="1.27" layer="27" rot="R270"/>
+<attribute name="NAME" x="34.925" y="39.89705" size="1.27" layer="25"/>
 </element>
 <element name="J1" library="hqc" package="DEBUG-PORT" value="" x="81.28" y="99.06" smashed="yes" rot="R90"/>
 <element name="J2" library="hqc" package="KF250-2X12P" value="" x="29.21" y="5.08" smashed="yes">
-<attribute name="NAME" x="26.21" y="23.48" size="1.27" layer="25"/>
+<attribute name="NAME" x="22.55875" y="1.255" size="1.27" layer="25"/>
 </element>
 <element name="JP1" library="pinhead" package="2X14" value="" x="3.81" y="78.74" smashed="yes" rot="R270">
-<attribute name="NAME" x="6.985" y="96.52" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="NAME" x="5.08" y="98.7425" size="1.27" layer="25" ratio="10" rot="R180"/>
 <attribute name="VALUE" x="-0.635" y="96.52" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="JP2" library="pinhead" package="2X12" value="" x="96.52" y="72.39" rot="R90"/>
+<element name="JP2" library="pinhead" package="2X12" value="" x="96.52" y="72.39" smashed="yes" rot="R90">
+<attribute name="NAME" x="93.18625" y="56.8325" size="1.27" layer="25" ratio="10" rot="R180"/>
+<attribute name="VALUE" x="100.965" y="57.15" size="1.27" layer="27" rot="R90"/>
+</element>
 <element name="JP3" library="pinhead" package="2X04" value="" x="96.52" y="93.98" smashed="yes" rot="R270">
-<attribute name="NAME" x="99.695" y="99.06" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="NAME" x="90.17" y="97.4725" size="1.27" layer="25" ratio="10"/>
 <attribute name="VALUE" x="92.075" y="99.06" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="JP4" library="pinhead" package="2X03" value="" x="15.24" y="93.98" smashed="yes" rot="R90">
-<attribute name="NAME" x="12.065" y="90.17" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="12.54125" y="88.265" size="1.27" layer="25" ratio="10"/>
 <attribute name="VALUE" x="19.685" y="90.17" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="JP5" library="pinhead" package="2X04" value="" x="96.52" y="36.83" smashed="yes" rot="R90">
-<attribute name="NAME" x="93.345" y="31.75" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="89.8525" y="40.9575" size="1.27" layer="25" ratio="10"/>
 <attribute name="VALUE" x="100.965" y="31.75" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="JP6" library="pinhead" package="2X04" value="" x="96.52" y="48.26" smashed="yes" rot="R90">
-<attribute name="NAME" x="93.345" y="43.18" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="89.69375" y="42.8625" size="1.27" layer="25" ratio="10"/>
 <attribute name="VALUE" x="100.965" y="43.18" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="JP7" library="pinhead" package="2X08" value="" x="96.52" y="20.32" smashed="yes" rot="R270">
-<attribute name="NAME" x="99.695" y="30.48" size="1.27" layer="25" ratio="10" rot="R270"/>
+<attribute name="NAME" x="90.17" y="25.87625" size="1.27" layer="25" ratio="10"/>
 <attribute name="VALUE" x="92.075" y="30.48" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="JP8" library="pinhead" package="1X04" value="" x="21.59" y="92.71" smashed="yes" rot="R90">
-<attribute name="NAME" x="19.7612" y="87.5538" size="1.27" layer="25" ratio="10" rot="R90"/>
+<attribute name="NAME" x="25.31745" y="87.7062" size="1.27" layer="25" ratio="10" rot="R180"/>
 <attribute name="VALUE" x="24.765" y="87.63" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="LED1" library="led" package="CHIP-LED0805" value="" x="27.94" y="91.44" smashed="yes" rot="R270">
-<attribute name="NAME" x="26.67" y="92.71" size="1.27" layer="25"/>
+<attribute name="NAME" x="26.19375" y="88.5825" size="1.27" layer="25"/>
 <attribute name="VALUE" x="26.67" y="88.9" size="1.27" layer="27"/>
 </element>
 <element name="LED2" library="led" package="CHIP-LED0805" value="" x="27.94" y="96.67875" smashed="yes" rot="R270">
-<attribute name="NAME" x="26.67" y="97.94875" size="1.27" layer="25"/>
+<attribute name="NAME" x="26.035" y="93.82125" size="1.27" layer="25"/>
 <attribute name="VALUE" x="26.67" y="94.13875" size="1.27" layer="27"/>
 </element>
 <element name="R1" library="hqc" package="0603" value="" x="8.89" y="95.25" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="97.79" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="99.06" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R10" library="hqc" package="0603" value="" x="8.89" y="72.39" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="74.93" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="76.2" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R11" library="hqc" package="0603" value="" x="8.89" y="69.85" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="72.39" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="73.66" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R12" library="hqc" package="0603" value="" x="8.89" y="67.31" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="69.85" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="71.12" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R13" library="hqc" package="0603" value="" x="8.89" y="64.77" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="67.31" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="68.58" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R14" library="hqc" package="0603" value="" x="8.89" y="62.23" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="64.77" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="66.04" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R15" library="hqc" package="0603" value="" x="91.44" y="58.42" smashed="yes">
-<attribute name="NAME" x="90.17" y="55.88" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="54.61" size="1.27" layer="27"/>
 </element>
 <element name="R16" library="hqc" package="0603" value="" x="91.44" y="60.96" smashed="yes">
-<attribute name="NAME" x="90.17" y="58.42" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="57.15" size="1.27" layer="27"/>
 </element>
 <element name="R17" library="hqc" package="0603" value="" x="91.44" y="63.5" smashed="yes">
-<attribute name="NAME" x="90.17" y="60.96" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="59.69" size="1.27" layer="27"/>
 </element>
 <element name="R18" library="hqc" package="0603" value="" x="91.44" y="66.04" smashed="yes">
-<attribute name="NAME" x="90.17" y="63.5" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="62.23" size="1.27" layer="27"/>
 </element>
 <element name="R19" library="hqc" package="0603" value="" x="91.44" y="68.58" smashed="yes">
-<attribute name="NAME" x="90.17" y="66.04" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="64.77" size="1.27" layer="27"/>
 </element>
 <element name="R2" library="hqc" package="0603" value="" x="8.89" y="92.71" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="95.25" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="96.52" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R20" library="hqc" package="0603" value="" x="91.44" y="71.12" smashed="yes">
-<attribute name="NAME" x="90.17" y="68.58" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="67.31" size="1.27" layer="27"/>
 </element>
 <element name="R21" library="hqc" package="0603" value="" x="91.44" y="73.66" smashed="yes">
-<attribute name="NAME" x="90.17" y="71.12" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="69.85" size="1.27" layer="27"/>
 </element>
 <element name="R22" library="hqc" package="0603" value="" x="91.44" y="76.2" smashed="yes">
-<attribute name="NAME" x="90.17" y="73.66" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="72.39" size="1.27" layer="27"/>
 </element>
 <element name="R23" library="hqc" package="0603" value="" x="91.44" y="78.74" smashed="yes">
-<attribute name="NAME" x="90.17" y="76.2" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="74.93" size="1.27" layer="27"/>
 </element>
 <element name="R24" library="hqc" package="0603" value="" x="91.44" y="81.28" smashed="yes">
-<attribute name="NAME" x="90.17" y="78.74" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="77.47" size="1.27" layer="27"/>
 </element>
 <element name="R25" library="hqc" package="0603" value="" x="91.44" y="83.82" smashed="yes">
-<attribute name="NAME" x="90.17" y="81.28" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="80.01" size="1.27" layer="27"/>
 </element>
 <element name="R26" library="hqc" package="0603" value="" x="91.44" y="86.36" smashed="yes">
-<attribute name="NAME" x="90.17" y="83.82" size="1.27" layer="25"/>
 <attribute name="VALUE" x="90.17" y="82.55" size="1.27" layer="27"/>
 </element>
-<element name="R27" library="rcl" package="R0402" value="" x="16.51" y="86.83625" rot="R90"/>
+<element name="R27" library="rcl" package="R0402" value="" x="16.51" y="86.83625" smashed="yes" rot="R90">
+<attribute name="NAME" x="16.03375" y="83.34375" size="1.27" layer="25" rot="R270"/>
+<attribute name="VALUE" x="18.415" y="86.20125" size="1.27" layer="27" rot="R90"/>
+</element>
 <element name="R28" library="rcl" package="R0402" value="" x="80.01" y="91.7575" smashed="yes" rot="R90">
-<attribute name="NAME" x="79.375" y="91.1225" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="80.80375" y="86.6775" size="1.27" layer="25" rot="R90"/>
 <attribute name="VALUE" x="81.915" y="91.1225" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="R29" library="hqc" package="0805" value="" x="22.225" y="60.0075" smashed="yes" rot="R270">
-<attribute name="NAME" x="20.0025" y="63.1825" size="1.27" layer="25" rot="R270"/>
+<attribute name="NAME" x="23.97125" y="60.48375" size="1.27" layer="25"/>
 <attribute name="VALUE" x="18.415" y="63.5" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R3" library="hqc" package="0603" value="" x="8.89" y="90.17" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="92.71" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="93.98" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R30" library="hqc" package="0805" value="" x="60.96" y="67.6275" smashed="yes" rot="R180">
-<attribute name="NAME" x="64.135" y="69.85" size="1.27" layer="25" rot="R180"/>
+<attribute name="NAME" x="62.38875" y="65.88125" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="64.4525" y="71.4375" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R31" library="hqc" package="0805" value="" x="60.80125" y="73.9775" smashed="yes" rot="R180">
-<attribute name="NAME" x="63.97625" y="76.2" size="1.27" layer="25" rot="R180"/>
+<attribute name="NAME" x="62.70625" y="72.0725" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="64.29375" y="77.7875" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R32" library="hqc" package="0805" value="" x="22.225" y="64.77" smashed="yes" rot="R90">
-<attribute name="NAME" x="24.4475" y="61.595" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="24.4475" y="65.405" size="1.27" layer="25"/>
 <attribute name="VALUE" x="26.035" y="61.2775" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="R33" library="hqc" package="0805" value="" x="46.99" y="68.58" smashed="yes" rot="R180">
-<attribute name="NAME" x="50.165" y="70.8025" size="1.27" layer="25" rot="R180"/>
+<attribute name="NAME" x="48.5775" y="66.675" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="50.4825" y="72.39" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R34" library="hqc" package="0805" value="" x="46.99" y="74.93" smashed="yes" rot="R180">
-<attribute name="NAME" x="50.165" y="77.1525" size="1.27" layer="25" rot="R180"/>
+<attribute name="NAME" x="48.73625" y="73.18375" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="50.4825" y="78.74" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R35" library="hqc" package="0805" value="" x="90.17" y="29.21" smashed="yes">
-<attribute name="NAME" x="86.995" y="26.9875" size="1.27" layer="25"/>
+<attribute name="NAME" x="83.97875" y="28.2575" size="1.27" layer="25"/>
 <attribute name="VALUE" x="86.6775" y="25.4" size="1.27" layer="27"/>
 </element>
-<element name="R36" library="rcl" package="R0402" value="" x="21.59" y="84.7725" rot="R90"/>
+<element name="R36" library="rcl" package="R0402" value="" x="21.59" y="84.7725" smashed="yes" rot="R90">
+<attribute name="NAME" x="22.38375" y="79.85125" size="1.27" layer="25" rot="R90"/>
+<attribute name="VALUE" x="23.495" y="84.1375" size="1.27" layer="27" rot="R90"/>
+</element>
 <element name="R4" library="hqc" package="0603" value="" x="8.89" y="87.63" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="90.17" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="91.44" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R5" library="hqc" package="0603" value="" x="8.89" y="85.09" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="87.63" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="88.9" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R6" library="hqc" package="0603" value="" x="8.89" y="82.55" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="85.09" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="86.36" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R7" library="hqc" package="0603" value="" x="8.89" y="80.01" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="82.55" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="83.82" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R8" library="hqc" package="0603" value="" x="8.89" y="77.47" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="80.01" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="81.28" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="R9" library="hqc" package="0603" value="" x="8.89" y="74.93" smashed="yes" rot="R180">
-<attribute name="NAME" x="10.16" y="77.47" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="10.16" y="78.74" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="U$1" library="stm32f4" package="STM32F4" value="STM32F4" x="53.34" y="74.93" rot="R270"/>
@@ -2710,21 +2685,13 @@ einem neuen Namen ab.&lt;br /&gt;
 <attribute name="PRICE" value="None" x="44.45" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="DESCRIPTION" value=" Motor Driver Power MOSFET Parallel 24-SSOP " x="44.45" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="Toshiba" x="44.45" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="39.81863125" y="30.724490625" size="1.27146875" layer="25" ratio="10" rot="R90"/>
-<attribute name="VALUE" x="50.434609375" y="30.72151875" size="1.272259375" layer="27" ratio="10" rot="R90"/>
+<attribute name="NAME" x="41.189259375" y="30.29363125" size="1.27146875" layer="25" ratio="10" rot="R180"/>
 </element>
 <element name="U2" library="hqc" package="SOT-23" value="SS8050-SOT-23" x="16.51" y="64.77" smashed="yes">
-<attribute name="NAME" x="19.01" y="65.27" size="1.27" layer="25"/>
-<attribute name="VALUE" x="19.01" y="63.77" size="1.27" layer="27"/>
+<attribute name="NAME" x="11.86625" y="64" size="1.27" layer="25"/>
 </element>
-<element name="U3" library="hqc" package="SOT-23" value="SS8050-SOT-23" x="53.34" y="68.58" smashed="yes" rot="R90">
-<attribute name="NAME" x="52.84" y="71.08" size="1.27" layer="25" rot="R90"/>
-<attribute name="VALUE" x="54.34" y="71.08" size="1.27" layer="27" rot="R90"/>
-</element>
-<element name="U4" library="hqc" package="SOT-23" value="SS8050-SOT-23" x="53.34" y="74.93" smashed="yes" rot="R90">
-<attribute name="NAME" x="52.84" y="77.43" size="1.27" layer="25" rot="R90"/>
-<attribute name="VALUE" x="54.34" y="77.43" size="1.27" layer="27" rot="R90"/>
-</element>
+<element name="U3" library="hqc" package="SOT-23" value="SS8050-SOT-23" x="53.34" y="68.58" smashed="yes" rot="R90"/>
+<element name="U4" library="hqc" package="SOT-23" value="SS8050-SOT-23" x="53.34" y="74.93" smashed="yes" rot="R90"/>
 <element name="U5" library="TB6612FNG" package="SOP65P760X160-24N" value="TB6612FNG(O,C,8,EL" x="57.15" y="35.56" smashed="yes" rot="R90">
 <attribute name="PACKAGE" value="SSOP-24 Toshiba" x="57.15" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="AVAILABILITY" value="Warning" x="57.15" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
@@ -2732,8 +2699,7 @@ einem neuen Namen ab.&lt;br /&gt;
 <attribute name="PRICE" value="None" x="57.15" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="DESCRIPTION" value=" Motor Driver Power MOSFET Parallel 24-SSOP " x="57.15" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="Toshiba" x="57.15" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="52.51863125" y="30.724490625" size="1.27146875" layer="25" ratio="10" rot="R90"/>
-<attribute name="VALUE" x="63.134609375" y="30.72151875" size="1.272259375" layer="27" ratio="10" rot="R90"/>
+<attribute name="NAME" x="52.473240625" y="29.23761875" size="1.27146875" layer="25" ratio="10"/>
 </element>
 <element name="U6" library="TB6612FNG" package="SOP65P760X160-24N" value="TB6612FNG(O,C,8,EL" x="71.12" y="35.56" smashed="yes" rot="R90">
 <attribute name="PACKAGE" value="SSOP-24 Toshiba" x="71.12" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
@@ -2742,19 +2708,18 @@ einem neuen Namen ab.&lt;br /&gt;
 <attribute name="PRICE" value="None" x="71.12" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="DESCRIPTION" value=" Motor Driver Power MOSFET Parallel 24-SSOP " x="71.12" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="Toshiba" x="71.12" y="35.56" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="66.48863125" y="30.724490625" size="1.27146875" layer="25" ratio="10" rot="R90"/>
-<attribute name="VALUE" x="77.104609375" y="30.72151875" size="1.272259375" layer="27" ratio="10" rot="R90"/>
+<attribute name="NAME" x="66.760740625" y="28.60261875" size="1.27146875" layer="25" ratio="10"/>
 </element>
 <element name="B2" library="switch-tact" package="DTSM-6" value="" x="28.8925" y="83.02625" smashed="yes" rot="R270">
-<attribute name="NAME" x="32.7025" y="85.56625" size="1.27" layer="25" rot="R270"/>
+<attribute name="NAME" x="28.2575" y="75.72375" size="1.27" layer="25"/>
 <attribute name="VALUE" x="23.8125" y="85.56625" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="B3" library="switch-tact" package="DTSM-6" value="" x="86.20125" y="50.64125" smashed="yes" rot="R270">
-<attribute name="NAME" x="90.01125" y="53.18125" size="1.27" layer="25" rot="R270"/>
+<attribute name="NAME" x="85.24875" y="43.33875" size="1.27" layer="25"/>
 <attribute name="VALUE" x="81.12125" y="53.18125" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="B4" library="switch-tact" package="DTSM-6" value="" x="78.26375" y="50.64125" smashed="yes" rot="R90">
-<attribute name="NAME" x="74.45375" y="48.10125" size="1.27" layer="25" rot="R90"/>
+<attribute name="NAME" x="79.0575" y="44.60875" size="1.27" layer="25" rot="R180"/>
 <attribute name="VALUE" x="83.34375" y="48.10125" size="1.27" layer="27" rot="R90"/>
 </element>
 </elements>
