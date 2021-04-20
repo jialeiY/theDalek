@@ -9,13 +9,11 @@ class CamMotor(object):
     def move(self,direction):
         
         if direction=="up":
-            self.current_pos=min(self.current_pos+1,180)
+           out="cam_up"
         elif direction=="down":
-            self.current_pos=max(self.current_pos-1,0)
+            out="cam_down"
 
-        
-        print(f"camera position {self.current_pos}")
-        self.ser.write(str(self.current_pos).encode())
+        self.ser.write(out.encode())
 
 
 cam_motor_obj=CamMotor()

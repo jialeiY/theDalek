@@ -16,6 +16,7 @@ int motorBackLeftPin1=42;
 int motorBackLeftPin2=44;
 
 int cameraServoPin=34;
+int cameraPosition=90;
 
 Servo cameraServo;
 
@@ -36,6 +37,7 @@ void setup() {
   pinMode(motorBackLeftPin2,OUTPUT);
   
   cameraServo.attach(cameraServoPin);
+  cameraServo.write(cameraPosition);
 }
 
 void forward(){
@@ -116,27 +118,34 @@ void loop() {
   if(Serial.available()>0){
     incomingVal=Serial.readString();
     
-    if(incomingVal.equals("forward")){
+    if(incomingVal.equals("move_forward")){
       forward();
       delay(1000);
     }
-    else if (incomingVal.equals("backward")){
+    else if (incomingVal.equals("move_backward")){
       backward();
       delay(1000);
     }
-    else if(incomingVal.equals("left")){
+    else if(incomingVal.equals("move_left")){
       left();
       delay(1000);
     }
-    else if(incomingVal.equals("right")){
+    else if(incomingVal.equals("move_right")){
       right();
       delay(1000);
-    }else if(incomingVal.toInt()>=0){
-      cameraServo.write(incomingVal.toInt());
+    }else if(incomingVal.equals("cam_up")){
+      cameraPosition=cameraPosition+1;
+      cameraPosition=min(cameraPosition,180);
+      cameraServo.write(cameraPosition);
+    }else if(incomingVal.equals("cam_down")){
+       cameraPosition=cameraPosition-1;
+       cameraPosition=max(cameraPosition,0);
+       cameraServo.write(cameraPosition);
     }
     else{
       stop();  
     }
+
     stop();
 
   }

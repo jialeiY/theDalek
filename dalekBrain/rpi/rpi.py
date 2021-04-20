@@ -19,8 +19,8 @@ def index():
 
 @app.route("/cam-motor",methods=["POST"])
 def move_camera():
-    move=request.form.get('move')
-    cam_motor_obj.move(move)
+    direction=request.form.get('move')
+    cam_motor_obj.move(direction)
     return "success"
 
 @app.route("/faces",methods=["POST"])
