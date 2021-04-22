@@ -2,3 +2,6 @@
 	path = dalekBrain/training/detection/pytorch-ssd
 	url = https://github.com/jialeiY/pytorch-ssd
 	branch = master
+[submodule "dalekFoot/src/wheel/lib/ChibiOS"]
+	path = dalekFoot/src/wheel/lib/ChibiOS
+	url = https://github.com/heqichen/ChibiOS
