@@ -202,9 +202,9 @@ int main(void)
 	while (true)
 	{
 		palClearPad(GPIOB, 9);
-		BaseThread::sleep(TIME_MS2I(50));
+		BaseThread::sleep(TIME_MS2I(500));
 		palSetPad(GPIOB, 9);
-		BaseThread::sleep(TIME_MS2I(50));
+		BaseThread::sleep(TIME_MS2I(500));
 	}
 
 	return 0;
