@@ -83,7 +83,7 @@ endif
 #
 
 # Define project name here
-PROJECT = ch
+PROJECT = wheel
 
 # Imported source files and paths
 CHIBIOS = lib/ChibiOS
