@@ -25,7 +25,7 @@ class MotorControl(object):
         elif direction=="left":
             out="move_left"
         elif direction=="right":
-            out="move_fright"
+            out="move_right"
         if out:
             self.__send(out)
 

@@ -15,8 +15,8 @@ $("#car_backward").click(function(){
 $("#car_left").click(function(){
     $.post("/car-motor", {move:"left"})
 });
-$("#car_forward").click(function(){
-    $.post("/car-right", {move:"right"})
+$("#car_right").click(function(){
+    $.post("/car-motor", {move:"right"})
 });
 
 
