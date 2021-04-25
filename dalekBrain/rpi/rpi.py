@@ -2,7 +2,7 @@ from flask import Flask,render_template,Response,request
 import camera
 from camera import CameraFactory
 from config import FACE_ENCODING_PATH
-from motor import cam_motor_obj
+from motor import motor_control
 from modules.face_recognition import FaceRecognizerTrainer
 
 app=Flask(__name__)
@@ -20,7 +20,13 @@ def index():
 @app.route("/cam-motor",methods=["POST"])
 def move_camera():
     direction=request.form.get('move')
-    cam_motor_obj.move(direction)
+    motor_control.move_camera(direction)
+    return "success"
+
+@app.route("/car-motor",methods=["POST"])
+def move_car():
+    direction=request.form.get("move")
+    motor_control.move_car(direction)
     return "success"
 
 @app.route("/faces",methods=["POST"])
