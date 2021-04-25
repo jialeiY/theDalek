@@ -3,8 +3,8 @@
 
 String incomingVal="";
 
-int motorFrontRightPin1=46;
-int motorFrontRightPin2=48;
+int motorFrontRightPin1=32;
+int motorFrontRightPin2=33;
 
 int motorBackRightPin1=50;
 int motorBackRightPin2=52;
@@ -13,7 +13,7 @@ int motorFrontLeftPin1=38;
 int motorFrontLeftPin2=40;
 
 int motorBackLeftPin1=42;
-int motorBackLeftPin2=44;
+int motorBackLeftPin2=43 ;
 
 int cameraServoPin=34;
 int cameraPosition=90;
@@ -115,6 +115,7 @@ void stop(){
 
 void loop() {
   // put your main code here, to run repeatedly:
+ 
   if(Serial.available()>0){
     incomingVal=Serial.readString();
     
