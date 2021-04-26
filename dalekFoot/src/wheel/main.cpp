@@ -20,14 +20,30 @@
 // #include "oslib_test_root.h"
 #include "driver/tb6612fng.h"
 #include "hw/board_def.h"
+#include "hw/pwm_controller.h"
+
+
+PwmController pwm1a(
+	kBoardDef.motor1APwmDriver,
+	kBoardDef.motor1APwmChannel,
+	kBoardDef.motor1APwmConf,
+	kBoardDef.motor1APort,
+	kBoardDef.motor1APad);
+
+PwmController pwm1b(
+	kBoardDef.motor1BPwmDriver,
+	kBoardDef.motor1BPwmChannel,
+	kBoardDef.motor1BPwmConf,
+	kBoardDef.motor1BPort,
+	kBoardDef.motor1BPad);
 
 Tb6612fng tb6612(
 	GPIOD, 0,
 	GPIOD, 1,
 	GPIOD, 2,
 	GPIOD, 3,
-	kBoardDef.motor1APort, kBoardDef.motor1APad,
-	GPIOD, 13);
+	pwm1a,
+	pwm1b);
 
 using namespace chibios_rt;
 
@@ -177,58 +193,13 @@ static const SerialConfig sdcfg = {
 
 int main(void)
 {
-
-	/*
-   * System initializations.
-   * - HAL initialization, this also initializes the configured device drivers
-   *   and performs the board-specific initializations.
-   * - Kernel initialization, the main() function becomes a thread and the
-   *   RTOS is active.
-   */
 	halInit();
 	System::init();
 	tb6612.init();
-	
 	sdStart(&SD1, &sdcfg);
 	
-
-	/*
-   * Activates the serial driver 2 using the driver default configuration.
-   * PA2(TX) and PA3(RX) are routed to USART2.
-   */
-	// sdStart(&SD2, NULL);
-	// palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));
-	// palSetPadMode(GPIOA, 3, PAL_MODE_ALTERNATE(7));
-
-	/*
-   * Starts several instances of the SequencerThread class, each one operating
-   * on a different LED.
-   */
-	// blinker1.start(NORMALPRIO + 10);
-	// blinker2.start(NORMALPRIO + 10);
-	// blinker3.start(NORMALPRIO + 10);
-	// blinker4.start(NORMALPRIO + 10);
-
-	/*
-   * Serves timer events.
-   */
-
-	// while (true) {
-	//   if (palReadPad(GPIOA, GPIOA_BUTTON)) {
-	//     tester.start(NORMALPRIO);
-	//     tester.wait();
-	//   };
-	//   BaseThread::sleep(TIME_MS2I(500));
-	// }
-
-	// palSetPadMode(GPIOB, 9, PAL_MODE_OUTPUT_PUSHPULL);
-	// palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(2));
 	palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7));
 	palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7));
-	// palSetPadMode(GPIOD, 12, PAL_MODE_ALTERNATE(2));
-	// PAL_MODE_ALTERNATE(2)
-	// PAL_MODE_OUTPUT_PUSHPULL
-	// palSetPadMode(GPIOD, 12, PAL_MODE_ALTERNATE(2));
 	
 	
 

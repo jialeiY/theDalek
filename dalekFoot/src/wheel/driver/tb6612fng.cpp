@@ -12,37 +12,29 @@ Tb6612fng::Tb6612fng(
 	uint32_t GPIO_PAD_BIN1,
 	stm32_gpio_t * GPIO_PORT_BIN2,
 	uint32_t GPIO_PAD_BIN2,
-	stm32_gpio_t * GPIO_PORT_PWMA,
-	uint32_t GPIO_PAD_PWMA,
-	stm32_gpio_t * GPIO_PORT_PWMB,
-	uint32_t GPIO_PAD_PWMB
+	const PwmController &pwma,
+	const PwmController &pwmb
 ): pad_ain1_(GPIO_PORT_AIN1, GPIO_PAD_AIN1),
 	pad_ain2_(GPIO_PORT_AIN2, GPIO_PAD_AIN2),
 	pad_bin1_(GPIO_PORT_BIN1, GPIO_PAD_BIN1),
 	pad_bin2_(GPIO_PORT_BIN2, GPIO_PAD_BIN2),
-	pad_pwma_(GPIO_PORT_PWMA, GPIO_PAD_PWMA),
-	pad_pwmb_(GPIO_PORT_PWMB, GPIO_PAD_PWMB) {
+	pwma_(pwma),
+	pwmb_(pwmb) {
 	palSetPadMode(pad_ain1_.port_, pad_ain1_.pad_, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetPadMode(pad_ain2_.port_, pad_ain2_.pad_, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetPadMode(pad_bin1_.port_, pad_bin1_.pad_, PAL_MODE_OUTPUT_PUSHPULL);
 	palSetPadMode(pad_bin2_.port_, pad_bin2_.pad_, PAL_MODE_OUTPUT_PUSHPULL);
-	// palSetPadMode(pad_pwma_.port_, pad_pwma_.pad_, PAL_MODE_ALTERNATE(2));
-	// palSetPadMode(pad_pwmb_.port_, pad_pwmb_.pad_, PAL_MODE_ALTERNATE(2));
-
+	
 	palClearPad(pad_ain1_.port_, pad_ain1_.pad_);
 	palClearPad(pad_ain2_.port_, pad_ain2_.pad_);
 	palClearPad(pad_bin1_.port_, pad_bin1_.pad_);
 	palClearPad(pad_bin2_.port_, pad_bin2_.pad_);
-	// palClearPad(pad_pwma_.port_, pad_pwma_.pad_);
-	// palClearPad(pad_pwmb_.port_, pad_pwmb_.pad_);
 
-
-	//pwmStart(&PWMD4, &pwmcfg);
-	pwmEnableChannel(&PWMD4, 0, 50);
 }
 
-void Tb6612fng::init(void) {
+void Tb6612fng::init(void) const{
 	pwma_.init();
+	pwmb_.init();
 }
 
 void Tb6612fng::on(void) const {

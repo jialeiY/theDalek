@@ -16,20 +16,18 @@ struct Pad {
 class Tb6612fng {
 	public:
 		Tb6612fng(
-			stm32_gpio_t * GPIO_PORT_AIN1,
-			uint32_t GPIO_PAD_AIN1,
-			stm32_gpio_t * GPIO_PORT_AIN2,
-			uint32_t GPIO_PAD_AIN2,
-			stm32_gpio_t * GPIO_PORT_BIN1,
-			uint32_t GPIO_PAD_BIN1,
-			stm32_gpio_t * GPIO_PORT_BIN2,
-			uint32_t GPIO_PAD_BIN2,
-			stm32_gpio_t * GPIO_PORT_PWMA,
-			uint32_t GPIO_PAD_PWMA,
-			stm32_gpio_t * GPIO_PORT_PWMB,
-			uint32_t GPIO_PAD_PWMB
+			stm32_gpio_t * const GPIO_PORT_AIN1,
+			uint32_t const GPIO_PAD_AIN1,
+			stm32_gpio_t * const GPIO_PORT_AIN2,
+			uint32_t const GPIO_PAD_AIN2,
+			stm32_gpio_t * const GPIO_PORT_BIN1,
+			uint32_t const GPIO_PAD_BIN1,
+			stm32_gpio_t * const GPIO_PORT_BIN2,
+			uint32_t const GPIO_PAD_BIN2,
+			const PwmController &pwma,
+			const PwmController &pwmb
 		);
-		void init();
+		void init(void) const;
 		void on(void) const;
 		void off(void) const;
 		void debug(int v);
@@ -38,10 +36,9 @@ class Tb6612fng {
 		Pad pad_ain2_;
 		Pad pad_bin1_;
 		Pad pad_bin2_;
-		Pad pad_pwma_;
-		Pad pad_pwmb_;
 
-		PwmController pwma_;
+		const PwmController &pwma_;
+		const PwmController &pwmb_;
 };
 
 

@@ -11,11 +11,17 @@ struct Pin {
 
 
 struct BoardDef {
-	PWMConfig *motor1APwmConf;
 	PWMDriver *motor1APwmDriver;
 	pwmchannel_t motor1APwmChannel;
+	PWMConfig *motor1APwmConf;
 	stm32_gpio_t *motor1APort;
 	uint32_t motor1APad;
+
+	PWMDriver *motor1BPwmDriver;
+	pwmchannel_t motor1BPwmChannel;
+	PWMConfig *motor1BPwmConf;
+	stm32_gpio_t *motor1BPort;
+	uint32_t motor1BPad;
 	
 };
 

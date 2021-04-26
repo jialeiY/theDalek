@@ -52,10 +52,25 @@ static PWMConfig pwm4Cfg {
 };
 
 
+// BoardDef kBoardDef {
+// 	&PWMD4,
+// 	0,
+// 	&pwm4Cfg,
+// 	GPIOD,
+// 	12
+// };
+
+
 BoardDef kBoardDef {
+	&PWMD4,
+	3,
 	&pwm4Cfg,
+	GPIOB,
+	9,
+	
 	&PWMD4,
 	0,
+	&pwm4Cfg,
 	GPIOD,
 	12
 };
