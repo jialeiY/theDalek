@@ -122,6 +122,8 @@ CSRC = $(STARTUPSRC) \
 # setting.
 CPPSRC = $(CHCPPSRC) \
          main.cpp \
+				 hw/board_def.cpp \
+				 hw/pwm_controller.cpp \
 				 driver/tb6612fng.cpp \
 				 hal/motor_channel.cpp
 				 

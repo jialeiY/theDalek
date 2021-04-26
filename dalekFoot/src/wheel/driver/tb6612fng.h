@@ -5,6 +5,8 @@
 #include "ch.hpp"
 #include "hal.h"
 
+#include "hw/pwm_controller.h"
+
 struct Pad {
 	stm32_gpio_t * port_;
 	uint32_t pad_;
@@ -27,9 +29,10 @@ class Tb6612fng {
 			stm32_gpio_t * GPIO_PORT_PWMB,
 			uint32_t GPIO_PAD_PWMB
 		);
-
+		void init();
 		void on(void) const;
 		void off(void) const;
+		void debug(int v);
 	private:
 		Pad pad_ain1_;
 		Pad pad_ain2_;
@@ -37,6 +40,8 @@ class Tb6612fng {
 		Pad pad_bin2_;
 		Pad pad_pwma_;
 		Pad pad_pwmb_;
+
+		PwmController pwma_;
 };
 
 
