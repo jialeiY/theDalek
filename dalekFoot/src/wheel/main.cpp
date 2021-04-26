@@ -17,7 +17,16 @@
 #include "ch.hpp"
 #include "hal.h"
 #include "rt_test_root.h"
-#include "oslib_test_root.h"
+// #include "oslib_test_root.h"
+#include "driver/tb6612fng.h"
+
+Tb6612fng tb6612(
+	GPIOD, 0,
+	GPIOD, 1,
+	GPIOD, 2,
+	GPIOD, 3,
+	GPIOD, 12,
+	GPIOD, 13);
 
 using namespace chibios_rt;
 
@@ -125,25 +134,25 @@ public:
 /*
  * Tester thread class. This thread executes the test suite.
  */
-class TesterThread : public BaseStaticThread<256>
-{
+// class TesterThread : public BaseStaticThread<256>
+// {
 
-protected:
-	virtual void main(void)
-	{
+// protected:
+// 	virtual void main(void)
+// 	{
 
-		setName("tester");
+// 		setName("tester");
 
-		test_execute((BaseSequentialStream *)&SD2, &rt_test_suite);
-		test_execute((BaseSequentialStream *)&SD2, &oslib_test_suite);
-		exit(test_global_fail);
-	}
+// 		test_execute((BaseSequentialStream *)&SD2, &rt_test_suite);
+// 		test_execute((BaseSequentialStream *)&SD2, &oslib_test_suite);
+// 		exit(test_global_fail);
+// 	}
 
-public:
-	TesterThread(void) : BaseStaticThread<256>()
-	{
-	}
-};
+// public:
+// 	TesterThread(void) : BaseStaticThread<256>()
+// 	{
+// 	}
+// };
 
 /* Static threads instances.*/
 // static TesterThread tester;
@@ -155,6 +164,15 @@ public:
 /*
  * Application entry point.
  */
+
+static const SerialConfig sdcfg = {
+  115200,
+  0,
+  USART_CR2_STOP1_BITS,
+	0
+};
+
+
 int main(void)
 {
 
@@ -167,6 +185,8 @@ int main(void)
    */
 	halInit();
 	System::init();
+
+	sdStart(&SD1, &sdcfg);
 
 	/*
    * Activates the serial driver 2 using the driver default configuration.
@@ -198,13 +218,19 @@ int main(void)
 	// }
 
 	palSetPadMode(GPIOB, 9, PAL_MODE_OUTPUT_PUSHPULL);
+	palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7));
+	palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7));
 
+	// const unsigned char * data = static_cast<const unsigned char *>("hello world\r\n");
 	while (true)
 	{
 		palClearPad(GPIOB, 9);
-		BaseThread::sleep(TIME_MS2I(500));
+		tb6612.on();
+		BaseThread::sleep(TIME_MS2I(2000));
 		palSetPad(GPIOB, 9);
-		BaseThread::sleep(TIME_MS2I(500));
+		tb6612.off();
+		BaseThread::sleep(TIME_MS2I(2000));
+		sdWrite(&SD1, (const uint8_t *)"hello gelaoshi\r\n", 16);
 	}
 
 	return 0;
