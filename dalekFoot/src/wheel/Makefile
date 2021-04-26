@@ -84,6 +84,7 @@ endif
 
 # Define project name here
 PROJECT = wheel
+CONFDIR = ./cfg
 
 # Imported source files and paths
 CHIBIOS = lib/ChibiOS
@@ -114,10 +115,9 @@ CSRC = $(STARTUPSRC) \
        $(OSALSRC) \
        $(HALSRC) \
        $(PLATFORMSRC) \
-       $(BOARDSRC) \
        $(TESTSRC) \
        $(CHIBIOS)/os/various/syscalls.c \
-			 board.c
+			 cfg/board.c
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CPPSRC = $(CHCPPSRC) \
@@ -204,13 +204,13 @@ CPPWARN = -Wall -Wextra -Wundef
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS = 
+UDEFS = -I./cfg
 
 # Define ASM defines here
-UADEFS =
+UADEFS = -I./cfg
 
 # List all user directories here
-UINCDIR =
+UINCDIR = -I./cfg
 
 # List the user directory to look for the libraries here
 ULIBDIR =
