@@ -173,6 +173,21 @@ static const SerialConfig sdcfg = {
 };
 
 
+	static PWMConfig pwmcfg = {
+		// STM32_SYSCLK,                                    
+		4000,
+		10,                                    /* Initial PWM period 1S.         */
+		NULL,                                     /* Period callback.               */
+		{
+		{PWM_OUTPUT_ACTIVE_HIGH, NULL},          /* CH1 mode and callback.         */
+		{PWM_OUTPUT_DISABLED, NULL},             /* CH2 mode and callback.         */
+		{PWM_OUTPUT_DISABLED, NULL},             /* CH3 mode and callback.         */
+		{PWM_OUTPUT_ACTIVE_HIGH, NULL}              /* CH4 mode and callback.         */
+		},
+		0,                                        /* Control Register 2.            */
+		0                                         /* DMA/Interrupt Enable Register. */
+	};
+
 int main(void)
 {
 
@@ -187,6 +202,7 @@ int main(void)
 	System::init();
 
 	sdStart(&SD1, &sdcfg);
+	pwmStart(&PWMD4, &pwmcfg);
 
 	/*
    * Activates the serial driver 2 using the driver default configuration.
@@ -217,19 +233,37 @@ int main(void)
 	//   BaseThread::sleep(TIME_MS2I(500));
 	// }
 
-	palSetPadMode(GPIOB, 9, PAL_MODE_OUTPUT_PUSHPULL);
+	// palSetPadMode(GPIOB, 9, PAL_MODE_OUTPUT_PUSHPULL);
+	palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(2));
 	palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7));
 	palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7));
+	// palSetPadMode(GPIOD, 12, PAL_MODE_ALTERNATE(2));
+	// PAL_MODE_ALTERNATE(2)
+	// PAL_MODE_OUTPUT_PUSHPULL
+	palSetPadMode(GPIOD, 12, PAL_MODE_ALTERNATE(2));
+	
+	
+
 
 	// const unsigned char * data = static_cast<const unsigned char *>("hello world\r\n");
 	while (true)
 	{
-		palClearPad(GPIOB, 9);
+		// palClearPad(GPIOB, 9);
+		pwmEnableChannel(&PWMD4, 3, 5);
+		pwmEnableChannel(&PWMD4, 0, 5);
 		tb6612.on();
-		BaseThread::sleep(TIME_MS2I(2000));
-		palSetPad(GPIOB, 9);
+		// palSetPad(GPIOD, 12);
+	
+
+
+		BaseThread::sleep(TIME_MS2I(500));
+		pwmEnableChannel(&PWMD4, 3, 1);
+		pwmEnableChannel(&PWMD4, 0, 1);
 		tb6612.off();
-		BaseThread::sleep(TIME_MS2I(2000));
+		// palClearPad(GPIOD, 12);
+
+
+		BaseThread::sleep(TIME_MS2I(500));
 		sdWrite(&SD1, (const uint8_t *)"hello gelaoshi\r\n", 16);
 	}
 

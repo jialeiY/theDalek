@@ -230,4 +230,6 @@ include $(RULESPATH)/rules.mk
 flash: build/$(PROJECT).hex
 	/mnt/c/Program\ Files\ \(x86\)/STMicroelectronics/STM32\ ST-LINK\ Utility/ST-LINK\ Utility/ST-LINK_CLI.exe -c SWD -p build/wheel.hex -Rst
 
-.PHONY: flash
+f: flash
+
+.PHONY: flash f
