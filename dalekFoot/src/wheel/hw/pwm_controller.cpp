@@ -11,10 +11,10 @@ PwmController::PwmController(PWMDriver * const pwmDriver, pwmchannel_t const pwm
 }
 
 void PwmController::init() const {
-	pwmStart(kBoardDef.motor1APwmDriver, kBoardDef.motor1APwmConf);
-	palSetPadMode(kBoardDef.motor1APort, kBoardDef.motor1APad, PAL_MODE_ALTERNATE(2));
+	pwmStart(pwmDriver_, pwmConf_);
+	palSetPadMode(port_, pad_, PAL_MODE_ALTERNATE(2));
 }
 
 void PwmController::setValue(pwmcnt_t value) const {
-	pwmEnableChannel(kBoardDef.motor1APwmDriver, kBoardDef.motor1APwmChannel, value);
+	pwmEnableChannel(pwmDriver_, pwmChannel_, value);
 }

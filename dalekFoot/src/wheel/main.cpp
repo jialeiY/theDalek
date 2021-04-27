@@ -21,29 +21,57 @@
 #include "driver/tb6612fng.h"
 #include "hw/board_def.h"
 #include "hw/pwm_controller.h"
+#include "hal/led.h"
 
-
-PwmController pwm1a(
+PwmController pwmM1a(
 	kBoardDef.motor1APwmDriver,
 	kBoardDef.motor1APwmChannel,
 	kBoardDef.motor1APwmConf,
 	kBoardDef.motor1APort,
 	kBoardDef.motor1APad);
 
-PwmController pwm1b(
+PwmController pwmM1b(
 	kBoardDef.motor1BPwmDriver,
 	kBoardDef.motor1BPwmChannel,
 	kBoardDef.motor1BPwmConf,
 	kBoardDef.motor1BPort,
 	kBoardDef.motor1BPad);
 
+PwmController pwmLed1(
+	kBoardDef.led1PwmDriver,
+	kBoardDef.led1PwmChannel,
+	kBoardDef.led1PwmConf,
+	kBoardDef.led1Port,
+	kBoardDef.led1Pad
+);
+
+PwmController pwmLed2(
+	kBoardDef.led2PwmDriver,
+	kBoardDef.led2PwmChannel,
+	kBoardDef.led2PwmConf,
+	kBoardDef.led2Port,
+	kBoardDef.led2Pad
+);
+
+PwmController pwmLed3(
+	kBoardDef.led3PwmDriver,
+	kBoardDef.led3PwmChannel,
+	kBoardDef.led3PwmConf,
+	kBoardDef.led3Port,
+	kBoardDef.led3Pad
+);
+
 Tb6612fng tb6612(
 	GPIOD, 0,
 	GPIOD, 1,
 	GPIOD, 2,
 	GPIOD, 3,
-	pwm1a,
-	pwm1b);
+	pwmM1a,
+	pwmM1b);
+
+Led led1(pwmLed1);
+Led led2(pwmLed2);
+Led led3(pwmLed3);
 
 using namespace chibios_rt;
 
@@ -196,6 +224,10 @@ int main(void)
 	halInit();
 	System::init();
 	tb6612.init();
+	led1.init();
+	led2.init();
+	led3.init();
+	
 	sdStart(&SD1, &sdcfg);
 	
 	palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7));
@@ -205,13 +237,16 @@ int main(void)
 
 	int v = 0;
 	tb6612.on();
-	
 	// const unsigned char * data = static_cast<const unsigned char *>("hello world\r\n");
 	while (true)
 	{
-		tb6612.debug(v++);
+		tb6612.debug(v);
+		led1.setBrightness(v);
+		led2.setBrightness(v);
+		led3.setBrightness((256-v) % 256);
+		v += 2;
 		if (v >= 255) v = 0;
-		BaseThread::sleep(TIME_MS2I(20));
+		BaseThread::sleep(TIME_MS2I(10));
 		//sdWrite(&SD1, (const uint8_t *)"hello gelaoshi\r\n", 16);
 	}
 

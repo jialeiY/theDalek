@@ -34,8 +34,27 @@
  * PWMA PC8 (TIMER 3_3 AF(2))
  * PWMB PA15 (TIMER 2_1 AF(2))
  * 
+ * 
+ * 
+ * ** LED **
+ * led1 PC6 (Timer 3_1 AF(2), Timer 8_1 AF(3))
+ * led2 PC7 (Timer 3_2 AF(2), Timer 8_2 AF(3))
+ * Led3 PB9 (Timer 4_4 AF(2))
  ***/
 
+static PWMConfig pwm3Cfg {
+	5120000,
+	256,                                  		/* Initial PWM period 1S.         */
+	NULL,                                     /* Period callback.               */
+	{
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},          		/* CH1 mode and callback.         */
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},             /* CH2 mode and callback.         */
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL},             /* CH3 mode and callback.         */
+	{PWM_OUTPUT_ACTIVE_HIGH, NULL}              /* CH4 mode and callback.         */
+	},
+	0,                                        /* Control Register 2.            */
+	0                                         /* DMA/Interrupt Enable Register. */
+};
 
 static PWMConfig pwm4Cfg {
 	5120000,
@@ -52,6 +71,8 @@ static PWMConfig pwm4Cfg {
 };
 
 
+
+
 // BoardDef kBoardDef {
 // 	&PWMD4,
 // 	0,
@@ -62,15 +83,38 @@ static PWMConfig pwm4Cfg {
 
 
 BoardDef kBoardDef {
-	&PWMD4,
-	3,
-	&pwm4Cfg,
-	GPIOB,
-	9,
-	
+	// motor 1A
 	&PWMD4,
 	0,
 	&pwm4Cfg,
 	GPIOD,
-	12
+	12,
+
+	// motor 1B
+	&PWMD4,
+	1,
+	&pwm4Cfg,
+	GPIOD,
+	13,
+
+	// LED 1
+	&PWMD3,
+	0,
+	&pwm3Cfg,
+	GPIOC,
+	6,
+	
+	// LED 2
+	&PWMD3,
+	1,
+	&pwm3Cfg,
+	GPIOC,
+	7,
+	
+	// LED 3
+	&PWMD4,
+	3,
+	&pwm4Cfg,
+	GPIOB,
+	9
 };

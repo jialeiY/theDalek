@@ -22,7 +22,25 @@ struct BoardDef {
 	PWMConfig *motor1BPwmConf;
 	stm32_gpio_t *motor1BPort;
 	uint32_t motor1BPad;
-	
+
+	PWMDriver *led1PwmDriver;
+	pwmchannel_t led1PwmChannel;
+	PWMConfig *led1PwmConf;
+	stm32_gpio_t *led1Port;
+	uint32_t led1Pad;
+
+	PWMDriver *led2PwmDriver;
+	pwmchannel_t led2PwmChannel;
+	PWMConfig *led2PwmConf;
+	stm32_gpio_t *led2Port;
+	uint32_t led2Pad;
+
+	PWMDriver *led3PwmDriver;
+	pwmchannel_t led3PwmChannel;
+	PWMConfig *led3PwmConf;
+	stm32_gpio_t *led3Port;
+	uint32_t led3Pad;
+
 };
 
 extern BoardDef kBoardDef;
