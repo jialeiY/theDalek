@@ -126,7 +126,8 @@ CPPSRC = $(CHCPPSRC) \
 				 hw/pwm_controller.cpp \
 				 driver/tb6612fng.cpp \
 				 hal/motor_channel.cpp \
-				 hal/led.cpp
+				 hal/led.cpp \
+				 hal/buzzer.cpp
 				 
 
 

@@ -1,5 +1,5 @@
-#ifndef __LED__H__
-#define __LED__H__
+#ifndef __HAL_LED__H__
+#define __HAL_LED__H__
 
 #include "ch.hpp"
 #include "hal.h"
