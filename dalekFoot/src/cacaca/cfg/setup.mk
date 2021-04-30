@@ -4,7 +4,6 @@ CPP=arm-none-eabi-g++
 LINKER=arm-none-eabi-gcc
 
 COMMFLAGS += -DSTM32F40_41xxx
-COMMFLAGS += -c 
 COMMFLAGS += -mcpu=cortex-m4 
 COMMFLAGS += -O2 
 COMMFLAGS += -ggdb 
@@ -19,7 +18,8 @@ COMMFLAGS += -DTHUMB_PRESENT
 COMMFLAGS += -mno-thumb-interwork 
 COMMFLAGS += -DTHUMB_NO_INTERWORKING 
 COMMFLAGS += -mthumb 
-COMMFLAGS += -DTHUMB 
+COMMFLAGS += -DTHUMB
+COMMFLAGS += -c 
 
 
 ASMFLAGS = $(COMMFLAGS)

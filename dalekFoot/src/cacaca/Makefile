@@ -1,5 +1,6 @@
 PROJECT = wheel
 STM32_LIB=lib/STM32F4xx-standard-peripherals-library
+BUILD_DIR = build
 
 include ./cfg/setup.mk
 
@@ -11,21 +12,31 @@ LDFLAGS += -Wl,-Map=build/$(PROJECT).map,--cref,--no-warn-mismatch,--script=cfg/
 
 $(PROJECT): build/$(PROJECT).hex build/$(PROJECT).bin
 
+ASM_SRC += cfg/startup_stm32f40_41xxx.s
+C_SRC += cfg/stm32f4xx_it.c
+C_SRC += cfg/system_stm32f4xx.c
 
-build/cfg/startup_stm32f40_41xxx.o: cfg/startup_stm32f40_41xxx.s
-	mkdir -p build/cfg
-	$(ASM) $(ASMFLAGS) $(ALLINC) cfg/startup_stm32f40_41xxx.s -o build/cfg/startup_stm32f40_41xxx.o
+CPP_SRC += main.cpp
 
-build/cfg/system_stm32f4xx.o: cfg/system_stm32f4xx.c
-	mkdir -p build/cfg
-	$(ASM) $(CFLAGS) $(ALLINC) cfg/system_stm32f4xx.c -o build/cfg/system_stm32f4xx.o
+ASM_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(ASM_SRC))))
+C_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(C_SRC))))
+CPP_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(CPP_SRC))))
 
-build/main.o: main.cpp
+$(BUILD_DIR)/%.o: %.s
+	mkdir -p $(dir $@)
+	$(ASM) $(ASMFLAGS) $(ALLINC) -MMD -MP -MF$(addprefix $(BUILD_DIR)/, $(addsuffix .d, $(basename $<))) -MT$@ -c $^ -o $@
+	
+$(BUILD_DIR)/%.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) $(ALLINC) $^ -o $@
+
+$(BUILD_DIR)/%.o: %.cpp
 	mkdir -p build
-	$(CPP) $(CPPFLAGS) $(ALLINC) main.cpp -o build/main.o
+	$(CPP) $(CPPFLAGS) $(ALLINC) $^ -o $@
+	
 
-build/$(PROJECT).elf: build/main.o build/cfg/startup_stm32f40_41xxx.o build/cfg/system_stm32f4xx.o
-	$(LINKER)  build/main.o build/cfg/startup_stm32f40_41xxx.o build/cfg/system_stm32f4xx.o $(LDFLAGS) -o build/$(PROJECT).elf
+build/$(PROJECT).elf: $(ASM_OBJ) $(C_OBJ) $(CPP_OBJ)
+	$(LINKER) $(LDFLAGS) $^ -o $@
 
 build/$(PROJECT).bin: build/$(PROJECT).elf
 	arm-none-eabi-objcopy -O binary build/$(PROJECT).elf build/$(PROJECT).bin
