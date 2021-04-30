@@ -277,15 +277,58 @@ static const EXTConfig extcfg = {
     {EXT_CH_MODE_DISABLED, NULL},
   }
 };
+*/
+
+
+static volatile uint8_t encoder4A = 0;
+static volatile uint8_t encoder4B = 0;
+static volatile uint32_t encoder4 = 0;
+
+static event_source_t button_pressed_event;
+static event_source_t button_released_event;
+
+static void irqEncoderPort4A(void *) {
+	System::lockFromIsr();
+	encoder4A = palReadPad(GPIOC, 9);
+	if (encoder4B) {
+		encoder4 += static_cast<bool>(encoder4A) ? 1 : -1;
+	} else {
+		encoder4 += static_cast<bool>(encoder4A) ? -1 : 1;
+	}
+	encoder4++;
+	System::unlockFromIsr();
+}
+
+static void irqEncoderPort4B(void *) {
+	sdPut(&SD1, 'o');
+	System::lockFromIsr();
+	encoder4B = palReadPad(GPIOA, 8);
+	if (encoder4A) {
+		encoder4 += static_cast<bool>(encoder4B) ? -1 : 1;
+	} else {
+		encoder4 += static_cast<bool>(encoder4B) ? 1 : -1;
+	}
+	encoder4++;
+	System::unlockFromIsr();
+}
 
 
 void ext() {
-	extInit();
-	extStart(&EXTD1, &extcfg);
+	// extInit();
+	// extStart(&EXTD1, &extcfg);
+	palSetPadMode(GPIOC, 9, PAL_MODE_INPUT);
+	palSetPadMode(GPIOA, 8, PAL_MODE_INPUT);
+
+  palEnableLineEvent(PAL_LINE(GPIOC, 9U), PAL_EVENT_MODE_BOTH_EDGES);
+  palSetLineCallback(PAL_LINE(GPIOC, 9U), irqEncoderPort4A, nullptr);
+	palEnableLineEvent(PAL_LINE(GPIOA, 8U), PAL_EVENT_MODE_BOTH_EDGES);
+  palSetLineCallback(PAL_LINE(GPIOA, 8U), irqEncoderPort4B, nullptr);
+
 }
-*/
+
 
 int main(void) {
+	event_listener_t el0, el1;
 	halInit();
 	System::init();
 	tb6612.init();
@@ -293,6 +336,11 @@ int main(void) {
 	led2.init();
 	led3.init();
 	buzzer.init();
+
+	chEvtObjectInit(&button_pressed_event);
+  chEvtObjectInit(&button_released_event);
+  chEvtRegister(&button_pressed_event, &el0, 0);
+  chEvtRegister(&button_released_event, &el1, 1);
 
 	//ext();
 	
@@ -321,9 +369,11 @@ int main(void) {
 		//buzzer.tone(20000 + v * 100);
 		v += 4;
 		if (v >= 255) v = 0;
-		BaseThread::sleep(TIME_MS2I(20));
+		BaseThread::sleep(TIME_MS2I(200));
 		// sdWrite(&SD1, (const uint8_t *)"hello gelaoshi\r\n", 16);
 		// chprintf(chp, "size: %d\r\n", 5);
+		
+		chprintf(chp, "enc: %lu\r\n", encoder4);
 	}
 
 	return 0;

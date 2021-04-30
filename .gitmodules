@@ -5,3 +5,6 @@
 [submodule "dalekFoot/src/wheel/lib/ChibiOS"]
 	path = dalekFoot/src/wheel/lib/ChibiOS
 	url = https://github.com/heqichen/ChibiOS
+[submodule "dalekFoot/src/cacaca/lib/STM32F4xx-standard-peripherals-library"]
+	path = dalekFoot/src/cacaca/lib/STM32F4xx-standard-peripherals-library
+	url = https://github.com/heqichen/STM32F4xx-standard-peripherals-library
