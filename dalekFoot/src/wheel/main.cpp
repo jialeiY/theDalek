@@ -18,6 +18,7 @@
 #include "hal.h"
 #include "rt_test_root.h"
 // #include "oslib_test_root.h"
+#include "chprintf.h"
 #include "driver/tb6612fng.h"
 #include "hw/board_def.h"
 #include "hw/pwm_controller.h"
@@ -238,10 +239,53 @@ static const SerialConfig sdcfg = {
 	0
 };
 
+static BaseSequentialStream* chp = (BaseSequentialStream*) &SD1;
 
 
-int main(void)
-{
+/*
+static void extcb1(EXTDriver *extp, expchannel_t channel) {
+  (void)extp;
+  (void)channel;
+
+}
+
+
+static const EXTConfig extcfg = {
+  {
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_BOTH_EDGES | EXT_CH_MODE_AUTOSTART | EXT_MODE_GPIOC, extcb1},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+    {EXT_CH_MODE_DISABLED, NULL},
+  }
+};
+
+
+void ext() {
+	extInit();
+	extStart(&EXTD1, &extcfg);
+}
+*/
+
+int main(void) {
 	halInit();
 	System::init();
 	tb6612.init();
@@ -249,22 +293,28 @@ int main(void)
 	led2.init();
 	led3.init();
 	buzzer.init();
+
+	//ext();
 	
 	sdStart(&SD1, &sdcfg);
 	
 	palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7));
 	palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7));
 	
+	// char buf[128];
+	chprintf(chp, "size: %d\r\n", 5);
+	// (&SD1, buf, sizeof(buf));
 	
 
 	int v = 0;
 	tb6612.on();
 	buzzer.tone(20000);
 	buzzer.stop();
+	tb6612.debug(20);
 	// const unsigned char * data = static_cast<const unsigned char *>("hello world\r\n");
 	while (true)
 	{
-		tb6612.debug(v);
+		
 		led1.setBrightness(v);
 		led2.setBrightness(v);
 		led3.setBrightness((256-v) % 256);
@@ -272,7 +322,8 @@ int main(void)
 		v += 4;
 		if (v >= 255) v = 0;
 		BaseThread::sleep(TIME_MS2I(20));
-		//sdWrite(&SD1, (const uint8_t *)"hello gelaoshi\r\n", 16);
+		// sdWrite(&SD1, (const uint8_t *)"hello gelaoshi\r\n", 16);
+		// chprintf(chp, "size: %d\r\n", 5);
 	}
 
 	return 0;
