@@ -11,6 +11,11 @@ void delay() {
 	}
 }
 
+#ifdef __cplusplus
+ extern "C" {
+#endif 
+
+
 int main(void) {
 	// SystemInit();
 	// boardInit();
@@ -28,7 +33,7 @@ int main(void) {
 	while (1) {
 		GPIO_ResetBits(GPIOC, GPIO_Pin_6);
 		
-		for (int i=0; i<20; ++i) {
+		for (int i=0; i<200; ++i) {
 			delay();
 		}
 		
@@ -36,3 +41,8 @@ int main(void) {
 	}
 	return 0;
 }
+#ifdef __cplusplus
+ }
+#endif 
+
+

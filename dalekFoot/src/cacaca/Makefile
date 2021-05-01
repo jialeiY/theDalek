@@ -4,7 +4,7 @@ C_SRC += lib/STM32F4xx-standard-peripherals-library/Libraries/STM32F4xx_StdPerip
 C_SRC += lib/STM32F4xx-standard-peripherals-library/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.c
 C_SRC += cfg/stm32f4xx_it.c
 C_SRC += cfg/system_stm32f4xx.c
-C_SRC += main.c
+CPP_SRC += main.cpp
 #CPP_SRC += main.cpp
 
 INC += -I.
@@ -49,7 +49,7 @@ build/wheel.hex: $(OBJS)
 
 $(BUILD_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(DEFS) $(INC) $< -o $@
+	$(CXX) $(CFLAGS) $(DEFS) $(INC) $< -o $@
 
 $(BUILD_DIR)/%.o: %.c
 	mkdir -p $(dir $@)
