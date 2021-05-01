@@ -3,7 +3,7 @@
 	url = https://github.com/jialeiY/pytorch-ssd
 	branch = master
 [submodule "dalekFootr/src/wheel/lib/ChibiOS"]
-	path = dalekFootr/src/wheel/lib/ChibiOS
+	path = dalekFoot/src/wheel/lib/ChibiOS
 	url = https://github.com/heqichen/ChibiOS
 [submodule "dalekFoot/src/cacaca/lib/STM32F4xx-standard-peripherals-library"]
 	path = dalekFoot/src/cacaca/lib/STM32F4xx-standard-peripherals-library
