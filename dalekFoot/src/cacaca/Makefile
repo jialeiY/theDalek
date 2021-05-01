@@ -1,17 +1,21 @@
+PROJECT = wheel
+CPP_SRC += main.cpp
 
-ASM_SRC += cfg/startup_stm32f40_41xxx.s
-C_SRC += lib/STM32F4xx-standard-peripherals-library/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c
-C_SRC += lib/STM32F4xx-standard-peripherals-library/Libraries/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.c
+ST_PHLIB = lib/STM32F4xx-standard-peripherals-library/Libraries
+C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c
+C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.c
 C_SRC += cfg/stm32f4xx_it.c
 C_SRC += cfg/system_stm32f4xx.c
-CPP_SRC += main.cpp
-#CPP_SRC += main.cpp
+
+ASM_SRC += cfg/startup_stm32f40_41xxx.s
+
+LDSCRIPT = cfg/ld/stm32f407ve.ld
 
 INC += -I.
 INC += -Icfg
-INC += -Ilib/STM32F4xx-standard-peripherals-library/Libraries/STM32F4xx_StdPeriph_Driver/inc
-INC += -Ilib/STM32F4xx-standard-peripherals-library/Libraries/CMSIS/Device/ST/STM32F4xx/Include
-INC += -Ilib/STM32F4xx-standard-peripherals-library/Libraries/CMSIS/Include
+INC += -I$(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/inc
+INC += -I$(ST_PHLIB)/CMSIS/Device/ST/STM32F4xx/Include
+INC += -I$(ST_PHLIB)/CMSIS/Include
 
 BUILD_DIR = build
 
@@ -23,10 +27,14 @@ OBJS += $(ASM_OBJ)
 OBJS += $(C_OBJ)
 OBJS += $(CPP_OBJ)
 
-LDSCRIPT = cfg/ld/stm32f407ve.ld
+ELF = $(BUILD_DIR)/$(PROJECT).elf
+BIN = $(BUILD_DIR)/$(PROJECT).bin
+HEX = $(BUILD_DIR)/$(PROJECT).hex
 
-CFLAGS = -c -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork -O0
+MCUFLAGS = -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork
+CFLAGS = -c $(MCUFLAGS) -Os
 DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx
+LDFLAGS = $(MCUFLAGS) --specs=nosys.specs -Os
 
 # GNU ARM Embedded Toolchain
 CC=arm-none-eabi-gcc
@@ -40,11 +48,17 @@ NM=arm-none-eabi-nm
 SIZE=arm-none-eabi-size
 A2L=arm-none-eabi-addr2line
 
-all: build/wheel.hex
+all: $(HEX) $(BIN)
 
-build/wheel.hex: $(OBJS)
-	arm-none-eabi-g++ -T $(LDSCRIPT) -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork --specs=nosys.specs -Os $(OBJS) -o build/wheel.elf
-	arm-none-eabi-objcopy -O ihex build/wheel.elf build/wheel.hex
+$(HEX): $(ELF)
+	$(CP) -O ihex $< $@
+
+$(BIN): $(ELF)
+	$(CP) -O binary $< $@
+
+$(ELF): $(OBJS)
+	$(CXX) -T $(LDSCRIPT) $(LDFLAGS) $^ -o $@
+	
 	
 
 $(BUILD_DIR)/%.o: %.cpp
