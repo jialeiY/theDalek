@@ -59,8 +59,6 @@ $(BIN): $(ELF)
 $(ELF): $(OBJS)
 	$(CXX) -T $(LDSCRIPT) $(LDFLAGS) $^ -o $@
 	
-	
-
 $(BUILD_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
 	$(CXX) $(CFLAGS) $(DEFS) $(INC) $< -o $@
