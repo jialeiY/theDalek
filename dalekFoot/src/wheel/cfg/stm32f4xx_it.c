@@ -139,9 +139,11 @@ void PendSV_Handler(void)
   * @param  None
   * @retval None
   */
+
+volatile uint32_t gMillis = 0;
 void SysTick_Handler(void)
 {
-  
+	gMillis ++;
 }
 
 /******************************************************************************/

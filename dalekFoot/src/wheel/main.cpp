@@ -1,5 +1,6 @@
-// #include "hw/board.h"
+#include "hw/board.h"
 #include "inc.h"
+#include "utils.h"
 
 int foo(int a, int b) {
 	return a + b;
@@ -17,8 +18,8 @@ void delay() {
 
 
 int main(void) {
-	// SystemInit();
-	// boardInit();
+	SysTick_Config(SystemCoreClock / 1000UL);
+	boardInit();
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	GPIO_StructInit(&GPIO_InitStructure);
@@ -29,16 +30,21 @@ int main(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 
-	
-	while (1) {
-		GPIO_ResetBits(GPIOC, GPIO_Pin_6);
-		
-		for (int i=0; i<200; ++i) {
-			delay();
+	static uint32_t currentMillis {0UL};
+	static bool on {false};
+
+	while (true) {
+		if (millis() - currentMillis > 500) {
+			currentMillis = millis();
+			if (on) {
+				GPIO_SetBits(GPIOC, GPIO_Pin_6);
+			} else {
+				GPIO_ResetBits(GPIOC, GPIO_Pin_6);
+			}
+			on = !on;
 		}
-		
-		GPIO_SetBits(GPIOC, GPIO_Pin_6);
 	}
+
 	return 0;
 }
 #ifdef __cplusplus
