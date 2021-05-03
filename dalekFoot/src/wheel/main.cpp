@@ -1,6 +1,6 @@
 #include "hw/board.h"
 #include "inc.h"
-#include "utils.h"
+#include "utils.hpp"
 
 int foo(int a, int b) {
 	return a + b;
@@ -34,8 +34,8 @@ int main(void) {
 	static bool on {false};
 
 	while (true) {
-		if (millis() - currentMillis > 500) {
-			currentMillis = millis();
+		if (System::millis() - currentMillis > 50) {
+			currentMillis = System::millis();
 			if (on) {
 				GPIO_SetBits(GPIOC, GPIO_Pin_6);
 			} else {

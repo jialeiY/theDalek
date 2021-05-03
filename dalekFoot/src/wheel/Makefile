@@ -6,6 +6,7 @@ CPP_SRC += hw/board.cpp
 ST_PHLIB = lib/STM32F4xx-standard-peripherals-library/Libraries
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.c
+C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.c
 C_SRC += cfg/stm32f4xx_it.c
 C_SRC += cfg/system_stm32f4xx.c
 
@@ -63,7 +64,7 @@ $(ELF): $(OBJS)
 	
 $(BUILD_DIR)/%.o: %.cpp
 	mkdir -p $(dir $@)
-	$(CXX) $(CFLAGS) $(DEFS) $(INC) $< -o $@
+	$(CXX) $(CFLAGS) -std=c++11 $(DEFS) $(INC) $< -o $@
 
 $(BUILD_DIR)/%.o: %.c
 	mkdir -p $(dir $@)

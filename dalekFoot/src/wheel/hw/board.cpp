@@ -41,9 +41,57 @@
  ***/
 
 void boardInit(void) {
+	// Setup motor, PD0, PD1, PD2, PD3
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+	GPIO_InitTypeDef  GPIO_InitStructure;
+	GPIO_StructInit(&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	GPIO_ResetBits(GPIOD, GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3);
 
+	// TBFN PD12 PD13
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource12, GPIO_AF_TIM4);
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource13, GPIO_AF_TIM4);
+	GPIO_StructInit(&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOD, &GPIO_InitStructure);
+	GPIO_SetBits(GPIOD, GPIO_Pin_12 | GPIO_Pin_13);
 
-	// GPIO_SetBits(GPIOC, GPIO_Pin_6);
-	// GPIOC->BSRRL = GPIO_Pin_6;
-	// GPIO_ResetBits(GPIOC, GPIO_Pin_6);
+	// Enable timer for PD11 and PD12
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+	TIM_TimeBaseInitTypeDef TIM_BaseStruct;
+	TIM_TimeBaseStructInit(&TIM_BaseStruct);
+
+	//timer_tick_frequency = Timer_default_frequency / (prescaller_set + 1)
+	// https://stm32f4-discovery.net/2014/05/stm32f4-stm32f429-discovery-pwm-tutorial/
+	TIM_BaseStruct.TIM_Prescaler = 0;
+	TIM_BaseStruct.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_BaseStruct.TIM_Period = 511;
+	TIM_BaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
+	TIM_BaseStruct.TIM_RepetitionCounter = 0;
+	TIM_TimeBaseInit(TIM4, &TIM_BaseStruct);
+	TIM_Cmd(TIM4, ENABLE);
+
+	TIM_OCInitTypeDef TIM_OCStruct;
+	TIM_OCStructInit(&TIM_OCStruct);
+
+	TIM_OCStruct.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCStruct.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCStruct.TIM_OutputNState = TIM_OCPolarity_High;
+	TIM_OCStruct.TIM_Pulse = 50;
+	TIM_OC1Init(TIM4, &TIM_OCStruct);
+	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
+
+	// for debug
+	GPIO_SetBits(GPIOD, GPIO_Pin_0);
+	GPIO_ResetBits(GPIOD, GPIO_Pin_1);
+
 }

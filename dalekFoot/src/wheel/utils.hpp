@@ -5,7 +5,10 @@
 #include "inc.h"
 
 
+namespace System {
 uint32_t millis();
+
+}
 
 
 
