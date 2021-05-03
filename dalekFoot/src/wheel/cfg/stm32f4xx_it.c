@@ -168,3 +168,14 @@ void SysTick_Handler(void)
 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+
+
+static int status = 0;
+void EXTI9_5_IRQHandler(void) {
+	EXTI_ClearITPendingBit(EXTI_Line9);
+	GPIO_ToggleBits(GPIOC, GPIO_Pin_6);
+	
+	
+}
+
