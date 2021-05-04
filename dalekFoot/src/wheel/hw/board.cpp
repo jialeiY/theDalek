@@ -154,7 +154,7 @@ void boardInit(void) {
 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 	USART_StructInit(&USART_InitStructure);
-	USART_InitStructure.USART_BaudRate = 9600; //10300;
+	USART_InitStructure.USART_BaudRate = 115200; //115200; //10300;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;

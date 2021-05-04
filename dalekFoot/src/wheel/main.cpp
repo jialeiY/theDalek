@@ -19,6 +19,7 @@ void delay() {
 
 int main(void) {
 	SysTick_Config(SystemCoreClock / 1000UL);
+	SystemCoreClockUpdate();
 	boardInit();
 	static uint32_t currentMillis {0UL};
 	static bool on {false};
