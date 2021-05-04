@@ -175,7 +175,16 @@ static int status = 0;
 void EXTI9_5_IRQHandler(void) {
 	EXTI_ClearITPendingBit(EXTI_Line9);
 	GPIO_ToggleBits(GPIOC, GPIO_Pin_6);
-	
-	
 }
 
+
+void USART1_IRQHandler(void) {
+	GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
+	if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET) {
+		// USART_SendData(USART1, 0x00);
+		USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+	} else {
+		USART_ReceiveData(USART1);
+		// USART_ITConfig(EVAL_COM1, USART_IT_RXNE, DISABLE);
+	}
+}

@@ -8,6 +8,7 @@ C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.c
+C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_usart.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_syscfg.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/misc.c
 C_SRC += cfg/stm32f4xx_it.c
@@ -39,7 +40,7 @@ HEX = $(BUILD_DIR)/$(PROJECT).hex
 
 MCUFLAGS = -mcpu=cortex-m4 -mthumb -mlittle-endian -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb-interwork
 CFLAGS = -c $(MCUFLAGS) -Os
-DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx
+DEFS = -DUSE_STDPERIPH_DRIVER -DSTM32F40_41xxx -DHSE_VALUE=8000000
 LDFLAGS = $(MCUFLAGS) --specs=nosys.specs -Os
 
 # GNU ARM Embedded Toolchain

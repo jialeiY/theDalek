@@ -89,7 +89,7 @@ void EXTI9_5_IRQHandler(void);                /* External Line[9:5]s          */
 // void I2C2_ER_IRQHandler(void);                /* I2C2 Error                   */                            
 // void SPI1_IRQHandler(void);                   /* SPI1                         */                   
 // void SPI2_IRQHandler(void);                   /* SPI2                         */                   
-// void USART1_IRQHandler(void);                 /* USART1                       */                   
+void USART1_IRQHandler(void);                 /* USART1                       */                   
 // void USART2_IRQHandler(void);                 /* USART2                       */                   
 // void USART3_IRQHandler(void);                 /* USART3                       */                   
 // void EXTI15_10_IRQHandler(void);              /* External Line[15:10]s        */                          

@@ -32,17 +32,13 @@ int main(void) {
 		}
 		*/
 
-		/*
-		if (System::millis() - currentMillis > 50) {
+		
+		if (System::millis() - currentMillis > 100) {
 			currentMillis = System::millis();
-			if (on) {
-				// GPIO_SetBits(GPIOC, GPIO_Pin_6);
-			} else {
-				// GPIO_ResetBits(GPIOC, GPIO_Pin_6);
-			}
-			on = !on;
+			USART_SendData(USART1, 0xC9);
+			USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
 		}
-		*/
+		
 	}
 
 	return 0;
