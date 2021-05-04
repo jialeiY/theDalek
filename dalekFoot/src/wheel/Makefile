@@ -2,6 +2,7 @@ PROJECT = wheel
 CPP_SRC += main.cpp
 CPP_SRC += utils.cpp
 CPP_SRC += hw/board.cpp
+CPP_SRC += driver/serial.cpp
 
 ST_PHLIB = lib/STM32F4xx-standard-peripherals-library/Libraries
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c
