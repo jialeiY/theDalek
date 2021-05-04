@@ -3,6 +3,7 @@
 #include "utils/utils.hpp"
 #include "utils/streams.hpp"
 #include "driver/serial.hpp"
+#include "driver/encoder.hpp"
 
 int foo(int a, int b) {
 	return a + b;
@@ -54,7 +55,7 @@ int main(void) {
 				// Serial1.println("12345678");
 
 				
-				Serial1.printf("haha time: %lu\r\n", currentMillis);
+				Serial1.printf("time: %lu, enc: %lu\r\n", currentMillis, encoder3);
 
 				// USART_SendData(USART1, 0xC9);
 				// USART_ITConfig(USART1, USART_IT_TXE, ENABLE);

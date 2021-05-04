@@ -29,7 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
-
+#include <stdint.h>
 
 /** @addtogroup Template_Project
   * @{
@@ -170,11 +170,28 @@ void SysTick_Handler(void)
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
 
+volatile int32_t encoder3 = 0UL;
+volatile uint8_t encoder3A = 0;  // C9
+volatile uint8_t encoder3B = 0;  // A8
 
-static int status = 0;
 void EXTI9_5_IRQHandler(void) {
-	EXTI_ClearITPendingBit(EXTI_Line9);
-	GPIO_ToggleBits(GPIOC, GPIO_Pin_6);
+	if (EXTI_GetITStatus(EXTI_Line8) != RESET) { // A8
+		EXTI_ClearITPendingBit(EXTI_Line8);
+		encoder3B = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_8);
+		if (encoder3A) {
+			encoder3 += encoder3B ? -1 : 1;
+		} else {
+			encoder3 += encoder3B ? 1 : -1;
+		}
+	} else if (EXTI_GetITStatus(EXTI_Line9) != RESET) { // C9
+		EXTI_ClearITPendingBit(EXTI_Line9);
+		encoder3A = GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9);
+		if (encoder3B) {
+			encoder3 += encoder3A ? 1 : -1;
+		} else {
+			encoder3 += encoder3A ? -1 : 1;
+		}
+	}
 }
 
 void usart1irq(void);
