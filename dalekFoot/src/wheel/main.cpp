@@ -1,6 +1,7 @@
 #include "hw/board.h"
 #include "inc.h"
 #include "utils.hpp"
+#include "driver/serial.h"
 
 int foo(int a, int b) {
 	return a + b;
@@ -21,7 +22,9 @@ int main(void) {
 	SysTick_Config(SystemCoreClock / 1000UL);
 	SystemCoreClockUpdate();
 	boardInit();
-	static uint32_t currentMillis {0UL};
+
+	Serial1.init();
+	
 	static bool on {false};
 
 	while (true) {
@@ -32,14 +35,27 @@ int main(void) {
 			GPIO_ResetBits(GPIOC, GPIO_Pin_6);
 		}
 		*/
-
-		
-		if (System::millis() - currentMillis > 100) {
-			currentMillis = System::millis();
-			USART_SendData(USART1, 0xC9);
-			USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+		{
+			static uint32_t currentMillis {0UL};
+			if (System::millis() - currentMillis > 100) {
+				
+				currentMillis = System::millis();
+				// USART_SendData(USART1, 0xC9);
+				// USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+			}
 		}
-		
+
+		{
+			static uint32_t currentMillis {0UL};
+			if (System::millis() - currentMillis > 500) {
+				// GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
+				currentMillis = System::millis();
+				Serial1.println("12345678");
+				// USART_SendData(USART1, 0xC9);
+				// USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
+			}
+		}
+			
 	}
 
 	return 0;
