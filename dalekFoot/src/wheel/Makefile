@@ -1,6 +1,7 @@
 PROJECT = wheel
 CPP_SRC += main.cpp
-CPP_SRC += utils.cpp
+CPP_SRC += utils/utils.cpp
+CPP_SRC += utils/streams.cpp
 CPP_SRC += hw/board.cpp
 CPP_SRC += driver/serial.cpp
 

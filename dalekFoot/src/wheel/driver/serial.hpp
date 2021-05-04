@@ -12,6 +12,7 @@ class Serial {
 	public:
 		void init(void);
 		void println(const char *str);
+		void printf(const char *fmt, ...);
 		void write(const uint8_t data);
 	private:
 		uint8_t mRingBuffer[SERIAL_RING_BUFFER_SIZE];

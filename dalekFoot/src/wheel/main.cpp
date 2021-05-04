@@ -1,7 +1,8 @@
 #include "hw/board.h"
 #include "inc.h"
-#include "utils.hpp"
-#include "driver/serial.h"
+#include "utils/utils.hpp"
+#include "utils/streams.hpp"
+#include "driver/serial.hpp"
 
 int foo(int a, int b) {
 	return a + b;
@@ -50,7 +51,11 @@ int main(void) {
 			if (System::millis() - currentMillis > 500) {
 				// GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
 				currentMillis = System::millis();
-				Serial1.println("12345678");
+				// Serial1.println("12345678");
+
+				
+				Serial1.printf("haha time: %lu\r\n", currentMillis);
+
 				// USART_SendData(USART1, 0xC9);
 				// USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
 			}

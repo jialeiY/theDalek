@@ -1,5 +1,6 @@
-#include "driver/serial.h"
-
+#include "driver/serial.hpp"
+#include "utils/streams.hpp"
+#include <stdarg.h>
 
 inline void serial1FriendIrq(void) {
 	Serial1.irq();
@@ -25,6 +26,19 @@ void Serial::println(const char *str) {
 	while (*str) write(*(str++));
 	write('\r');
 	write('\n');
+}
+
+
+void Serial::printf(const char *fmt, ...) {
+	char buffer[128];
+	va_list ap;
+  int formatted_bytes;
+  va_start(ap, fmt);
+  formatted_bytes = cooboc::vsprintf(buffer, fmt, ap);
+  va_end(ap);
+	for (int i=0; i<formatted_bytes; ++i) {
+		write(buffer[i]);
+	}
 }
 
 
