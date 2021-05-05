@@ -198,3 +198,23 @@ void usart1irq(void);
 void USART1_IRQHandler(void) {
 	usart1irq();
 }
+
+volatile uint16_t adc1[8];
+static volatile uint8_t adcCh = 0U;
+volatile int count = 0;
+void ADC_IRQHandler(void) {
+	// GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
+	if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET) {
+		adc1[adcCh] = ADC_GetConversionValue(ADC1);
+		adcCh ++;
+		adcCh &= 0x07;
+		count ++;
+		ADC_RegularChannelConfig(ADC1, adcCh, 1, ADC_SampleTime_480Cycles);
+		ADC_SoftwareStartConv(ADC1);
+		// ADC_ClearITPendingBit(ADC1,ADC_FLAG_EOC);//<--clear automatically
+	} else if(ADC_GetFlagStatus(ADC2, ADC_FLAG_EOC) != RESET) {
+		uint16_t ADC_Result = ADC_GetConversionValue(ADC2);
+		ADC_SoftwareStartConv(ADC2);
+		ADC_ClearITPendingBit(ADC2,ADC_FLAG_EOC); //<--clear automatically
+	}
+}

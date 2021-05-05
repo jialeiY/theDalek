@@ -7,6 +7,7 @@ CPP_SRC += driver/serial.cpp
 
 ST_PHLIB = lib/STM32F4xx-standard-peripherals-library/Libraries
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c
+C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_adc.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_rcc.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_tim.c
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_exti.c

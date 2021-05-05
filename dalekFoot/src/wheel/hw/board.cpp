@@ -44,6 +44,8 @@
  * PA10 RX
  ***/
 
+
+
 void boardInit(void) {
 	// Setup motor, PD0, PD1, PD2, PD3
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
@@ -51,7 +53,8 @@ void boardInit(void) {
 	EXTI_InitTypeDef EXTI_InitStructure;
 	NVIC_InitTypeDef NVIC_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
-
+  ADC_InitTypeDef ADC_InitStructure;
+  ADC_CommonInitTypeDef ADC_CommonInitStructure;
 
 	GPIO_StructInit(&GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
@@ -163,7 +166,7 @@ void boardInit(void) {
 	
 	// USART
 
-		// Initialize pins as alternating function
+	// Initialize pins as alternating function
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	GPIO_StructInit(&GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9 | GPIO_Pin_10;
@@ -195,7 +198,106 @@ void boardInit(void) {
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_Init(&NVIC_InitStructure);
 
+	// ADC
+	// PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7		ADC123 CH 0-7
+	// PB0 PB1														ADC12  CH 8-9
+	// PC0 PC1 PC2 PC3										ADC123 CH 10-13
+	// PC4 PC5														ADC12  CH 14-15
 
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	GPIO_StructInit(&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3
+		| GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+	GPIO_StructInit(&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	GPIO_StructInit(&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3
+		| GPIO_Pin_4 | GPIO_Pin_5;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+
+
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+	// RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC2, ENABLE);
+	ADC_CommonStructInit(&ADC_CommonInitStructure);
+	ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;
+	ADC_CommonInitStructure.ADC_Prescaler = ADC_Prescaler_Div8;
+	ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;
+	ADC_CommonInitStructure.ADC_TwoSamplingDelay = ADC_TwoSamplingDelay_20Cycles;
+	ADC_CommonInit(&ADC_CommonInitStructure);
+
+
+	ADC_StructInit(&ADC_InitStructure);
+  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
+  ADC_InitStructure.ADC_ScanConvMode = DISABLE;
+  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+  ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
+  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1;
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+  ADC_InitStructure.ADC_NbrOfConversion = 1;
+  ADC_Init(ADC1, &ADC_InitStructure);
+
+	ADC_StructInit(&ADC_InitStructure);
+  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
+  ADC_InitStructure.ADC_ScanConvMode = ENABLE;
+  ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+  ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_None;
+  ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T1_CC1;
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+  ADC_InitStructure.ADC_NbrOfConversion = 8;
+  // ADC_Init(ADC2, &ADC_InitStructure);
+	
+	/*
+  ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 1, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 2, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 3, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 4, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_4, 5, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 6, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 7, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_7, 8, ADC_SampleTime_480Cycles);
+
+
+  ADC_RegularChannelConfig(ADC2, ADC_Channel_8, 1, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_9, 2, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_10, 3, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_11, 4, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_12, 5, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_13, 6, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_14, 7, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_15, 8, ADC_SampleTime_480Cycles);
+	*/
+
+	ADC_Cmd(ADC1, ENABLE);
+	// ADC_Cmd(ADC2, ENABLE);
+
+	NVIC_InitStructure.NVIC_IRQChannel = ADC_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+
+	ADC_ClearITPendingBit(ADC1,ADC_IT_EOC);
+	ADC_ITConfig(ADC1, ADC_IT_EOC, ENABLE);
+	ADC_ClearITPendingBit(ADC2,ADC_IT_EOC);
+	ADC_ITConfig(ADC2, ADC_IT_EOC, ENABLE);
+
+	ADC_SoftwareStartConv(ADC1);
+	// ADC_SoftwareStartConv(ADC2);
 
 	// for debug
 	GPIO_SetBits(GPIOD, GPIO_Pin_1);

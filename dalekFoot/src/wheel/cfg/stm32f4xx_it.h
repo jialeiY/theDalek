@@ -70,7 +70,7 @@ void SysTick_Handler(void);
 // void DMA1_Stream4_IRQHandler(void);           /* DMA1 Stream 4                */                   
 // void DMA1_Stream5_IRQHandler(void);           /* DMA1 Stream 5                */                   
 // void DMA1_Stream6_IRQHandler(void);           /* DMA1 Stream 6                */                   
-// void ADC_IRQHandler(void);                    /* ADC1, ADC2 and ADC3s         */                   
+void ADC_IRQHandler(void);                    /* ADC1, ADC2 and ADC3s         */                   
 // void CAN1_TX_IRQHandler(void);                /* CAN1 TX                      */                         
 // void CAN1_RX0_IRQHandler(void);               /* CAN1 RX0                     */                          
 // void CAN1_RX1_IRQHandler(void);               /* CAN1 RX1                     */                          
