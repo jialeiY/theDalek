@@ -93,6 +93,7 @@ int main(void) {
 				currentMillis = System::millis();
 
 				extern volatile uint16_t adc1[8];
+				extern volatile uint16_t adc2[8];
 				extern volatile int count;
 				volatile int cpCnt = count;
 				count = 0;
@@ -109,9 +110,9 @@ int main(void) {
 				}
 				*/
 				
-				Serial1.printf("ADC1: \t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u count:%d\r\n", adc1[0], adc1[1], adc1[2], adc1[3], adc1[4], adc1[5], adc1[6], adc1[7], cpCnt);
-				// Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2[0], adc2[1], adc2[2], adc2[3], adc2[4], adc2[5], adc2[6], adc2[7]);
-				Serial1.println("");
+				Serial1.printf("ADC1: \t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\r\n", adc1[0], adc1[1], adc1[2], adc1[3], adc1[4], adc1[5], adc1[6], adc1[7]);
+				Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2[0], adc2[1], adc2[2], adc2[3], adc2[4], adc2[5], adc2[6], adc2[7]);
+				Serial1.printf("count:%d\r\n", cpCnt);
 			}
 		}
 	}
