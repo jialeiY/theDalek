@@ -4,7 +4,7 @@
 #include "inc.h"
 #include <stdint.h>
 
-constexpr uint32_t SERIAL_RING_BUFFER_SIZE {128};
+constexpr uint32_t SERIAL_RING_BUFFER_SIZE {256};
 // #define SERIAL_RING_BUFFER_SIZE 128
 
 class Serial {

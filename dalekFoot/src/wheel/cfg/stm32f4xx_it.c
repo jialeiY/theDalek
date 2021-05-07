@@ -203,6 +203,11 @@ volatile uint16_t adc1[8];
 static volatile uint8_t adc1Ch = 0U;
 volatile uint16_t adc2[8];
 static volatile uint8_t adc2Ch = 0U;
+volatile uint16_t adc2ex1[8];
+volatile uint16_t adc2ex2[8];
+static volatile uint8_t exCh = 0U;
+static uint16_t channelSwitchSeq[8] = {GPIO_Pin_10, GPIO_Pin_11, GPIO_Pin_10, GPIO_Pin_12, GPIO_Pin_10, GPIO_Pin_11, GPIO_Pin_10, GPIO_Pin_12};
+
 volatile int count = 0;
 void ADC_IRQHandler(void) {
 	if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET) {
@@ -211,18 +216,29 @@ void ADC_IRQHandler(void) {
 		adc1Ch ++;
 		adc1Ch &= 0x07;
 		count ++;
-		ADC_RegularChannelConfig(ADC1, adc1Ch, 1, ADC_SampleTime_480Cycles);
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_0 + adc1Ch, 1, ADC_SampleTime_480Cycles);
 		ADC_SoftwareStartConv(ADC1);
 		// ADC_ClearITPendingBit(ADC1,ADC_FLAG_EOC);//<--clear automatically
 	}
 	
 	if(ADC_GetFlagStatus(ADC2, ADC_FLAG_EOC) != RESET) {
-		GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
+		// GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
 		adc2[adc2Ch] = ADC_GetConversionValue(ADC2);
 		adc2Ch ++;
 		adc2Ch &= 0x07;
 		count ++;
-		ADC_RegularChannelConfig(ADC2, adc2Ch, 1, ADC_SampleTime_480Cycles);
+		// ADC_Channel_12
+		// ADC_RegularChannelConfig(ADC2, ADC_Channel_9, 1, ADC_SampleTime_480Cycles);
+		ADC_RegularChannelConfig(ADC2, ADC_Channel_8 + adc2Ch, 1, ADC_SampleTime_480Cycles);
+		// adc2[0] = GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_1);
 		ADC_SoftwareStartConv(ADC2);
+
+		if (adc2Ch == 0) { // update 4051 channel
+			GPIO_ToggleBits(GPIOC, channelSwitchSeq[exCh]);
+			adc2ex1[exCh] = adc2[6];
+			adc2ex2[exCh] = adc2[7];
+			exCh ++;
+			exCh &= 0x07;
+		}
 	}
 }

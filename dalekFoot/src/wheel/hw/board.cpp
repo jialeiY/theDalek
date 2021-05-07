@@ -42,6 +42,16 @@
  * ** USART **
  * PA9 TX
  * PA10 RX
+ * 
+ * 
+ * ADC
+ * PA0 PA1 PA2 PA3 PA4 PA5 PA6 PA7		ADC123 CH 0-7
+ * PB0 PB1														ADC12  CH 8-9
+ * PC0 PC1 PC2 PC3										ADC123 CH 10-13
+ * PC4 PC5														ADC12  CH 14-15
+ *
+ * 4051CHNNEL
+ * PC10 PC11 PC12
  ***/
 
 
@@ -277,10 +287,22 @@ void boardInit(void) {
 	ADC_ITConfig(ADC2, ADC_IT_EOC, ENABLE);
 
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 1, ADC_SampleTime_480Cycles);
-	ADC_RegularChannelConfig(ADC2, ADC_Channel_0, 1, ADC_SampleTime_480Cycles);
+	ADC_RegularChannelConfig(ADC2, ADC_Channel_8, 1, ADC_SampleTime_480Cycles);
 
 	ADC_SoftwareStartConv(ADC1);
 	ADC_SoftwareStartConv(ADC2);
+
+ 	// 4051CHNNEL
+ 	// PC10 PC11 PC12
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
+	GPIO_StructInit(&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	GPIO_ResetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
 
 	// for debug
 	GPIO_SetBits(GPIOD, GPIO_Pin_1);
