@@ -22617,9 +22617,9 @@ Source: www.kingbright.com</description>
 <label x="111.76" y="203.2" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="A" pin="X3"/>
-<wire x1="109.22" y1="294.64" x2="127" y2="294.64" width="0.1524" layer="91"/>
-<label x="109.22" y="294.64" size="1.778" layer="95"/>
+<pinref part="IC5" gate="A" pin="X2"/>
+<wire x1="127" y1="297.18" x2="109.22" y2="297.18" width="0.1524" layer="91"/>
+<label x="109.22" y="297.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AIN1" class="0">
@@ -22629,9 +22629,9 @@ Source: www.kingbright.com</description>
 <label x="111.76" y="200.66" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="A" pin="X0"/>
-<wire x1="127" y1="302.26" x2="109.22" y2="302.26" width="0.1524" layer="91"/>
-<label x="109.22" y="302.26" size="1.778" layer="95"/>
+<pinref part="IC5" gate="A" pin="X3"/>
+<wire x1="109.22" y1="294.64" x2="127" y2="294.64" width="0.1524" layer="91"/>
+<label x="109.22" y="294.64" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AIN2" class="0">
@@ -22641,9 +22641,9 @@ Source: www.kingbright.com</description>
 <label x="111.76" y="198.12" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="A" pin="X1"/>
-<wire x1="109.22" y1="299.72" x2="127" y2="299.72" width="0.1524" layer="91"/>
-<label x="109.22" y="299.72" size="1.778" layer="95"/>
+<pinref part="IC5" gate="A" pin="X0"/>
+<wire x1="127" y1="302.26" x2="109.22" y2="302.26" width="0.1524" layer="91"/>
+<label x="109.22" y="302.26" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="AIN3" class="0">
@@ -22653,9 +22653,9 @@ Source: www.kingbright.com</description>
 <label x="111.76" y="195.58" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC5" gate="A" pin="X2"/>
-<wire x1="127" y1="297.18" x2="109.22" y2="297.18" width="0.1524" layer="91"/>
-<label x="109.22" y="297.18" size="1.778" layer="95"/>
+<pinref part="IC5" gate="A" pin="X1"/>
+<wire x1="109.22" y1="299.72" x2="127" y2="299.72" width="0.1524" layer="91"/>
+<label x="109.22" y="299.72" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="MADC_A" class="0">
