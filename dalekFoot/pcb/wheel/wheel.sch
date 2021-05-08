@@ -13059,6 +13059,19 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <text x="8.89" y="7.62" size="2.032" layer="21">+</text>
 <text x="8.89" y="-8.89" size="2.032" layer="21">-</text>
 </package>
+<package name="M3-MOUNTING-HOLE">
+<circle x="0" y="0" radius="2.5" width="1.5" layer="1"/>
+<hole x="0" y="0" drill="3.2"/>
+<circle x="0" y="0" radius="2.5" width="1.5" layer="16"/>
+<pad name="P$1" x="0" y="2.54" drill="0.3048"/>
+<pad name="P$2" x="2.667" y="0" drill="0.3048"/>
+<pad name="P$3" x="0" y="-2.54" drill="0.3048"/>
+<pad name="P$4" x="-2.54" y="0.127" drill="0.3048"/>
+<pad name="P$5" x="-1.778" y="1.778" drill="0.3048"/>
+<pad name="P$6" x="1.778" y="1.651" drill="0.3048"/>
+<pad name="P$7" x="1.905" y="-1.778" drill="0.3048"/>
+<pad name="P$8" x="-1.778" y="-1.778" drill="0.3048"/>
+</package>
 </packages>
 <symbols>
 <symbol name="RESISTOR">
@@ -13123,16 +13136,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <text x="12.7" y="2.54" size="1.27" layer="95">&gt;NAME</text>
 <text x="12.7" y="0" size="1.27" layer="96">&gt;VALUE</text>
 </symbol>
-<symbol name="CAPACITOR">
-<pin name="P$1" x="-2.54" y="0" visible="off" length="point" swaplevel="1"/>
-<pin name="P$2" x="2.54" y="0" visible="off" length="point" swaplevel="1"/>
-<wire x1="-2.54" y1="0" x2="-0.9525" y2="0" width="0.254" layer="94"/>
-<wire x1="2.54" y1="0" x2="0.9525" y2="0" width="0.254" layer="94"/>
-<text x="-5.08" y="-3.175" size="1.27" layer="95">&gt;NAME</text>
-<text x="-5.08" y="-4.445" size="1.27" layer="96">&gt;VALUE</text>
-<rectangle x1="-0.9525" y1="-1.5875" x2="-0.3175" y2="1.5875" layer="94"/>
-<rectangle x1="0.3175" y1="-1.5875" x2="0.9525" y2="1.5875" layer="94"/>
-</symbol>
 <symbol name="KF250-2X12P">
 <pin name="P$1" x="-15.24" y="5.08" visible="off" length="short" rot="R270"/>
 <pin name="P$2" x="-15.24" y="-5.08" visible="off" length="short" rot="R90"/>
@@ -13178,6 +13181,14 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <wire x1="0" y1="0" x2="2.54" y2="0" width="0.254" layer="94"/>
 <wire x1="0" y1="7.62" x2="0" y2="2.54" width="0.254" layer="94"/>
 <wire x1="0" y1="0" x2="0" y2="-5.08" width="0.254" layer="94"/>
+</symbol>
+<symbol name="MOUNTING-HOLE">
+<circle x="0" y="0" radius="5.6796125" width="0.254" layer="94"/>
+<circle x="0" y="0" radius="3.5921" width="0.254" layer="94"/>
+<text x="10.16" y="2.54" size="1.778" layer="95">&gt;NAME</text>
+<text x="10.16" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="P$1" x="0" y="-7.62" length="point"/>
+<wire x1="0" y1="-5.715" x2="0" y2="-7.62" width="0.254" layer="94"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -13266,22 +13277,6 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="C-0805" prefix="C" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="CAPACITOR" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="0805">
-<connects>
-<connect gate="G$1" pin="P$1" pad="P$1"/>
-<connect gate="G$1" pin="P$2" pad="P$2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
 <deviceset name="KF250-2X12P" prefix="J" uservalue="yes">
 <gates>
 <gate name="G$1" symbol="KF250-2X12P" x="0" y="0"/>
@@ -13329,6 +13324,21 @@ Source: http://www.diodes.com/datasheets/ds23001.pdf</description>
 <connects>
 <connect gate="G$1" pin="P$NEG" pad="P$-"/>
 <connect gate="G$1" pin="P$POS" pad="P$+"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="M3-MOUNTING-HOLE">
+<gates>
+<gate name="G$1" symbol="MOUNTING-HOLE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="M3-MOUNTING-HOLE">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$1 P$2 P$3 P$4 P$5 P$6 P$7 P$8"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -21230,7 +21240,6 @@ Source: www.kingbright.com</description>
 <part name="R34" library="hqc" deviceset="R-0805" device=""/>
 <part name="LED1" library="led" deviceset="LED" device="CHIP-LED0805"/>
 <part name="LED2" library="led" deviceset="LED" device="CHIP-LED0805"/>
-<part name="C7" library="hqc" deviceset="C-0805" device=""/>
 <part name="U5" library="TB6612FNG" deviceset="TB6612FNG(O,C,8,EL" device=""/>
 <part name="SUPPLY28" library="supply2" deviceset="DGND" device=""/>
 <part name="U6" library="TB6612FNG" deviceset="TB6612FNG(O,C,8,EL" device=""/>
@@ -21260,6 +21269,10 @@ Source: www.kingbright.com</description>
 <part name="B4" library="switch-tact" deviceset="DTSM-6-2PIN" device=""/>
 <part name="U$3" library="hqc-logo" deviceset="COOBOC-PLACE" device=""/>
 <part name="U$4" library="hqc-logo" deviceset="ASTRONANT" device=""/>
+<part name="U$5" library="hqc" deviceset="M3-MOUNTING-HOLE" device=""/>
+<part name="U$6" library="hqc" deviceset="M3-MOUNTING-HOLE" device=""/>
+<part name="U$7" library="hqc" deviceset="M3-MOUNTING-HOLE" device=""/>
+<part name="U$8" library="hqc" deviceset="M3-MOUNTING-HOLE" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -21367,7 +21380,6 @@ Source: www.kingbright.com</description>
 <instance part="R34" gate="G$1" x="149.86" y="441.96" rot="R90"/>
 <instance part="LED1" gate="G$1" x="99.06" y="454.66"/>
 <instance part="LED2" gate="G$1" x="149.86" y="454.66"/>
-<instance part="C7" gate="G$1" x="33.02" y="431.8"/>
 <instance part="U5" gate="G$1" x="160.02" y="596.9"/>
 <instance part="SUPPLY28" gate="G$1" x="180.34" y="558.8"/>
 <instance part="U6" gate="G$1" x="281.94" y="596.9"/>
@@ -21397,6 +21409,10 @@ Source: www.kingbright.com</description>
 <instance part="B4" gate="G$1" x="121.92" y="375.92" rot="R270"/>
 <instance part="U$3" gate="G$1" x="-27.94" y="627.38"/>
 <instance part="U$4" gate="G$1" x="-35.56" y="596.9"/>
+<instance part="U$5" gate="G$1" x="-38.1" y="530.86"/>
+<instance part="U$6" gate="G$1" x="-38.1" y="492.76"/>
+<instance part="U$7" gate="G$1" x="-48.26" y="454.66"/>
+<instance part="U$8" gate="G$1" x="-50.8" y="408.94"/>
 </instances>
 <busses>
 </busses>
@@ -22920,18 +22936,11 @@ Source: www.kingbright.com</description>
 <label x="284.48" y="66.04" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$9" class="0">
-<segment>
-<pinref part="R29" gate="G$1" pin="P$2"/>
-<pinref part="C7" gate="G$1" pin="P$1"/>
-<wire x1="25.4" y1="431.8" x2="30.48" y2="431.8" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$12" class="0">
 <segment>
-<pinref part="C7" gate="G$1" pin="P$2"/>
 <pinref part="U2" gate="G$1" pin="P$B"/>
-<wire x1="35.56" y1="431.8" x2="40.64" y2="431.8" width="0.1524" layer="91"/>
+<pinref part="R29" gate="G$1" pin="P$2"/>
+<wire x1="40.64" y1="431.8" x2="25.4" y2="431.8" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="PWM1.A" class="0">
