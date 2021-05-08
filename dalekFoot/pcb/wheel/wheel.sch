@@ -21273,6 +21273,10 @@ Source: www.kingbright.com</description>
 <part name="U$6" library="hqc" deviceset="M3-MOUNTING-HOLE" device=""/>
 <part name="U$7" library="hqc" deviceset="M3-MOUNTING-HOLE" device=""/>
 <part name="U$8" library="hqc" deviceset="M3-MOUNTING-HOLE" device=""/>
+<part name="SUPPLY4" library="supply2" deviceset="DGND" device=""/>
+<part name="SUPPLY5" library="supply2" deviceset="DGND" device=""/>
+<part name="SUPPLY6" library="supply2" deviceset="DGND" device=""/>
+<part name="SUPPLY40" library="supply2" deviceset="DGND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -21413,6 +21417,10 @@ Source: www.kingbright.com</description>
 <instance part="U$6" gate="G$1" x="-38.1" y="492.76"/>
 <instance part="U$7" gate="G$1" x="-48.26" y="454.66"/>
 <instance part="U$8" gate="G$1" x="-50.8" y="408.94"/>
+<instance part="SUPPLY4" gate="G$1" x="-50.8" y="393.7"/>
+<instance part="SUPPLY5" gate="G$1" x="-48.26" y="439.42"/>
+<instance part="SUPPLY6" gate="G$1" x="-38.1" y="477.52"/>
+<instance part="SUPPLY40" gate="G$1" x="-38.1" y="518.16"/>
 </instances>
 <busses>
 </busses>
@@ -21858,6 +21866,26 @@ Source: www.kingbright.com</description>
 <wire x1="325.12" y1="218.44" x2="325.12" y2="220.98" width="0.1524" layer="91"/>
 <pinref part="JP8" gate="A" pin="4"/>
 <wire x1="325.12" y1="220.98" x2="332.74" y2="220.98" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$5" gate="G$1" pin="P$1"/>
+<pinref part="SUPPLY40" gate="G$1" pin="DGND"/>
+<wire x1="-38.1" y1="523.24" x2="-38.1" y2="520.7" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$6" gate="G$1" pin="P$1"/>
+<pinref part="SUPPLY6" gate="G$1" pin="DGND"/>
+<wire x1="-38.1" y1="485.14" x2="-38.1" y2="480.06" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$7" gate="G$1" pin="P$1"/>
+<pinref part="SUPPLY5" gate="G$1" pin="DGND"/>
+<wire x1="-48.26" y1="447.04" x2="-48.26" y2="441.96" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U$8" gate="G$1" pin="P$1"/>
+<pinref part="SUPPLY4" gate="G$1" pin="DGND"/>
+<wire x1="-50.8" y1="401.32" x2="-50.8" y2="396.24" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="BAT+" class="0">
