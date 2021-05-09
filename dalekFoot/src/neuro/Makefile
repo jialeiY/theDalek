@@ -1,6 +1,7 @@
 PROJECT = wheel
 
 CPP_SRC += main.cpp
+CPP_SRC += driver/serial_handler.cpp
 
 C_SRC = 
 ASM_SRC = 
@@ -22,7 +23,7 @@ ELF = $(BUILD_DIR)/$(PROJECT)
 
 CFLAGS = -c -Os -std=c++11
 DEFS = 
-LDFLAGS = -Os
+LDFLAGS = -Os -pthread
 
 # GNU ARM Embedded Toolchain
 CC=gcc
