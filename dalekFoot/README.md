@@ -1,3 +1,37 @@
+## For USART Only
+
+## Control Request Packet
+Offset | Name | Content | Width<br />(Bytes)
+-:|:-|:-:|-:
+0 | Packet Header | 0x55 | 1
+1 | Motor Power # 1 | xx | 1
+2 | Motor Power # 2 | xx | 1
+3 | Motor Power # 3 | xx | 1
+4 | Motor Power # 4 | xx | 1
+5 | Melody Index | xx | 1
+6 | LED | xx | 1
+7 | CRC for payload only | xx | 1
+8 | Packet Ending | 0xAA | 1
+
+## Sampling Data Packet
+
+Offset | Name | Content | Width<br />(Bytes)
+-:|:-|:-:|-:
+0 | Packet Header | 0x55 | 1
+1 | Timestamp (Milliseconds) | xx | 4
+5 | Time Offset (Micro Seconds) | xx | 4
+9 | Motor Encoder #1 | xx | 2
+11 | Motor Encoder #2 | xx | 2
+13 | Motor Encoder #3 | xx | 2
+15 | Motor Encoder #4 | xx | 2
+17 | Fast ADC Value #1 ~ #14 | xx | 28
+45 | Slow ADC Index | xx | 1
+46 | Slow ADC Value | xx | 2
+47 | UserInput | xx | 1
+48 | CRC for payload only | xx  | 1
+49 | Packet Ending | 0xAA | 1
+
+
 # dalekFoot
 
 ![alt text](images/architecture.png?raw=true)
