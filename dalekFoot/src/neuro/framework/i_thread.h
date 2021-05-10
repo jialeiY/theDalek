@@ -5,10 +5,10 @@
 #include <pthread.h>
 #include <cstdint>
 #include <string>
-
-using namespace std;
+#include "event_type.h"
 #include "framework/thread_hub.h"
 
+using namespace std;
 class ThreadHub;
 
 class IThread {
@@ -20,15 +20,17 @@ class IThread {
 		
 	protected:
 		virtual void onNotify(uint64_t msgType) = 0;
-		void notify(const string &threadName, uint64_t msgType);
+		void notify(const string &threadName, EventType eventType);
 
 	private:
 		pthread_mutex_t mMutex;
 		pthread_t mPid;
 		friend void * thread_entry(void*);
+		void *thread(void);
 		virtual void work() = 0;
 		const ThreadHub &mHub;
 		friend ThreadHub;
+		volatile EventType mPendingEvent;
 };
 
 

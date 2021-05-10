@@ -23,12 +23,10 @@ void WatchdogThread::onNotify(uint64_t eventType) {
 
 
 void WatchdogThread::work() {
-	while (true) {
-		notify("io", EventType::GLOBAL_CYCLE_START);
-		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-		notify("io", EventType::IO_MCU_RESPONSE_TIMEOUT);
-		std::this_thread::sleep_for(std::chrono::milliseconds(8000));
-	}
+	notify("io", EventType::GLOBAL_CYCLE_START);
+	std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+	notify("io", EventType::IO_MCU_RESPONSE_TIMEOUT);
+	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 }
 
 

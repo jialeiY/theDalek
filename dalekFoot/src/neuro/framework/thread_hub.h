@@ -2,6 +2,7 @@
 #define __FRAMEWORK_THREAD_HUB_H__
 
 #include <string>
+#include "framework/event_type.h"
 #include "framework/i_thread.h"
 #include <unordered_map>
 
@@ -14,7 +15,7 @@ class ThreadHub {
 		ThreadHub();
 		virtual ~ThreadHub();
 		void registerThread(IThread *thread, const string &name);
-		void notify(const string &threadName, uint64_t msgType) const;
+		void notify(const string &threadName, EventType eventType) const;
 	private:
 		unordered_map<string, IThread *> mThreadMap;
 

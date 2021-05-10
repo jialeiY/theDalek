@@ -1,4 +1,5 @@
 #include "framework/thread_hub.h"
+#include "framework/event_type.h"
 
 
 ThreadHub::ThreadHub() {
@@ -17,10 +18,10 @@ void ThreadHub::registerThread(IThread *thread, const string &name) {
 }
 
 
-void ThreadHub::notify(const string &threadName, uint64_t msgType) const{
+void ThreadHub::notify(const string &threadName, EventType eventType) const{
 	unordered_map<string, IThread *>::const_iterator iter = mThreadMap.find(threadName);
 	if (iter != mThreadMap.end()) {
-		iter->second->onNotify(msgType);
+		iter->second->mPendingEvent = eventType;
 	}
 }
 

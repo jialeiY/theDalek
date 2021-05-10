@@ -2,7 +2,8 @@
 	"files.associations": {
 		"chrono": "cpp",
 		"map": "cpp",
-		"ostream": "cpp"
+		"ostream": "cpp",
+		"cstring": "cpp"
 	},
 	"C_Cpp.files.exclude": {
 		"**/build/**": true,

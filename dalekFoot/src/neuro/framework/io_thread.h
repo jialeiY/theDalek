@@ -3,6 +3,9 @@
 
 #include "framework/i_thread.h"
 #include "framework/watchdog_thread.h"
+#include <cstdint>
+
+
 
 class IOThread : public IThread{
 	public:
@@ -11,7 +14,13 @@ class IOThread : public IThread{
 	protected:
 		virtual void onNotify(uint64_t msgType);
 	private:
+		int mTtyFd;
+
+		std::uint8_t mOutputBuffer[9];
+		
 		virtual void work();
+		void crcPayload();
+
 };
 
 #endif
