@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"chrono": "cpp",
+		"map": "cpp"
+	},
+	"C_Cpp.files.exclude": {
+		"**/build/**": true,
+		"**/.vscode": true
+	}
+}

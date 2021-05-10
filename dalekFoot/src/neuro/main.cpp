@@ -6,9 +6,25 @@
 #include <fcntl.h>
 #include <termios.h>
 
+#include "framework/thread_hub.h"
+#include "framework/watchdog_thread.h"
+#include "framework/io_thread.h"
+
+
 using namespace std;
 
 int main() {
+	ThreadHub th;
+
+	WatchdogThread wdt(th);
+	IOThread iot(th);
+
+	th.registerThread(&wdt, "watchdog");
+	th.registerThread(&iot, "io");
+
+	wdt.start();
+	iot.start();
+
 	cout << "hello wrold" << endl;
 	int ttyFd = open("/dev/ttyS3", O_RDWR | O_NOCTTY | O_NDELAY);
 
@@ -40,7 +56,7 @@ int main() {
 	while (true) {
 		int lenRead = read(ttyFd, buffer, 256);
 		for (int i=0; i<lenRead; ++i) {
-			printf("%c", buffer[i]);
+			// printf("%c", buffer[i]);
 		}
 	}
 	

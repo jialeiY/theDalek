@@ -1,7 +1,10 @@
 PROJECT = wheel
 
 CPP_SRC += main.cpp
-CPP_SRC += driver/serial_handler.cpp
+CPP_SRC += framework/thread_hub.cpp
+CPP_SRC += framework/i_thread.cpp
+CPP_SRC += framework/watchdog_thread.cpp
+CPP_SRC += framework/io_thread.cpp
 
 C_SRC = 
 ASM_SRC = 
