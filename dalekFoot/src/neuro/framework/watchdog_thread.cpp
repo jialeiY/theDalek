@@ -2,6 +2,8 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include "framework/event_type.h"
+
 
 using namespace std;
 
@@ -13,8 +15,8 @@ WatchdogThread::~WatchdogThread() {
 
 }
 
-void WatchdogThread::onNotify(uint64_t msgType) {
-	cout << "got notify in watchdog" << msgType << endl;
+void WatchdogThread::onNotify(uint64_t eventType) {
+	cout << "got notify in watchdog" << eventType << endl;
 }
 
 
@@ -22,8 +24,10 @@ void WatchdogThread::onNotify(uint64_t msgType) {
 
 void WatchdogThread::work() {
 	while (true) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		cout << "out" << endl;
+		notify("io", EventType::GLOBAL_CYCLE_START);
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+		notify("io", EventType::IO_MCU_RESPONSE_TIMEOUT);
+		std::this_thread::sleep_for(std::chrono::milliseconds(8000));
 	}
 }
 

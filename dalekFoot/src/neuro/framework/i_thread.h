@@ -8,6 +8,7 @@
 
 using namespace std;
 #include "framework/thread_hub.h"
+
 class ThreadHub;
 
 class IThread {

@@ -1,4 +1,5 @@
 #include "framework/io_thread.h"
+#include "framework/event_type.h"
 #include <chrono>
 #include <thread>
 #include <iostream>
@@ -23,8 +24,21 @@ void IOThread::work() {
 }
 
 
-void IOThread::onNotify(uint64_t msgType) {
-	cout << "got notify in io iothread" << msgType << endl;
+void IOThread::onNotify(uint64_t eventType) {
+	switch (eventType) {
+		case (EventType::GLOBAL_CYCLE_START) : {
+			// output the data;
+			printf("output data\r\n");
+			break;
+		}
+		case (EventType::IO_MCU_RESPONSE_TIMEOUT) : {
+			printf("response timeout\r\n");
+			break;
+		}
+		default: {
+			break;
+		}
+	}
 }
 
 
