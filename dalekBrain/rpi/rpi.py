@@ -1,9 +1,7 @@
 from flask import Flask,render_template,Response,request
-import camera
-from camera import CameraFactory
-from config import FACE_ENCODING_PATH
+
 from motor import motor_control
-from modules.face_recognition import FaceRecognizerTrainer
+from modules import the_brain
 
 app=Flask(__name__)
 
@@ -14,7 +12,7 @@ def hello_doctor():
 
 @app.route("/index")
 def index():
-    return render_template("index.html",camera={"width":camera.WIDTH,"height":camera.HEIGHT})
+    return render_template("index.html",camera={"width":the_brain.vision_width,"height":the_brain.vision_height})
 
 
 @app.route("/cam-motor",methods=["POST"])
@@ -29,37 +27,36 @@ def move_car():
     motor_control.move_car(direction)
     return "success"
 
-@app.route("/faces",methods=["POST"])
-def add_face():
-    face_name=request.form.get("face_name")
-    print(f"face name is: {face_name}")
+# @app.route("/faces",methods=["POST"])
+# def add_face():
+#     face_name=request.form.get("face_name")
+#     print(f"face name is: {face_name}")
 
-    status="success"
-    try:
-        camera=CameraFactory.create_camera()
-        faceRecognizerTrainer=FaceRecognizerTrainer(camera,FACE_ENCODING_PATH)
-        faceRecognizerTrainer.add_face(face_name)
-        camera.face_recognizer.load_face_encodings()
+#     status="success"
+#     try:
+#         camera=CameraFactory.create_camera()
+#         faceRecognizerTrainer=FaceRecognizerTrainer(camera,FACE_ENCODING_PATH)
+#         faceRecognizerTrainer.add_face(face_name)
+#         camera.face_recognizer.load_face_encodings()
 
-    except Exception as e:
-        status="failed"
+#     except Exception as e:
+#         status="failed"
 
-    return status
+#     return status
 
 
-def gen(camera):
+def gen(brain):
     while True:
-        frame = camera.get_frame()
+        frame = brain.get_vision_output()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route("/index/stream.mjpg")
 def video_stream():
 
-    camera=CameraFactory.create_camera()
-    return Response(gen(camera),
+    return Response(gen(the_brain),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 if __name__=="__main__":
-    app.run("0.0.0.0",debug=True)
+    app.run("0.0.0.0",debug=True,use_reloader=False)

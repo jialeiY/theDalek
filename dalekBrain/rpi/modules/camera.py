@@ -3,8 +3,6 @@ import time
 import threading
 import numpy as np
 import cv2
-from modules.face_recognition import FaceRecognizer
-from config import FACE_ENCODING_PATH,CAMERA_NAME
 from modules.utils.singleton import singleton
 
 WIDTH=480
@@ -13,8 +11,7 @@ HEIGHT=320
 class CameraFactory(object):
 
     @staticmethod
-    def create_camera():
-        name=CAMERA_NAME
+    def create_camera(name):
         if name.lower()=="picamera":
             return PiCamera()
         elif name.lower()=="mockcamera":
@@ -29,21 +26,23 @@ class CameraFactory(object):
 class BaseCamera(object):
     thread=None
     frame=None
-    raw_img=None
     last_access=0
     condition=None
-    face_recognizer=None
     
     def __init__(self):
+        print("init camera")
         if BaseCamera.thread is None:
             BaseCamera.last_access=time.time()
 
             BaseCamera.condition=threading.Condition()
             BaseCamera.thread=threading.Thread(target=self._thread)
             BaseCamera.thread.start()
+            print("init camera thread")
 
             while self.get_frame() is None:
                 time.sleep(0)
+
+
 
     def get_frame(self):
         BaseCamera.last_access=time.time()
@@ -51,10 +50,6 @@ class BaseCamera(object):
             BaseCamera.condition.wait()
         return BaseCamera.frame
     
-    def get_raw_img(self):
-        with BaseCamera.condition:
-            BaseCamera.condition.wait()
-        return BaseCamera.raw_img
 
     @classmethod
     def frames(cls):
@@ -64,12 +59,12 @@ class BaseCamera(object):
     def _thread(cls):
         print('Starting camera thread.')
         frames_iterator=cls.frames()
-        for frame,raw_img in frames_iterator:
+        for frame in frames_iterator:
             with BaseCamera.condition:
 
                 BaseCamera.frame=frame
-                BaseCamera.raw_img=raw_img
                 BaseCamera.condition.notify_all()
+
 
             time.sleep(0)
 
@@ -79,10 +74,9 @@ class BaseCamera(object):
                 break
         BaseCamera.thread = None
 
-
+@singleton
 class JetsonCamera(BaseCamera):
 
-    face_recognizer=FaceRecognizer(FACE_ENCODING_PATH)
 
     @staticmethod
     def _get_jetson_gstreamer_source(capture_width=640, capture_height=480, display_width=640, display_height=480, framerate=15, flip_method=0):
@@ -107,22 +101,15 @@ class JetsonCamera(BaseCamera):
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
 
-        process_this_frame = True
         while True:
             # read current frame
             _, output_stream = camera.read()
-            output_stream=cv2.cvtColor(output_stream , cv2.COLOR_BGR2RGB)
+            
+            if output_stream is not None:
+                output_stream=cv2.cvtColor(output_stream , cv2.COLOR_BGR2RGB)
 
-            recognized_output=output_stream
 
-            if process_this_frame:
-                    recognized_output=cls.face_recognizer.recognize(output_stream)
-
-            output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
-                
-            process_this_frame=process_this_frame^True
-
-            yield cv2.imencode(".jpg",output)[1].tobytes(),output_stream
+            yield output_stream
 
 
 
@@ -130,7 +117,7 @@ class JetsonCamera(BaseCamera):
 @singleton
 class PiCamera(BaseCamera):
 
-    face_recognizer=FaceRecognizer(FACE_ENCODING_PATH)
+    face_recognizer=None
 
     @classmethod
     def frames(cls):
@@ -143,21 +130,10 @@ class PiCamera(BaseCamera):
 
             output_stream = np.empty((HEIGHT, WIDTH, 3), dtype=np.uint8)
 
-            process_this_frame = True
 
             for _  in camera.capture_continuous(output_stream,format="rgb",use_video_port=True):
                 
-                recognized_output=output_stream
-
-                if process_this_frame:
-
-                    recognized_output=cls.face_recognizer.recognize(output_stream)
-                
-                output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
-                
-                process_this_frame=process_this_frame^True
-
-                yield cv2.imencode(".jpg",output)[1].tobytes(),output_stream
+                yield output_stream
 
 
 class OpenCVCamera(BaseCamera):
@@ -173,9 +149,8 @@ class OpenCVCamera(BaseCamera):
         while True:
             # read current frame
             _, img = camera.read()
-            recognized_output=recognize_face(img)
             # encode as a jpeg image and return it
-            yield cv2.imencode('.jpg', recognized_output)[1].tobytes(),img
+            yield img
 
 
 class MockCamera(BaseCamera):
@@ -186,4 +161,4 @@ class MockCamera(BaseCamera):
     def frames(cls):
         while True:
             time.sleep(1)
-            yield MockCamera.imgs[int(time.time()) % 3],None
+            yield MockCamera.imgs[int(time.time()) % 3]

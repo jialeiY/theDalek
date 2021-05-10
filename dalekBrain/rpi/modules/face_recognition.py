@@ -4,6 +4,8 @@ import cv2
 import csv
 import os
 
+FACE_ENCODING_PATH="../../model/face/encodings.csv"
+
 def _load_face_encodings(file_path):
     face_labels=[]
     face_encodings=[]
@@ -113,5 +115,7 @@ class FaceRecognizer(object):
             cv2.rectangle(img, (left,top), (right,bottom), (0,255,0), 2)
             cv2.putText(img, str(name), (left+5,top-5), font, 1, (255,255,255), 2)
             cv2.putText(img, f"{dist:.2f}", (left+5,top-20), font, 1, (255,255,255), 2)
-        return img
+        
+        is_face_exist=len(face_names)>0
+        return img,is_face_exist
 
