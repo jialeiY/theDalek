@@ -1,28 +1,30 @@
 #include <iostream>
 
-
-
 #include "framework/thread_hub.h"
+#include "framework/timer_thread.h"
 #include "framework/watchdog_thread.h"
 #include "framework/io_thread.h"
-
 
 using namespace std;
 
 int main() {
 	ThreadHub th;
 
+	TimerThread tt(th);
 	WatchdogThread wdt(th);
 	IOThread iot(th);
 
+	th.registerThread(&tt, "timer");
 	th.registerThread(&wdt, "watchdog");
 	th.registerThread(&iot, "io");
 
 	wdt.start();
 	iot.start();
+	tt.start();
 
-	while (true);
-	
+	while (true)
+		;
+
 	// char buffer[256];
 
 	// while (true) {
@@ -31,10 +33,6 @@ int main() {
 	// 		// printf("%c", buffer[i]);
 	// 	}
 	// }
-	
 
-
-	
-
-	return 0;	
+	return 0;
 }

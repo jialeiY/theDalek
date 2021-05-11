@@ -5,24 +5,21 @@
 #include "framework/watchdog_thread.h"
 #include <cstdint>
 
-
-
-class IOThread : public IThread{
+class IOThread : public IThread {
 	public:
 		IOThread(const ThreadHub &hub);
 		virtual ~IOThread();
+
 	protected:
-		virtual void onNotify(uint64_t msgType);
+		virtual void onNotify(EventType eventType);
+
 	private:
 		int mTtyFd;
 
 		std::uint8_t mOutputBuffer[9];
-		
+
 		virtual void work();
 		void crcPayload();
-
 };
 
 #endif
-
-

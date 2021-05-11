@@ -8,5 +8,10 @@
 	"C_Cpp.files.exclude": {
 		"**/build/**": true,
 		"**/.vscode": true
-	}
+	},
+	"editor.formatOnSave": false,
+	"editor.codeActionsOnSave": null,
+	"editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.insertSpaces": false
 }
