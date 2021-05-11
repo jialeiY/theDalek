@@ -29,6 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_it.h"
+#include "inc.h"
 #include <stdint.h>
 
 /** @addtogroup Template_Project

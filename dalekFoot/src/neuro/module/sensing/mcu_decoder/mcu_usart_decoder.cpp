@@ -1,6 +1,6 @@
 #include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
 #include "module/math/utility.h"
-
+#include <cstdio>
 
 namespace sensing {
 
@@ -30,6 +30,7 @@ void McuUsartDecoder::reset() {
 void McuUsartDecoder::decode(const uint8_t *data, size_t length) {
 	for (size_t i=0; i<length; ++i) {
 		decodeByByte(data[i]);
+		printf("%c", data[i]);
 	}
 }
 

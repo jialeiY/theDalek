@@ -13,15 +13,19 @@
 
 using namespace std;
 
-IOThread::IOThread(const ThreadHub &hub) : IThread(hub)
+IOThread::IOThread(const ThreadHub &hub) : 
+	IThread(hub),
+	mStatus(IOStatus::WORKING)
 {
+	mDecoder.reset();
+
 	mOutputBuffer[0] = 0x55;					   // HEAD
 	mOutputBuffer[1] = 0x00;					   // MOTOR #1
 	mOutputBuffer[2] = 0x00;					   // MOTOR #2
 	mOutputBuffer[3] = 0x00;					   // MOTOR #3
-	mOutputBuffer[4] = 0x00;					   // MOTOR #4
+	mOutputBuffer[4] = 0x14;					   // MOTOR #4
 	mOutputBuffer[5] = 0x00;					   // Melody Id
-	mOutputBuffer[6] = 0x00;					   // LED
+	mOutputBuffer[6] = 0x3F;					   // LED
 	mOutputBuffer[7] = crc8(mOutputBuffer + 1, 6); // CRC
 	mOutputBuffer[8] = 0xAA;					   // END
 
@@ -47,20 +51,40 @@ IOThread::IOThread(const ThreadHub &hub) : IThread(hub)
 	cfsetospeed(&options, B115200);
 	tcsetattr(mTtyFd, TCSANOW, &options);
 
-	// Set Block read
-	fcntl(mTtyFd, F_SETFL, 0);
+	// Set non-Block read
+	fcntl(mTtyFd, F_SETFL, O_NONBLOCK);
 }
 
 IOThread::~IOThread() {
 	close(mTtyFd);
 }
 
-void IOThread::work() {}
+void IOThread::work() {
+	switch (mStatus) {
+		case (IOStatus::TRANSCEIVING): {
+			int lenRead = read(mTtyFd, mInputBuffer, 32);
+			if (lenRead > 0) {
+				mDecoder.decode(mInputBuffer, lenRead);
+			}
+			break;
+		}
+		case (IOStatus::WORKING) : {
+			usleep(50);
+			break;
+		}
+		default: {
+			mStatus = IOStatus::WORKING;
+			// ERROR(unreachable status);
+			break;
+		}
+	}
+}
 
 void IOThread::onNotify(EventType eventType) {
 	switch (eventType) {
 		case (EventType::GLOBAL_CYCLE_START): {
 			// output the data;
+			mStatus = IOStatus::TRANSCEIVING;
 			printf("write data to mcu\r\n");
 			size_t remainLength = 9;
 			while (remainLength > 0) {
@@ -81,7 +105,6 @@ void IOThread::onNotify(EventType eventType) {
 			break;
 		}
 	}
-	cout << "end of io thread notifiy" << endl;
 }
 
 void IOThread::crcPayload() {

@@ -1,6 +1,6 @@
 #include "modules/decoder/decoder.hpp"
 #include "modules/math/utility.h"
-
+#include "driver/serial.hpp"
 
 
 
@@ -20,20 +20,18 @@ void Decoder::reset(void) {
 
 void Decoder::decode(uint8_t byte) {
 	if (mIsSync) {
-		
+		mBuffer[mOffset] = byte;
+		mOffset++;
+		if (mOffset == 9) {
+			validatePacket();
+			invalidatePacket();
+		}
 	} else {
 		if (byte == 0x55)
 		{
 			mOffset = 1;
 			mBuffer[0] = byte;
 			mIsSync = true;
-		} else {
-			mBuffer[mOffset] = byte;
-			mOffset++;
-			if (mOffset == 9) {
-				validatePacket();
-				invalidatePacket();
-			}
 		}
 	}
 }
@@ -44,12 +42,15 @@ void Decoder::validatePacket(void) {
 	if (expectCrc != mBuffer[7]) return ;
 
 	for (int i=0; i<4; ++i) {
-		mOutput.power[i] = u8array2u16(mBuffer + (1 + i*2));
+		mOutput.power[i] = mBuffer[1+i];
 	}
 	mOutput.melodyIdx = mBuffer[5];
 	mOutput.ledStatus = mBuffer[6];
 
 	mHasOutput = true;
+
+	// Serial1.printf("packet:%2x %2x %2x %2x %2x %2x %2x %2x %2x\r\n", 
+	// mBuffer[0], mBuffer[1], mBuffer[2], mBuffer[3], mBuffer[4], mBuffer[5], mBuffer[6], mBuffer[7]);
 }
 
 

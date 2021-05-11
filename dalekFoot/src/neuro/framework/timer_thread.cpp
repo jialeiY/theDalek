@@ -22,9 +22,9 @@ void TimerThread::onNotify(EventType eventType)
 
 void TimerThread::work()
 {
-    notify("watchdog", EventType::GLOBAL_CYCLE_START);
+    // notify("watchdog", EventType::GLOBAL_CYCLE_START);
     notify("io", EventType::GLOBAL_CYCLE_START);
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-    notify("watchdog", EventType::IO_MCU_RESPONSE_TIMEOUT);
-    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    // notify("watchdog", EventType::IO_MCU_RESPONSE_TIMEOUT);
+    // std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 }

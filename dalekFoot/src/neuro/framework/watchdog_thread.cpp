@@ -13,7 +13,7 @@ WatchdogThread::~WatchdogThread() {
 }
 
 void WatchdogThread::onNotify(EventType eventType) {
-	cout << "got notify in watchdog" << eventType << endl;
+	// cout << "got notify in watchdog" << eventType << endl;
 }
 
 void WatchdogThread::work() {
