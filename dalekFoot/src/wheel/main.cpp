@@ -30,6 +30,12 @@ int main(void) {
 	static bool on {false};
 
 	while (true) {
+		// Serial1.tick();
+		if (Serial1.hasPacket()) {
+			ContorlRequestPacket packet = Serial1.fetchPacket();
+			Serial1.printf("got packet motor:%d %d %d %d, m:%d, led:%x\r\n", 
+				packet.power[0], packet.power[1], packet.power[2], packet.power[3], packet.melodyIdx, packet.ledStatus);
+		}
 		/*
 		if (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9)) {
 			GPIO_SetBits(GPIOC, GPIO_Pin_6);
@@ -39,7 +45,7 @@ int main(void) {
 		*/
 		{
 			static uint32_t currentMillis {0UL};
-			if (System::millis() - currentMillis >= 100) {
+			if (System::millis() - currentMillis >= 10000) {
 				
 				currentMillis = System::millis();
 				// USART_SendData(USART1, 0xC9);
@@ -89,7 +95,7 @@ int main(void) {
 		*/
 		{
 			static uint32_t currentMillis {0UL};
-			if (System::millis() - currentMillis >= 100) {
+			if (System::millis() - currentMillis >= 10000) {
 				currentMillis = System::millis();
 
 				extern volatile uint16_t adc1[8];

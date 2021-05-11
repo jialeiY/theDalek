@@ -1,5 +1,6 @@
 #include "driver/serial.hpp"
 #include "utils/streams.hpp"
+#include "modules/decoder/decoder.hpp"
 #include <stdarg.h>
 
 inline void serial1FriendIrq(void) {
@@ -18,7 +19,7 @@ void Serial::init(void) {
 	M_BUFFER_END = mRingBuffer + SERIAL_RING_BUFFER_SIZE;
 	if (M_BUFFER_END != (mRingBuffer+SERIAL_RING_BUFFER_SIZE)) GPIO_ToggleBits(GPIOC, GPIO_Pin_7);
 	isTransmitting = false;
-	
+	mDecoder.init();
 }
 
 // This is utility for human print, no need for package sending
@@ -82,7 +83,7 @@ inline void Serial::irq() {
 			if (mPopPtr >= M_BUFFER_END) mPopPtr = mRingBuffer;
 		}
 	} else {
-		USART_ReceiveData(USART1);
+		mDecoder.decode(uint8_t(USART_ReceiveData(USART1)));
 		// USART_ITConfig(EVAL_COM1, USART_IT_RXNE, DISABLE);
 	}
 }

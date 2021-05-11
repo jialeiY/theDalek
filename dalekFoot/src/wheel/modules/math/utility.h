@@ -1,10 +1,9 @@
 #ifndef __MODULE_MATH_UTILITY_H__
 #define __MODULE_MATH_UTILITY_H__
 
-#include <cstdint>
-#include <stddef.h>
+#include "inc.h"
 
-static uint8_t crc8(const uint8_t * payload, size_t len) {
+static uint8_t crc8(const uint8_t * payload, int len) {
   uint8_t crc = 0;//0xFF;
   int i;
 
@@ -28,7 +27,6 @@ inline uint16_t u8array2u16(const uint8_t *v2) {
 	return 	uint16_t(v2[4])
 	 | uint16_t((v2[3] << 8));
 }
-
 
 
 #endif

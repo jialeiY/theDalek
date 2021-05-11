@@ -4,6 +4,7 @@ CPP_SRC += utils/utils.cpp
 CPP_SRC += utils/streams.cpp
 CPP_SRC += hw/board.cpp
 CPP_SRC += driver/serial.cpp
+CPP_SRC += modules/decoder/decoder.cpp
 
 ST_PHLIB = lib/STM32F4xx-standard-peripherals-library/Libraries
 C_SRC += $(ST_PHLIB)/STM32F4xx_StdPeriph_Driver/src/stm32f4xx_gpio.c

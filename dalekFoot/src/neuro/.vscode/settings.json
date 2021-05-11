@@ -3,7 +3,8 @@
 		"chrono": "cpp",
 		"map": "cpp",
 		"ostream": "cpp",
-		"cstring": "cpp"
+		"cstring": "cpp",
+		"cstdint": "cpp"
 	},
 	"C_Cpp.files.exclude": {
 		"**/build/**": true,

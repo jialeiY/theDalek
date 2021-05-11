@@ -4,17 +4,6 @@
 
 namespace sensing {
 
-inline uint32_t u8array2u32(const uint8_t *v4) {
-	return 	uint32_t(v4[4])
-	 | uint32_t((v4[3] << 8))
-	 | uint32_t((v4[2] << 16))
-	 | uint32_t((v4[1] << 24));
-}
-
-inline uint16_t u8array2u16(const uint8_t *v2) {
-	return 	uint16_t(v2[4])
-	 | uint16_t((v2[3] << 8));
-}
 
 
 
