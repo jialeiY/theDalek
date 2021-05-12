@@ -15,7 +15,11 @@ class McuUsartDecoder {
 		virtual ~McuUsartDecoder();
 		void reset();
 		void decode(const uint8_t *data, size_t length);
-		bool hasData() const;
+		bool hasData() const { return mHasData; };
+		McuSensors fetchData() {
+			mHasData = false;
+			return mOutput;
+		}
 	private:
 		enum DecoderStatus {
 			UNSYNC,
@@ -25,7 +29,7 @@ class McuUsartDecoder {
 		DecoderStatus mStatus;
 		size_t mOffset;
 		bool mHasData;
-		uint8_t mBuffer[50];
+		uint8_t mBuffer[51];
 		McuSensors mOutput;
 		
 		inline void decodeByByte(uint8_t byte);

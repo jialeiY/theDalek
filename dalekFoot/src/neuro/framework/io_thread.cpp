@@ -15,7 +15,7 @@ using namespace std;
 
 IOThread::IOThread(const ThreadHub &hub) : 
 	IThread(hub),
-	mStatus(IOStatus::WORKING)
+	mStatus(IOStatus::IDLE)
 {
 	mDecoder.reset();
 
@@ -58,13 +58,22 @@ IOThread::IOThread(const ThreadHub &hub) :
 IOThread::~IOThread() {
 	close(mTtyFd);
 }
+#include <errno.h>
+#include <string.h>
 
 void IOThread::work() {
+	int lenRead = read(mTtyFd, mInputBuffer, 32);
 	switch (mStatus) {
 		case (IOStatus::TRANSCEIVING): {
-			int lenRead = read(mTtyFd, mInputBuffer, 32);
 			if (lenRead > 0) {
 				mDecoder.decode(mInputBuffer, lenRead);
+				if (mDecoder.hasData()) {
+					sensing::McuSensors packet = mDecoder.fetchData();
+					printf("time from mcu: %u\r\nn", packet.timestampMsec);
+				}
+			}
+			if (lenRead < 0) {
+				// printf("Error reading file: %s\n", strerror( errno ));	
 			}
 			break;
 		}

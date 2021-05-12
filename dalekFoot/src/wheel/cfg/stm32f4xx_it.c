@@ -171,7 +171,7 @@ void SysTick_Handler(void)
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
 
-volatile int32_t encoder3 = 0UL;
+volatile int16_t encoder3 = 0UL;
 volatile uint8_t encoder3A = 0;  // C9
 volatile uint8_t encoder3B = 0;  // A8
 

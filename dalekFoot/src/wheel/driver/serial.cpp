@@ -62,6 +62,13 @@ inline void Serial::write(const uint8_t data) {
 	__enable_irq();
 }
 
+void Serial::write(const uint8_t *data, int size) {
+	for (int i=0; i<size; ++i) {
+		write(data[i]);
+	}
+}
+
+
 inline bool Serial::isRingBufferFull() const {
 	return ((mPopPtr == mRingBuffer) && (mPushPtr == (M_BUFFER_END-1)))
 			|| ((mPushPtr + 1) == mPopPtr);

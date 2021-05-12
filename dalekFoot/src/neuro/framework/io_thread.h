@@ -18,7 +18,8 @@ class IOThread : public IThread {
 	private:
 		enum IOStatus {
 			TRANSCEIVING,
-			WORKING
+			WORKING,
+			IDLE
 		};
 		IOStatus mStatus;
 		int mTtyFd;

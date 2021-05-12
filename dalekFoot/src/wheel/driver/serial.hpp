@@ -15,6 +15,7 @@ class Serial {
 		void println(const char *str);
 		void printf(const char *fmt, ...);
 		void write(const uint8_t data);
+		void write(const uint8_t *data, int size);
 		// void tick();
 		inline bool hasPacket(void) const {
 			return mDecoder.hasOutput();
@@ -22,6 +23,7 @@ class Serial {
 		inline ContorlRequestPacket fetchPacket(void) {
 			return mDecoder.fetchOutput();
 		}
+		
 	private:
 		uint8_t mRingBuffer[SERIAL_RING_BUFFER_SIZE];
 		uint8_t *mPushPtr;

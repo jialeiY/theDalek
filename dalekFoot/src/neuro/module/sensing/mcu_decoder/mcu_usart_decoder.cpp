@@ -30,11 +30,11 @@ void McuUsartDecoder::reset() {
 void McuUsartDecoder::decode(const uint8_t *data, size_t length) {
 	for (size_t i=0; i<length; ++i) {
 		decodeByByte(data[i]);
-		printf("%c", data[i]);
 	}
 }
 
 inline void McuUsartDecoder::decodeByByte(uint8_t byte) {
+
 	switch (mStatus) {
 		case (DecoderStatus::UNSYNC) : {
 			if (byte == 0x55) {
@@ -47,8 +47,9 @@ inline void McuUsartDecoder::decodeByByte(uint8_t byte) {
 		case (DecoderStatus::SYNCED) : {
 			mBuffer[mOffset] = byte;
 			mOffset ++;
-			if (mOffset == 50) {
+			if (mOffset == 51) {
 				validateAndOutputPackage();
+				invalidatePacket();
 			}
 			break;
 		}
@@ -62,14 +63,12 @@ inline void McuUsartDecoder::decodeByByte(uint8_t byte) {
 
 
 inline void McuUsartDecoder::validateAndOutputPackage() {
-	if (mBuffer[8] != 0xAA) {
-		invalidatePacket();
+	if (mBuffer[50] != 0xAA) {
 		return ;
 	}
 
-	uint8_t expectCrc = crc8(mBuffer+1, 47);
-	if (expectCrc != mBuffer[48]) {
-		invalidatePacket();
+	uint8_t expectCrc = crc8(mBuffer+1, 48);
+	if (expectCrc != mBuffer[49]) {
 		return ;
 	}
 	outputPacket();
@@ -93,10 +92,9 @@ void McuUsartDecoder::outputPacket() {
 		}
 		mOutput.slowAdcIdx = mBuffer[45];
 		mOutput.slowAdcIdx = u8array2u16(mBuffer+46);
-		mOutput.userInput = mBuffer[47];
+		mOutput.userInput = mBuffer[48];
 
 		mHasData = true;
-
 }
 
 

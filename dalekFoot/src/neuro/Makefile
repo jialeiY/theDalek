@@ -26,9 +26,9 @@ OBJS += $(CPP_OBJ)
 ELF = $(BUILD_DIR)/$(PROJECT)
 
 
-CFLAGS = -c -Os -std=c++11
+CFLAGS = -c -Os -std=c++11 -g
 DEFS = 
-LDFLAGS = -Os -pthread
+LDFLAGS = -Os -pthread -g
 
 # GNU ARM Embedded Toolchain
 CC=gcc
