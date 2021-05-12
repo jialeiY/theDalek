@@ -27,9 +27,9 @@ Offset | Name | Content | Width<br />(Bytes)
 17 | Fast ADC Value #1 ~ #14 | xx | 28
 45 | Slow ADC Index | xx | 1
 46 | Slow ADC Value | xx | 2
-47 | UserInput | xx | 1
-48 | CRC for payload only | xx  | 1
-49 | Packet Ending | 0xAA | 1
+48 | UserInput | xx | 1
+49 | CRC for payload only | xx  | 1
+50 | Packet Ending | 0xAA | 1
 
 
 # dalekFoot
