@@ -115,9 +115,10 @@ void stop(){
 
 void loop() {
   // put your main code here, to run repeatedly:
- 
+
   if(Serial.available()>0){
     incomingVal=Serial.readString();
+    incomingVal.trim();
     
     if(incomingVal.equals("move_forward")){
       forward();
