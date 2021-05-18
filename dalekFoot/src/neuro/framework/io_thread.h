@@ -4,7 +4,7 @@
 #include "framework/i_thread.h"
 #include "framework/watchdog_thread.h"
 #include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
-
+#include "module/sensing/sensor_buffer/sensor_buffer.h"
 #include <cstdint>
 
 class IOThread : public IThread {
@@ -27,6 +27,7 @@ class IOThread : public IThread {
 		std::uint8_t mOutputBuffer[9];
 		std::uint8_t mInputBuffer[32];
 		sensing::McuUsartDecoder mDecoder;
+		sensing::SensorBuffer mSensorBuffer;
 		virtual void work();
 		void crcPayload();
 };

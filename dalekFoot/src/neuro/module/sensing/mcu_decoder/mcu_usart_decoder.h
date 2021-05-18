@@ -2,7 +2,7 @@
 #define __MODULE_SENSING_MCU_DECODER_MCU_USART_DECODER_H__
 
 
-#include "module/sensing/mcu_decoder/data_type.h"
+#include "module/data_types/sensing/mcu_sensors.h"
 #include <stdint.h>
 #include <stddef.h>
 

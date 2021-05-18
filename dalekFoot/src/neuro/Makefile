@@ -7,7 +7,7 @@ CPP_SRC += framework/timer_thread.cpp
 CPP_SRC += framework/watchdog_thread.cpp
 CPP_SRC += framework/io_thread.cpp
 CPP_SRC += module/sensing/mcu_decoder/mcu_usart_decoder.cpp
-
+CPP_SRC += module/sensing/sensor_buffer/sensor_buffer.cpp
 C_SRC = 
 ASM_SRC = 
 

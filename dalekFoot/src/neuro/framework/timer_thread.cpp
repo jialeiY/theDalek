@@ -24,7 +24,7 @@ void TimerThread::work()
 {
     // notify("watchdog", EventType::GLOBAL_CYCLE_START);
     notify("io", EventType::GLOBAL_CYCLE_START);
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     // notify("watchdog", EventType::IO_MCU_RESPONSE_TIMEOUT);
     // std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 }
