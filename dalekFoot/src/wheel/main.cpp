@@ -86,12 +86,33 @@ void transmitReplyPacket() {
 
 }
 
+TIM_OCInitTypeDef TIM_OCStruct;
+void setSpeed(int32_t speed) {
+	
+	if (speed < 0) {
+
+	} else if (speed > 0) {
+		TIM_OCStruct.TIM_Pulse = speed;
+		TIM_OC1Init(TIM4, &TIM_OCStruct);
+		
+	} else { // speed == 0
+
+	}
+}
 
 int main(void) {
 	SysTick_Config(SystemCoreClock / 1000UL);
 	SystemCoreClockUpdate();
 	boardInit();
 	Serial1.init();
+	// motor init
+
+	TIM_OCStructInit(&TIM_OCStruct);
+	TIM_OCStruct.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCStruct.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCStruct.TIM_OutputNState = TIM_OCPolarity_High;
+
+
 	replyPacketBuffer[0] = 0x55;
 	replyPacketBuffer[50] = 0xAA;
 	
@@ -100,12 +121,17 @@ int main(void) {
 	while (true) {
 		// Serial1.tick();
 		if (Serial1.hasPacket()) {
+			GPIO_SetBits(GPIOC, GPIO_Pin_6);
+			
 			transmitReplyPacket();
+			GPIO_ResetBits(GPIOC, GPIO_Pin_6);
 			
 			ContorlRequestPacket packet = Serial1.fetchPacket();
 			Serial1.printf("got packet motor:%d %d %d %d, m:%d, led:%x\r\n", 
 				packet.power[0], packet.power[1], packet.power[2], packet.power[3], packet.melodyIdx, packet.ledStatus);
+			setSpeed(static_cast<int32_t>(packet.power[3]) * 4);
 		}
+		
 		/*
 		if (GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_9)) {
 			GPIO_SetBits(GPIOC, GPIO_Pin_6);

@@ -13,6 +13,8 @@
 
 using namespace std;
 
+volatile uint8_t m4speed = 0;
+
 IOThread::IOThread(const ThreadHub &hub) : 
 	IThread(hub),
 	mStatus(IOStatus::IDLE),
@@ -25,7 +27,7 @@ IOThread::IOThread(const ThreadHub &hub) :
 	mOutputBuffer[1] = 0x00;					   // MOTOR #1
 	mOutputBuffer[2] = 0x00;					   // MOTOR #2
 	mOutputBuffer[3] = 0x00;					   // MOTOR #3
-	mOutputBuffer[4] = 0x14;					   // MOTOR #4
+	mOutputBuffer[4] = 0x00;					   // MOTOR #4
 	mOutputBuffer[5] = 0x00;					   // Melody Id
 	mOutputBuffer[6] = 0x3F;					   // LED
 	mOutputBuffer[7] = crc8(mOutputBuffer + 1, 6); // CRC
@@ -94,7 +96,11 @@ void IOThread::onNotify(EventType eventType) {
 		case (EventType::GLOBAL_CYCLE_START): {
 			// output the data;
 			mStatus = IOStatus::TRANSCEIVING;
-			printf("write data to mcu\r\n");
+			// printf("write data to mcu\r\n");
+			// for debug
+			mOutputBuffer[4] = m4speed;
+			mOutputBuffer[7] = crc8(mOutputBuffer + 1, 6); // CRC
+			
 			size_t remainLength = 9;
 			while (remainLength > 0) {
 				ssize_t lengthSent = write(mTtyFd, mOutputBuffer, remainLength);

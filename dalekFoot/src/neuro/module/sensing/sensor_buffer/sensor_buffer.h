@@ -8,6 +8,12 @@ namespace sensing {
 class SensorBuffer {
 	public:
 		void update(const McuSensors &mcuSensors);
+		void printStatus(void) const;
+
+
+
+		
+
 };
 
 }

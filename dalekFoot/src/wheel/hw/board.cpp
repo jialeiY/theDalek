@@ -65,7 +65,9 @@ void boardInit(void) {
 	USART_InitTypeDef USART_InitStructure;
   ADC_InitTypeDef ADC_InitStructure;
   ADC_CommonInitTypeDef ADC_CommonInitStructure;
-
+	TIM_TimeBaseInitTypeDef TIM_BaseStruct;
+	TIM_OCInitTypeDef TIM_OCStruct;
+	
 	GPIO_StructInit(&GPIO_InitStructure);
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
@@ -89,7 +91,7 @@ void boardInit(void) {
 
 	// Enable timer for PD11 and PD12
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
-	TIM_TimeBaseInitTypeDef TIM_BaseStruct;
+	
 	TIM_TimeBaseStructInit(&TIM_BaseStruct);
 
 	//timer_tick_frequency = Timer_default_frequency / (prescaller_set + 1)
@@ -102,9 +104,8 @@ void boardInit(void) {
 	TIM_TimeBaseInit(TIM4, &TIM_BaseStruct);
 	TIM_Cmd(TIM4, ENABLE);
 
-	TIM_OCInitTypeDef TIM_OCStruct;
+	
 	TIM_OCStructInit(&TIM_OCStruct);
-
 	TIM_OCStruct.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCStruct.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCStruct.TIM_OutputNState = TIM_OCPolarity_High;
@@ -172,6 +173,8 @@ void boardInit(void) {
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
+	// Turn off led
+	GPIO_ResetBits(GPIOC, GPIO_Pin_6);
 
 	
 	// USART
@@ -308,7 +311,7 @@ void boardInit(void) {
 	GPIO_SetBits(GPIOD, GPIO_Pin_1);
 	GPIO_ResetBits(GPIOD, GPIO_Pin_0);
 	
-	GPIO_SetBits(GPIOC, GPIO_Pin_6);
+	
 	GPIO_ResetBits(GPIOC, GPIO_Pin_7);
 
 }

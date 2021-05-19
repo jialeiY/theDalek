@@ -14,7 +14,7 @@ class IOThread : public IThread {
 
 	protected:
 		virtual void onNotify(EventType eventType);
-
+		
 	private:
 		enum IOStatus {
 			TRANSCEIVING,

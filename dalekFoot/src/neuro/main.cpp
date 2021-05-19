@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "framework/thread_hub.h"
 #include "framework/timer_thread.h"
 #include "framework/watchdog_thread.h"
@@ -12,16 +13,22 @@ using namespace std;
 
 vector<string> splitString(const string &str) {
 	vector<string> ret;
-	size_t found = string::npos;
 	size_t last = 0;
-	while ((found = str.find(' ', last)) != std::string::npos) {
-    ret.push_back(move(str.substr(last, (found - last))));
-		last = found + 1;
+
+	for (int i=0; i<str.size(); ++i) {
+		if (str[i] == ' ') {
+			if (i - last > 0) {
+				ret.push_back(str.substr(last, i-last));
+			}
+			last = i + 1;
+		}
 	}
-	ret.push_back(str.substr(last, str.size() - last));
+	if (str.size() - last > 0) {
+		ret.push_back(str.substr(last, str.size() - last));
+	}
 	return ret;
 }
-
+extern volatile uint8_t m4speed;
 int main() {
 	ThreadHub th;
 
@@ -40,13 +47,35 @@ int main() {
 	string cmd;
 
 	while (true) {
+		cout << "cmd > " << flush;
 		getline(cin, cmd);
 		vector<string> cmdList = splitString(cmd);
-		string out = accumulate(next(begin(cmdList)), end(cmdList), cmdList.front(), [](string acc, const string &item) {
+		vector<string> cleanCmdList;
+		std::copy_if(cmdList.begin(), cmdList.end(), std::back_inserter(cleanCmdList), [](const string &str) {
+			return str.size() > 0;
+		});
+
+		if (cmdList.size() < 1) continue;
+		
+
+		string out = accumulate(next(begin(cleanCmdList)), end(cleanCmdList), cleanCmdList.front(), [](string acc, const string &item) {
 			return acc + " - " + item;
 		});
-		cout << out << endl;		
+		cout << out << endl;
 
+
+		if (cleanCmdList[0] == "quit" || cleanCmdList[0] == "q") {
+			break;
+		}
+		
+		if (cleanCmdList[0] == "m4") {
+			if (cleanCmdList.size() < 3) continue;
+			if (cleanCmdList[1] == "set") {
+				int speed = atoi(cleanCmdList[2].c_str());
+				cout << "set motor 4 speed to " << speed << endl;
+				m4speed = speed;
+			}
+		}
 	}
 		
 
