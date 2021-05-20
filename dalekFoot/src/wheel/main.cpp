@@ -191,7 +191,7 @@ int main(void) {
 		*/
 		{
 			static uint32_t currentMillis {0UL};
-			if (System::millis() - currentMillis >= 10000) {
+			if (System::millis() - currentMillis >= 100) {
 				currentMillis = System::millis();
 
 
@@ -215,7 +215,8 @@ int main(void) {
 				Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2[0], adc2[1], adc2[2], adc2[3], adc2[4], adc2[5], adc2[6], adc2[7]);
 				Serial1.printf("ADC1: \t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\r\n", adc2ex1[0], adc2ex1[1], adc2ex1[2], adc2ex1[3], adc2ex1[4], adc2ex1[5], adc2ex1[6], adc2ex1[7]);
 				Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2ex2[0], adc2ex2[1], adc2ex2[2], adc2ex2[3], adc2ex2[4], adc2ex2[5], adc2ex2[6], adc2ex2[7]);
-				Serial1.printf("count:%d\r\n", cpCnt);
+				Serial1.printf("encoder: %d %d %d %d\r\n", encoder1, encoder2, encoder3, encoder4);
+				Serial1.printf("count:%d\r\n\r\n", cpCnt);
 			}
 		}
 	}

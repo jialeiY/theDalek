@@ -58,11 +58,13 @@ void SysTick_Handler(void);
 // void RTC_WKUP_IRQHandler(void);               /* RTC Wakeup through the EXTI line */                      
 // void FLASH_IRQHandler(void);                  /* FLASH                        */                                          
 // void RCC_IRQHandler(void);                    /* RCC                          */                                            
-// void EXTI0_IRQHandler(void);                  /* EXTI Line0                   */                        
-// void EXTI1_IRQHandler(void);                  /* EXTI Line1                   */                          
+void EXTI0_IRQHandler(void);                  /* EXTI Line0                   */                        
+void EXTI1_IRQHandler(void);                  /* EXTI Line1                   */                          
 // void EXTI2_IRQHandler(void);                  /* EXTI Line2                   */                          
 // void EXTI3_IRQHandler(void);                  /* EXTI Line3                   */                          
 // void EXTI4_IRQHandler(void);                  /* EXTI Line4                   */                          
+void EXTI9_5_IRQHandler(void);                /* External Line[9:5]s          */                          
+// void EXTI15_10_IRQHandler(void);              /* External Line[15:10]s        */                          
 // void DMA1_Stream0_IRQHandler(void);           /* DMA1 Stream 0                */                  
 // void DMA1_Stream1_IRQHandler(void);           /* DMA1 Stream 1                */                   
 // void DMA1_Stream2_IRQHandler(void);           /* DMA1 Stream 2                */                   
@@ -75,7 +77,6 @@ void ADC_IRQHandler(void);                    /* ADC1, ADC2 and ADC3s         */
 // void CAN1_RX0_IRQHandler(void);               /* CAN1 RX0                     */                          
 // void CAN1_RX1_IRQHandler(void);               /* CAN1 RX1                     */                          
 // void CAN1_SCE_IRQHandler(void);               /* CAN1 SCE                     */                          
-void EXTI9_5_IRQHandler(void);                /* External Line[9:5]s          */                          
 // void TIM1_BRK_TIM9_IRQHandler(void);          /* TIM1 Break and TIM9          */         
 // void TIM1_UP_TIM10_IRQHandler(void);          /* TIM1 Update and TIM10        */         
 // void TIM1_TRG_COM_TIM11_IRQHandler(void);     /* TIM1 Trigger and Commutation and TIM11 */
@@ -92,7 +93,6 @@ void EXTI9_5_IRQHandler(void);                /* External Line[9:5]s          */
 void USART1_IRQHandler(void);                 /* USART1                       */                   
 // void USART2_IRQHandler(void);                 /* USART2                       */                   
 // void USART3_IRQHandler(void);                 /* USART3                       */                   
-// void EXTI15_10_IRQHandler(void);              /* External Line[15:10]s        */                          
 // void RTC_Alarm_IRQHandler(void);              /* RTC Alarm (A and B) through EXTI Line */                 
 // void OTG_FS_WKUP_IRQHandler(void);            /* USB OTG FS Wakeup through EXTI line */                       
 // void TIM8_BRK_TIM12_IRQHandler(void);         /* TIM8 Break and TIM12         */         

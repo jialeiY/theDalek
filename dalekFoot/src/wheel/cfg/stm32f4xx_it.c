@@ -170,6 +170,38 @@ void SysTick_Handler(void)
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
+volatile int16_t encoder4 = 0UL;
+volatile uint8_t encoder4A = 0; // DIN1 PE0
+volatile uint8_t encoder4B = 0; // DIN2 PE1
+
+// PE0 DIN1 encoder port 1
+void EXTI0_IRQHandler(void) {
+	__disable_irq();
+	EXTI_ClearITPendingBit(EXTI_Line0);
+	encoder4A = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_0);
+	if (encoder4B) {
+		if (encoder4A) encoder4--;
+		else encoder4++;
+	} else {
+		if (encoder4A) encoder4++;
+		else encoder4--;
+	}
+	__enable_irq();
+}
+
+// PE1 DIN2 encoder port 1
+void EXTI1_IRQHandler(void) {
+	__disable_irq();
+	EXTI_ClearITPendingBit(EXTI_Line1);
+	encoder4B = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_1);
+	if (encoder4A) {
+		encoder4 += encoder4B ? 1 : -1;
+	} else {
+		encoder4 += encoder4B ? -1 : 1;
+	}
+	__enable_irq();
+}
+
 
 volatile int16_t encoder3 = 0UL;
 volatile uint8_t encoder3A = 0;  // C9
