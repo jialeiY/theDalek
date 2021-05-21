@@ -33,10 +33,14 @@ Offset | Name | Content | Width<br />(Bytes)
 
 
 # dalekFoot
+## System Architecture
+![System Architecture](images/architecture.png?raw=true)
 
-![alt text](images/architecture.png?raw=true)
+## MCU components connection diagram
+![MCU components connection diagram](images/diagram.png?raw=true)
 
-![alt text](images/diagram.png?raw=true)
+## Neuro Software Architecture
+![Neuro Software Architecture](images/neuro.png?raw=true)
 
 ## Protocol
 ### Working Scenario
