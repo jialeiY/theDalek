@@ -8,6 +8,11 @@
 #include "framework/io_thread.h"
 #include <numeric>
 
+#include "framework/entity_agency.h"
+
+#include "hardware/wheel_sensor/wheel_sensor.h"
+
+
 using namespace std;
 
 
@@ -30,6 +35,8 @@ vector<string> splitString(const string &str) {
 }
 extern volatile uint8_t m4speed;
 int main() {
+	EntityAgency agency;
+	
 	ThreadHub th;
 
 	TimerThread tt(th);
@@ -40,44 +47,56 @@ int main() {
 	th.registerThread(&wdt, "watchdog");
 	th.registerThread(&iot, "io");
 
+
+	// setup hardware
+	hardware::wheelsensor::WheelSensor wheelSensor;
+	agency.registerHardware("wheelSensor", &wheelSensor);
+	// setup action
+
+	// setup application
+
+	// start program
+
 	wdt.start();
 	iot.start();
 	tt.start();
 
-	string cmd;
 
-	while (true) {
-		cout << "cmd > " << flush;
-		getline(cin, cmd);
-		vector<string> cmdList = splitString(cmd);
-		vector<string> cleanCmdList;
-		std::copy_if(cmdList.begin(), cmdList.end(), std::back_inserter(cleanCmdList), [](const string &str) {
-			return str.size() > 0;
-		});
+	
+	// string cmd;
 
-		if (cmdList.size() < 1) continue;
+	// while (true) {
+	// 	cout << "cmd > " << flush;
+	// 	getline(cin, cmd);
+	// 	vector<string> cmdList = splitString(cmd);
+	// 	vector<string> cleanCmdList;
+	// 	std::copy_if(cmdList.begin(), cmdList.end(), std::back_inserter(cleanCmdList), [](const string &str) {
+	// 		return str.size() > 0;
+	// 	});
+
+	// 	if (cmdList.size() < 1) continue;
 		
 
-		string out = accumulate(next(begin(cleanCmdList)), end(cleanCmdList), cleanCmdList.front(), [](string acc, const string &item) {
-			return acc + " - " + item;
-		});
-		cout << out << endl;
+	// 	string out = accumulate(next(begin(cleanCmdList)), end(cleanCmdList), cleanCmdList.front(), [](string acc, const string &item) {
+	// 		return acc + " - " + item;
+	// 	});
+	// 	cout << out << endl;
 
 
-		if (cleanCmdList[0] == "quit" || cleanCmdList[0] == "q") {
-			break;
-		}
+	// 	if (cleanCmdList[0] == "quit" || cleanCmdList[0] == "q") {
+	// 		break;
+	// 	}
 		
-		if (cleanCmdList[0] == "m4") {
-			if (cleanCmdList.size() < 3) continue;
-			if (cleanCmdList[1] == "set") {
-				int speed = atoi(cleanCmdList[2].c_str());
-				cout << "set motor 4 speed to " << speed << endl;
-				m4speed = speed;
-			}
-		}
-	}
-		
+	// 	if (cleanCmdList[0] == "m4") {
+	// 		if (cleanCmdList.size() < 3) continue;
+	// 		if (cleanCmdList[1] == "set") {
+	// 			int speed = atoi(cleanCmdList[2].c_str());
+	// 			cout << "set motor 4 speed to " << speed << endl;
+	// 			m4speed = speed;
+	// 		}
+	// 	}
+	// }
+	
 
 	// char buffer[256];
 

@@ -8,6 +8,13 @@ CPP_SRC += framework/watchdog_thread.cpp
 CPP_SRC += framework/io_thread.cpp
 CPP_SRC += module/sensing/mcu_decoder/mcu_usart_decoder.cpp
 CPP_SRC += module/sensing/sensor_buffer/sensor_buffer.cpp
+
+CPP_SRC += framework/entity_agency.cpp
+CPP_SRC += application/dalek/dalek.cpp
+CPP_SRC += hardware/wheel_sensor/wheel_sensor.cpp
+
+
+
 C_SRC = 
 ASM_SRC = 
 
@@ -42,7 +49,10 @@ NM=nm
 SIZE=size
 A2L=addr2line
 
-all: $(ELF)
+
+all: dalek
+
+dalek: $(ELF)
 
 $(ELF): $(OBJS)
 	$(CXX) $(LDFLAGS) $^ -o $@
