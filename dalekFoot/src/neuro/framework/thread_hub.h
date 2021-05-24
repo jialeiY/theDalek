@@ -15,7 +15,7 @@ class ThreadHub {
 		ThreadHub();
 		virtual ~ThreadHub();
 		void registerThread(IThread *thread, const std::string &name);
-		void notify(const std::string &threadName, EventType eventType, void *data=nullptr) const;
+		void notify(const std::string &threadName, EventType eventType, volatile void *data=nullptr) const;
 	private:
 		std::unordered_map<std::string, IThread *> mThreadMap;
 

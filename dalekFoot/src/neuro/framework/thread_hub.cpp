@@ -19,9 +19,10 @@ void ThreadHub::registerThread(IThread *thread, const std::string &name) {
 }
 
 
-void ThreadHub::notify(const std::string &threadName, EventType eventType, void *data) const{
+void ThreadHub::notify(const std::string &threadName, EventType eventType, volatile void *data) const{
 	std::unordered_map<std::string, IThread *>::const_iterator iter = mThreadMap.find(threadName);
 	if (iter != mThreadMap.end()) {
+		iter->second->mPendingData = data;
 		iter->second->mPendingEvent = eventType;
 	}
 }

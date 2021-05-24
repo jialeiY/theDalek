@@ -11,7 +11,7 @@ class ControlThread : public IThread {
 		virtual ~ControlThread();
 
 	protected:
-		virtual void onNotify(EventType msgType, void *data=nullptr);
+		virtual void onNotify(EventType msgType, volatile void *data=nullptr);
 
 	private:
 		virtual void work();

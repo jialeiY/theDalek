@@ -32,14 +32,15 @@ void IThread::stop() {
 void *IThread::thread(void) {
 	while (true) {
 		if (mPendingEvent != EventType::EMPTY) {
-			onNotify(mPendingEvent);
+			onNotify(mPendingEvent, mPendingData);
 			mPendingEvent = EventType::EMPTY;
+			mPendingData = nullptr;
 		}
 		work();
 	}
 }
 
-void IThread::notify(const string &threadName, EventType eventType, void *data) {
+void IThread::notify(const string &threadName, EventType eventType, volatile void *data) {
 	mHub.notify(threadName, eventType, data);
 }
 

@@ -19,8 +19,8 @@ class IThread {
 		void stop();
 
 	protected:
-		virtual void onNotify(EventType msgType, void *data = nullptr) = 0;
-		void notify(const std::string &threadName, EventType eventType, void *data=nullptr);
+		virtual void onNotify(EventType msgType, volatile void *data = nullptr) = 0;
+		void notify(const std::string &threadName, EventType eventType, volatile void *data=nullptr);
 
 	private:
 		pthread_mutex_t mMutex;

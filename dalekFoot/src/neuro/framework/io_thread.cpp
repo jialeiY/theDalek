@@ -93,7 +93,7 @@ void IOThread::work() {
 	}
 }
 
-void IOThread::onNotify(EventType eventType, void *data) {
+void IOThread::onNotify(EventType eventType, volatile void *data) {
 	switch (eventType) {
 		case (EventType::GLOBAL_CYCLE_START): {
 			// output the data;

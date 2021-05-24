@@ -14,7 +14,7 @@ class IOThread : public IThread {
 		virtual ~IOThread();
 
 	protected:
-		virtual void onNotify(EventType eventType, void *data = nullptr);
+		virtual void onNotify(EventType eventType, volatile void *data = nullptr);
 		
 	private:
 		enum IOStatus {
