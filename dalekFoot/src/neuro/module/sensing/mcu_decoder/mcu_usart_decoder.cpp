@@ -1,5 +1,6 @@
 #include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
-#include "module/math/utility.h"
+#include "module/math/crc.h"
+#include "module/math/bitop.h"
 #include <cstdio>
 
 namespace sensing {
@@ -67,7 +68,7 @@ inline void McuUsartDecoder::validateAndOutputPackage() {
 		return ;
 	}
 
-	uint8_t expectCrc = crc8(mBuffer+1, 48);
+	uint8_t expectCrc = math::crc8(mBuffer+1, 48);
 	if (expectCrc != mBuffer[49]) {
 		return ;
 	}
@@ -82,16 +83,16 @@ void McuUsartDecoder::invalidatePacket() {
 }
 
 void McuUsartDecoder::outputPacket() {
-		mOutput.timestampMsec = u8array2u32(mBuffer+1);
-		mOutput.timestampUsec = u8array2u32(mBuffer+5);
+		mOutput.timestampMsec = math::u8array2u32(mBuffer+1);
+		mOutput.timestampUsec = math::u8array2u32(mBuffer+5);
 		for (int i=0; i<4; ++i) {
-			mOutput.motorEncoder[i] = u8array2u16(mBuffer+9 + i*2);
+			mOutput.motorEncoder[i] = math::u8array2u16(mBuffer+9 + i*2);
 		}
 		for (int i=0; i<14; ++i) {
-			mOutput.fastAdc[i] = u8array2u16(mBuffer+17 + i*2);
+			mOutput.fastAdc[i] = math::u8array2u16(mBuffer+17 + i*2);
 		}
 		mOutput.slowAdcIdx = mBuffer[45];
-		mOutput.slowAdcIdx = u8array2u16(mBuffer+46);
+		mOutput.slowAdcIdx = math::u8array2u16(mBuffer+46);
 		mOutput.userInput = mBuffer[48];
 
 		mHasData = true;

@@ -7,9 +7,10 @@
 #include "event_type.h"
 #include "framework/thread_hub.h"
 
-using namespace std;
-class ThreadHub;
 
+namespace framework {
+
+class ThreadHub;
 class IThread {
 	public:
 		IThread(const ThreadHub &hub);
@@ -18,8 +19,8 @@ class IThread {
 		void stop();
 
 	protected:
-		virtual void onNotify(EventType msgType) = 0;
-		void notify(const string &threadName, EventType eventType);
+		virtual void onNotify(EventType msgType, void *data = nullptr) = 0;
+		void notify(const std::string &threadName, EventType eventType, void *data=nullptr);
 
 	private:
 		pthread_mutex_t mMutex;
@@ -30,6 +31,9 @@ class IThread {
 		const ThreadHub &mHub;
 		friend ThreadHub;
 		volatile EventType mPendingEvent;
+		volatile void *mPendingData;
 };
 
+
+}
 #endif

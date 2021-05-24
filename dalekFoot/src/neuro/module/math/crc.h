@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <stddef.h>
 
+namespace math {
+
 static uint8_t crc8(const uint8_t * payload, size_t len) {
   uint8_t crc = 0;//0xFF;
   int i;
@@ -29,6 +31,6 @@ inline uint16_t u8array2u16(const uint8_t *v2) {
 	 
 }
 
-
+}
 
 #endif

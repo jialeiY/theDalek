@@ -4,6 +4,8 @@
 #include "framework/i_thread.h"
 #include "framework/event_type.h"
 
+namespace framework {
+
 class TimerThread : public IThread
 {
 public:
@@ -11,10 +13,13 @@ public:
     virtual ~TimerThread();
 
 protected:
-    virtual void onNotify(EventType eventType);
+    virtual void onNotify(EventType eventType, void *data=nullptr);
 
 private:
     virtual void work();
 };
+
+
+}
 
 #endif

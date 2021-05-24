@@ -2,10 +2,11 @@
 #define __IO_THREAD_H__
 
 #include "framework/i_thread.h"
-#include "framework/watchdog_thread.h"
 #include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
 #include "module/sensing/sensor_buffer/sensor_buffer.h"
 #include <cstdint>
+
+namespace framework {
 
 class IOThread : public IThread {
 	public:
@@ -13,7 +14,7 @@ class IOThread : public IThread {
 		virtual ~IOThread();
 
 	protected:
-		virtual void onNotify(EventType eventType);
+		virtual void onNotify(EventType eventType, void *data = nullptr);
 		
 	private:
 		enum IOStatus {
@@ -31,5 +32,8 @@ class IOThread : public IThread {
 		virtual void work();
 		void crcPayload();
 };
+
+
+}
 
 #endif

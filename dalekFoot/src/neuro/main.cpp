@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "framework/thread_hub.h"
 #include "framework/timer_thread.h"
-#include "framework/watchdog_thread.h"
+#include "framework/control_thread.h"
 #include "framework/io_thread.h"
 #include <numeric>
 
@@ -37,15 +37,14 @@ extern volatile uint8_t m4speed;
 int main() {
 	EntityAgency agency;
 	
-	ThreadHub th;
-
-	TimerThread tt(th);
-	WatchdogThread wdt(th);
-	IOThread iot(th);
+	framework::ThreadHub th;
+	framework::TimerThread tt(th);
+	framework::IOThread iot(th);
+	framework::ControlThread ct(th);
 
 	th.registerThread(&tt, "timer");
-	th.registerThread(&wdt, "watchdog");
 	th.registerThread(&iot, "io");
+	th.registerThread(&ct, "control");
 
 
 	// setup hardware
@@ -57,7 +56,7 @@ int main() {
 
 	// start program
 
-	wdt.start();
+	ct.start();
 	iot.start();
 	tt.start();
 
@@ -106,6 +105,8 @@ int main() {
 	// 		// printf("%c", buffer[i]);
 	// 	}
 	// }
+
+	while (true);
 
 	return 0;
 }

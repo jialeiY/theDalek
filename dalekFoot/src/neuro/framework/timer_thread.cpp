@@ -1,12 +1,11 @@
 #include "framework/timer_thread.h"
-
-#include "framework/watchdog_thread.h"
+#include "logger/logger.h"
 #include <chrono>
 #include <thread>
 #include <iostream>
 #include "framework/event_type.h"
 
-using namespace std;
+namespace framework {
 
 TimerThread::TimerThread(const ThreadHub &hub) : IThread(hub)
 {
@@ -16,15 +15,17 @@ TimerThread::~TimerThread()
 {
 }
 
-void TimerThread::onNotify(EventType eventType)
+void TimerThread::onNotify(EventType eventType, void *data)
 {
 }
 
 void TimerThread::work()
 {
-    // notify("watchdog", EventType::GLOBAL_CYCLE_START);
-    notify("io", EventType::GLOBAL_CYCLE_START);
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    // notify("watchdog", EventType::IO_MCU_RESPONSE_TIMEOUT);
-    // std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	notify("io", EventType::GLOBAL_CYCLE_START);
+	notify("control", EventType::GLOBAL_CYCLE_START);
+  std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+}
+
+
 }

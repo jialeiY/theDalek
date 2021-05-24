@@ -6,7 +6,7 @@
 #include "framework/i_thread.h"
 #include <unordered_map>
 
-using namespace std;
+namespace framework {
 
 class IThread;
 
@@ -14,13 +14,15 @@ class ThreadHub {
 	public:
 		ThreadHub();
 		virtual ~ThreadHub();
-		void registerThread(IThread *thread, const string &name);
-		void notify(const string &threadName, EventType eventType) const;
+		void registerThread(IThread *thread, const std::string &name);
+		void notify(const std::string &threadName, EventType eventType, void *data=nullptr) const;
 	private:
-		unordered_map<string, IThread *> mThreadMap;
+		std::unordered_map<std::string, IThread *> mThreadMap;
 
 
 };
 
+
+}
 #endif
 

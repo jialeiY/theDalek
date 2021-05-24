@@ -5,10 +5,11 @@
 
 using namespace std;
 
+namespace framework {
 
 void* thread_entry(void *msg) {
-	IThread *wdt = (IThread *)msg;
-	return wdt->thread();
+	IThread *thread = (IThread *)msg;
+	return thread->thread();
 }
 
 
@@ -38,6 +39,9 @@ void *IThread::thread(void) {
 	}
 }
 
-void IThread::notify(const string &threadName, EventType eventType) {
-	mHub.notify(threadName, eventType);
+void IThread::notify(const string &threadName, EventType eventType, void *data) {
+	mHub.notify(threadName, eventType, data);
+}
+
+
 }

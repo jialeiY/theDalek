@@ -1,10 +1,11 @@
 PROJECT = wheel
 
 CPP_SRC += main.cpp
+CPP_SRC += logger/logger.cpp
 CPP_SRC += framework/thread_hub.cpp
 CPP_SRC += framework/i_thread.cpp
 CPP_SRC += framework/timer_thread.cpp
-CPP_SRC += framework/watchdog_thread.cpp
+CPP_SRC += framework/control_thread.cpp
 CPP_SRC += framework/io_thread.cpp
 CPP_SRC += module/sensing/mcu_decoder/mcu_usart_decoder.cpp
 CPP_SRC += module/sensing/sensor_buffer/sensor_buffer.cpp
