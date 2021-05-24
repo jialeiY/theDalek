@@ -10,7 +10,7 @@ namespace sensing {
 struct McuSensors {
 	uint32_t timestampMsec;
 	uint32_t timestampUsec;
-	uint16_t motorEncoder[4];
+	int16_t motorEncoder[4];
 	uint16_t fastAdc[14];
 	uint8_t slowAdcIdx;
 	uint16_t slowAdc;

@@ -19,15 +19,15 @@ void TimerThread::onNotify(EventType eventType, volatile void *data) {
 }
 
 void TimerThread::work() {
-	volatile data_types::ExchangeArea *ioBufferPtr;
-	volatile data_types::ExchangeArea *controlBufferPtr;
+	volatile void *ioBufferPtr;
+	volatile void *controlBufferPtr;
 	if (mExchangeIdx == 0) {
-		ioBufferPtr = &mExchange1;
-		controlBufferPtr = &mExchange2;
+		ioBufferPtr = static_cast<volatile void *>(mExchange1);
+		controlBufferPtr = static_cast<volatile void *>(mExchange2);
 		mExchangeIdx = 1;
 	} else {
-		ioBufferPtr = &mExchange2;
-		controlBufferPtr = &mExchange1;
+		ioBufferPtr = static_cast<volatile void *>(mExchange2);
+		controlBufferPtr = static_cast<volatile void *>(mExchange1);
 		mExchangeIdx = 0;
 	}
 

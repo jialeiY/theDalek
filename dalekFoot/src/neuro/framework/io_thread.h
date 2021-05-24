@@ -3,7 +3,7 @@
 
 #include "framework/i_thread.h"
 #include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
-#include "module/sensing/sensor_buffer/sensor_buffer.h"
+#include "module/data_types/exchange_area.h"
 #include <cstdint>
 
 namespace framework {
@@ -28,7 +28,7 @@ class IOThread : public IThread {
 		std::uint8_t mOutputBuffer[9];
 		std::uint8_t mInputBuffer[32];
 		sensing::McuUsartDecoder mDecoder;
-		sensing::SensorBuffer mSensorBuffer;
+		volatile data_types::ExchangeArea *mExchangeAreaPtr;
 		virtual void work();
 		void crcPayload();
 };

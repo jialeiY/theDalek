@@ -18,8 +18,8 @@ class TimerThread : public IThread {
 
 	private:
     virtual void work();
-		volatile data_types::ExchangeArea mExchange1;
-		volatile data_types::ExchangeArea mExchange2;
+		volatile uint8_t mExchange1[sizeof(struct data_types::ExchangeArea)];
+		volatile uint8_t mExchange2[sizeof(struct data_types::ExchangeArea)];
 		uint8_t mExchangeIdx;
 		
 		

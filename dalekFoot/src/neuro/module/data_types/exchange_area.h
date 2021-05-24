@@ -5,10 +5,14 @@
 
 namespace data_types {
 
+namespace detail {
+struct Input {
+	sensing::McuSensors mcuSensors;
+};
+
+}
 struct ExchangeArea {
-	struct sensors {
-		sensing::McuSensors mcuSensors;
-	};
+	detail::Input input;
 };
 
 }

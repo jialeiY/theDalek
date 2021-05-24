@@ -2,6 +2,7 @@
 #define __FRAMEWORK_CONTROL_THREAD_H__
 
 #include "framework/i_thread.h"
+#include "module/data_types/exchange_area.h"
 
 namespace framework {
 
@@ -15,6 +16,7 @@ class ControlThread : public IThread {
 
 	private:
 		virtual void work();
+		volatile data_types::ExchangeArea *mExchangeAreaPtr;
 };
 
 }

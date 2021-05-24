@@ -3,6 +3,7 @@
 #include "module/math/crc.h"
 #include "module/math/bitop.h"
 #include "logger/logger.h"
+#include "module/mem/mem.h"
 #include <chrono>
 #include <thread>
 #include <iostream>
@@ -12,6 +13,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <termios.h>
+#include <cstring>
+
 
 namespace framework {
 
@@ -21,7 +24,7 @@ IOThread::IOThread(const ThreadHub &hub) :
 	IThread(hub),
 	mStatus(IOStatus::IDLE),
 	mDecoder(),
-	mSensorBuffer()
+	mExchangeAreaPtr(nullptr)
 {
 	mDecoder.reset();
 
@@ -73,7 +76,11 @@ void IOThread::work() {
 				mDecoder.decode(mInputBuffer, lenRead);
 				if (mDecoder.hasData()) {
 					sensing::McuSensors packet = mDecoder.fetchData();
-					mSensorBuffer.update(packet);
+
+					// ... a log of work
+					data_types::ExchangeArea finalExportData;
+					finalExportData.input.mcuSensors = packet;
+					mem::memcpy(static_cast<volatile void *>(mExchangeAreaPtr), &finalExportData, sizeof(volatile data_types::ExchangeArea));
 				}
 			}
 			if (lenRead < 0) {
@@ -97,6 +104,7 @@ void IOThread::onNotify(EventType eventType, volatile void *data) {
 	switch (eventType) {
 		case (EventType::GLOBAL_CYCLE_START): {
 			// output the data;
+			mExchangeAreaPtr = static_cast<volatile data_types::ExchangeArea *>(data);
 			mStatus = IOStatus::TRANSCEIVING;
 			// printf("write data to mcu\r\n");
 			// for debug
