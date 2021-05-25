@@ -35,26 +35,28 @@ vector<string> splitString(const string &str) {
 }
 extern volatile uint8_t m4speed;
 int main() {
-	EntityAgency agency;
+	EntityAgency ea;
 	
-	framework::ThreadHub th;
-	framework::TimerThread tt(th);
-	framework::IOThread iot(th);
-	framework::ControlThread ct(th);
-
-	th.registerThread(&tt, "timer");
-	th.registerThread(&iot, "io");
-	th.registerThread(&ct, "control");
-
 
 	// setup hardware
 	hardware::wheelsensor::WheelSensor wheelSensor;
-	agency.registerHardware("wheelSensor", &wheelSensor);
+	ea.registerHardware("wheelSensor", &wheelSensor);
 	// setup action
 
 	// setup application
 
 	// start program
+
+
+	framework::ThreadHub th;
+	framework::TimerThread tt(th);
+	framework::IOThread iot(th);
+	framework::ControlThread ct(th, ea);
+
+	th.registerThread(&tt, "timer");
+	th.registerThread(&iot, "io");
+	th.registerThread(&ct, "control");
+
 
 	ct.start();
 	iot.start();

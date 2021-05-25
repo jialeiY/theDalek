@@ -1,13 +1,16 @@
 #include "framework/control_thread.h"
 #include "framework/event_type.h"
+#include "framework/entity_agency.h"
 #include "logger/logger.h"
 #include "module/mem/mem.h"
+
 namespace framework {
 
 
-ControlThread::ControlThread(const ThreadHub &hub) : 
+ControlThread::ControlThread(const ThreadHub &hub, const EntityAgency &agency) : 
 	IThread(hub), 
-	mExchangeAreaPtr(nullptr) {
+	mExchangeAreaPtr(nullptr),
+	mAgency(agency) {
 }
 
 ControlThread::~ControlThread() {

@@ -3,12 +3,13 @@
 
 #include "framework/i_thread.h"
 #include "module/data_types/exchange_area.h"
+#include "framework/entity_agency.h"
 
 namespace framework {
 
 class ControlThread : public IThread {
 	public:
-		ControlThread(const ThreadHub &hub);
+		ControlThread(const ThreadHub &hub, const EntityAgency &agency);
 		virtual ~ControlThread();
 
 	protected:
@@ -17,6 +18,7 @@ class ControlThread : public IThread {
 	private:
 		virtual void work();
 		volatile data_types::ExchangeArea *mExchangeAreaPtr;
+		const EntityAgency &mAgency;
 };
 
 }
