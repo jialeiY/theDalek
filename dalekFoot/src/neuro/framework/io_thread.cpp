@@ -77,7 +77,7 @@ void IOThread::work() {
 				if (mDecoder.hasData()) {
 					sensing::McuSensors packet = mDecoder.fetchData();
 
-					// ... a log of work
+					// ... a lot of work
 					data_types::ExchangeArea finalExportData;
 					finalExportData.input.mcuSensors = packet;
 					mem::memcpy(static_cast<volatile void *>(mExchangeAreaPtr), &finalExportData, sizeof(volatile data_types::ExchangeArea));
