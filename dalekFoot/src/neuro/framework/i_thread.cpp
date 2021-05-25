@@ -37,6 +37,7 @@ void *IThread::thread(void) {
 			mPendingData = nullptr;
 		}
 		work();
+		std::this_thread::sleep_for(std::chrono::nanoseconds(50));
 	}
 }
 

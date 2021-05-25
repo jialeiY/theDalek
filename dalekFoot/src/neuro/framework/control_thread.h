@@ -16,9 +16,15 @@ class ControlThread : public IThread {
 		virtual void onNotify(EventType msgType, volatile void *data=nullptr);
 
 	private:
+		enum ControlStatus {
+			IDLE,
+			WORKING
+		};
 		virtual void work();
 		volatile data_types::ExchangeArea *mExchangeAreaPtr;
 		const EntityAgency &mAgency;
+		ControlStatus mStatus;
+		volatile void *mWorkingDataPtr;
 };
 
 }

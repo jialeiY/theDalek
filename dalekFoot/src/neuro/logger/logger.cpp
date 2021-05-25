@@ -8,6 +8,8 @@
 #include <sys/types.h>
 
 
+namespace detail {
+
 int gLogLevel = 0;
 
 uint64_t useconds()
@@ -25,4 +27,7 @@ void writeLogger(int level, const char *format, ...) {
 	va_start(args, format);
 	vprintf(format, args);
 	va_end(args);
+}
+
+
 }

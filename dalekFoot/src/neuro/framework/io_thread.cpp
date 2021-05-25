@@ -81,7 +81,8 @@ void IOThread::work() {
 					data_types::ExchangeArea finalExportData;
 					finalExportData.input.mcuSensors = packet;
 					mem::memcpy(static_cast<volatile void *>(mExchangeAreaPtr), &finalExportData, sizeof(volatile data_types::ExchangeArea));
-					/// TODO: notify timer thread the io work finished
+					
+					notify("timer", EventType::IO_FINISHED, nullptr);
 				}
 			}
 			if (lenRead < 0) {
@@ -121,10 +122,6 @@ void IOThread::onNotify(EventType eventType, volatile void *data) {
 				}
 				remainLength -= lengthSent;
 			}
-			break;
-		}
-		case (EventType::IO_MCU_RESPONSE_TIMEOUT): {
-			LogError("response timeout");
 			break;
 		}
 		default: {
