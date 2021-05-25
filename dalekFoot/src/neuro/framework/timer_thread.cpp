@@ -4,12 +4,20 @@
 #include <thread>
 #include <iostream>
 #include "framework/event_type.h"
+#include <stdint.h>
 
 namespace framework {
 
 TimerThread::TimerThread(const ThreadHub &hub) : 
 	IThread(hub),
 	mExchangeIdx(0U) {
+		for (size_t i=0; i<sizeof(struct data_types::ExchangeArea); ++i) {
+			mExchange1[i] = 0;
+		}
+		for (size_t i=0; i<sizeof(struct data_types::ExchangeArea); ++i) {
+			mExchange2[i] = 0;
+		}
+
 }
 
 TimerThread::~TimerThread() {

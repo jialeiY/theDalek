@@ -81,6 +81,7 @@ void IOThread::work() {
 					data_types::ExchangeArea finalExportData;
 					finalExportData.input.mcuSensors = packet;
 					mem::memcpy(static_cast<volatile void *>(mExchangeAreaPtr), &finalExportData, sizeof(volatile data_types::ExchangeArea));
+					/// TODO: notify timer thread the io work finished
 				}
 			}
 			if (lenRead < 0) {

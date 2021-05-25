@@ -11,6 +11,7 @@
 #include "framework/entity_agency.h"
 
 #include "hardware/wheel_sensor/wheel_sensor.h"
+#include "action/odometry/odometry_action.h"
 
 
 using namespace std;
@@ -35,13 +36,13 @@ vector<string> splitString(const string &str) {
 }
 extern volatile uint8_t m4speed;
 int main() {
-	EntityAgency ea;
+	framework::EntityAgency ea;
 	
-
 	// setup hardware
-	hardware::wheelsensor::WheelSensor wheelSensor;
-	ea.registerHardware("wheelSensor", &wheelSensor);
+	hardware::wheelsensor::WheelSensor wheelSensor("wheel", ea);
+	
 	// setup action
+	action::odometry::OdometryAction odometry("odometry", ea);
 
 	// setup application
 
