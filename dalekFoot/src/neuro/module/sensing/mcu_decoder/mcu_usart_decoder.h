@@ -3,7 +3,7 @@
 
 
 #include "module/data_types/sensing/mcu_sensors.h"
-#include <stdint.h>
+#include <cstdint>
 #include <stddef.h>
 
 namespace sensing {
@@ -14,6 +14,7 @@ class McuUsartDecoder {
 		McuUsartDecoder();
 		virtual ~McuUsartDecoder();
 		void reset();
+		void printDebugInfo();
 		void decode(const uint8_t *data, size_t length);
 		bool hasData() const { return mHasData; };
 		McuSensors fetchData() {
@@ -21,9 +22,9 @@ class McuUsartDecoder {
 			return mOutput;
 		}
 	private:
-		enum DecoderStatus {
-			UNSYNC,
-			SYNCED
+		enum DecoderStatus : std::uint8_t {
+			UNSYNC = 0,
+			SYNCED = 1
 		};
 		
 		DecoderStatus mStatus;

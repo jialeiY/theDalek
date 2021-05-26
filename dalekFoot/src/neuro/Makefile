@@ -5,6 +5,7 @@ CPP_SRC += logger/logger.cpp
 CPP_SRC += framework/thread_hub.cpp
 CPP_SRC += framework/i_thread.cpp
 CPP_SRC += framework/loop_thread.cpp
+CPP_SRC += module/hardware/usart/wheel_usart.cpp
 # CPP_SRC += framework/timer_thread.cpp
 # CPP_SRC += framework/control_thread.cpp
 # CPP_SRC += framework/io_thread.cpp

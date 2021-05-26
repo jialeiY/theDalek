@@ -1,8 +1,10 @@
 #include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
 #include "module/math/crc.h"
 #include "module/math/bitop.h"
+#include "logger/logger.h"
 #include <cstdio>
-
+#include <cstring>
+#include <string>
 namespace sensing {
 
 
@@ -29,13 +31,13 @@ void McuUsartDecoder::reset() {
 
 
 void McuUsartDecoder::decode(const uint8_t *data, size_t length) {
+	// if (data[0] == 0x55) LogDebug("should sync, current status: %d", mStatus);
 	for (size_t i=0; i<length; ++i) {
 		decodeByByte(data[i]);
 	}
 }
 
 inline void McuUsartDecoder::decodeByByte(uint8_t byte) {
-
 	switch (mStatus) {
 		case (DecoderStatus::UNSYNC) : {
 			if (byte == 0x55) {
@@ -98,5 +100,21 @@ void McuUsartDecoder::outputPacket() {
 		mHasData = true;
 }
 
+
+
+void McuUsartDecoder::printDebugInfo() {
+	LogDebug("status: %s, offset: %ld", 
+		(mStatus == DecoderStatus::UNSYNC ? "unsync" : "synced"), 
+		mOffset);
+		if (mStatus == DecoderStatus::SYNCED) {
+			std::string output;
+			char buffer[28];
+			for (int i=0; i<mOffset; ++i) {
+				sprintf(buffer, "%02X ", mBuffer[i]);
+				output += buffer;
+			}
+			LogDebug("buffer: %s", output.c_str());
+		}
+}
 
 }

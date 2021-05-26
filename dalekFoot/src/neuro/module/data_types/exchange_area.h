@@ -10,9 +10,14 @@ struct Input {
 	sensing::McuSensors mcuSensors;
 };
 
+struct Output {
+	
+};
+
 }
 struct ExchangeArea {
 	detail::Input input;
+	detail::Output output;
 };
 
 }
