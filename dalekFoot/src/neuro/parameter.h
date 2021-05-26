@@ -4,6 +4,6 @@
 #include <cstdint>
 
 
-constexpr std::uint64_t kLoopThreadInterval {1000000000ULL};
+constexpr std::uint64_t kLoopThreadInterval {1000000ULL};
 
 #endif

@@ -8,11 +8,11 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-static uint64_t nseconds()
+static uint64_t useconds()
 {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
-	return static_cast<uint64_t>(tv.tv_usec)*1000ULL + static_cast<uint64_t>(tv.tv_sec) * 1000000000ULL;
+	return static_cast<uint64_t>(tv.tv_usec) + static_cast<uint64_t>(tv.tv_sec) * 1000000ULL;
 }
 
 namespace framework {
@@ -36,7 +36,7 @@ void LoopThread::onNotify(EventType msgType, volatile void *data) {
 /// work() function intented to return fast to not block the IO. and not block
 /// being notified.
 void LoopThread::work() {
-	std::uint64_t currentTime = nseconds();
+	std::uint64_t currentTime = useconds();
 	switch (mStatus) {
 		case (WORKING): {
 			tickOnWorking(currentTime);
@@ -47,7 +47,7 @@ void LoopThread::work() {
 			break;
 		}
 	}
-	//std::this_thread::sleep_for(std::chrono::nanoseconds(kLoopThreadInterval));
+	//std::this_thread::sleep_for(std::chrono::microseconds(kLoopThreadInterval));
 }
 
 
