@@ -16,7 +16,7 @@ class IAction {
 	public:
 		IAction(const std::string &name, framework::EntityAgency &entityAgency);
 		virtual ~IAction() {};
-		virtual void tick(void) = 0;
+		virtual void execute(void) = 0;
 	protected:
 		framework::EntityAgency & mAgency;
 };

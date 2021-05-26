@@ -14,7 +14,7 @@ class OdometryAction : public IAction {
 	public:
 		OdometryAction(const std::string &name, framework::EntityAgency &entityAgency);
 		virtual ~OdometryAction();
-		virtual void tick(void);
+		virtual void execute(void);
 
 
 		Odometry getOdometry(void) const {return mOdometry;};

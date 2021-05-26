@@ -19,7 +19,7 @@ OdometryAction::~OdometryAction() {
 }
 
 
-void OdometryAction::tick(void) {
+void OdometryAction::execute(void) {
 	// Odometry need wheelSensor
 	hardware::wheelsensor::WheelSensor *wheel = dynamic_cast<hardware::wheelsensor::WheelSensor *>(mAgency.getHardware("wheel"));
 	

@@ -44,10 +44,11 @@ void ControlThread::work() {
 
 		// 1. Odometry
 		action::IAction *odometry = mAgency.getAction("odometry");
-		odometry->tick();
+		odometry->execute();
 
 		mStatus = ControlStatus::IDLE;
 		notify("timer", EventType::CONTROL_FINISHED, nullptr);		
+		LogDebug("control thread");
 	}
 }
 

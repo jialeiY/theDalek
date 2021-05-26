@@ -57,7 +57,7 @@ inline void McuUsartDecoder::decodeByByte(uint8_t byte) {
 			break;
 		}
 		default: {
-			// TODO: ERROR(unknown status);
+			LogError("Unknown status of McuUsart");
 			reset();
 			break;
 		}
