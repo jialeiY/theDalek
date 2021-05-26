@@ -38,7 +38,7 @@ int main() {
 	framework::EntityAgency ea;
 	
 	// setup hardware
-	hardware::wheelsensor::WheelSensor wheelSensor("wheel", ea);
+	hardware::wheel_sensor::WheelSensor wheelSensor("wheel", ea);
 	
 	// setup action
 	action::odometry::OdometryAction odometry("odometry", ea);

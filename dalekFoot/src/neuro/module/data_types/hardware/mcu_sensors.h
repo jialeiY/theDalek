@@ -1,10 +1,10 @@
-#ifndef __MODULE_DATA_TYPES_SENSING_MCU_SENSORS_H__
-#define __MODULE_DATA_TYPES_SENSING_MCU_SENSORS_H__
+#ifndef __MODULE_DATA_TYPES_HARDWARE_MCU_SENSORS_H__
+#define __MODULE_DATA_TYPES_HARDWARE_MCU_SENSORS_H__
 
 #include <stdint.h>
 
 
-namespace sensing {
+namespace hardware {
 
 
 struct McuSensors {

@@ -2,7 +2,7 @@
 #include "module/data_types/exchange_area.h"
 #include "logger/logger.h"
 namespace hardware {
-namespace wheelsensor {
+namespace wheel_sensor {
 
 WheelSensor::WheelSensor(const std::string &name, framework::EntityAgency &entityAgency) :
 	IHardware(name, entityAgency) {
@@ -28,7 +28,7 @@ void WheelSensor::updateFromSensor(const data_types::ExchangeArea &inputData) {
 }
 
 
-WheelStatus WheelSensor::getWheelStatus(void) const {
+sensing::WheelStatus WheelSensor::getWheelStatus(void) const {
 	return mStatus;
 }
 

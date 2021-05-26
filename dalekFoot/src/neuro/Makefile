@@ -7,7 +7,7 @@ CPP_SRC += framework/i_thread.cpp
 CPP_SRC += framework/loop_thread.cpp
 CPP_SRC += module/hardware/usart/wheel_usart.cpp
 CPP_SRC += framework/control_thread.cpp
-CPP_SRC += module/sensing/mcu_decoder/mcu_usart_decoder.cpp
+CPP_SRC += module/hardware/mcu_decoder/mcu_usart_decoder.cpp
 CPP_SRC += module/mem/mem.cpp
 
 CPP_SRC += framework/entity_agency.cpp

@@ -1,7 +1,7 @@
 #include "action/odometry/odometry_action.h"
 #include "hardware/wheel_sensor/wheel_sensor.h"
 #include "logger/logger.h"
-#include "module/data_types/hardware/wheelsensor.h"
+#include "module/data_types/sensing/wheel_status.h"
 #include <string>
 
 namespace action {
@@ -21,9 +21,9 @@ OdometryAction::~OdometryAction() {
 
 void OdometryAction::execute(void) {
 	// Odometry need wheelSensor
-	hardware::wheelsensor::WheelSensor *wheel = dynamic_cast<hardware::wheelsensor::WheelSensor *>(mAgency.getHardware("wheel"));
+	hardware::wheel_sensor::WheelSensor *wheel = dynamic_cast<hardware::wheel_sensor::WheelSensor *>(mAgency.getHardware("wheel"));
 	
-	hardware::wheelsensor::WheelStatus wheelStatus = wheel->getWheelStatus();
+	sensing::WheelStatus wheelStatus = wheel->getWheelStatus();
 	// copy to local just for debug
 	mOdometry.value = wheelStatus.encoder[3];
 	mSpeed = mOdometry.value - mPreviousEncoderValue;

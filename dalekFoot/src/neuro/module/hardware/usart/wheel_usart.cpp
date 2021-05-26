@@ -1,5 +1,5 @@
 #include "module/hardware/usart/wheel_usart.h"
-#include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
+#include "module/hardware/mcu_decoder/mcu_usart_decoder.h"
 #include "logger/logger.h"
 #include "module/mem/mem.h"
 #include "module/math/crc.h"
@@ -117,12 +117,12 @@ void WheelUsart::tick(void) {
 	}
 		mDecoder.decode(mInputBuffer, lenRead);
 		if (mDecoder.hasData()) {
-			sensing::McuSensors packet = mDecoder.fetchData();
+			hardware::McuSensors packet = mDecoder.fetchData();
 
 			// ... a lot of work
 			data_types::ExchangeArea finalExportData;
 			finalExportData.input.mcuSensors = packet;
-			mem::memcpy(&(mExchangeArea->input.mcuSensors), &packet, sizeof(struct sensing::McuSensors));
+			mem::memcpy(&(mExchangeArea->input.mcuSensors), &packet, sizeof(struct hardware::McuSensors));
 			mHasResult = true;
 		}
 	} else if (lenRead < 0) {

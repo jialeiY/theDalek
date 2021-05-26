@@ -1,12 +1,12 @@
-#ifndef __MODULE_SENSING_MCU_DECODER_MCU_USART_DECODER_H__
-#define __MODULE_SENSING_MCU_DECODER_MCU_USART_DECODER_H__
+#ifndef __MODULE_HARDWARE_MCU_DECODER_MCU_USART_DECODER_H__
+#define __MODULE_HARDWARE_MCU_DECODER_MCU_USART_DECODER_H__
 
 
-#include "module/data_types/sensing/mcu_sensors.h"
+#include "module/data_types/hardware/mcu_sensors.h"
 #include <cstdint>
 #include <stddef.h>
 
-namespace sensing {
+namespace hardware {
 
 
 class McuUsartDecoder {

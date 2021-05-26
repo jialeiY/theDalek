@@ -1,14 +1,13 @@
-#include "module/sensing/mcu_decoder/mcu_usart_decoder.h"
+#include "module/hardware/mcu_decoder/mcu_usart_decoder.h"
 #include "module/math/crc.h"
 #include "module/math/bitop.h"
 #include "logger/logger.h"
 #include <cstdio>
 #include <cstring>
 #include <string>
-namespace sensing {
 
 
-
+namespace hardware {
 
 McuUsartDecoder::McuUsartDecoder() 
 	:mStatus(DecoderStatus::UNSYNC),
