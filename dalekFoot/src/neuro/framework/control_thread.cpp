@@ -1,7 +1,7 @@
 #include "framework/control_thread.h"
 #include "framework/event_type.h"
 #include "framework/entity_agency.h"
-#include "hardware/i_hardware.h"
+#include "module/sensing/i_sensor.h"
 #include "action/odometry/odometry_action.h"
 #include "logger/logger.h"
 #include "module/mem/mem.h"
@@ -36,8 +36,8 @@ void ControlThread::work() {
 		mem::memcpy(&localData, mExchangeAreaPtr, sizeof(struct data_types::ExchangeArea));
 		
 		// update all sensors
-		std::vector<hardware::IHardware *> hardwareList = mAgency.getHardwareList();
-		for (hardware::IHardware *hardware : hardwareList) {
+		std::vector<sensing::ISensor *> hardwareList = mAgency.getSensorList();
+		for (sensing::ISensor *hardware : hardwareList) {
 			hardware->updateFromSensor(localData);
 		}
 

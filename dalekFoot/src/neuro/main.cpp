@@ -9,7 +9,7 @@
 
 #include "framework/entity_agency.h"
 
-#include "hardware/wheel_sensor/wheel_sensor.h"
+#include "module/sensing/wheel_sensor/wheel_sensor.h"
 #include "action/odometry/odometry_action.h"
 
 
@@ -38,7 +38,7 @@ int main() {
 	framework::EntityAgency ea;
 	
 	// setup hardware
-	hardware::wheel_sensor::WheelSensor wheelSensor("wheel", ea);
+	sensing::wheel_sensor::WheelSensor wheelSensor("wheel", ea);
 	
 	// setup action
 	action::odometry::OdometryAction odometry("odometry", ea);

@@ -1,5 +1,5 @@
-#ifndef __HARDWARE_I_HARDWARE_H__
-#define __HARDWARE_I_HARDWARE_H__
+#ifndef __MODULE_SENSING_I_SENSOR_H__
+#define __MODULE_SENSING_I_SENSOR_H__
 
 #include "module/data_types/exchange_area.h"
 
@@ -11,12 +11,12 @@ namespace framework {
 }
 
 
-namespace hardware {
+namespace sensing {
 
-class IHardware {
+class ISensor {
 	public:
-		IHardware(const std::string &name, framework::EntityAgency &entityAgency);
-		virtual ~IHardware() {};
+		ISensor(const std::string &name, framework::EntityAgency &entityAgency);
+		virtual ~ISensor() {};
 
 		virtual void updateFromSensor(const data_types::ExchangeArea &inputData) = 0;
 

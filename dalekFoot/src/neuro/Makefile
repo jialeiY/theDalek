@@ -12,8 +12,8 @@ CPP_SRC += module/mem/mem.cpp
 
 CPP_SRC += framework/entity_agency.cpp
 CPP_SRC += application/dalek/dalek.cpp
-CPP_SRC += hardware/i_hardware.cpp
-CPP_SRC += hardware/wheel_sensor/wheel_sensor.cpp
+CPP_SRC += module/sensing/i_sensor.cpp
+CPP_SRC += module/sensing/wheel_sensor/wheel_sensor.cpp
 CPP_SRC += action/i_action.cpp
 CPP_SRC += action/odometry/odometry_action.cpp
 

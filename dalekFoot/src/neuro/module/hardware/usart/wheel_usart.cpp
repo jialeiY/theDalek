@@ -48,7 +48,7 @@ WheelUsart::WheelUsart() :
 	options.c_iflag &= ~(IXON | IXOFF | IXANY);			//disable software flow control
 	options.c_oflag &= ~OPOST;							//raw output
 	cfsetispeed(&options, B115200);
-	cfsetospeed(&options, B115200);
+	// cfsetospeed(&options, B9600);
 	tcsetattr(mTtyFd, TCSANOW, &options);
 
 	// Set non-Block read

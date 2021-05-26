@@ -7,8 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
-namespace hardware {
-	class IHardware;
+namespace sensing {
+	class ISensor;
 }
 namespace framework {
 
@@ -16,14 +16,14 @@ class EntityAgency {
 public:
 	EntityAgency();
 	virtual ~EntityAgency();
-	inline void registerHardware(const std::string &name, hardware::IHardware *hardware) { mHardwareMap[name] = hardware; }
+	inline void registerSensor(const std::string &name, sensing::ISensor *sensor) { mSensorMap[name] = sensor; }
 	inline void registerAction(const std::string &name, action::IAction *action) {mActionMap[name] = action;}
-	hardware::IHardware *getHardware(const std::string &name) const;
-	std::vector<hardware::IHardware *> getHardwareList(void) const;
+	sensing::ISensor *getSensor(const std::string &name) const;
+	std::vector<sensing::ISensor *> getSensorList(void) const;
 	action::IAction *getAction(const std::string &name) const;
 
 private:
-	std::unordered_map<std::string, hardware::IHardware *> mHardwareMap;
+	std::unordered_map<std::string, sensing::ISensor *> mSensorMap;
 	std::unordered_map<std::string, action::IAction *> mActionMap;
 	
 };

@@ -1,4 +1,5 @@
 #include "framework/entity_agency.h"
+#include "module/sensing/i_sensor.h"
 #include "string.h"
 #include <vector>
 
@@ -16,16 +17,16 @@ EntityAgency::~EntityAgency()
 
 
 
-hardware::IHardware * EntityAgency::getHardware(const std::string &name) const {
-	const auto iter = mHardwareMap.find(name);
-	return iter == mHardwareMap.end() ? nullptr : iter->second;
+sensing::ISensor * EntityAgency::getSensor(const std::string &name) const {
+	const auto iter = mSensorMap.find(name);
+	return iter == mSensorMap.end() ? nullptr : iter->second;
 }
 
 
 
-std::vector<hardware::IHardware *> EntityAgency::getHardwareList(void) const {
-	std::vector<hardware::IHardware *> ret;
-	for (const auto & hdPair : mHardwareMap) {
+std::vector<sensing::ISensor *> EntityAgency::getSensorList(void) const {
+	std::vector<sensing::ISensor *> ret;
+	for (const auto & hdPair : mSensorMap) {
 		ret.push_back(hdPair.second);
 	}
 	return ret;

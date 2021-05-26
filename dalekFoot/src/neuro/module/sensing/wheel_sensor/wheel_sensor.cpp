@@ -1,11 +1,11 @@
-#include "hardware/wheel_sensor/wheel_sensor.h"
+#include "module/sensing/wheel_sensor/wheel_sensor.h"
 #include "module/data_types/exchange_area.h"
 #include "logger/logger.h"
-namespace hardware {
+namespace sensing {
 namespace wheel_sensor {
 
 WheelSensor::WheelSensor(const std::string &name, framework::EntityAgency &entityAgency) :
-	IHardware(name, entityAgency) {
+	ISensor(name, entityAgency) {
 
 }
 
