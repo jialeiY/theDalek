@@ -54,6 +54,10 @@
  *
  * 4051CHNNEL
  * PC10 PC11 PC12
+ * 
+ * 
+ * BUTTON
+ * PE4
  ***/
 
 
@@ -309,6 +313,17 @@ void boardInit(void) {
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);
 	GPIO_ResetBits(GPIOC, GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12);
+
+
+	// Button
+	GPIO_StructInit(&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_OD;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_Init(GPIOE, &GPIO_InitStructure);
+	
 
 	// for debug
 	GPIO_SetBits(GPIOD, GPIO_Pin_1);

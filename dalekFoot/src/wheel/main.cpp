@@ -118,6 +118,8 @@ int main(void) {
 	
 	static bool on {false};
 
+	bool isDebugMode = (GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_4) == 0);
+
 	while (true) {
 		// Serial1.tick();
 		if (Serial1.hasPacket()) {
@@ -127,8 +129,10 @@ int main(void) {
 			GPIO_ResetBits(GPIOC, GPIO_Pin_6);
 			
 			ContorlRequestPacket packet = Serial1.fetchPacket();
-			Serial1.printf("got packet motor:%d %d %d %d, m:%d, led:%x\r\n", 
-				packet.power[0], packet.power[1], packet.power[2], packet.power[3], packet.melodyIdx, packet.ledStatus);
+			if (isDebugMode) {
+				Serial1.printf("got packet motor:%d %d %d %d, m:%d, led:%x\r\n", 
+					packet.power[0], packet.power[1], packet.power[2], packet.power[3], packet.melodyIdx, packet.ledStatus);
+			}
 			setSpeed(static_cast<int32_t>(packet.power[3]) * 4);
 		}
 		
@@ -156,8 +160,9 @@ int main(void) {
 				currentMillis = System::millis();
 				// Serial1.println("12345678");
 
-				
-				Serial1.printf("time: %lu, enc: %ld\r\n", currentMillis, encoder3);
+				if (isDebugMode) {
+					Serial1.printf("time: %lu, enc: %ld\r\n", currentMillis, encoder3);
+				}
 
 				// USART_SendData(USART1, 0xC9);
 				// USART_ITConfig(USART1, USART_IT_TXE, ENABLE);
@@ -191,7 +196,7 @@ int main(void) {
 		*/
 		{
 			static uint32_t currentMillis {0UL};
-			if (System::millis() - currentMillis >= 100) {
+			if (System::millis() - currentMillis >= 1000) {
 				currentMillis = System::millis();
 
 
@@ -210,13 +215,14 @@ int main(void) {
 					// adc2[i] = ADC_GetConversionValue(ADC2);
 				}
 				*/
-				
-				Serial1.printf("ADC1: \t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\r\n", adc1[0], adc1[1], adc1[2], adc1[3], adc1[4], adc1[5], adc1[6], adc1[7]);
-				Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2[0], adc2[1], adc2[2], adc2[3], adc2[4], adc2[5], adc2[6], adc2[7]);
-				Serial1.printf("ADC1: \t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\r\n", adc2ex1[0], adc2ex1[1], adc2ex1[2], adc2ex1[3], adc2ex1[4], adc2ex1[5], adc2ex1[6], adc2ex1[7]);
-				Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2ex2[0], adc2ex2[1], adc2ex2[2], adc2ex2[3], adc2ex2[4], adc2ex2[5], adc2ex2[6], adc2ex2[7]);
-				Serial1.printf("encoder: %d %d %d %d\r\n", encoder1, encoder2, encoder3, encoder4);
-				Serial1.printf("count:%d\r\n\r\n", cpCnt);
+				if (isDebugMode) {
+					Serial1.printf("ADC1: \t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\r\n", adc1[0], adc1[1], adc1[2], adc1[3], adc1[4], adc1[5], adc1[6], adc1[7]);
+					Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2[0], adc2[1], adc2[2], adc2[3], adc2[4], adc2[5], adc2[6], adc2[7]);
+					Serial1.printf("ADC1: \t%u\t%u\t%u\t%u\t%u\t%u\t%u\t%u\r\n", adc2ex1[0], adc2ex1[1], adc2ex1[2], adc2ex1[3], adc2ex1[4], adc2ex1[5], adc2ex1[6], adc2ex1[7]);
+					Serial1.printf("ADC2: \t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\r\n", adc2ex2[0], adc2ex2[1], adc2ex2[2], adc2ex2[3], adc2ex2[4], adc2ex2[5], adc2ex2[6], adc2ex2[7]);
+					Serial1.printf("encoder: %d %d %d %d\r\n", encoder1, encoder2, encoder3, encoder4);
+					Serial1.printf("count:%d button: %d\r\n\r\n", cpCnt, GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_4));
+				}
 			}
 		}
 	}
