@@ -3,9 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include "framework/thread_hub.h"
-#include "framework/timer_thread.h"
-#include "framework/control_thread.h"
-#include "framework/io_thread.h"
+#include "framework/loop_thread.h"
 #include <numeric>
 
 #include "framework/entity_agency.h"
@@ -50,18 +48,19 @@ int main() {
 
 
 	framework::ThreadHub th;
-	framework::TimerThread tt(th);
-	framework::IOThread iot(th);
-	framework::ControlThread ct(th, ea);
+	framework::LoopThread lt(th);
+	// framework::TimerThread tt(th);
+	// framework::IOThread iot(th);
+	// framework::ControlThread ct(th, ea);
 
-	th.registerThread(&tt, "timer");
-	th.registerThread(&iot, "io");
-	th.registerThread(&ct, "control");
+	// th.registerThread(&tt, "timer");
+	// th.registerThread(&iot, "io");
+	// th.registerThread(&ct, "control");
 
 
-	ct.start();
-	iot.start();
-	tt.start();
+	// ct.start();
+	// iot.start();
+	// tt.start();
 
 
 	
