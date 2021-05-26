@@ -1,8 +1,9 @@
 #ifndef __PARAMETER_H__
 #define __PARAMETER_H__
 
-#include <chrono>
+#include <cstdint>
 
 
+constexpr std::uint64_t kLoopThreadInterval {1000000000ULL};
 
 #endif

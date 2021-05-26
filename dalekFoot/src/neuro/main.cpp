@@ -57,7 +57,7 @@ int main() {
 	// th.registerThread(&iot, "io");
 	// th.registerThread(&ct, "control");
 
-
+	lt.start();
 	// ct.start();
 	// iot.start();
 	// tt.start();

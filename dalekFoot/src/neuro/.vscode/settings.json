@@ -50,7 +50,8 @@
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
-		"thread": "cpp"
+		"thread": "cpp",
+		"ratio": "cpp"
 	},
 	"C_Cpp.files.exclude": {
 		"**/build/**": true,
