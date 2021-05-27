@@ -18,7 +18,7 @@ class ISensor {
 		ISensor(const std::string &name, framework::EntityAgency &entityAgency);
 		virtual ~ISensor() {};
 
-		virtual void updateFromSensor(const data_types::HardwareData &inputData) = 0;
+		virtual void updateFromSensor(std::uint64_t cycleCount, const data_types::HardwareData &inputData) = 0;
 		virtual void setExchangeMemoryArea(data_types::SensorData *sensorData);
 	protected:
 		data_types::SensorData *mSensorData;

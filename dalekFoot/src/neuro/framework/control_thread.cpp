@@ -41,7 +41,8 @@ void ControlThread::onNotify(EventType eventType, volatile void *data) {
 	}
 }
 
-void ControlThread::work() {	
+void ControlThread::work() {
+	mCycleCount ++;
 	if (mStatus == ControlStatus::WORKING) {
 		mHardwareDataPtr = static_cast<volatile data_types::HardwareData *>(mWorkingDataPtr);
 		// copy to local memory
@@ -57,7 +58,7 @@ void ControlThread::work() {
 		// update all sensors
 		std::vector<sensing::ISensor *> sensorList = mAgency.getSensorList();
 		for (sensing::ISensor *sensor : sensorList) {
-			sensor->updateFromSensor(localData);
+			sensor->updateFromSensor(mCycleCount, localData);
 		}
 
 		// 1. Odometry

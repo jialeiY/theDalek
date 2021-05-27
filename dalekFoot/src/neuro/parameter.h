@@ -6,7 +6,7 @@
 
 // 1HZ
 
-#define HZ1
+#define HZ10
 
 #ifdef HZ1
 constexpr std::uint64_t kLoopThreadInputTimeout {500000ULL};
@@ -28,5 +28,6 @@ constexpr std::uint64_t kLoopThreadInputTimeout {500ULL};
 constexpr std::uint64_t kLoopThreadInterval {1000ULL};
 #endif
 
+constexpr std::size_t kWheelSensorHistorySize {3U};
 
 #endif
