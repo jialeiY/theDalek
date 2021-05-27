@@ -7,7 +7,9 @@
 namespace sensing {
 
 struct Wheel {
-	std::int16_t encoder[4];
+	std::uint64_t encoder;
+	float speed;
+	float acceleration;
 };
 
 

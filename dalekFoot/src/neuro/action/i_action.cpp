@@ -12,7 +12,7 @@ IAction::IAction(const std::string &name, framework::EntityAgency &entityAgency)
 }
 
 
-void IAction::setMemoryArea(data_types::ActionData *actionData) {
+void IAction::setExchangeMemoryArea(data_types::ActionData *actionData) {
 	mActionData = actionData;
 }
 

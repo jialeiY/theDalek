@@ -7,4 +7,8 @@ namespace sensing {
 ISensor::ISensor(const std::string &name, framework::EntityAgency &entityAgency) {
 	entityAgency.registerSensor(name, this);
 };
+
+void ISensor::setExchangeMemoryArea(data_types::SensorData *sensorData) {
+	mSensorData = sensorData;
+}
 }

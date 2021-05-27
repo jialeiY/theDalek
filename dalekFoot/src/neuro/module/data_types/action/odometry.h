@@ -10,6 +10,9 @@ namespace odometry {
 
 
 struct Odometry {
+	// position
+	// velocity
+	// acceleration
 	int16_t value;
 	
 };

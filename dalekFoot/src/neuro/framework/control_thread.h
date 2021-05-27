@@ -3,8 +3,9 @@
 
 #include "framework/i_thread.h"
 #include "module/data_types/hardware_data.h"
-#include "framework/entity_agency.h"
+#include "module/data_types/sensor_data.h"
 #include "module/data_types/action_data.h"
+#include "framework/entity_agency.h"
 #include <cstdint>
 
 namespace framework {
@@ -27,6 +28,7 @@ class ControlThread : public IThread {
 		const EntityAgency &mAgency;
 		ControlStatus mStatus;
 		volatile void *mWorkingDataPtr;
+		data_types::SensorData mSensorData;
 		data_types::ActionData mActionData;
 		uint64_t mCycleCount;
 };

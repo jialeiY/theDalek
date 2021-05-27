@@ -24,9 +24,13 @@ ControlThread::~ControlThread() {
 }
 
 void ControlThread::init() {
+	std::vector<sensing::ISensor *> sensorList = mAgency.getSensorList();
+	for (sensing::ISensor *sensor : sensorList) {
+		sensor->setExchangeMemoryArea(&mSensorData);
+	}
 	std::vector<action::IAction *> actionList = mAgency.getActionList();
 	for (auto *action : actionList) {
-		action->setMemoryArea(&mActionData);
+		action->setExchangeMemoryArea(&mActionData);
 	}
 }
 
@@ -44,15 +48,17 @@ void ControlThread::work() {
 		data_types::HardwareData localData;
 		mem::memcpy(&localData, mHardwareDataPtr, sizeof(struct data_types::HardwareData));
 		
-		// update all sensors
-		std::vector<sensing::ISensor *> hardwareList = mAgency.getSensorList();
-		for (sensing::ISensor *hardware : hardwareList) {
-			hardware->updateFromSensor(localData);
-		}
 
+		
 		// Initialize data area
+		memset(&mSensorData, 0, sizeof(data_types::SensorData));
 		memset(&mActionData, 0, sizeof(data_types::ActionData));
 
+		// update all sensors
+		std::vector<sensing::ISensor *> sensorList = mAgency.getSensorList();
+		for (sensing::ISensor *sensor : sensorList) {
+			sensor->updateFromSensor(localData);
+		}
 
 		// 1. Odometry
 		action::IAction *odometry = mAgency.getAction("odometry");
