@@ -17,6 +17,7 @@ class IThread {
 		virtual ~IThread();
 		void start();
 		void stop();
+		virtual void init() {};
 
 	protected:
 		virtual void onNotify(EventType msgType, volatile void *data = nullptr) = 0;

@@ -6,7 +6,7 @@
 
 namespace sensing {
 
-struct WheelStatus {
+struct Wheel {
 	std::int16_t encoder[4];
 };
 

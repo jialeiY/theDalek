@@ -26,8 +26,8 @@ sensing::ISensor * EntityAgency::getSensor(const std::string &name) const {
 
 std::vector<sensing::ISensor *> EntityAgency::getSensorList(void) const {
 	std::vector<sensing::ISensor *> ret;
-	for (const auto & hdPair : mSensorMap) {
-		ret.push_back(hdPair.second);
+	for (const auto & senPair : mSensorMap) {
+		ret.push_back(senPair.second);
 	}
 	return ret;
 }
@@ -37,4 +37,14 @@ action::IAction *EntityAgency::getAction(const std::string &name) const {
 	return iter == mActionMap.end() ? nullptr : iter->second;
 }
 
+std::vector<action::IAction *> EntityAgency::getActionList(void) const {
+	std::vector<action::IAction *> ret;
+	for (const auto & actPair : mActionMap) {
+		ret.push_back(actPair.second);
+	}
+	return ret;
 }
+
+
+}
+

@@ -2,8 +2,10 @@
 #define __FRAMEWORK_CONTROL_THREAD_H__
 
 #include "framework/i_thread.h"
-#include "module/data_types/exchange_area.h"
+#include "module/data_types/hardware_data.h"
 #include "framework/entity_agency.h"
+#include "module/data_types/action_data.h"
+#include <cstdint>
 
 namespace framework {
 
@@ -11,7 +13,7 @@ class ControlThread : public IThread {
 	public:
 		ControlThread(const ThreadHub &hub, const EntityAgency &agency);
 		virtual ~ControlThread();
-
+		virtual void init();
 	protected:
 		virtual void onNotify(EventType msgType, volatile void *data=nullptr);
 
@@ -21,10 +23,12 @@ class ControlThread : public IThread {
 			WORKING
 		};
 		virtual void work();
-		volatile data_types::ExchangeArea *mExchangeAreaPtr;
+		volatile data_types::HardwareData *mHardwareDataPtr;
 		const EntityAgency &mAgency;
 		ControlStatus mStatus;
 		volatile void *mWorkingDataPtr;
+		data_types::ActionData mActionData;
+		uint64_t mCycleCount;
 };
 
 }

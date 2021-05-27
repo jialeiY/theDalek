@@ -1,7 +1,7 @@
 #ifndef __MODULE_SENSING_I_SENSOR_H__
 #define __MODULE_SENSING_I_SENSOR_H__
 
-#include "module/data_types/exchange_area.h"
+#include "module/data_types/hardware_data.h"
 
 #include <string>
 
@@ -18,7 +18,7 @@ class ISensor {
 		ISensor(const std::string &name, framework::EntityAgency &entityAgency);
 		virtual ~ISensor() {};
 
-		virtual void updateFromSensor(const data_types::ExchangeArea &inputData) = 0;
+		virtual void updateFromSensor(const data_types::HardwareData &inputData) = 0;
 
 	
 

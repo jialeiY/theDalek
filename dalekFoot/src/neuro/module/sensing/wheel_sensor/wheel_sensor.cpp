@@ -1,5 +1,5 @@
 #include "module/sensing/wheel_sensor/wheel_sensor.h"
-#include "module/data_types/exchange_area.h"
+#include "module/data_types/hardware_data.h"
 #include "logger/logger.h"
 namespace sensing {
 namespace wheel_sensor {
@@ -14,7 +14,8 @@ WheelSensor::~WheelSensor() {
 }
 
 
-void WheelSensor::updateFromSensor(const data_types::ExchangeArea &inputData) {
+void WheelSensor::updateFromSensor(const data_types::HardwareData &inputData) {
+	/*
 	for (int i=0; i<4; ++i) {
 		mStatus.encoder[i] = inputData.input.mcuSensors.motorEncoder[i];
 	}
@@ -25,12 +26,11 @@ void WheelSensor::updateFromSensor(const data_types::ExchangeArea &inputData) {
 		mStatus.encoder[1],
 		mStatus.encoder[2],
 		mStatus.encoder[3]);
+		*/
+	
 }
 
 
-sensing::WheelStatus WheelSensor::getWheelStatus(void) const {
-	return mStatus;
-}
 
 }
 }

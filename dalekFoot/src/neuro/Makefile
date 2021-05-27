@@ -9,7 +9,7 @@ CPP_SRC += module/hardware/usart/wheel_usart.cpp
 CPP_SRC += framework/control_thread.cpp
 CPP_SRC += module/hardware/mcu_decoder/mcu_usart_decoder.cpp
 CPP_SRC += module/mem/mem.cpp
-
+CPP_SRC += module/time/time.cpp
 CPP_SRC += framework/entity_agency.cpp
 CPP_SRC += application/dalek/dalek.cpp
 CPP_SRC += module/sensing/i_sensor.cpp

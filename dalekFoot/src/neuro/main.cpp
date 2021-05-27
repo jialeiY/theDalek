@@ -55,9 +55,11 @@ int main() {
 	th.registerThread(&lt, "loop");
 	th.registerThread(&ct, "control");
 	
+	lt.init();
 
 	lt.start();
 	ct.start();
+
 
 
 	

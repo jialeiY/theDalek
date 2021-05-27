@@ -16,7 +16,7 @@ namespace usart {
 
 WheelUsart::WheelUsart() :
 	mDecoder() ,
-	mExchangeArea(nullptr), 
+	mHardwareDataPtr(nullptr), 
 	mHasResult (false){
 
 	mOutputBuffer[0] = 0x55;					   // HEAD
@@ -61,8 +61,8 @@ WheelUsart::~WheelUsart() {
 	close(mTtyFd);
 }
 
-void WheelUsart::startCycle(volatile struct data_types::ExchangeArea *data) {
-	mExchangeArea = data;
+void WheelUsart::startCycle(volatile struct data_types::HardwareData *data) {
+	mHardwareDataPtr = data;
 	mHasResult = false;
 	clearUsartInputBuffer();
 	writeUsart();
@@ -120,9 +120,9 @@ void WheelUsart::tick(void) {
 			hardware::McuSensors packet = mDecoder.fetchData();
 
 			// ... a lot of work
-			data_types::ExchangeArea finalExportData;
+			data_types::HardwareData finalExportData;
 			finalExportData.input.mcuSensors = packet;
-			mem::memcpy(&(mExchangeArea->input.mcuSensors), &packet, sizeof(struct hardware::McuSensors));
+			mem::memcpy(&(mHardwareDataPtr->input.mcuSensors), &packet, sizeof(struct hardware::McuSensors));
 			mHasResult = true;
 		}
 	} else if (lenRead < 0) {

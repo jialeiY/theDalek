@@ -12,13 +12,22 @@ namespace framework {
 
 ControlThread::ControlThread(const ThreadHub &hub, const EntityAgency &agency) : 
 	IThread(hub), 
-	mExchangeAreaPtr(nullptr),
+	mHardwareDataPtr(nullptr),
 	mAgency(agency),
 	mStatus(IDLE),
-	mWorkingDataPtr(nullptr) {
+	mWorkingDataPtr(nullptr),
+	mCycleCount(0ULL) {
 }
 
 ControlThread::~ControlThread() {
+
+}
+
+void ControlThread::init() {
+	std::vector<action::IAction *> actionList = mAgency.getActionList();
+	for (auto *action : actionList) {
+		action->setMemoryArea(&mActionData);
+	}
 }
 
 void ControlThread::onNotify(EventType eventType, volatile void *data) {
@@ -28,12 +37,12 @@ void ControlThread::onNotify(EventType eventType, volatile void *data) {
 	}
 }
 
-void ControlThread::work() {
+void ControlThread::work() {	
 	if (mStatus == ControlStatus::WORKING) {
-		mExchangeAreaPtr = static_cast<volatile data_types::ExchangeArea *>(mWorkingDataPtr);
+		mHardwareDataPtr = static_cast<volatile data_types::HardwareData *>(mWorkingDataPtr);
 		// copy to local memory
-		data_types::ExchangeArea localData;
-		mem::memcpy(&localData, mExchangeAreaPtr, sizeof(struct data_types::ExchangeArea));
+		data_types::HardwareData localData;
+		mem::memcpy(&localData, mHardwareDataPtr, sizeof(struct data_types::HardwareData));
 		
 		// update all sensors
 		std::vector<sensing::ISensor *> hardwareList = mAgency.getSensorList();
@@ -41,14 +50,16 @@ void ControlThread::work() {
 			hardware->updateFromSensor(localData);
 		}
 
+		// Initialize data area
+		memset(&mActionData, 0, sizeof(data_types::ActionData));
+
 
 		// 1. Odometry
 		action::IAction *odometry = mAgency.getAction("odometry");
 		odometry->execute();
 
 		mStatus = ControlStatus::IDLE;
-		notify("timer", EventType::CONTROL_FINISHED, nullptr);		
-		LogDebug("control thread");
+		notify("loop", EventType::CONTROL_FINISHED, nullptr);
 	}
 }
 

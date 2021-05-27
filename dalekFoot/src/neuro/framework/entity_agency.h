@@ -21,6 +21,7 @@ public:
 	sensing::ISensor *getSensor(const std::string &name) const;
 	std::vector<sensing::ISensor *> getSensorList(void) const;
 	action::IAction *getAction(const std::string &name) const;
+	std::vector<action::IAction *> getActionList(void) const;
 
 private:
 	std::unordered_map<std::string, sensing::ISensor *> mSensorMap;

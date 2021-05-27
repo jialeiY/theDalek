@@ -6,9 +6,14 @@ namespace action {
 
 
 IAction::IAction(const std::string &name, framework::EntityAgency &entityAgency) :
-	mAgency(entityAgency) {
+	mAgency(entityAgency),
+	mActionData(nullptr) {
 	entityAgency.registerAction(name, this);
 }
 
+
+void IAction::setMemoryArea(data_types::ActionData *actionData) {
+	mActionData = actionData;
+}
 
 }

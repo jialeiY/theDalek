@@ -2,7 +2,7 @@
 #define __MODULE_DATA_TYPES_EXCHANGE_AREA_H__
 
 #include "module/data_types/hardware/mcu_sensors.h"
-
+#include <cstdint>
 namespace data_types {
 
 namespace detail {
@@ -15,7 +15,8 @@ struct Output {
 };
 
 }
-struct ExchangeArea {
+struct HardwareData {
+	std::uint64_t cycleStartTime;
 	detail::Input input;
 	detail::Output output;
 };
