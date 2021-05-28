@@ -96,7 +96,8 @@ void setSpeed(int32_t speed) {
 		TIM_OC1Init(TIM4, &TIM_OCStruct);
 		
 	} else { // speed == 0
-
+		TIM_OCStruct.TIM_Pulse = 0;
+		TIM_OC1Init(TIM4, &TIM_OCStruct);
 	}
 }
 
@@ -133,7 +134,7 @@ int main(void) {
 				Serial1.printf("got packet motor:%d %d %d %d, m:%d, led:%x\r\n", 
 					packet.power[0], packet.power[1], packet.power[2], packet.power[3], packet.melodyIdx, packet.ledStatus);
 			}
-			setSpeed(static_cast<int32_t>(packet.power[3]) * 4);
+			setSpeed(static_cast<int32_t>(packet.power[3]) * 16);
 		}
 		
 		/*

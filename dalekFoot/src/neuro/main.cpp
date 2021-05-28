@@ -10,6 +10,7 @@
 #include "framework/entity_agency.h"
 
 #include "module/sensing/wheel_sensor/wheel_sensor.h"
+#include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
 
 
@@ -41,6 +42,7 @@ int main() {
 	sensing::wheel_sensor::WheelSensor wheelSensor("wheel", ea);
 	
 	// setup action
+	action::power::PowerAction power("power", ea);
 	action::odometry::OdometryAction odometry("odometry", ea);
 
 	// setup application
@@ -56,6 +58,7 @@ int main() {
 	th.registerThread(&ct, "control");
 	
 	lt.init();
+	ct.init();
 
 	lt.start();
 	ct.start();

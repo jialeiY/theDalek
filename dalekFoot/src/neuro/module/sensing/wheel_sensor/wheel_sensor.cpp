@@ -39,6 +39,7 @@ void WheelSensor::updateFromSensor(std::uint64_t cycleCount, const data_types::H
 		updateEncoder();
 		updateSpeed();
 		updateAcceleration();
+		writeOutput();
 	}
 }
 

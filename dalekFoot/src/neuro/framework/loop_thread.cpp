@@ -28,7 +28,7 @@ LoopThread::LoopThread(const ThreadHub &hub) :
 	mIsIoFinished(false),
 	mIsControlFinished(false),
 	mInputExchangeIdx(0U),
-	mWheel() {
+	mWheelUsart() {
 
 	//Initialize memory
 	mem::memset(&mExchange1, sizeof(struct data_types::HardwareData), 0U);
@@ -80,9 +80,9 @@ void LoopThread::tickOnWorking(const std::uint64_t &currentTime) {
 		switchToWaitting(currentTime);
 	} else {
 		if (!mIsIoFinished) {
-			mWheel.tick();
-			if (mWheel.hasResult()) {
-				mWheel.endCycle();
+			mWheelUsart.tick();
+			if (mWheelUsart.hasResult()) {
+				mWheelUsart.endCycle();
 				mIsIoFinished = true;
 				// LogInfo("io time duration: %lu", currentTime - mCycleStartTime);
 			}
@@ -116,14 +116,14 @@ void LoopThread::switchToWorking(const std::uint64_t &currentTime) {
 	volatile struct data_types::HardwareData *outputBufferPtr = mInputExchangeIdx == 0 ? &mExchange2 : &mExchange1;
 	outputBufferPtr->cycleStartTime = mCycleStartTime;
 	notify("control", EventType::GLOBAL_CYCLE_START, outputBufferPtr);
-	mWheel.startCycle(inputBufferPtr);
+	mWheelUsart.startCycle(inputBufferPtr);
 	
 	
 }
 
 
 void LoopThread::switchToWaitting(const std::uint64_t &currentTime) {
-	mWheel.endCycle();
+	mWheelUsart.endCycle();
 	mStatus = LoopStatus::WAITTING;
 	
 	/// TODO: Check 1. If the transmitting is finished

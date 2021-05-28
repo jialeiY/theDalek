@@ -2,6 +2,7 @@
 #include "framework/event_type.h"
 #include "framework/entity_agency.h"
 #include "module/sensing/i_sensor.h"
+#include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
 #include "logger/logger.h"
 #include "module/mem/mem.h"
@@ -30,6 +31,8 @@ void ControlThread::init() {
 	}
 	std::vector<action::IAction *> actionList = mAgency.getActionList();
 	for (auto *action : actionList) {
+		LogInfo("set sensor data");
+		action->setSensorData(&mSensorData);
 		action->setExchangeMemoryArea(&mActionData);
 	}
 }
@@ -64,6 +67,9 @@ void ControlThread::work() {
 		// 1. Odometry
 		action::IAction *odometry = mAgency.getAction("odometry");
 		odometry->execute();
+
+		action::IAction *power = mAgency.getAction("power");
+		power->execute();
 
 		mStatus = ControlStatus::IDLE;
 		notify("loop", EventType::CONTROL_FINISHED, nullptr);

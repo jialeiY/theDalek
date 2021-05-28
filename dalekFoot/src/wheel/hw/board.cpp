@@ -105,7 +105,7 @@ void boardInit(void) {
 	TIM_BaseStruct.TIM_Prescaler = 0;
 	TIM_BaseStruct.TIM_CounterMode = TIM_CounterMode_Up;
 	// TIM_BaseStruct.TIM_Period = 511;
-	TIM_BaseStruct.TIM_Period = 8000000UL;
+	TIM_BaseStruct.TIM_Period = 2047UL;
 	TIM_BaseStruct.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_BaseStruct.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM4, &TIM_BaseStruct);
@@ -116,7 +116,7 @@ void boardInit(void) {
 	TIM_OCStruct.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCStruct.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCStruct.TIM_OutputNState = TIM_OCPolarity_High;
-	TIM_OCStruct.TIM_Pulse = 200;
+	TIM_OCStruct.TIM_Pulse = 0;
 	TIM_OC1Init(TIM4, &TIM_OCStruct);
 	TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
 

@@ -15,6 +15,7 @@ CPP_SRC += application/dalek/dalek.cpp
 CPP_SRC += module/sensing/i_sensor.cpp
 CPP_SRC += module/sensing/wheel_sensor/wheel_sensor.cpp
 CPP_SRC += action/i_action.cpp
+CPP_SRC += action/power/power_action.cpp
 CPP_SRC += action/odometry/odometry_action.cpp
 
 

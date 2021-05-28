@@ -16,8 +16,6 @@ class OdometryAction : public IAction {
 		virtual ~OdometryAction();
 		virtual void execute(void);
 
-
-		Odometry getOdometry(void) const {return mOdometry;};
 	private:
 		Odometry mOdometry;
 

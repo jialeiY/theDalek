@@ -32,7 +32,7 @@ class LoopThread : public IThread {
 		/// @brief The variable to indicate which exchange area is used
 		uint8_t mInputExchangeIdx;
 
-		hardware::usart::WheelUsart mWheel;
+		hardware::usart::WheelUsart mWheelUsart;
 
 		void tickOnWaitting(const std::uint64_t &currentTime);
 		void tickOnWorking(const std::uint64_t &currentTime);
