@@ -4,11 +4,12 @@
 
 namespace sensing {
 
-ISensor::ISensor(const std::string &name, framework::EntityAgency &entityAgency) {
+ISensor::ISensor(const std::string &name, framework::EntityAgency &entityAgency) :
+	mOutputData(nullptr) {
 	entityAgency.registerSensor(name, this);
 };
 
 void ISensor::setExchangeMemoryArea(data_types::SensorData *sensorData) {
-	mSensorData = sensorData;
+	mOutputData = sensorData;
 }
 }

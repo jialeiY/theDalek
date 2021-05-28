@@ -6,7 +6,7 @@
 
 // 1HZ
 
-#define HZ1
+#define HZ10
 
 #ifdef HZ1
 constexpr std::uint64_t kLoopThreadInputTimeout {500000ULL};

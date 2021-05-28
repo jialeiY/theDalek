@@ -21,7 +21,7 @@ class ISensor {
 		virtual void updateFromSensor(std::uint64_t cycleCount, const data_types::HardwareData &inputData) = 0;
 		virtual void setExchangeMemoryArea(data_types::SensorData *sensorData);
 	protected:
-		data_types::SensorData *mSensorData;
+		data_types::SensorData *mOutputData;
 
 };
 

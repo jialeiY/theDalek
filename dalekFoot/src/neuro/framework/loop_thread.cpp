@@ -44,7 +44,7 @@ LoopThread::~LoopThread() {
 void LoopThread::onNotify(EventType msgType, volatile void *data) {
 	if (msgType == EventType::CONTROL_FINISHED) {
 		mIsControlFinished = true;
-		LogInfo("control time duration: %lu", times::useconds() - mCycleStartTime);
+		// LogInfo("control time duration: %lu", times::useconds() - mCycleStartTime);
 	}
 	
 
@@ -84,7 +84,7 @@ void LoopThread::tickOnWorking(const std::uint64_t &currentTime) {
 			if (mWheel.hasResult()) {
 				mWheel.endCycle();
 				mIsIoFinished = true;
-				LogInfo("io time duration: %lu", currentTime - mCycleStartTime);
+				// LogInfo("io time duration: %lu", currentTime - mCycleStartTime);
 			}
 		}
 		if (mIsControlFinished && mIsIoFinished) {
