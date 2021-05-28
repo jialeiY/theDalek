@@ -37,7 +37,24 @@ void WheelSensor::updateFromSensor(std::uint64_t cycleCount, const data_types::H
 	}
 
 	// Write to output
-	std::string output;
+	std::string output {"\r\n"};
+	char buffer[100];
+	for (int i=0; i< kWheelSensorHistorySize; ++i) {
+		for (int j=0; j<4; ++j) {
+			sprintf(buffer, "%d ", mHwEncoder[i][j]);
+			output += buffer;
+		}
+		output += "\r\n";
+	}
+
+	LogInfo("cycle: %llu encoder: %d %d %d %d", 
+		cycleCount,
+		mWheelData[0].encoder, 
+		mWheelData[1].encoder, 
+		mWheelData[2].encoder, 
+		mWheelData[3].encoder);
+	
+	/*
 	LogInfo("encoder: %d %d %d %d %d %d %d %d", 
 		mWheelData[0].encoder, 
 		mWheelData[1].encoder, 
@@ -47,6 +64,8 @@ void WheelSensor::updateFromSensor(std::uint64_t cycleCount, const data_types::H
 		mHwEncoder[(kWheelSensorHistorySize-1)][1],
 		mHwEncoder[(kWheelSensorHistorySize-1)][2],
 		mHwEncoder[(kWheelSensorHistorySize-1)][3]);
+	*/
+	LogInfo("%s", output.c_str());
 }
 
 void WheelSensor::warmupWork(const data_types::HardwareData &inputData) {

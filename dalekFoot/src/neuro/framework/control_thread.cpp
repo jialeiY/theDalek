@@ -36,13 +36,13 @@ void ControlThread::init() {
 
 void ControlThread::onNotify(EventType eventType, volatile void *data) {
 	if (eventType == EventType::GLOBAL_CYCLE_START) {
+		mCycleCount ++;
 		mStatus = ControlStatus::WORKING;
 		mWorkingDataPtr = data;
 	}
 }
 
 void ControlThread::work() {
-	mCycleCount ++;
 	if (mStatus == ControlStatus::WORKING) {
 		mHardwareDataPtr = static_cast<volatile data_types::HardwareData *>(mWorkingDataPtr);
 		// copy to local memory
