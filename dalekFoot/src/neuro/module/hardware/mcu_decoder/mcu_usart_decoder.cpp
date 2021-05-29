@@ -73,7 +73,7 @@ inline void McuUsartDecoder::validateAndOutputPackage() {
 	if (expectCrc != mBuffer[49]) {
 		return ;
 	}
-	outputPacket();
+	mHasData = true;
 }
 
 
@@ -81,22 +81,6 @@ inline void McuUsartDecoder::validateAndOutputPackage() {
 void McuUsartDecoder::invalidatePacket() {
 	mStatus = DecoderStatus::UNSYNC;
 	mOffset = 0U;
-}
-
-void McuUsartDecoder::outputPacket() {
-		mOutput.timestampMsec = math::u8array2u32(mBuffer+1);
-		mOutput.timestampUsec = math::u8array2u32(mBuffer+5);
-		for (int i=0; i<4; ++i) {
-			mOutput.motorEncoder[i] = math::u8array2u16(mBuffer+9 + i*2);
-		}
-		for (int i=0; i<14; ++i) {
-			mOutput.fastAdc[i] = math::u8array2u16(mBuffer+17 + i*2);
-		}
-		mOutput.slowAdcIdx = mBuffer[45];
-		mOutput.slowAdcIdx = math::u8array2u16(mBuffer+46);
-		mOutput.userInput = mBuffer[48];
-
-		mHasData = true;
 }
 
 

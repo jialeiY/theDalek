@@ -18,28 +18,35 @@ WheelSensor::~WheelSensor() {
 
 
 void WheelSensor::updateFromSensor(std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
-	// Update encoder history
-	for (int i=0; i<(kWheelSensorHistorySize-1); ++i) {
-		for (int j=0; j<4; ++j) {
-			mHwEncoder[i][j] = mHwEncoder[i+1][j];
+	// Validate
+	
+	const data_types::Qualifier & qualifier = inputData.input.mcuSensors.qualifier;
+	if (qualifier != data_types::Qualifier::QUALIFIER_READ_OK) {
+		LogError("hardware sensor read error!!!!!!!");
+	} else {
+			// Update encoder history
+		for (int i=0; i<(kWheelSensorHistorySize-1); ++i) {
+			for (int j=0; j<4; ++j) {
+				mHwEncoder[i][j] = mHwEncoder[i+1][j];
+			}
 		}
-	}
-	for (int i=0; i<4; ++i) {
-		mHwEncoder[kWheelSensorHistorySize-1][i] = inputData.input.mcuSensors.motorEncoder[i];
-	}
+		for (int i=0; i<4; ++i) {
+			mHwEncoder[kWheelSensorHistorySize-1][i] = inputData.input.mcuSensors.motorEncoder[i];
+		}
 
-	// Update Time
-	for (int i=0; i<(kWheelSensorHistorySize-1); ++i) {
-		mHwTime[i] = mHwTime[i+1];
-	}
-	mHwTime[kWheelSensorHistorySize-1] = static_cast<std::uint64_t>(inputData.input.mcuSensors.timestampMsec) * 1000ULL + inputData.input.mcuSensors.timestampUsec;
+		// Update Time
+		for (int i=0; i<(kWheelSensorHistorySize-1); ++i) {
+			mHwTime[i] = mHwTime[i+1];
+		}
+		mHwTime[kWheelSensorHistorySize-1] = static_cast<std::uint64_t>(inputData.input.mcuSensors.timestampMsec) * 1000ULL + inputData.input.mcuSensors.timestampUsec;
 
-	// Only start calculate after 5th cycle
-	if (cycleCount > 5) {
-		updateEncoder();
-		updateSpeed();
-		updateAcceleration();
-		writeOutput();
+		// Only start calculate after 5th cycle
+		if (cycleCount > 5) {
+			updateEncoder();
+			updateSpeed();
+			updateAcceleration();
+			writeOutput();
+		}
 	}
 }
 
@@ -53,12 +60,6 @@ inline void WheelSensor::updateEncoder(void) {
 	for (int i=0; i<4; ++i) {
 		mEncoder[kWheelSensorHistorySize-1][i] += mHwEncoder[(kWheelSensorHistorySize-1)][i] - mHwEncoder[(kWheelSensorHistorySize-2)][i];
 	}
-	// LogInfo("encoder: %d %d %d %d", 
-	// 	mEncoder[kWheelSensorHistorySize-1][0],
-	// 	mEncoder[kWheelSensorHistorySize-1][1],
-	// 	mEncoder[kWheelSensorHistorySize-1][2],
-	// 	mEncoder[kWheelSensorHistorySize-1][3]
-	// );
 }
 
 
@@ -77,13 +78,6 @@ inline void WheelSensor::updateSpeed(void) {
 		const float distance {rotation * (3.1415926535F * 0.0254F * 3.0F)};
 		mWheelSpeed[kWheelSensorHistorySize-2][i] = distance / timeDiff;	
 	}
-
-	// LogInfo("timediff: %f,  speed: %f %f %f %f", 
-	// 	timeDiff,
-	// 	mWheelSpeed[kWheelSensorHistorySize-2][0], 
-	// 	mWheelSpeed[kWheelSensorHistorySize-2][1], 
-	// 	mWheelSpeed[kWheelSensorHistorySize-2][2], 
-	// 	mWheelSpeed[kWheelSensorHistorySize-2][3]);
 }
 
 inline void WheelSensor::updateAcceleration(void) {
@@ -97,11 +91,6 @@ inline void WheelSensor::updateAcceleration(void) {
 			(mWheelSpeed[kWheelSensorHistorySize-2][i] - mWheelSpeed[kWheelSensorHistorySize-3][i]) / 
 			static_cast<float>((mHwTime[kWheelSensorHistorySize-1] - mHwTime[kWheelSensorHistorySize-3])) * 2000000.0F;
 	}
-	// LogInfo("acc: %f %f %f %f", 
-	// 	mWheelAcceleration[kWheelSensorHistorySize-3][0], 
-	// 	mWheelAcceleration[kWheelSensorHistorySize-3][1], 
-	// 	mWheelAcceleration[kWheelSensorHistorySize-3][2], 
-	// 	mWheelAcceleration[kWheelSensorHistorySize-3][3]);
 }
 
 inline void WheelSensor::writeOutput(void) {

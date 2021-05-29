@@ -17,9 +17,9 @@ class McuUsartDecoder {
 		void printDebugInfo();
 		void decode(const uint8_t *data, size_t length);
 		bool hasData() const { return mHasData; };
-		McuSensors fetchData() {
+		const std::uint8_t * fetchData() {
 			mHasData = false;
-			return mOutput;
+			return mBuffer;
 		}
 	private:
 		enum DecoderStatus : std::uint8_t {
@@ -31,12 +31,10 @@ class McuUsartDecoder {
 		size_t mOffset;
 		bool mHasData;
 		uint8_t mBuffer[51];
-		McuSensors mOutput;
 		
 		inline void decodeByByte(uint8_t byte);
 		inline void validateAndOutputPackage();
 		void invalidatePacket();
-		void outputPacket();
 };
 
 

@@ -27,7 +27,7 @@ LoopThread::LoopThread(const ThreadHub &hub) :
 	mCycleStartTime(0ULL),
 	mIsIoFinished(false),
 	mIsControlFinished(false),
-	mInputExchangeIdx(0U),
+	mIOExchangeIdx(0U),
 	mWheelUsart() {
 
 	//Initialize memory
@@ -82,9 +82,7 @@ void LoopThread::tickOnWorking(const std::uint64_t &currentTime) {
 		if (!mIsIoFinished) {
 			mWheelUsart.tick();
 			if (mWheelUsart.hasResult()) {
-				mWheelUsart.endCycle();
 				mIsIoFinished = true;
-				// LogInfo("io time duration: %lu", currentTime - mCycleStartTime);
 			}
 		}
 		if (mIsControlFinished && mIsIoFinished) {
@@ -112,13 +110,19 @@ void LoopThread::switchToWorking(const std::uint64_t &currentTime) {
 	mIsIoFinished = false;
 	mIsControlFinished = false;	
 	
-	volatile struct data_types::HardwareData *inputBufferPtr = mInputExchangeIdx == 0 ? &mExchange1 : &mExchange2;
-	volatile struct data_types::HardwareData *outputBufferPtr = mInputExchangeIdx == 0 ? &mExchange2 : &mExchange1;
-	outputBufferPtr->cycleStartTime = mCycleStartTime;
-	notify("control", EventType::GLOBAL_CYCLE_START, outputBufferPtr);
-	mWheelUsart.startCycle(inputBufferPtr);
+	volatile struct data_types::HardwareData *ioBufferPtr = getIoBufferPtr();
+	volatile struct data_types::HardwareData *controlBufferPtr = getControlBufferPtr();
+	ioBufferPtr->cycleStartTime = mCycleStartTime;
+	controlBufferPtr->cycleStartTime = mCycleStartTime;
 	
-	
+	// Reset io input memory area
+	resetInputData(ioBufferPtr);
+	// Reset control output memory area
+	resetOutputData(controlBufferPtr);
+
+
+	notify("control", EventType::GLOBAL_CYCLE_START, controlBufferPtr);
+	mWheelUsart.startCycle(ioBufferPtr);
 }
 
 
@@ -134,16 +138,16 @@ void LoopThread::switchToWaitting(const std::uint64_t &currentTime) {
 	/// TODO: Check the output, if the output is not produced by controlThread, 
 	/// 
 	// Evaluation Input and Output, Set the area to all-zero. if invalid
-	volatile data_types::HardwareData *inputBufferPtr = (mInputExchangeIdx == 0 ? &mExchange1 : &mExchange2);
-	volatile data_types::HardwareData *outputBufferPtr = (mInputExchangeIdx == 0 ? &mExchange2 : &mExchange1);
-
+	volatile data_types::HardwareData *ioBufferPtr = getIoBufferPtr();
+	volatile data_types::HardwareData *controlBufferPtr = getControlBufferPtr();
+	//evaludate input
 	
-	resetOutputData(inputBufferPtr);
+	resetOutputData(ioBufferPtr);
 	/// TODO: evalutate the output after calculation
-	// evaluateOutputData(outputBufferPtr);
+	// evaluateOutputData(controlBufferPtr);
 	
 	// switch HardwareData Index
-	mInputExchangeIdx = 1U - mInputExchangeIdx;
+	mIOExchangeIdx = 1U - mIOExchangeIdx;
 }
 
 

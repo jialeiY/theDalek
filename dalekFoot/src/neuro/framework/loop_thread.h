@@ -30,7 +30,7 @@ class LoopThread : public IThread {
 		volatile struct data_types::HardwareData mExchange1;
 		volatile struct data_types::HardwareData mExchange2;
 		/// @brief The variable to indicate which exchange area is used
-		uint8_t mInputExchangeIdx;
+		uint8_t mIOExchangeIdx;
 
 		hardware::usart::WheelUsart mWheelUsart;
 
@@ -39,6 +39,13 @@ class LoopThread : public IThread {
 
 		void switchToWorking(const std::uint64_t &currentTime);
 		void switchToWaitting(const std::uint64_t &currentTime);
+
+		inline volatile data_types::HardwareData *getIoBufferPtr() {
+			return mIOExchangeIdx == 0 ? &mExchange1 : &mExchange2;
+		} 
+		inline volatile data_types::HardwareData *getControlBufferPtr() {
+			return mIOExchangeIdx == 0 ? &mExchange2 : &mExchange1;
+		}
 };
 
 }

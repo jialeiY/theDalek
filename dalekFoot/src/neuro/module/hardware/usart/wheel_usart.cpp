@@ -72,8 +72,7 @@ void WheelUsart::startCycle(volatile struct data_types::HardwareData *data) {
 
 void WheelUsart::endCycle() {
 	if (!mHasResult) {
-		LogError("not got data in this cycle");
-		mDecoder.printDebugInfo();
+		// mDecoder.printDebugInfo();
 	}
 }
 
@@ -117,12 +116,25 @@ void WheelUsart::tick(void) {
 	}
 		mDecoder.decode(mInputBuffer, lenRead);
 		if (mDecoder.hasData()) {
-			hardware::McuSensors packet = mDecoder.fetchData();
+			
+			const std::uint8_t *packet = mDecoder.fetchData();
 
-			// ... a lot of work
-			data_types::HardwareData finalExportData;
-			finalExportData.input.mcuSensors = packet;
-			mem::memcpy(&(mHardwareDataPtr->input.mcuSensors), &packet, sizeof(struct hardware::McuSensors));
+			// Filling the packet to output area
+			mHardwareDataPtr->input.mcuSensors.timestampMsec = math::u8array2u32(packet+1);
+			mHardwareDataPtr->input.mcuSensors.timestampUsec = math::u8array2u32(packet+5);
+			for (int i=0; i<4; ++i) {
+				mHardwareDataPtr->input.mcuSensors.motorEncoder[i] = math::u8array2u16(packet+9 + i*2);
+			}
+			for (int i=0; i<14; ++i) {
+				mHardwareDataPtr->input.mcuSensors.fastAdc[i] = math::u8array2u16(packet+17 + i*2);
+			}
+			mHardwareDataPtr->input.mcuSensors.slowAdcIdx = packet[45];
+			mHardwareDataPtr->input.mcuSensors.slowAdcIdx = math::u8array2u16(packet+46);
+			mHardwareDataPtr->input.mcuSensors.userInput = packet[48];
+			
+			// Set the qualifier
+			mHardwareDataPtr->input.mcuSensors.qualifier = data_types::Qualifier::QUALIFIER_READ_OK;
+
 			mHasResult = true;
 		}
 	} else if (lenRead < 0) {
