@@ -66,13 +66,19 @@ void ControlThread::work() {
 
 		// 1. Odometry
 		action::IAction *odometry = mAgency.getAction("odometry");
-		odometry->execute();
+		odometry->execute(mCycleCount);
 
 		action::IAction *power = mAgency.getAction("power");
-		power->execute();
+		power->execute(mCycleCount);
 
 		mStatus = ControlStatus::IDLE;
 		notify("loop", EventType::CONTROL_FINISHED, nullptr);
+
+		// Compose output data
+		localData.output.value = mActionData.power.value;
+
+		// Write Output back to exchagne area
+		mem::memcpy(mHardwareDataPtr, &localData, sizeof(struct data_types::HardwareData));
 	}
 }
 

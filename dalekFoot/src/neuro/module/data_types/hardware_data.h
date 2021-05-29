@@ -11,7 +11,8 @@ struct Input {
 };
 
 struct Output {
-	
+	// for debug
+	std::uint8_t value;
 };
 
 }

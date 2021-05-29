@@ -5,6 +5,7 @@
 #include "module/data_types/action_data.h"
 #include "module/data_types/sensor_data.h"
 #include <string>
+#include <cstdint>
 namespace framework {
 	class EntityAgency;
 }
@@ -18,7 +19,7 @@ class IAction {
 	public:
 		IAction(const std::string &name, framework::EntityAgency &entityAgency);
 		virtual ~IAction() {};
-		virtual void execute(void) = 0;
+		virtual void execute(std::uint64_t cycleCount) = 0;
 		virtual void setSensorData(data_types::SensorData *sensorData) {
 			mSensorData = sensorData;
 		}

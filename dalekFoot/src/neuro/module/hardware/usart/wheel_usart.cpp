@@ -88,8 +88,8 @@ void WheelUsart::clearUsartInputBuffer(void) const {
 
 void WheelUsart::writeUsart(void) {
 	// for debug
-	
-	mOutputBuffer[4] = 10;
+	// LogInfo("ready to write speed: %d", mHardwareDataPtr->output.value);
+	mOutputBuffer[4] = mHardwareDataPtr->output.value;
 	mOutputBuffer[7] = math::crc8(mOutputBuffer + 1, 6); // CRC
 
 	size_t remainLength = 9;

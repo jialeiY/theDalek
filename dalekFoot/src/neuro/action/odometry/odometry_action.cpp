@@ -3,6 +3,7 @@
 #include "logger/logger.h"
 #include "module/data_types/sensing/wheel_sensor_data.h"
 #include <string>
+#include <cstdint>
 
 namespace action {
 namespace odometry {
@@ -19,7 +20,7 @@ OdometryAction::~OdometryAction() {
 }
 
 
-void OdometryAction::execute(void) {
+void OdometryAction::execute(std::uint64_t cycleCount) {
 	
 	
 	/*
