@@ -29,7 +29,8 @@ WheelUsart::WheelUsart() :
 	mOutputBuffer[7] = math::crc8(mOutputBuffer + 1, 6); // CRC
 	mOutputBuffer[8] = 0xAA;					   // END
 
-	mTtyFd = open("/dev/ttyS3", O_RDWR | O_NOCTTY | O_NDELAY);
+	// Set non-Block read
+	mTtyFd = open("/dev/ttyS3", O_RDWR | O_NOCTTY | O_NONBLOCK);
 
 	if (mTtyFd <= 0) {
 		LogFatal("open file failed");
@@ -50,9 +51,6 @@ WheelUsart::WheelUsart() :
 	cfsetispeed(&options, B115200);
 	// cfsetospeed(&options, B9600);
 	tcsetattr(mTtyFd, TCSANOW, &options);
-
-	// Set non-Block read
-	fcntl(mTtyFd, F_SETFL, O_NONBLOCK);
 
 	mDecoder.reset();
 }
@@ -103,20 +101,11 @@ void WheelUsart::writeUsart(void) {
 }
 
 void WheelUsart::tick(void) {
-	int lenRead = read(mTtyFd, mInputBuffer, 32);
+	int lenRead = read(mTtyFd, mInputBuffer, 64);
 	if (lenRead > 0) {
-	{				
-		std::string output;
-		char buffer[28];
-		for (int i=0; i<lenRead; ++i) {
-			sprintf(buffer, "%02X ", mInputBuffer[i]);
-			output += buffer;
-		}
-		//LogDebug("buffer: %s", output.c_str());
-	}
+		LogInfo("decode %d", lenRead);
 		mDecoder.decode(mInputBuffer, lenRead);
 		if (mDecoder.hasData()) {
-			
 			const std::uint8_t *packet = mDecoder.fetchData();
 
 			// Filling the packet to output area

@@ -19,7 +19,7 @@ class WheelUsart {
 	private:
 		int mTtyFd;
 		std::uint8_t mOutputBuffer[9];
-		std::uint8_t mInputBuffer[32];
+		std::uint8_t mInputBuffer[64];
 		hardware::McuUsartDecoder mDecoder;
 
 		void clearUsartInputBuffer(void) const;

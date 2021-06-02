@@ -6,6 +6,7 @@
 #include "module/time/time.h"
 #include <chrono>
 #include <thread>
+#include <unistd.h>
 
 
 static void evaluateOutputData(volatile data_types::HardwareData* hardwareData) {
@@ -85,12 +86,12 @@ void LoopThread::tickOnWorking(const std::uint64_t &currentTime) {
 				mIsIoFinished = true;
 			}
 		}
+
 		if (mIsControlFinished && mIsIoFinished) {
 			switchToWaitting(currentTime);
 		}
 	}
 }
-
 
 
 /// @brief tick function for waitting period
