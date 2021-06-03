@@ -2,6 +2,7 @@ PROJECT = wheel
 
 CPP_SRC += main.cpp
 CPP_SRC += logger/logger.cpp
+CPP_SRC += framework/prog/arg_parser.cpp
 CPP_SRC += framework/thread/thread_hub.cpp
 CPP_SRC += framework/thread/i_thread.cpp
 CPP_SRC += framework/thread/loop_thread.cpp
@@ -26,6 +27,7 @@ ASM_SRC =
 INC += -I.
 
 BUILD_DIR = build
+RUNTIME_DIR = runtime
 
 ASM_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(ASM_SRC))))
 C_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(C_SRC))))
@@ -78,7 +80,8 @@ clean:
 	rm -rf build
 
 run: $(ELF)
-	./$(BUILD_DIR)/$(PROJECT)
+	mkdir -p $(RUNTIME_DIR)
+	./$(BUILD_DIR)/$(PROJECT) --record-hardware-output=$(RUNTIME_DIR)/hardware.dat --record-all-output=$(RUNTIME_DIR)/hsal.dat
 
 r: run
 

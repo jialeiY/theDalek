@@ -1,3 +1,5 @@
+#include "framework/prog/arg_parser.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -12,7 +14,7 @@
 #include "module/sensing/wheel_sensor/wheel_sensor.h"
 #include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
-
+#include "logger/logger.h"
 
 using namespace std;
 
@@ -35,7 +37,12 @@ vector<string> splitString(const string &str) {
 	return ret;
 }
 extern volatile uint8_t m4speed;
-int main() {
+int main(int argc, char *argv[], char *env[]) {
+	framework::prog::ArgParser args(argc, argv);
+	LogDebug("hard: %s", args.getHardwareOutput().c_str());
+	LogDebug("all: %s", args.getAllOutput().c_str());
+
+
 	framework::thread::EntityAgency ea;
 	
 	// setup hardware
