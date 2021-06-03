@@ -1,6 +1,6 @@
-#include "framework/control_thread.h"
-#include "framework/event_type.h"
-#include "framework/entity_agency.h"
+#include "framework/thread/control_thread.h"
+#include "framework/thread/event_type.h"
+#include "framework/thread/entity_agency.h"
 #include "module/sensing/i_sensor.h"
 #include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
@@ -9,7 +9,7 @@
 #include <vector>
 
 namespace framework {
-
+namespace thread {
 
 ControlThread::ControlThread(const ThreadHub &hub, const EntityAgency &agency) : 
 	IThread(hub), 
@@ -84,4 +84,4 @@ void ControlThread::work() {
 
 
 }
-
+}

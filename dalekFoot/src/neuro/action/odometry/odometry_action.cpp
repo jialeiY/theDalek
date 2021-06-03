@@ -9,7 +9,7 @@ namespace action {
 namespace odometry {
 
 
-OdometryAction::OdometryAction(const std::string &name, framework::EntityAgency &entityAgency) :
+OdometryAction::OdometryAction(const std::string &name, framework::thread::EntityAgency &entityAgency) :
 	IAction(name, entityAgency) {
 	
 }

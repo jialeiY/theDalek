@@ -2,12 +2,12 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "framework/thread_hub.h"
-#include "framework/loop_thread.h"
-#include "framework/control_thread.h"
+#include "framework/thread/thread_hub.h"
+#include "framework/thread/loop_thread.h"
+#include "framework/thread/control_thread.h"
 #include <numeric>
 
-#include "framework/entity_agency.h"
+#include "framework/thread/entity_agency.h"
 
 #include "module/sensing/wheel_sensor/wheel_sensor.h"
 #include "action/power/power_action.h"
@@ -36,7 +36,7 @@ vector<string> splitString(const string &str) {
 }
 extern volatile uint8_t m4speed;
 int main() {
-	framework::EntityAgency ea;
+	framework::thread::EntityAgency ea;
 	
 	// setup hardware
 	sensing::wheel_sensor::WheelSensor wheelSensor("wheel", ea);
@@ -50,9 +50,9 @@ int main() {
 	// start program
 
 
-	framework::ThreadHub th;
-	framework::LoopThread lt(th);
-	framework::ControlThread ct(th, ea);
+	framework::thread::ThreadHub th;
+	framework::thread::LoopThread lt(th);
+	framework::thread::ControlThread ct(th, ea);
 
 	th.registerThread(&lt, "loop");
 	th.registerThread(&ct, "control");

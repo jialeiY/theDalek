@@ -7,7 +7,9 @@
 #include <string>
 #include <cstdint>
 namespace framework {
+namespace thread {
 	class EntityAgency;
+}
 }
 
 
@@ -17,7 +19,7 @@ namespace action {
 
 class IAction {
 	public:
-		IAction(const std::string &name, framework::EntityAgency &entityAgency);
+		IAction(const std::string &name, framework::thread::EntityAgency &entityAgency);
 		virtual ~IAction() {};
 		virtual void execute(std::uint64_t cycleCount) = 0;
 		virtual void setSensorData(data_types::SensorData *sensorData) {
@@ -25,7 +27,7 @@ class IAction {
 		}
 		virtual void setExchangeMemoryArea(data_types::ActionData *actionData);
 	protected:
-		framework::EntityAgency & mAgency;
+		framework::thread::EntityAgency & mAgency;
 		data_types::SensorData *mSensorData;
 		data_types::ActionData *mOutputData;
 };

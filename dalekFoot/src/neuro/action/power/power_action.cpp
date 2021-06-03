@@ -11,7 +11,7 @@ namespace action {
 namespace power {
 
 
-PowerAction::PowerAction(const std::string &name, framework::EntityAgency &entityAgency) :
+PowerAction::PowerAction(const std::string &name, framework::thread::EntityAgency &entityAgency) :
 	IAction(name, entityAgency),
 	mErrorSum(0.0F),
 	mLastError(0.0F) {

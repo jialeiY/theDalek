@@ -2,7 +2,7 @@
 #define __HARDWARE_WHEEL_SENSOR_WHEEL_SENSOR_H__
 
 #include "module/sensing/i_sensor.h"
-#include "framework/entity_agency.h"
+#include "framework/thread/entity_agency.h"
 #include "module/data_types/hardware_data.h"
 #include "module/data_types/sensing/wheel_sensor_data.h"
 #include "module/data_types/sensor_data.h"
@@ -15,7 +15,7 @@ namespace wheel_sensor {
 
 class WheelSensor : public sensing::ISensor {
 	public:
-		WheelSensor(const std::string &name, framework::EntityAgency &entityAgency);
+		WheelSensor(const std::string &name, framework::thread::EntityAgency &entityAgency);
 		virtual ~WheelSensor();
 		virtual void updateFromSensor(std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 

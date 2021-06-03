@@ -1,10 +1,10 @@
-#include "framework/entity_agency.h"
+#include "framework/thread/entity_agency.h"
 #include "module/sensing/i_sensor.h"
 #include "string.h"
 #include <vector>
 
 namespace framework {
-
+namespace thread {
 
 
 EntityAgency::EntityAgency()
@@ -47,4 +47,4 @@ std::vector<action::IAction *> EntityAgency::getActionList(void) const {
 
 
 }
-
+}

@@ -1,12 +1,13 @@
-#ifndef __FRAMEWORK_THREAD_HUB_H__
-#define __FRAMEWORK_THREAD_HUB_H__
+#ifndef __FRAMEWORK_THREAD_THREAD_HUB_H__
+#define __FRAMEWORK_THREAD_THREAD_HUB_H__
 
 #include <string>
-#include "framework/event_type.h"
-#include "framework/i_thread.h"
+#include "framework/thread/event_type.h"
+#include "framework/thread/i_thread.h"
 #include <unordered_map>
 
 namespace framework {
+namespace thread {
 
 class IThread;
 
@@ -24,5 +25,7 @@ class ThreadHub {
 
 
 }
+}
+
 #endif
 

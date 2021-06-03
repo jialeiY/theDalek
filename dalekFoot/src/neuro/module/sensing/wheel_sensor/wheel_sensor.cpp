@@ -7,7 +7,7 @@
 namespace sensing {
 namespace wheel_sensor {
 
-WheelSensor::WheelSensor(const std::string &name, framework::EntityAgency &entityAgency) :
+WheelSensor::WheelSensor(const std::string &name, framework::thread::EntityAgency &entityAgency) :
 	ISensor(name, entityAgency) {
 
 }

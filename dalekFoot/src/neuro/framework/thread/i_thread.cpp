@@ -1,4 +1,4 @@
-#include "framework/i_thread.h"
+#include "framework/thread/i_thread.h"
 #include <chrono>
 #include <thread>
 #include <iostream>
@@ -6,6 +6,7 @@
 using namespace std;
 
 namespace framework {
+namespace thread {
 
 void* thread_entry(void *msg) {
 	IThread *thread = (IThread *)msg;
@@ -45,5 +46,5 @@ void IThread::notify(const string &threadName, EventType eventType, volatile voi
 	mHub.notify(threadName, eventType, data);
 }
 
-
+}
 }

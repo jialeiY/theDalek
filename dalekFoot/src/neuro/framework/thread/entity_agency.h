@@ -1,5 +1,5 @@
-#ifndef __FRAMEWORK_ENTITY_AGENCY_H__
-#define __FRAMEWORK_ENTITY_AGENCY_H__
+#ifndef __FRAMEWORK_THREAD_ENTITY_AGENCY_H__
+#define __FRAMEWORK_THREAD_ENTITY_AGENCY_H__
 
 
 #include "action/i_action.h"
@@ -11,6 +11,7 @@ namespace sensing {
 	class ISensor;
 }
 namespace framework {
+namespace thread {
 
 class EntityAgency {
 public:
@@ -29,6 +30,7 @@ private:
 	
 };
 
+}
 }
 
 #endif

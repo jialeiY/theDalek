@@ -1,9 +1,11 @@
-#ifndef __FRAMEWORK_EVENT_TYPE_H__
-#define __FRAMEWORK_EVENT_TYPE_H__
+#ifndef __FRAMEWORK_THREAD_EVENT_TYPE_H__
+#define __FRAMEWORK_THREAD_EVENT_TYPE_H__
 
 
 #include <cstdint>
 
+namespace framework {
+namespace thread {
 
 enum EventType : uint64_t {
 	GLOBAL_CYCLE_START,
@@ -13,6 +15,8 @@ enum EventType : uint64_t {
 	EMPTY = 0xFFFFFFFFFFFFFFFF
 };
 
+}
+}
 
 #endif
 

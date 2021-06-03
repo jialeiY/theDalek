@@ -2,7 +2,7 @@
 #define __ACTION_ODOMETRY_ODOMETRY_ACTION_H__
 
 #include "action/i_action.h"
-#include "framework/entity_agency.h"
+#include "framework/thread/entity_agency.h"
 #include "module/data_types/action/odometry_data.h"
 #include <string>
 #include <cstdint>
@@ -13,7 +13,7 @@ namespace odometry {
 
 class OdometryAction : public IAction {
 	public:
-		OdometryAction(const std::string &name, framework::EntityAgency &entityAgency);
+		OdometryAction(const std::string &name, framework::thread::EntityAgency &entityAgency);
 		virtual ~OdometryAction();
 		virtual void execute(std::uint64_t cycleCount);
 

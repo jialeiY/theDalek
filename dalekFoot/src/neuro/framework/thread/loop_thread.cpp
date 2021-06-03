@@ -1,7 +1,7 @@
-#include "framework/loop_thread.h"
+#include "framework/thread/loop_thread.h"
 #include "parameter.h"
 #include "logger/logger.h"
-#include "framework/event_type.h"
+#include "framework/thread/event_type.h"
 #include "module/mem/mem.h"
 #include "module/time/time.h"
 #include <chrono>
@@ -22,6 +22,9 @@ static inline void resetOutputData(volatile data_types::HardwareData *hardwareDa
 }
 
 namespace framework {
+namespace thread {
+
+
 LoopThread::LoopThread(const ThreadHub &hub) : 
 	IThread(hub),
 	mStatus(WAITTING),
@@ -151,5 +154,6 @@ void LoopThread::switchToWaitting(const std::uint64_t &currentTime) {
 	mIOExchangeIdx = 1U - mIOExchangeIdx;
 }
 
-
 }
+}
+

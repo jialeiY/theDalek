@@ -1,14 +1,15 @@
-#ifndef __FRAMEWORK_I_THREAD_H__
-#define __FRAMEWORK_I_THREAD_H__
+#ifndef __FRAMEWORK_THREAD_I_THREAD_H__
+#define __FRAMEWORK_THREAD_I_THREAD_H__
 
 #include <pthread.h>
 #include <cstdint>
 #include <string>
 #include "event_type.h"
-#include "framework/thread_hub.h"
+#include "framework/thread/thread_hub.h"
 
 
 namespace framework {
+namespace thread {
 
 class ThreadHub;
 class IThread {
@@ -37,4 +38,6 @@ class IThread {
 
 
 }
+}
+
 #endif

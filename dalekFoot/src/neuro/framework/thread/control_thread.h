@@ -1,14 +1,15 @@
-#ifndef __FRAMEWORK_CONTROL_THREAD_H__
-#define __FRAMEWORK_CONTROL_THREAD_H__
+#ifndef __FRAMEWORK_THREAD_CONTROL_THREAD_H__
+#define __FRAMEWORK_THREAD_CONTROL_THREAD_H__
 
-#include "framework/i_thread.h"
+#include "framework/thread/i_thread.h"
+#include "framework/thread/entity_agency.h"
 #include "module/data_types/hardware_data.h"
 #include "module/data_types/sensor_data.h"
 #include "module/data_types/action_data.h"
-#include "framework/entity_agency.h"
 #include <cstdint>
 
 namespace framework {
+namespace thread {
 
 class ControlThread : public IThread {
 	public:
@@ -34,6 +35,6 @@ class ControlThread : public IThread {
 };
 
 }
-
+}
 
 #endif

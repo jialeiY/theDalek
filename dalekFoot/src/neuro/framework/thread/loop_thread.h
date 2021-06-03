@@ -1,12 +1,13 @@
-#ifndef __FRAMEWORK_LOOP_THREAD_H__
-#define __FRAMEWORK_LOOP_THREAD_H__
+#ifndef __FRAMEWORK_THREAD_LOOP_THREAD_H__
+#define __FRAMEWORK_THREAD_LOOP_THREAD_H__
 
-#include "framework/i_thread.h"
+#include "framework/thread/i_thread.h"
 #include "module/data_types/hardware_data.h"
 #include "module/hardware/usart/wheel_usart.h"
 #include <cstdint>
 
 namespace framework {
+namespace thread {
 
 class LoopThread : public IThread {
 	public:
@@ -48,6 +49,7 @@ class LoopThread : public IThread {
 		}
 };
 
+}
 }
 
 #endif

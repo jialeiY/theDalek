@@ -7,7 +7,9 @@
 
 
 namespace framework {
-	class EntityAgency;
+namespace thread {
+class EntityAgency;
+}
 }
 
 
@@ -15,7 +17,7 @@ namespace sensing {
 
 class ISensor {
 	public:
-		ISensor(const std::string &name, framework::EntityAgency &entityAgency);
+		ISensor(const std::string &name, framework::thread::EntityAgency &entityAgency);
 		virtual ~ISensor() {};
 
 		virtual void updateFromSensor(std::uint64_t cycleCount, const data_types::HardwareData &inputData) = 0;

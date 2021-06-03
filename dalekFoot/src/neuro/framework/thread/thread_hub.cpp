@@ -1,7 +1,8 @@
-#include "framework/thread_hub.h"
-#include "framework/event_type.h"
+#include "framework/thread/thread_hub.h"
+#include "framework/thread/event_type.h"
 
 namespace framework {
+namespace thread {
 
 ThreadHub::ThreadHub() {
 
@@ -27,4 +28,5 @@ void ThreadHub::notify(const std::string &threadName, EventType eventType, volat
 	}
 }
 
+}
 }
