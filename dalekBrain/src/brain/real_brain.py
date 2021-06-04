@@ -5,7 +5,7 @@ import time
 
 class RealBrain(object):
 
-    def __init__(self,eyes,mouth=None,face_recognizer=None):
+    def __init__(self,eyes,mouth,face_recognizer=None):
         self.eyes=eyes
         self.mouth=mouth
 
@@ -16,6 +16,8 @@ class RealBrain(object):
         self.vision_height=320
 
         self.eye_thread=None
+        self.mouth_thread=None
+        self.mouth_condition=None
 
         # self.condition=threading.Condition()
         # self.thread=threading.Thread(target=self.recognize_face_and_play_sound)
@@ -25,16 +27,19 @@ class RealBrain(object):
         self.eye_thread=threading.Thread(target=self.eyes.start)
         self.eye_thread.start()
 
+        self.mouth_thread=threading.Thread(target=self.mouth.start)
+        self.mouth_thread.start()
+
         # thread=threading.Thread(target=self.test)
         # thread.start()
 
         self.eye_thread.join()
+        self.mouth_thread.join()
 
     # def test(self):
-    #     for _ in range(10):
-    #         frame=self.eyes.get_frame()
-    #         print(frame)
-    #         time.sleep(1)
+    #     with self.mouth.condition:
+    #         self.mouth.set_sound(FACE_DETECTED_SOUND)
+    #         self.mouth.condition.notify_all()
 
     # def get_vision_output(self):
     #     with self.condition:
