@@ -1,4 +1,4 @@
-#include "framework/persistent/writer.h"
+#include "framework/rtdp/writer_thread.h"
 #include <pthread.h>
 #include <string>
 #include <cstdio>
@@ -6,42 +6,42 @@
 
 
 namespace framework {
-namespace persistent {
+namespace rtdp {
 
 
 
 void* threadEntry(void *msg) {
-	Writer *writer = (Writer *)msg;
+	WriterThread *writer = (WriterThread *)msg;
 	return writer->thread();
 }
 
 
-Writer::Writer() :	mIsStarted (false),
+WriterThread::WriterThread() :	mIsStarted (false),
 										mHardwareOutputPath {},
 										mHardwareOutputFilePtr (nullptr) {
 	pthread_mutex_init(&mMutex, NULL);
 }
 
-Writer::~Writer() {
+WriterThread::~WriterThread() {
 	pthread_mutex_destroy(&mMutex);
 }
 
-void Writer::init()  {
+void WriterThread::init()  {
 	if (!mHardwareOutputPath.empty()) {
 		mHardwareOutputFilePtr = fopen(mHardwareOutputPath.c_str(), "wb");
 	}
 }
 
-void Writer::start() {
+void WriterThread::start() {
 	pthread_create(&mPid, NULL, threadEntry, (void *)(this));
 }
 
 
-void Writer::stop() {
+void WriterThread::stop() {
 
 }
 
-void * Writer::thread(void) {
+void * WriterThread::thread(void) {
 	mIsStarted = true;
 	while (true) {
 		
@@ -51,7 +51,7 @@ void * Writer::thread(void) {
 	return nullptr;
 }
 
-
+WriterThread writerThread;
 
 }
 }

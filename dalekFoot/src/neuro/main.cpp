@@ -1,6 +1,6 @@
 #include "framework/prog/arg_parser.h"
 
-#include "framework/persistent/writer.h"
+#include "framework/rtdp/writer_thread.h"
 #include "framework/thread/thread_hub.h"
 #include "framework/thread/loop_thread.h"
 #include "framework/thread/control_thread.h"
@@ -9,7 +9,7 @@
 #include "module/sensing/wheel_sensor/wheel_sensor.h"
 #include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
-#include "logger/logger.h"
+#include "framework/rtdp/logger/logger.h"
 
 #include <numeric>
 #include <iostream>
@@ -37,9 +37,14 @@ vector<string> splitString(const string &str) {
 	}
 	return ret;
 }
-extern volatile uint8_t m4speed;
+
 int main(int argc, char *argv[], char *env[]) {
 	framework::prog::ArgParser args(argc, argv);
+	framework::rtdp::writerThread.setHardwareOutputPath(args.getHardwareOutput());
+	if (!args.getHardwareOutput().empty() || !args.getAllOutput().empty()) {
+		framework::rtdp::writerThread.start();
+	}
+	
 	LogDebug("hard: %s", args.getHardwareOutput().c_str());
 	LogDebug("all: %s", args.getAllOutput().c_str());
 
@@ -56,11 +61,9 @@ int main(int argc, char *argv[], char *env[]) {
 	// setup application
 
 	// start program
-	framework::persistent::Writer writer;
-	writer.setHardwareOutputPath(args.getHardwareOutput());
-	if (!args.getHardwareOutput().empty() || !args.getAllOutput().empty()) {
-		writer.start();
-	}
+	
+	
+	
 	
 	framework::thread::ThreadHub th;
 	framework::thread::LoopThread lt(th);
@@ -108,7 +111,7 @@ int main(int argc, char *argv[], char *env[]) {
 	// 		if (cleanCmdList[1] == "set") {
 	// 			int speed = atoi(cleanCmdList[2].c_str());
 	// 			cout << "set motor 4 speed to " << speed << endl;
-	// 			m4speed = speed;
+	// // 			m4speed = speed;
 	// 		}
 	// 	}
 	// }

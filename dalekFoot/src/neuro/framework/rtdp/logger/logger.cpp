@@ -1,5 +1,5 @@
 
-#include "logger/logger.h"
+#include "framework/rtdp/logger/logger.h"
 
 #include <stdint.h>
 #include <stdarg.h>
@@ -7,7 +7,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-
+namespace framework {
+namespace rtdp {
+namespace logger {
 namespace detail {
 
 int gLogLevel = 0;
@@ -29,5 +31,8 @@ void writeLogger(int level, const char *format, ...) {
 	va_end(args);
 }
 
-
 }
+}
+}
+}
+
