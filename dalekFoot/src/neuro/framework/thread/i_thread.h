@@ -12,6 +12,7 @@ namespace framework {
 namespace thread {
 
 class ThreadHub;
+
 class IThread {
 	public:
 		IThread(const ThreadHub &hub);

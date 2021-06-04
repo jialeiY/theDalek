@@ -1,18 +1,21 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+#include "framework/prog/arg_parser.h"
+
+#include "framework/persistent/writer.h"
 #include "framework/thread/thread_hub.h"
 #include "framework/thread/loop_thread.h"
 #include "framework/thread/control_thread.h"
-#include <numeric>
-
 #include "framework/thread/entity_agency.h"
 
 #include "module/sensing/wheel_sensor/wheel_sensor.h"
 #include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
+#include "logger/logger.h"
 
+#include <numeric>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -35,7 +38,12 @@ vector<string> splitString(const string &str) {
 	return ret;
 }
 extern volatile uint8_t m4speed;
-int main() {
+int main(int argc, char *argv[], char *env[]) {
+	framework::prog::ArgParser args(argc, argv);
+	LogDebug("hard: %s", args.getHardwareOutput().c_str());
+	LogDebug("all: %s", args.getAllOutput().c_str());
+
+
 	framework::thread::EntityAgency ea;
 	
 	// setup hardware
@@ -48,14 +56,19 @@ int main() {
 	// setup application
 
 	// start program
-
-
+	framework::persistent::Writer writer;
+	writer.setHardwareOutputPath(args.getHardwareOutput());
+	if (!args.getHardwareOutput().empty() || !args.getAllOutput().empty()) {
+		writer.start();
+	}
+	
 	framework::thread::ThreadHub th;
 	framework::thread::LoopThread lt(th);
 	framework::thread::ControlThread ct(th, ea);
-
+	
 	th.registerThread(&lt, "loop");
 	th.registerThread(&ct, "control");
+	
 	
 	lt.init();
 	ct.init();
