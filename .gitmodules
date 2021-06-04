@@ -1,7 +1,3 @@
-[submodule "dalekBrain/training/detection/pytorch-ssd"]
-	path = dalekBrain/training/detection/pytorch-ssd
-	url = https://github.com/jialeiY/pytorch-ssd
-	branch = master
 [submodule "dalekFootr/src/wheel/lib/ChibiOS"]
 	path = dalekFoot/src/archive/poc_v2/lib/ChibiOS
 	url = https://github.com/heqichen/ChibiOS
