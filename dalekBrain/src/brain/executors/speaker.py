@@ -7,14 +7,14 @@ class Speaker(object):
         self._sound=None
         self.condition=threading.Condition()
 
-    def _check_sound_available(self):
-        return self.get_sound() is not None
-
     def start(self):
+        print("speaker thread start")
+        while True:
+            with self.condition:
+                self.condition.wait()
 
-        with self.condition:
-            self.condition.wait_for(self._check_sound_available)
-        self.play_sound()
+            self.play_sound()
+        print("speaker thread end")
 
     def set_sound(self,sound):
         self._sound=sound
@@ -24,6 +24,5 @@ class Speaker(object):
 
     def play_sound(self):
         subprocess.run(["play", self.get_sound()])
-        self.set_sound(None)
 
 

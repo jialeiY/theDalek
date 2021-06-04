@@ -3,6 +3,7 @@ import face_recognition
 import cv2
 import csv
 import os
+from brain.actions.base_recognition import BaseRecognizer
 
 
 def _load_face_encodings(file_path):
@@ -65,25 +66,31 @@ class FaceRecognizerTrainer(object):
 
 
 
-class FaceRecognizer(object):
+class FaceRecognizer(BaseRecognizer):
 
     
-    def __init__(self,face_encoding_path):
-        
-        self.face_encoding_path=face_encoding_path
+    def __init__(self,model,scale=0.5,threshold=0.35):
 
+        super().__init__(model)
+
+        self.scale=scale
+        self.threshold=threshold
+        
         self.face_labels=[]
         self.face_encodings=[]
 
-        self.load_model()
+        self._load_model()
         
-    def load_model(self):
-        self.face_encodings,self.face_labels=_load_face_encodings(self.face_encoding_path)
+    def _load_model(self):
+        self.face_encodings,self.face_labels=_load_face_encodings(self.model)
 
-    def recognize(self,img,scale=0.5,threshold=0.35):
+    def recognize(self,img):
+        if img is None:
+            return img,False
+        
         img=img.copy()
         font=cv2.FONT_HERSHEY_SIMPLEX
-        small_img= cv2.resize(img, (0, 0), fx=scale, fy=scale)
+        small_img= cv2.resize(img, (0, 0), fx=self.scale, fy=self.scale)
     
         face_locations = face_recognition.face_locations(small_img,model="hog")
         face_encodings = face_recognition.face_encodings(small_img, face_locations)
@@ -99,17 +106,17 @@ class FaceRecognizer(object):
                 face_distances = face_recognition.face_distance(self.face_encodings, face_encoding)
                 best_match_index = np.argmin(face_distances)
                 face_score=face_distances[best_match_index]
-                if face_score<=threshold:
+                if face_score<=self.threshold:
                     name=self.face_labels[best_match_index]
 
             face_names.append(name)
             face_dists.append(1-face_score)
         
         for face_loc,name,dist in zip(face_locations,face_names,face_dists):
-            top = int(face_loc[0]/scale)
-            right = int(face_loc[1]/scale)
-            bottom = int(face_loc[2]/scale)
-            left = int(face_loc[3]/scale)
+            top = int(face_loc[0]/self.scale)
+            right = int(face_loc[1]/self.scale)
+            bottom = int(face_loc[2]/self.scale)
+            left = int(face_loc[3]/self.scale)
 
             cv2.rectangle(img, (left,top), (right,bottom), (0,255,0), 2)
             cv2.putText(img, str(name), (left+5,top-5), font, 1, (255,255,255), 2)
