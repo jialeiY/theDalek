@@ -15,16 +15,16 @@ class ControlThread : public IThread {
 	public:
 		ControlThread(const ThreadHub &hub, const EntityAgency &agency);
 		virtual ~ControlThread();
-		virtual void init();
+		virtual void init() override;
 	protected:
-		virtual void onNotify(EventType msgType, volatile void *data=nullptr);
+		virtual void onNotify(EventType msgType, volatile void *data=nullptr) override;
 
 	private:
 		enum ControlStatus {
 			IDLE,
 			WORKING
 		};
-		virtual void work();
+		virtual void work() override;
 		volatile data_types::HardwareData *mHardwareDataPtr;
 		const EntityAgency &mAgency;
 		ControlStatus mStatus;

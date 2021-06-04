@@ -1,20 +1,21 @@
 #include "framework/prog/arg_parser.h"
 
-#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
+#include "framework/persistent/writer.h"
 #include "framework/thread/thread_hub.h"
 #include "framework/thread/loop_thread.h"
 #include "framework/thread/control_thread.h"
-#include <numeric>
-
 #include "framework/thread/entity_agency.h"
 
 #include "module/sensing/wheel_sensor/wheel_sensor.h"
 #include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
 #include "logger/logger.h"
+
+#include <numeric>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
@@ -55,14 +56,19 @@ int main(int argc, char *argv[], char *env[]) {
 	// setup application
 
 	// start program
-
-
+	framework::persistent::Writer writer;
+	writer.setHardwareOutputPath(args.getHardwareOutput());
+	if (!args.getHardwareOutput().empty() || !args.getAllOutput().empty()) {
+		writer.start();
+	}
+	
 	framework::thread::ThreadHub th;
 	framework::thread::LoopThread lt(th);
 	framework::thread::ControlThread ct(th, ea);
-
+	
 	th.registerThread(&lt, "loop");
 	th.registerThread(&ct, "control");
+	
 	
 	lt.init();
 	ct.init();
