@@ -1,14 +1,14 @@
 PROJECT = wheel
 
 CPP_SRC += main.cpp
-CPP_SRC += logger/logger.cpp
+CPP_SRC += framework/rtdp/persistent/writer_thread.cpp
+CPP_SRC += framework/rtdp/logger/logger.cpp
 CPP_SRC += framework/prog/arg_parser.cpp
 CPP_SRC += framework/thread/thread_hub.cpp
 CPP_SRC += framework/thread/i_thread.cpp
 CPP_SRC += framework/thread/loop_thread.cpp
 CPP_SRC += framework/thread/control_thread.cpp
 CPP_SRC += framework/thread/entity_agency.cpp
-CPP_SRC += framework/persistent/writer.cpp
 CPP_SRC += module/hardware/usart/wheel_usart.cpp
 CPP_SRC += module/hardware/mcu_decoder/mcu_usart_decoder.cpp
 CPP_SRC += module/mem/mem.cpp

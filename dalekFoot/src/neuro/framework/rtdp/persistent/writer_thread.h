@@ -1,5 +1,5 @@
-#ifndef __FRAMEWORK_PERSISTENT_WRITER_H__
-#define __FRAMEWORK_PERSISTENT_WRITER_H__
+#ifndef __FRAMEWORK_RTDP_PERSISTENT_WRITER_THREAD_H__
+#define __FRAMEWORK_RTDP_PERSISTENT_WRITER_THREAD_H__
 
 
 #include <pthread.h>
@@ -8,12 +8,13 @@
 
 
 namespace framework {
+namespace rtdp {
 namespace persistent {
 
-class Writer {
+class WriterThread {
 	public:
-		Writer();
-		virtual ~Writer();
+		WriterThread();
+		virtual ~WriterThread();
 		void setHardwareOutputPath(const std::string & filepath) {
 			mHardwareOutputPath = filepath;
 		}
@@ -31,9 +32,11 @@ class Writer {
 		FILE *mHardwareOutputFilePtr;
 };
 
-}
-}
+extern WriterThread writerThread;
 
+}
+}
+}
 
 #endif
 

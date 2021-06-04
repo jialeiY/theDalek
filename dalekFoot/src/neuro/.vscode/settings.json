@@ -59,9 +59,15 @@
 	},
 	"editor.codeActionsOnSave": null,
 	"editor.tabSize": 2,
-  "editor.detectIndentation": false,
+	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
 	"files.exclude": {
 		"**/build": true
-	}
+	},
+	"workbench.editorAssociations": [
+		{
+			"viewType": "hexEditor.hexedit",
+			"filenamePattern": "*.dat"
+		}
+	]
 }
