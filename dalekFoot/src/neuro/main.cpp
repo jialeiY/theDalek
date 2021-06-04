@@ -1,6 +1,6 @@
 #include "framework/prog/arg_parser.h"
 
-#include "framework/rtdp/writer_thread.h"
+#include "framework/rtdp/persistent/writer_thread.h"
 #include "framework/thread/thread_hub.h"
 #include "framework/thread/loop_thread.h"
 #include "framework/thread/control_thread.h"
@@ -40,9 +40,9 @@ vector<string> splitString(const string &str) {
 
 int main(int argc, char *argv[], char *env[]) {
 	framework::prog::ArgParser args(argc, argv);
-	framework::rtdp::writerThread.setHardwareOutputPath(args.getHardwareOutput());
+	framework::rtdp::persistent::writerThread.setHardwareOutputPath(args.getHardwareOutput());
 	if (!args.getHardwareOutput().empty() || !args.getAllOutput().empty()) {
-		framework::rtdp::writerThread.start();
+		framework::rtdp::persistent::writerThread.start();
 	}
 	
 	LogDebug("hard: %s", args.getHardwareOutput().c_str());

@@ -1,5 +1,5 @@
-#ifndef __FRAMEWORK_RTDP_WRITER_THREAD_H__
-#define __FRAMEWORK_RTDP_WRITER_THREAD_H__
+#ifndef __FRAMEWORK_RTDP_PERSISTENT_WRITER_THREAD_H__
+#define __FRAMEWORK_RTDP_PERSISTENT_WRITER_THREAD_H__
 
 
 #include <pthread.h>
@@ -9,6 +9,7 @@
 
 namespace framework {
 namespace rtdp {
+namespace persistent {
 
 class WriterThread {
 	public:
@@ -33,10 +34,9 @@ class WriterThread {
 
 extern WriterThread writerThread;
 
-
 }
 }
-
+}
 
 #endif
 

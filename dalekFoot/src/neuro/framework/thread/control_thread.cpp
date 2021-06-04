@@ -4,6 +4,7 @@
 #include "module/sensing/i_sensor.h"
 #include "action/power/power_action.h"
 #include "action/odometry/odometry_action.h"
+#include "framework/rtdp/persistent/writer_handler.h"
 #include "framework/rtdp/logger/logger.h"
 #include "module/mem/mem.h"
 #include <vector>
@@ -51,7 +52,7 @@ void ControlThread::work() {
 		// copy to local memory
 		data_types::HardwareData localData;
 		mem::memcpy(&localData, mHardwareDataPtr, sizeof(struct data_types::HardwareData));
-		
+		WritePersistentHardwareData(&localData);
 
 		
 		// Initialize data area

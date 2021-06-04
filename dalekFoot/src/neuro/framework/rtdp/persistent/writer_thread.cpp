@@ -1,4 +1,4 @@
-#include "framework/rtdp/writer_thread.h"
+#include "framework/rtdp/persistent/writer_thread.h"
 #include <pthread.h>
 #include <string>
 #include <cstdio>
@@ -7,7 +7,7 @@
 
 namespace framework {
 namespace rtdp {
-
+namespace persistent {
 
 
 void* threadEntry(void *msg) {
@@ -53,5 +53,6 @@ void * WriterThread::thread(void) {
 
 WriterThread writerThread;
 
+}
 }
 }
