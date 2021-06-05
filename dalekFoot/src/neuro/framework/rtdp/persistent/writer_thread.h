@@ -60,7 +60,7 @@ class SafeCircularQueue {
 			bool success = false;
 			pthread_mutex_lock(&mMutex);
 			if (!lockIsEmpty()) {
-				memcpy(mBuffer+mPopOffset, dest, sizeof(T));
+				memcpy(dest, mBuffer+mPopOffset, sizeof(T));
 				mPopOffset++;
 				mPopOffset %= size;
 				success = true;
