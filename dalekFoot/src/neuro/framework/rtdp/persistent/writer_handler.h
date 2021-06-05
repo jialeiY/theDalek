@@ -9,10 +9,12 @@ namespace rtdp {
 namespace persistent {
 namespace detail {
 static inline void writeHandware(const data_types::HardwareData *data)  {
-	/// @todo
+	framework::rtdp::persistent::writerThread.requestWriteHardwareData(data);
 }
 
 static inline void dummyFun(...) {}
+
+
 }
 }
 }

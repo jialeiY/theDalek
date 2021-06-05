@@ -41,6 +41,7 @@ vector<string> splitString(const string &str) {
 int main(int argc, char *argv[], char *env[]) {
 	framework::prog::ArgParser args(argc, argv);
 	framework::rtdp::persistent::writerThread.setHardwareOutputPath(args.getHardwareOutput());
+	framework::rtdp::persistent::writerThread.init();
 	if (!args.getHardwareOutput().empty() || !args.getAllOutput().empty()) {
 		framework::rtdp::persistent::writerThread.start();
 	}

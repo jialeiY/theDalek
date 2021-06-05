@@ -103,7 +103,6 @@ void WheelUsart::writeUsart(void) {
 void WheelUsart::tick(void) {
 	int lenRead = read(mTtyFd, mInputBuffer, 64);
 	if (lenRead > 0) {
-		LogInfo("decode %d", lenRead);
 		mDecoder.decode(mInputBuffer, lenRead);
 		if (mDecoder.hasData()) {
 			const std::uint8_t *packet = mDecoder.fetchData();
