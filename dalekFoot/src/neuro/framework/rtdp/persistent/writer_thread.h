@@ -15,7 +15,7 @@ namespace framework {
 namespace rtdp {
 namespace persistent {
 
-
+/// @todo: move utility class into standalone file
 template<typename T, std::size_t size>
 class SafeCircularQueue {
 	public:
