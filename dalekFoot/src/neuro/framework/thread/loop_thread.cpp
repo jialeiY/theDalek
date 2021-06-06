@@ -116,14 +116,17 @@ void LoopThread::switchToWorking(const std::uint64_t &currentTime) {
 	
 	volatile struct data_types::HardwareData *ioBufferPtr = getIoBufferPtr();
 	volatile struct data_types::HardwareData *controlBufferPtr = getControlBufferPtr();
-	ioBufferPtr->cycleStartTime = mCycleStartTime;
-	controlBufferPtr->cycleStartTime = mCycleStartTime;
+
 	
 	// Reset io input memory area
 	resetInputData(ioBufferPtr);
 	// Reset control output memory area
 	resetOutputData(controlBufferPtr);
-
+	
+	// Set the time
+	ioBufferPtr->input.cycleStartTime = mCycleStartTime;
+	controlBufferPtr->output.cycleStartTime = mCycleStartTime;
+	
 
 	notify("control", EventType::GLOBAL_CYCLE_START, controlBufferPtr);
 	mWheelUsart.startCycle(ioBufferPtr);

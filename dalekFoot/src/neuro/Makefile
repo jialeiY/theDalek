@@ -1,6 +1,6 @@
-PROJECT = wheel
+PROJECT = dalek
 
-CPP_SRC += main.cpp
+
 CPP_SRC += framework/rtdp/persistent/writer_thread.cpp
 CPP_SRC += framework/rtdp/logger/logger.cpp
 CPP_SRC += framework/prog/arg_parser.cpp
@@ -20,6 +20,8 @@ CPP_SRC += action/i_action.cpp
 CPP_SRC += action/power/power_action.cpp
 CPP_SRC += action/odometry/odometry_action.cpp
 
+DALEK_MAIN = main.cpp
+REPLAY_MAIN = replay.cpp
 
 C_SRC = 
 ASM_SRC = 
@@ -32,13 +34,16 @@ RUNTIME_DIR = runtime
 ASM_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(ASM_SRC))))
 C_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(C_SRC))))
 CPP_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(CPP_SRC))))
+DALEK_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(DALEK_MAIN))))
+REPLAY_OBJ = $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(REPLAY_MAIN))))
 
 OBJS += $(ASM_OBJ)
 OBJS += $(C_OBJ)
 OBJS += $(CPP_OBJ)
 
-ELF = $(BUILD_DIR)/$(PROJECT)
 
+DALEK_ELF = $(BUILD_DIR)/$(PROJECT)
+REPLAY_ELF = $(BUILD_DIR)/replay
 
 CFLAGS = -c -Os -std=c++11 -g
 DEFS = 
@@ -59,9 +64,14 @@ A2L=addr2line
 
 all: dalek
 
-dalek: $(ELF)
+dalek: $(DALEK_ELF)
 
-$(ELF): $(OBJS)
+$(DALEK_ELF): $(OBJS) $(DALEK_OBJ)
+	$(CXX) $(LDFLAGS) $^ -o $@
+
+replay: $(REPLAY_ELF)
+
+$(REPLAY_ELF): $(OBJS) $(REPLAY_OBJ)
 	$(CXX) $(LDFLAGS) $^ -o $@
 	
 $(BUILD_DIR)/%.o: %.cpp
@@ -79,10 +89,10 @@ $(BUILD_DIR)/%.o: %.s
 clean:
 	rm -rf build
 
-run: $(ELF)
+run: $(DALEK_ELF)
 	mkdir -p $(RUNTIME_DIR)
 	./$(BUILD_DIR)/$(PROJECT) --record-hardware-output=$(RUNTIME_DIR)/hardware.dat --record-all-output=$(RUNTIME_DIR)/hsal.dat
 
 r: run
 
-.PHONY: all clean run r
+.PHONY: all clean run r dalek replay

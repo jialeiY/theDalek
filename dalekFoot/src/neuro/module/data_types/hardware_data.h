@@ -7,17 +7,18 @@ namespace data_types {
 
 namespace detail {
 struct Input {
+	std::uint64_t cycleStartTime;
 	hardware::McuSensors mcuSensors;
 };
 
 struct Output {
 	// for debug
+	std::uint64_t cycleStartTime;
 	std::uint8_t value;
 };
 
 }
 struct HardwareData {
-	std::uint64_t cycleStartTime;
 	detail::Input input;
 	detail::Output output;
 };
