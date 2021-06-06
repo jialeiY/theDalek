@@ -1,7 +1,7 @@
 import torch
 from torch.nn import Conv2d, Sequential, ModuleList, BatchNorm2d
 from torch import nn
-from ..nn.mobilenet_v2 import MobileNetV2, InvertedResidual
+from ..backbone.mobilenet_v2 import MobileNetV2, InvertedResidual
 
 from .ssd import SSD, GraphPath
 from .predictor import Predictor

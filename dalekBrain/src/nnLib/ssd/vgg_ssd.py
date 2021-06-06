@@ -1,6 +1,6 @@
 import torch
 from torch.nn import Conv2d, Sequential, ModuleList, ReLU, BatchNorm2d
-from ..nn.vgg import vgg
+from ..backbone.vgg import vgg
 
 from .ssd import SSD
 from .predictor import Predictor
