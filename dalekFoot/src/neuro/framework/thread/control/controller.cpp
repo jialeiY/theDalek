@@ -24,6 +24,7 @@ Controller::~Controller() {
 void Controller::init(void) {
 	std::vector<sensing::ISensor *> sensorList = mAgency.getSensorList();
 	for (sensing::ISensor *sensor : sensorList) {
+		printf("ready to run the sensor module\r\n");
 		sensor->setExchangeMemoryArea(&mSensorData);
 	}
 	std::vector<action::IAction *> actionList = mAgency.getActionList();
