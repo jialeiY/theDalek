@@ -15,6 +15,7 @@ class Controller {
 		Controller(const EntityAgency &agency);
 		virtual ~Controller();
 		void init();
+		void beforeStep(void);
 		void step(data_types::HardwareData *hardwareDataPtr);
 	private:
 		const EntityAgency &mAgency;

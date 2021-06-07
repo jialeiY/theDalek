@@ -20,6 +20,15 @@ class WheelSensor : public sensing::ISensor {
 		virtual void updateFromSensor(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 
 	private:
+		std::size_t mFailCount;
+		bool mIsFailsafe;
+
+		std::int16_t lastHwEncoder[4];
+		bool isEncoderReady;
+
+		void handleUnqualifiedData(void);
+		/*
+
 		std::int16_t mHwEncoder[kWheelSensorHistorySize][4];
 		std::uint64_t mHwTime[kWheelSensorHistorySize];
 		sensing::WheelSensorData mWheelData[4];
@@ -32,6 +41,9 @@ class WheelSensor : public sensing::ISensor {
 		void updateSpeed(void);
 		void updateAcceleration(void);
 		void writeOutput(void);
+		*/
+
+
 };
 
 }

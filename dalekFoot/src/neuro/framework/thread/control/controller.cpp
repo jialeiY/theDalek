@@ -35,12 +35,16 @@ void Controller::init(void) {
 	}
 }
 
-void Controller::step(data_types::HardwareData *hardwareDataPtr) {
+
+inline void Controller::beforeStep() {
 	mCycleCount++;
 	// Initialize data area
 	memset(&mSensorData, 0, sizeof(data_types::SensorData));
 	memset(&mActionData, 0, sizeof(data_types::ActionData));
+}
 
+void Controller::step(data_types::HardwareData *hardwareDataPtr) {
+	beforeStep();
 
 	// update all sensors
 	std::vector<sensing::ISensor *> sensorList = mAgency.getSensorList();

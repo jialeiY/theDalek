@@ -8,7 +8,10 @@ namespace sensing {
 namespace wheel_sensor {
 
 WheelSensor::WheelSensor(const std::string &name, framework::thread::EntityAgency &entityAgency) :
-	ISensor(name, entityAgency) {
+	ISensor(name, entityAgency),
+	mFailCount {0U},
+	mIsFailsafe {false},
+	isEncoderReady {false} {
 
 }
 
@@ -17,10 +20,23 @@ WheelSensor::~WheelSensor() {
 }
 
 
-void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
+void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_types::HardwareData &hardwareData) {
+	if (mIsFailsafe) {
+		LogError("WheelSensor in failsafe, exited");
+		mOutputData->wheel->qualifier = data_types::Qualifier::QUALIFIER_ERROR_FAILSAFE;
+		return ;
+	}
+
 	// Validate
+	if (hardwareData.input.mcuSensors.qualifier != data_types::Qualifier::QUALIFIER_READ_OK) {
+		handleUnqualifiedData();
+	} else {
+		/// @todo: process normal situation
+	}
 	
-	const data_types::Qualifier & qualifier = inputData.input.mcuSensors.qualifier;
+	
+	/*
+	const data_types::Qualifier & qualifier = hardwareData.input.mcuSensors.qualifier;
 	if (qualifier != data_types::Qualifier::QUALIFIER_READ_OK) {
 		LogError("hardware sensor read error!!!!!!!");
 	} else {
@@ -31,14 +47,14 @@ void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_ty
 			}
 		}
 		for (int i=0; i<4; ++i) {
-			mHwEncoder[kWheelSensorHistorySize-1][i] = inputData.input.mcuSensors.motorEncoder[i];
+			mHwEncoder[kWheelSensorHistorySize-1][i] = hardwareData.input.mcuSensors.motorEncoder[i];
 		}
 
 		// Update Time
 		for (int i=0; i<(kWheelSensorHistorySize-1); ++i) {
 			mHwTime[i] = mHwTime[i+1];
 		}
-		mHwTime[kWheelSensorHistorySize-1] = static_cast<std::uint64_t>(inputData.input.mcuSensors.timestampMsec) * 1000ULL + inputData.input.mcuSensors.timestampUsec;
+		mHwTime[kWheelSensorHistorySize-1] = static_cast<std::uint64_t>(hardwareData.input.mcuSensors.timestampMsec) * 1000ULL + hardwareData.input.mcuSensors.timestampUsec;
 
 		// Only start calculate after 5th cycle
 		if (cycleCount > 5) {
@@ -48,8 +64,19 @@ void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_ty
 			writeOutput();
 		}
 	}
+	*/
 }
 
+inline void WheelSensor::handleUnqualifiedData(void) {
+	LogDebug("unqualified data found");
+	mFailCount ++;
+	if (mFailCount >= kFailCountToFailsafe) {
+		LogFatal("Wheel Sensor entering FAILSAFE");
+		mIsFailsafe = true;
+	}
+}
+
+/*
 inline void WheelSensor::updateEncoder(void) {
 	// Update Encoder
 	for (int i=0; i<(kWheelSensorHistorySize-1); ++i) {
@@ -101,6 +128,8 @@ inline void WheelSensor::writeOutput(void) {
 		(mOutputData->wheel)[i].acceleration = mWheelAcceleration[kWheelSensorHistorySize-3][i];
 	}
 }
+
+*/
 
 }
 }
