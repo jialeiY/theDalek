@@ -25,7 +25,7 @@ PowerAction::~PowerAction() {
 
 
 void PowerAction::execute(std::uint64_t cycleCount) {
-	constexpr float target {0.2F};
+	constexpr float target {0.02F};
 	const float currentSpeed = (mSensorData->wheel)[3].speed;
 	const float currentError = target - currentSpeed;
 
