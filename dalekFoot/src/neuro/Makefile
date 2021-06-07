@@ -100,7 +100,7 @@ r: run
 
 
 runreplayer: $(REPLAYER_ELF)
-	./$(BUILD_DIR)/replayer --record-hardware=$(RUNTIME_DIR)/encoder_jump.dat
+	./$(BUILD_DIR)/replayer --record-hardware=$(RUNTIME_DIR)/error_startup.dat
 
 rr: runreplayer
 

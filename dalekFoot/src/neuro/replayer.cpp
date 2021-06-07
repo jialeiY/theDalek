@@ -36,11 +36,10 @@ int main(int argc, char *argv[], char *env[]) {
 
 	
 	while (true) {
-		std::cout << "Press Enter to Continue";
+		// std::cout << "Press Enter to Continue";
 		// std::cin.ignore();
 		std::size_t len = fread(buffer, hardwareSize, 1, hardwareRecordFile);
 		if (len < 1) break;
-		std::cout << len << std::endl;
 
 		data_types::HardwareData data;
 		memcpy(&data, buffer, hardwareSize);
@@ -50,7 +49,7 @@ int main(int argc, char *argv[], char *env[]) {
 
 		controller.step(&data);
 
-		std::cout << "output: [" << (int)(data.output.value) << "]" << std::endl;
+		std::cout << "output: [" << (int)(data.output.value) << "]" << std::endl << std::endl;
 
 	}
 

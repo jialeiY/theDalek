@@ -59,10 +59,8 @@ inline void WheelSensor::updateEncoder(void) {
 	}
 	for (int i=0; i<4; ++i) {
 		const int16_t encdiff = uint16_t(mHwEncoder[(kWheelSensorHistorySize-1)][i] - mHwEncoder[(kWheelSensorHistorySize-2)][i]);
-		mEncoder[kWheelSensorHistorySize-1][i] += mHwEncoder[(kWheelSensorHistorySize-1)][i] - mHwEncoder[(kWheelSensorHistorySize-2)][i];
+		mEncoder[kWheelSensorHistorySize-1][i] += encdiff; //mHwEncoder[(kWheelSensorHistorySize-1)][i] - mHwEncoder[(kWheelSensorHistorySize-2)][i];
 	}
-
-	
 }
 
 

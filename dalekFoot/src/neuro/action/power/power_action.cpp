@@ -40,10 +40,12 @@ void PowerAction::execute(std::uint64_t cycleCount) {
 		
 		float pid = p + i + d;
 		
+		LogInfo("encoder: %llu speed from sensor: %f, pid: %f, P:%f I:%f D:%f", (mSensorData->wheel)[3].encoder, (mSensorData->wheel)[3].speed, pid, p, i, d);
+
 		pid = std::min(pid, 100.0F);
 		pid = std::min(pid, 50.0F);
 		pid = std::max(pid, 0.0F);
-		// LogInfo("speed from sensor: %f, pid: %f, P:%f I:%f D:%f", (mSensorData->wheel)[3].speed, pid, p, i, d);
+		
 		
 		mOutputData->power.value = std::round(pid);
 	}
