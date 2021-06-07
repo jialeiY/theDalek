@@ -139,7 +139,8 @@ class OpenCVCamera(BaseCamera):
 
 class MockCamera(BaseCamera):
 
-    imgs = [open(join(dirname(abspath(__file__)),f"data/mock{n}.jpg"), 'rb').read() for n in ['1', '2', '3']]
+    # imgs = [open(join(dirname(abspath(__file__)),f"../../test_data/mock{n}.jpg"), 'rb').read() for n in ['1', '2', '3']]
+    imgs=[cv2.imread(join(dirname(abspath(__file__)),f"../../test_data/mock{n}.jpg")) for n in ['1', '2', '3']]
 
     def frames(self):
         while True:

@@ -56,7 +56,9 @@ class RealBrain(object):
 
         process_this_frame = True
         is_face_exist=False
+        is_dalek_exist=False
         face_recognizer=self.vision_recognizers[0]
+        dalek_recognizer=self.vision_recognizers[1]
 
         while True:
             frame=self.eyes.get_frame()
@@ -64,6 +66,8 @@ class RealBrain(object):
             recognized_output=frame
             if process_this_frame:
                 recognized_output,is_face_exist=face_recognizer.recognize(frame)
+
+                recognized_output,is_dalek_exist=dalek_recognizer.recognize(recognized_output)
 
             output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
                 
@@ -74,9 +78,15 @@ class RealBrain(object):
 
             #     self.vision_output=cv2.imencode(".jpg",output)[1].tobytes()
             #     self.condition.notify_all()
+            print(f"is face exist:{is_face_exist}")
             if is_face_exist:
-                print(f"is face exist:{is_face_exist}")
 
                 with self.mouth.condition:
                     self.mouth.set_sound(FACE_DETECTED_SOUND)
+                    self.mouth.condition.notify_all()
+
+            print(f"is dalek exist:{is_dalek_exist}")
+            if is_dalek_exist:
+                with self.mouth.condition:
+                    self.mouth.set_sound(DALEK_DETECTED_SOUND)
                     self.mouth.condition.notify_all()
