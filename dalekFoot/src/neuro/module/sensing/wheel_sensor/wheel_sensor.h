@@ -17,7 +17,7 @@ class WheelSensor : public sensing::ISensor {
 	public:
 		WheelSensor(const std::string &name, framework::thread::EntityAgency &entityAgency);
 		virtual ~WheelSensor();
-		virtual void updateFromSensor(std::uint64_t cycleCount, const data_types::HardwareData &inputData);
+		virtual void updateFromSensor(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 
 	private:
 		std::int16_t mHwEncoder[kWheelSensorHistorySize][4];

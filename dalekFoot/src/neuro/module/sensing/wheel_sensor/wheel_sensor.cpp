@@ -17,7 +17,7 @@ WheelSensor::~WheelSensor() {
 }
 
 
-void WheelSensor::updateFromSensor(std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
+void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
 	// Validate
 	
 	const data_types::Qualifier & qualifier = inputData.input.mcuSensors.qualifier;
@@ -60,6 +60,9 @@ inline void WheelSensor::updateEncoder(void) {
 	for (int i=0; i<4; ++i) {
 		mEncoder[kWheelSensorHistorySize-1][i] += mHwEncoder[(kWheelSensorHistorySize-1)][i] - mHwEncoder[(kWheelSensorHistorySize-2)][i];
 	}
+
+	// int16_t encdiff = uint16_t(mHwEncoder[(kWheelSensorHistorySize-1)][3] - mHwEncoder[(kWheelSensorHistorySize-2)][3]);
+	
 }
 
 

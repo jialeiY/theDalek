@@ -3,9 +3,8 @@
 
 #include "framework/thread/i_thread.h"
 #include "framework/thread/entity_agency.h"
+#include "framework/thread/control/controller.h"
 #include "module/data_types/hardware_data.h"
-#include "module/data_types/sensor_data.h"
-#include "module/data_types/action_data.h"
 #include <cstdint>
 
 namespace framework {
@@ -25,13 +24,10 @@ class ControlThread : public IThread {
 			WORKING
 		};
 		virtual void work() override;
-		volatile data_types::HardwareData *mHardwareDataPtr;
-		const EntityAgency &mAgency;
+		
+		framework::thread::control::Controller mController;
 		ControlStatus mStatus;
 		volatile void *mWorkingDataPtr;
-		data_types::SensorData mSensorData;
-		data_types::ActionData mActionData;
-		uint64_t mCycleCount;
 };
 
 }
