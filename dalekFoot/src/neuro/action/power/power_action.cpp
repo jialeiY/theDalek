@@ -30,6 +30,8 @@ void PowerAction::execute(std::uint64_t cycleCount) {
 	const float currentError = target - currentSpeed;
 
 	if (cycleCount > 5) {
+
+
 		const float p =  target / 0.007F + 5.5F;
 		
 		mErrorSum += currentError;
@@ -40,7 +42,11 @@ void PowerAction::execute(std::uint64_t cycleCount) {
 		
 		float pid = p + i + d;
 		
-		LogInfo("encoder: %llu speed from sensor: %f, pid: %f, P:%f I:%f D:%f", (mSensorData->wheelSensor.wheel)[3].encoder, (mSensorData->wheelSensor.wheel)[3].speed, pid, p, i, d);
+		LogInfo("qlf:%d, encoder: %llu, speed: %f, pid: %f, P:%f I:%f D:%f",
+			mSensorData->wheelSensor.qualifier,
+			mSensorData->wheelSensor.wheel[3].encoder,
+			mSensorData->wheelSensor.wheel[3].speed,
+			pid, p, i, d);
 
 		pid = std::min(pid, 100.0F);
 		pid = std::min(pid, 50.0F);

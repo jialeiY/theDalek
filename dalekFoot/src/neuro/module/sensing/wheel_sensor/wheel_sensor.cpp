@@ -12,7 +12,7 @@ inline float calculateSpeed(std::int16_t encDiff, std::uint64_t timeLapse) {
 	const float encDist = static_cast<float>(encDiff);
 	const float rotation = encDist / 2200.0F;
 	const float dist = rotation * (3.1415926535F * 0.0254F * 3.0F);
-	const float speed = dist / timeLapse / 1000000.0F;
+	const float speed = dist / timeLapse * 1000000.0F;
 	return speed;
 }
 }
@@ -96,14 +96,17 @@ inline void WheelSensor::handleNormalData(const std::uint64_t cycleCount, const 
 			uint64_t timeDiff = mMcuMeasurementTime[2] - mMcuMeasurementTime[0];
 
 			// fill the data
-
 			for (int i=0; i<4; ++i) {
 				mEncoder[i] += encoderDiff[i];
 				const float speedDiff = currentSpeed[i] - mSpeed[i];
 				mOutputData->wheelSensor.wheel[i].encoder = mEncoder[i];
 				mOutputData->wheelSensor.wheel[i].speed = currentSpeed[i];
 				mOutputData->wheelSensor.wheel[i].acceleration = speedDiff / timeDiff * 2.0F;
+				
 			}
+			LogDebug("enc: %ld, speed: %f", 
+				mOutputData->wheelSensor.wheel[3].encoder,
+				mOutputData->wheelSensor.wheel[3].speed);
 			
 			
 		} else {
