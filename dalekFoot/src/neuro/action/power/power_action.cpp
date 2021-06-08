@@ -43,7 +43,8 @@ void PowerAction::execute(std::uint64_t cycleCount) {
 				const float d = (currentError - mLastError) * 5.10; 
 				float pid = p + i + d;
 				
-				LogInfo("qlf:%d, encoder: %llu, speed: %f, pid: %f, P:%f I:%f D:%f",
+				LogInfo("cyc: %lu, qlf:%d, encoder: %llu, speed: %f, pid: %f, P:%f I:%f D:%f",
+					cycleCount,
 					mSensorData->wheelSensor.qualifier,
 					mSensorData->wheelSensor.wheel[3].encoder,
 					mSensorData->wheelSensor.wheel[3].speed,

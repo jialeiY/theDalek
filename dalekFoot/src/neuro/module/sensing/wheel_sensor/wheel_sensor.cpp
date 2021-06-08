@@ -34,6 +34,7 @@ WheelSensor::~WheelSensor() {
 
 
 void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_types::HardwareData &hardwareData) {
+	LogDebug("cyc: %llu, enc: %d", cycleCount, hardwareData.input.mcuSensors.motorEncoder[3]);
 	if (mIsFailsafe) {
 		LogError("WheelSensor in failsafe, exited");
 		mOutputData->wheelSensor.qualifier = data_types::Qualifier::QUALIFIER_ERROR_FAILSAFE;
