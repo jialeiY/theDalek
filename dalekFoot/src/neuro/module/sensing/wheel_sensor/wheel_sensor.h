@@ -13,6 +13,12 @@
 namespace sensing {
 namespace wheel_sensor {
 
+namespace detail {
+
+float calculateSpeed(std::int16_t currentEnc, std::int16_t lastEnc, std::uint64_t timeLapse);
+
+}
+
 class WheelSensor : public sensing::ISensor {
 	public:
 		WheelSensor(const std::string &name, framework::thread::EntityAgency &entityAgency);
@@ -23,30 +29,18 @@ class WheelSensor : public sensing::ISensor {
 		std::size_t mFailCount;
 		bool mIsFailsafe;
 
-		std::uint64_t mLastMcuMeasureTime;
-		std::int64_t mLastMeasureTtimeOffset;
-		bool mIsTimeReady;
+		std::int16_t mHwEncoder[3][4];
+		std::int64_t mEncoder[4];
+		std::uint64_t mNeuroMeasurementTime[3];
+		std::uint64_t mMcuMeasurementTime[3];
+		std::uint64_t mGoodDataCount;
+		
+		float mSpeed[4];
 
-		std::int16_t lastHwEncoder[4];
-		bool isEncoderReady;
+
 
 		void handleUnqualifiedData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 		void handleNormalData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
-		/*
-
-		std::int16_t mHwEncoder[kWheelSensorHistorySize][4];
-		std::uint64_t mHwTime[kWheelSensorHistorySize];
-		sensing::WheelSensorData mWheelData[4];
-		
-		std::int32_t mEncoder[kWheelSensorHistorySize][4];
-		float mWheelSpeed[kWheelSensorHistorySize-1][4];
-		float mWheelAcceleration[kWheelSensorHistorySize-2][4];
-		
-		void updateEncoder(void);
-		void updateSpeed(void);
-		void updateAcceleration(void);
-		void writeOutput(void);
-		*/
 
 
 };
