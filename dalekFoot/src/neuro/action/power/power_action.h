@@ -15,6 +15,7 @@ class PowerAction : public IAction {
 	private:
 		float mErrorSum;
 		float mLastError;
+		float mLastOutput;
 	
 };
 
