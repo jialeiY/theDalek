@@ -23,10 +23,14 @@ class WheelSensor : public sensing::ISensor {
 		std::size_t mFailCount;
 		bool mIsFailsafe;
 
+		std::uint64_t mLastMcuMeasureTime;
+		std::int64_t mLastMeasureTtimeOffset;
+		bool mIsTimeReady;
+
 		std::int16_t lastHwEncoder[4];
 		bool isEncoderReady;
 
-		void handleUnqualifiedData(void);
+		void handleUnqualifiedData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 		void handleNormalData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 		/*
 

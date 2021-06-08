@@ -11,6 +11,7 @@ WheelSensor::WheelSensor(const std::string &name, framework::thread::EntityAgenc
 	ISensor(name, entityAgency),
 	mFailCount {0U},
 	mIsFailsafe {false},
+	mIsTimeReady {false},
 	isEncoderReady {false} {
 
 }
@@ -27,9 +28,8 @@ void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_ty
 		return ;
 	}
 
-	// Validate
 	if (hardwareData.input.mcuSensors.qualifier != data_types::Qualifier::QUALIFIER_READ_OK) {
-		handleUnqualifiedData();
+		handleUnqualifiedData(cycleCount, hardwareData);
 	} else {
 		handleNormalData(cycleCount, hardwareData);
 	}
@@ -67,17 +67,32 @@ void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_ty
 	*/
 }
 
-inline void WheelSensor::handleUnqualifiedData(void) {
+inline void WheelSensor::handleUnqualifiedData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
 	LogDebug("unqualified data found");
+	mOutputData->wheel->qualifier = inputData.input.mcuSensors.qualifier;
 	mFailCount ++;
 	if (mFailCount >= kFailCountToFailsafe) {
 		LogFatal("Wheel Sensor entering FAILSAFE");
 		mIsFailsafe = true;
+		mOutputData->wheel->qualifier = data_types::Qualifier::QUALIFIER_ERROR_FAILSAFE;
 	}
 }
 
 inline void WheelSensor::handleNormalData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
 	mFailCount = 0;
+	// Validate time
+	const std::uint64_t mcuMeasureTime = static_cast<std::uint64_t>(inputData.input.mcuSensors.timestampMsec) * 1000ULL + inputData.input.mcuSensors.timestampUsec;
+	const std::uint64_t neuroMeasureTime = inputData.input.cycleStartTime;
+	const std::int64_t measureTimeOffset = mcuMeasureTime - neuroMeasureTime;
+	
+	if (mIsTimeReady) {
+
+	} else {
+		mIsTimeReady = true;
+		mLastMcuMeasureTime = mcuMeasureTime;
+		mLastMeasureTtimeOffset = measureTimeOffset;
+	}
+
 }
 
 /*
