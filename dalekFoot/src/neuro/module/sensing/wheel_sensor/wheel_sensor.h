@@ -41,21 +41,6 @@ class WheelSensor : public sensing::ISensor {
 
 		void handleUnqualifiedData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 		void handleNormalData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
-		/*
-
-		std::int16_t mHwEncoder[kWheelSensorHistorySize][4];
-		std::uint64_t mHwTime[kWheelSensorHistorySize];
-		sensing::WheelSensorData mWheelData[4];
-		
-		std::int32_t mEncoder[kWheelSensorHistorySize][4];
-		float mWheelSpeed[kWheelSensorHistorySize-1][4];
-		float mWheelAcceleration[kWheelSensorHistorySize-2][4];
-		
-		void updateEncoder(void);
-		void updateSpeed(void);
-		void updateAcceleration(void);
-		void writeOutput(void);
-		*/
 
 
 };
