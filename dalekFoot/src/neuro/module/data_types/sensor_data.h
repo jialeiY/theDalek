@@ -7,7 +7,7 @@ namespace data_types {
 
 
 struct SensorData {
-	sensing::WheelSensorData wheel[4];
+	sensing::WheelSensorData wheelSensor;
 };
 
 }

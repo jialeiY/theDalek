@@ -26,7 +26,7 @@ PowerAction::~PowerAction() {
 
 void PowerAction::execute(std::uint64_t cycleCount) {
 	constexpr float target {0.02F};
-	const float currentSpeed = (mSensorData->wheel)[3].speed;
+	const float currentSpeed = (mSensorData->wheelSensor.wheel)[3].speed;
 	const float currentError = target - currentSpeed;
 
 	if (cycleCount > 5) {
@@ -40,7 +40,7 @@ void PowerAction::execute(std::uint64_t cycleCount) {
 		
 		float pid = p + i + d;
 		
-		LogInfo("encoder: %llu speed from sensor: %f, pid: %f, P:%f I:%f D:%f", (mSensorData->wheel)[3].encoder, (mSensorData->wheel)[3].speed, pid, p, i, d);
+		LogInfo("encoder: %llu speed from sensor: %f, pid: %f, P:%f I:%f D:%f", (mSensorData->wheelSensor.wheel)[3].encoder, (mSensorData->wheelSensor.wheel)[3].speed, pid, p, i, d);
 
 		pid = std::min(pid, 100.0F);
 		pid = std::min(pid, 50.0F);

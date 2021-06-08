@@ -6,11 +6,20 @@
 
 namespace sensing {
 
-struct WheelSensorData {
-	data_types::Qualifier qualifier;
-	std::uint64_t encoder;
+namespace detail {
+
+struct WheelData {
+	std::int64_t encoder;
 	float speed;
 	float acceleration;
+};
+
+}
+
+struct WheelSensorData {
+	data_types::Qualifier qualifier;
+	std::uint64_t measurementTime;
+	detail::WheelData wheel[4];
 };
 
 
