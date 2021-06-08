@@ -11,7 +11,7 @@ if __name__=="__main__":
     speaker=Speaker()
 
     face_recognizer=FaceRecognizer(FACE_MODEL_PATH,FACE_SCALE,FACE_THR)
-    dalek_recognizer=DaleksRecognizer(DALEK_MODEL_PATH,DALEK_LABEL_PATH)
+    dalek_recognizer=DaleksRecognizer(DALEK_MODEL_PATH,DALEK_LABEL_PATH,DALEK_SCALE,DALEK_THR)
 
     the_brain=RealBrain(eyes=camera,mouth=speaker,vision_recognizers=[face_recognizer,dalek_recognizer])
     the_brain.start()

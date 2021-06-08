@@ -2,6 +2,7 @@ import threading
 import cv2
 from brain.config import *
 import time
+import os
 
 class RealBrain(object):
 
@@ -40,10 +41,12 @@ class RealBrain(object):
 
     # def test(self):
     #     for _ in range(5):
-    #         with self.mouth.condition:
-    #             self.mouth.set_sound(FACE_DETECTED_SOUND)
-    #             self.mouth.condition.notify_all()
-    #             print("notified")
+    #         # with self.mouth.condition:
+    #         #     self.mouth.set_sound(FACE_DETECTED_SOUND)
+    #         #     self.mouth.condition.notify_all()
+    #         #     print("notified")
+    #         frame=self.eyes.get_frame()
+    #         print(frame)
     #         time.sleep(4)
 
     # def get_vision_output(self):
@@ -69,24 +72,26 @@ class RealBrain(object):
 
                 recognized_output,is_dalek_exist=dalek_recognizer.recognize(recognized_output)
 
+                # with self.condition:
+
+                #     self.vision_output=cv2.imencode(".jpg",output)[1].tobytes()
+                #     self.condition.notify_all()
+                print(f"is face exist:{is_face_exist}")
+                if is_face_exist:
+
+                    with self.mouth.condition:
+                        self.mouth.set_sound(FACE_DETECTED_SOUND)
+                        self.mouth.condition.notify_all()
+
+                print(f"is dalek exist:{is_dalek_exist}")
+                if is_dalek_exist:
+                    with self.mouth.condition:
+                        self.mouth.set_sound(DALEK_DETECTED_SOUND)
+                        self.mouth.condition.notify_all()
+
             output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
+
+            if IS_SAVE_OUTPUT and process_this_frame and  (is_face_exist or is_dalek_exist):
+                    cv2.imwrite(os.path.join(VISION_TEST_PATH,f"vision_{int(time.time())}.jpg"), output)
                 
             process_this_frame=process_this_frame^True
-
-
-            # with self.condition:
-
-            #     self.vision_output=cv2.imencode(".jpg",output)[1].tobytes()
-            #     self.condition.notify_all()
-            print(f"is face exist:{is_face_exist}")
-            if is_face_exist:
-
-                with self.mouth.condition:
-                    self.mouth.set_sound(FACE_DETECTED_SOUND)
-                    self.mouth.condition.notify_all()
-
-            print(f"is dalek exist:{is_dalek_exist}")
-            if is_dalek_exist:
-                with self.mouth.condition:
-                    self.mouth.set_sound(DALEK_DETECTED_SOUND)
-                    self.mouth.condition.notify_all()
