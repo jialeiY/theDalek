@@ -31,7 +31,7 @@ void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_ty
 	if (hardwareData.input.mcuSensors.qualifier != data_types::Qualifier::QUALIFIER_READ_OK) {
 		handleUnqualifiedData();
 	} else {
-		/// @todo: process normal situation
+		handleNormalData(cycleCount, hardwareData);
 	}
 	
 	
@@ -74,6 +74,10 @@ inline void WheelSensor::handleUnqualifiedData(void) {
 		LogFatal("Wheel Sensor entering FAILSAFE");
 		mIsFailsafe = true;
 	}
+}
+
+inline void WheelSensor::handleNormalData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
+	mFailCount = 0;
 }
 
 /*

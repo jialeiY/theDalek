@@ -27,6 +27,7 @@ class WheelSensor : public sensing::ISensor {
 		bool isEncoderReady;
 
 		void handleUnqualifiedData(void);
+		void handleNormalData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData);
 		/*
 
 		std::int16_t mHwEncoder[kWheelSensorHistorySize][4];
