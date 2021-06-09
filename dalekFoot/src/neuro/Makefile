@@ -100,7 +100,7 @@ r: run
 
 
 runreplayer: $(REPLAYER_ELF)
-	./$(BUILD_DIR)/replayer --record-hardware=$(RUNTIME_DIR)/power_jump.dat
+	./$(BUILD_DIR)/replayer --record-hardware=$(RUNTIME_DIR)/goto-failsafe.dat
 
 rr: runreplayer
 

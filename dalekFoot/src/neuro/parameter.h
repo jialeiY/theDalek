@@ -32,6 +32,8 @@ constexpr std::uint64_t kLoopThreadInterval {1000ULL};
 constexpr std::size_t kFailCountToFailsafe {50U};
 #endif
 
+constexpr bool kIsFailsafeEnabled {false};
+
 constexpr std::size_t kWheelSensorHistorySize {3U};
 
 constexpr std::size_t kPersistentWriterBufferSize {128U};

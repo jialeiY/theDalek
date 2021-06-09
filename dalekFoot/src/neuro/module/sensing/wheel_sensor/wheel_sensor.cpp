@@ -35,7 +35,7 @@ WheelSensor::~WheelSensor() {
 
 void WheelSensor::updateFromSensor(const std::uint64_t cycleCount, const data_types::HardwareData &hardwareData) {
 	LogDebug("cyc: %llu, enc: %d", cycleCount, hardwareData.input.mcuSensors.motorEncoder[3]);
-	if (mIsFailsafe) {
+	if (kIsFailsafeEnabled && mIsFailsafe) {
 		LogError("WheelSensor in failsafe, exited");
 		mOutputData->wheelSensor.qualifier = data_types::Qualifier::QUALIFIER_ERROR_FAILSAFE;
 		return ;
@@ -60,7 +60,12 @@ inline void WheelSensor::handleUnqualifiedData(const std::uint64_t cycleCount, c
 	}
 }
 
+int maxFailCount = 0;
 inline void WheelSensor::handleNormalData(const std::uint64_t cycleCount, const data_types::HardwareData &inputData) {
+	if (mFailCount > maxFailCount) {
+		LogDebug("max fail count occur: %d", maxFailCount);
+		maxFailCount = mFailCount;
+	}
 	mFailCount = 0;
 	mGoodDataCount ++;
 	// Validate time
