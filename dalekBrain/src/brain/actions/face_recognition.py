@@ -3,7 +3,7 @@ import face_recognition
 import cv2
 import csv
 import os
-from brain.actions.base_recognition import BaseRecognizer
+from brain.actions.base_recognition import BaseRecognizer,RecognizerOutput
 
 
 def _load_face_encodings(file_path):
@@ -69,10 +69,9 @@ class FaceRecognizerTrainer(object):
 class FaceRecognizer(BaseRecognizer):
 
     
-    def __init__(self,model,scale=0.5,threshold=0.35):
+    def __init__(self,model_path,scale=0.5,threshold=0.35):
 
-        super().__init__(model)
-
+        self.model_path=model_path
         self.scale=scale
         self.threshold=threshold
         
@@ -80,16 +79,18 @@ class FaceRecognizer(BaseRecognizer):
         self.face_encodings=[]
 
         self._load_model()
+    
+    def get_name(self):
+        return "FaceRecognizer"
         
     def _load_model(self):
-        self.face_encodings,self.face_labels=_load_face_encodings(self.model)
+        self.face_encodings,self.face_labels=_load_face_encodings(self.model_path)
 
     def recognize(self,img):
         if img is None:
             return img,False
         
         img=img.copy()
-        font=cv2.FONT_HERSHEY_SIMPLEX
         small_img= cv2.resize(img, (0, 0), fx=self.scale, fy=self.scale)
     
         face_locations = face_recognition.face_locations(small_img,model="hog")
@@ -112,16 +113,17 @@ class FaceRecognizer(BaseRecognizer):
             face_names.append(name)
             face_dists.append(1-face_score)
         
+        output=[]
         for face_loc,name,dist in zip(face_locations,face_names,face_dists):
-            top = int(face_loc[0]/self.scale)
-            right = int(face_loc[1]/self.scale)
-            bottom = int(face_loc[2]/self.scale)
-            left = int(face_loc[3]/self.scale)
 
-            cv2.rectangle(img, (left,top), (right,bottom), (0,255,0), 2)
-            cv2.putText(img, str(name), (left+5,top-5), font, 1, (255,255,255), 2)
-            cv2.putText(img, f"{dist:.2f}", (left+5,top-20), font, 1, (255,255,255), 2)
-        
-        is_face_exist=len(face_names)>0
-        return img,is_face_exist
+
+            output.append(RecognizerOutput(label=name,
+                    score=dist,
+                    x0=int(face_loc[3]/self.scale),
+                    y0=int(face_loc[0]/self.scale),
+                    x1=int(face_loc[1]/self.scale),
+                    y1=int(face_loc[2]/self.scale)
+
+
+        return output
 

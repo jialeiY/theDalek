@@ -68,14 +68,21 @@ class RealBrain(object):
 
             recognized_output=frame
             if process_this_frame:
-                recognized_output,is_face_exist=face_recognizer.recognize(frame)
+                face_output=face_recognizer.recognize(frame)
 
-                recognized_output,is_dalek_exist=dalek_recognizer.recognize(recognized_output)
+                dalek_output=dalek_recognizer.recognize(frame)
 
                 # with self.condition:
 
                 #     self.vision_output=cv2.imencode(".jpg",output)[1].tobytes()
                 #     self.condition.notify_all()
+                
+
+                recognized_output=self._build_recognized_img(frame,face_output+dalek_output)
+
+                is_face_exist=len(face_output)>0
+                is_dalek_exist=len(dalek_output)>0
+
                 print(f"is face exist:{is_face_exist}")
                 if is_face_exist:
 
@@ -90,8 +97,20 @@ class RealBrain(object):
                         self.mouth.condition.notify_all()
 
             output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
-
-            if IS_SAVE_OUTPUT and process_this_frame and  (is_face_exist or is_dalek_exist):
-                    cv2.imwrite(os.path.join(VISION_TEST_PATH,f"vision_{int(time.time())}.jpg"), output)
                 
             process_this_frame=process_this_frame^True
+
+    def _build_recognized_img(self,img,outputs):
+
+            font=cv2.FONT_HERSHEY_SIMPLEX
+            for o in outputs:
+                cv2.rectangle(img, (o.x0,o.y0), (o.x1,o.y1), (0,255,0), 2)
+                cv2.putText(img, o.label, (left+5,top-5), font, 1, (255,255,255), 2)
+                cv2.putText(img, f"{o.score:.2f}", (left+5,top-20), font, 1, (255,255,255), 2)
+
+
+            if IS_SAVE_OUTPUT and len(outputs)>0:
+                cv2.imwrite(os.path.join(VISION_TEST_PATH,f"vision_{int(time.time())}.jpg"), img)
+
+            return img
+        

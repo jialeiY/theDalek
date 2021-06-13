@@ -1,10 +1,10 @@
 import cv2
-
-from brain.config import DALEK_MODEL_PATH,DALEK_LABEL_PATH
 import os
 from nnLib.ssd.mobilenetv1_ssd import create_mobilenetv1_ssd_predictor,create_mobilenetv1_ssd
+from brain.actions.base_recognition import BaseRecognizer,RecognizerOutput
 
-class DaleksRecognizer(object):
+
+class DaleksRecognizer(BaseRecognizer):
 
     def __init__(self,model_path,label_path,scale=0.5,threshold=0.5):
         self.model_path=model_path
@@ -16,10 +16,13 @@ class DaleksRecognizer(object):
         self.scale=scale
         self.threshold=threshold
 
-        self.load_model(model_path)
+        self._load_model()
         print("load dalek model done")
+    
+    def get_name(self):
+        return "DaleksRecognizer"
 
-    def load_model(self,model_path):
+    def _load_model(self):
 
         self.labels=[name.strip() for name in open(self.label_path).readlines()]
 
@@ -36,38 +39,20 @@ class DaleksRecognizer(object):
             return img,False
         
         img=img.copy()
-        font=cv2.FONT_HERSHEY_SIMPLEX
         small_img= cv2.resize(img, (0, 0), fx=self.scale, fy=self.scale)
 
         boxes, labels, probs = self.model.predict(small_img, 10,self.threshold)
+
     
-        
+        output=[]
         for i in range(boxes.size(0)):
-            
+
             box = boxes[i, :]
-            top = int(box[1]/self.scale)
-            right = int(box[2]/self.scale)
-            bottom = int(box[3]/self.scale)
-            left = int(box[0]/self.scale)
-            cv2.rectangle(img, (left,top), (right,bottom), (0,255,0), 2)
+            output.append(RecognizerOutput(label=self.labels[labels[i]],
+                             score=probs[i],
+                             x0=int(box[0]/self.scale),
+                             y0=int(box[1]/self.scale),
+                             x1=int(box[2]/self.scale),
+                             y1=int(box[3]/self.scale)))
 
-            label = f"{self.labels[labels[i]]}: {probs[i]:.2f}"
-
-            cv2.putText(img, label,(left + 5, top +5), font,1,(255, 0, 255),2) 
-
-        is_dalek_exist=boxes.size(0)>0
-        return img,is_dalek_exist
-
-
-# if __name__=="__main__":
-#     dd=DaleksRecognizer(DALEK_MODEL_PATH,DALEK_LABEL_PATH)
-#     img=cv2.imread('test_data/test_daleks.jpg')
-#     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-#     result=dd.recognize(img)
-#     print(result)
-
-
-    
-
-
-        
+        return output
