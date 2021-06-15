@@ -105,8 +105,8 @@ class RealBrain(object):
             font=cv2.FONT_HERSHEY_SIMPLEX
             for o in outputs:
                 cv2.rectangle(img, (o.x0,o.y0), (o.x1,o.y1), (0,255,0), 2)
-                cv2.putText(img, o.label, (left+5,top-5), font, 1, (255,255,255), 2)
-                cv2.putText(img, f"{o.score:.2f}", (left+5,top-20), font, 1, (255,255,255), 2)
+                cv2.putText(img, o.label, (o.x0+5,o.y0-5), font, 1, (255,255,255), 2)
+                cv2.putText(img, f"{o.score:.2f}", (o.x0+5,o.y0-20), font, 1, (255,255,255), 2)
 
 
             if IS_SAVE_OUTPUT and len(outputs)>0:

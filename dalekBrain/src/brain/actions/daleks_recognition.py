@@ -36,7 +36,7 @@ class DaleksRecognizer(BaseRecognizer):
     def recognize(self,img):
 
         if img is None:
-            return img,False
+            return []
         
         img=img.copy()
         small_img= cv2.resize(img, (0, 0), fx=self.scale, fy=self.scale)
@@ -54,5 +54,4 @@ class DaleksRecognizer(BaseRecognizer):
                              y0=int(box[1]/self.scale),
                              x1=int(box[2]/self.scale),
                              y1=int(box[3]/self.scale)))
-
         return output

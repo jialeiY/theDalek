@@ -88,7 +88,7 @@ class FaceRecognizer(BaseRecognizer):
 
     def recognize(self,img):
         if img is None:
-            return img,False
+            return []
         
         img=img.copy()
         small_img= cv2.resize(img, (0, 0), fx=self.scale, fy=self.scale)
@@ -122,7 +122,7 @@ class FaceRecognizer(BaseRecognizer):
                     x0=int(face_loc[3]/self.scale),
                     y0=int(face_loc[0]/self.scale),
                     x1=int(face_loc[1]/self.scale),
-                    y1=int(face_loc[2]/self.scale)
+                    y1=int(face_loc[2]/self.scale)))
 
 
         return output
