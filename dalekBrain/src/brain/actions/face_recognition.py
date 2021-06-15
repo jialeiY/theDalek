@@ -86,18 +86,14 @@ class FaceRecognizer(BaseRecognizer):
     def _load_model(self):
         self.face_encodings,self.face_labels=_load_face_encodings(self.model_path)
 
-    def recognize(self,img):
-        if img is None:
-            return []
-        
-        img=img.copy()
-        small_img= cv2.resize(img, (0, 0), fx=self.scale, fy=self.scale)
     
-        face_locations = face_recognition.face_locations(small_img,model="hog")
-        face_encodings = face_recognition.face_encodings(small_img, face_locations)
+    def _predict(self,img):
 
-        face_names=[]
-        face_dists=[]
+        face_locations = face_recognition.face_locations(img,model="hog")
+        face_encodings = face_recognition.face_encodings(img, face_locations)
+
+        labels=[]
+        probs=[]
 
         for face_encoding in face_encodings:
             name="unknown"
@@ -110,20 +106,10 @@ class FaceRecognizer(BaseRecognizer):
                 if face_score<=self.threshold:
                     name=self.face_labels[best_match_index]
 
-            face_names.append(name)
-            face_dists.append(1-face_score)
+            labels.append(name)
+            probs.append(1-face_score)
+
+
+        boxes=[(loc[3],loc[0],loc[1],loc[2]) for loc in face_locations]
         
-        output=[]
-        for face_loc,name,dist in zip(face_locations,face_names,face_dists):
-
-
-            output.append(RecognizerOutput(label=name,
-                    score=dist,
-                    x0=int(face_loc[3]/self.scale),
-                    y0=int(face_loc[0]/self.scale),
-                    x1=int(face_loc[1]/self.scale),
-                    y1=int(face_loc[2]/self.scale)))
-
-
-        return output
-
+        return boxes,labels,probs

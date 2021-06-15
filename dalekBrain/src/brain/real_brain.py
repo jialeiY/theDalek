@@ -3,10 +3,11 @@ import cv2
 from brain.config import *
 import time
 import os
+import functools
 
 class RealBrain(object):
 
-    def __init__(self,eyes,mouth,vision_recognizers=[]):
+    def __init__(self,eyes,mouth,vision_recognizers=[],rules=[]):
         self.eyes=eyes
         self.mouth=mouth
 
@@ -19,6 +20,8 @@ class RealBrain(object):
         self.vision_output=None
         self.vision_width=480
         self.vision_height=320
+
+        self.rules=rules
 
 
     def start(self):
@@ -58,19 +61,21 @@ class RealBrain(object):
     def _vision_recognition_and_play_sound(self):
 
         process_this_frame = True
-        is_face_exist=False
-        is_dalek_exist=False
-        face_recognizer=self.vision_recognizers[0]
-        dalek_recognizer=self.vision_recognizers[1]
+
 
         while True:
             frame=self.eyes.get_frame()
 
-            recognized_output=frame
+            recognized_img=frame
             if process_this_frame:
-                face_output=face_recognizer.recognize(frame)
 
-                dalek_output=dalek_recognizer.recognize(frame)
+                recognizer_output_map={}
+
+                for recognizer in self.vision_recognizers:
+                    output=recognizer.recognize(frame)
+
+                    recognizer_output_map[recognizer.get_name()]=output
+
 
                 # with self.condition:
 
@@ -78,35 +83,29 @@ class RealBrain(object):
                 #     self.condition.notify_all()
                 
 
-                recognized_output=self._build_recognized_img(frame,face_output+dalek_output)
+                recognized_img=self._build_recognized_img(frame,recognizer_output_map)
 
-                is_face_exist=len(face_output)>0
-                is_dalek_exist=len(dalek_output)>0
+                for rule in self.rules:
+                    is_hit=functools.reduce(lambda a,b:a and len(recognizer_output_map.get(b,[]))>0,rule["criteria"],True)
+                    print(f"rule {rule['name']}: {is_hit}")
+                    if is_hit:
+                        with self.mouth.condition:
+                            self.mouth.set_sound(rule["output"])
+                            self.mouth.condition.notify_all()
 
-                print(f"is face exist:{is_face_exist}")
-                if is_face_exist:
 
-                    with self.mouth.condition:
-                        self.mouth.set_sound(FACE_DETECTED_SOUND)
-                        self.mouth.condition.notify_all()
-
-                print(f"is dalek exist:{is_dalek_exist}")
-                if is_dalek_exist:
-                    with self.mouth.condition:
-                        self.mouth.set_sound(DALEK_DETECTED_SOUND)
-                        self.mouth.condition.notify_all()
-
-            output=cv2.cvtColor(recognized_output , cv2.COLOR_RGB2BGR)
+            output=cv2.cvtColor(recognized_img , cv2.COLOR_RGB2BGR)
                 
             process_this_frame=process_this_frame^True
 
-    def _build_recognized_img(self,img,outputs):
+    def _build_recognized_img(self,img,output_map):
 
             font=cv2.FONT_HERSHEY_SIMPLEX
-            for o in outputs:
-                cv2.rectangle(img, (o.x0,o.y0), (o.x1,o.y1), (0,255,0), 2)
-                cv2.putText(img, o.label, (o.x0+5,o.y0-5), font, 1, (255,255,255), 2)
-                cv2.putText(img, f"{o.score:.2f}", (o.x0+5,o.y0-20), font, 1, (255,255,255), 2)
+            for outputs in output_map.values():
+                for o in outputs:
+                    cv2.rectangle(img, (o.x0,o.y0), (o.x1,o.y1), (0,255,0), 2)
+                    cv2.putText(img, o.label, (o.x0+5,o.y0-5), font, 1, (255,255,255), 2)
+                    cv2.putText(img, f"{o.score:.2f}", (o.x0+5,o.y0-20), font, 1, (255,255,255), 2)
 
 
             if IS_SAVE_OUTPUT and len(outputs)>0:

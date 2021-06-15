@@ -18,7 +18,7 @@ DALEK_DETECTED_SOUND="../model/audio/goStronger.mp3"
 DALEK_SCALE=1
 DALEK_THR=0.9
 
-DALEK_FACE_DETECTED_SOUND=""
+DALEK_FACE_DETECTED_SOUND="../model/audio/destroy.mp3"
 
 
 # test_file config
@@ -26,11 +26,9 @@ IS_SAVE_OUTPUT=True
 VISION_TEST_PATH="test_data/vision_output"
 
 # rules
-# rules={
-#     "rules":[
-#         {"action":["FaceRecognizer"],"output":FACE_DETECTED_SOUND},
-#         {"action":["DaleksRecognizer"],"output":DALEK_DETECTED_SOUND},
-#         {"action":["FaceRecognizer","DaleksRecognizer"],"output":DALEK_FACE_DETECTED_SOUND}
-#     ]}
-
-# }
+# TODO: priority?
+rules=[
+        {"name":"isFaceAndDaleks","criteria":["FaceRecognizer","DaleksRecognizer"],"output":DALEK_FACE_DETECTED_SOUND},
+        {"name":"isFace","criteria":["FaceRecognizer"],"output":FACE_DETECTED_SOUND},
+        {"name":"isDaleks","criteria":["DaleksRecognizer"],"output":DALEK_DETECTED_SOUND}
+    ]
