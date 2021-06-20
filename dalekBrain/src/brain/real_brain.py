@@ -41,6 +41,7 @@ class RealBrain(object):
 
         self.eye_thread.join()
         self.mouth_thread.join()
+        self.vision_action_thread.join()
 
     # def test(self):
     #     for _ in range(5):
