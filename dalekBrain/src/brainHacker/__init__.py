@@ -6,7 +6,8 @@ def create_app(brain=None):
     app.config["brain"]=brain
 
     from brainHacker.hacker import bp
-    app.register_blueprint(bp)
+    with app.app_context():
+        app.register_blueprint(bp)
 
     return app
 

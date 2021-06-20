@@ -17,6 +17,7 @@ class RealBrain(object):
         self.vision_recognizers=vision_recognizers
         self.vision_action_thread=None
 
+        self.vision_condition=threading.Condition()
         self.vision_output=None
         self.vision_width=480
         self.vision_height=320
@@ -28,7 +29,6 @@ class RealBrain(object):
         self.eye_thread=threading.Thread(target=self.eyes.start)
         self.eye_thread.start()
 
-        
         self.mouth_thread=threading.Thread(target=self.mouth.start)
         self.mouth_thread.start()
 
@@ -53,10 +53,11 @@ class RealBrain(object):
     #         print(frame)
     #         time.sleep(4)
 
-    # def get_vision_output(self):
-    #     with self.condition:
-    #         self.condition.wait()
-    #     return self.vision_output
+    def get_vision_output(self):
+        # with self.vision_condition:
+        #     self.vision_condition.wait()
+
+        return self.vision_output
     
 
     def _vision_recognition_and_play_sound(self):
@@ -65,26 +66,20 @@ class RealBrain(object):
 
 
         while True:
-            frame=self.eyes.get_frame()
-
-            recognized_img=frame
+    
+            img=self.eyes.get_frame()
+            recognized_img=img
             if process_this_frame:
 
                 recognizer_output_map={}
 
                 for recognizer in self.vision_recognizers:
-                    output=recognizer.recognize(frame)
+                    output=recognizer.recognize(img)
 
                     recognizer_output_map[recognizer.get_name()]=output
 
 
-                # with self.condition:
-
-                #     self.vision_output=cv2.imencode(".jpg",output)[1].tobytes()
-                #     self.condition.notify_all()
-                
-
-                recognized_img=self._build_recognized_img(frame,recognizer_output_map)
+                recognized_img=self._build_recognized_img(img,recognizer_output_map)
 
                 for rule in self.rules:
                     is_hit=functools.reduce(lambda a,b:a and len(recognizer_output_map.get(b,[]))>0,rule["criteria"],True)
@@ -96,6 +91,10 @@ class RealBrain(object):
 
 
             output=cv2.cvtColor(recognized_img , cv2.COLOR_RGB2BGR)
+
+            with self.vision_condition:
+                self.vision_output=output
+                self.vision_condition.notify_all()
                 
             process_this_frame=process_this_frame^True
 

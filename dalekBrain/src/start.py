@@ -23,7 +23,7 @@ if __name__=="__main__":
 
 
     hacker_app=create_app(the_brain)
-    hacker_p=Process(target=run_app,args=(hacker_app,))
+    hacker_p=threading.Thread(target=run_app,args=(hacker_app,))
     
     hacker_p.start()
 
