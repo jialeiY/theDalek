@@ -4,15 +4,18 @@ from brain.config import *
 import time
 import os
 import functools
+from brain.executors.motor import MotorAction
 
 class RealBrain(object):
 
-    def __init__(self,eyes,mouth,vision_recognizers=[],rules=[]):
+    def __init__(self,eyes,mouth,dong,vision_recognizers=[],rules=[]):
         self.eyes=eyes
         self.mouth=mouth
+        self.dong=dong
 
         self.eye_thread=None
         self.mouth_thread=None
+        self.dong_thread=None
 
         self.vision_recognizers=vision_recognizers
         self.vision_action_thread=None
@@ -35,22 +38,24 @@ class RealBrain(object):
         self.vision_action_thread=threading.Thread(target=self._vision_recognition_and_play_sound)
         self.vision_action_thread.start()
 
+        self.dong_thread=threading.Thread(target=self.dong.start)
+        self.dong_thread.start()
 
         # thread=threading.Thread(target=self.test)
         # thread.start()
 
         self.eye_thread.join()
         self.mouth_thread.join()
+        self.dong_thread.join()
         self.vision_action_thread.join()
 
     # def test(self):
     #     for _ in range(5):
-    #         # with self.mouth.condition:
-    #         #     self.mouth.set_sound(FACE_DETECTED_SOUND)
-    #         #     self.mouth.condition.notify_all()
-    #         #     print("notified")
-    #         frame=self.eyes.get_frame()
-    #         print(frame)
+    #         with self.dong.condition:
+    #             self.dong.set_action(MotorAction.MOVE_FORWARD)
+    #             self.dong.condition.notify_all()
+    #             print("notified")
+            
     #         time.sleep(4)
 
     def get_vision_output(self):
@@ -108,7 +113,7 @@ class RealBrain(object):
                     cv2.putText(img, f"{o.score:.2f}", (o.x0+5,o.y0-20), font, 1, (255,255,255), 2)
 
 
-            if IS_SAVE_OUTPUT and len(outputs)>0:
+            if IS_SAVE_OUTPUT and len(output_map)>0:
                 cv2.imwrite(os.path.join(VISION_TEST_PATH,f"vision_{int(time.time())}.jpg"), img)
 
             return img

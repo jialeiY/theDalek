@@ -1,34 +1,39 @@
 import serial
+import threading
+from enum import Enum
+
+
+class MotorAction(Enum):
+    CAM_UP="cam_up"
+    CAM_DOWN="cam_down"
+
+    MOVE_FORWARD="move_forward"
+    MOVE_BACKWORD="move_backward"
+    MOVE_LEFT="move_left"
+    MOVE_RIGHT="move_right"
 
 class MotorControl(object):
 
     def __init__(self):
         self.serial=serial.Serial("/dev/ttyACM0",9600)
+        self._action:MotorAction=None
+        self.condition=threading.Condition()
+        
 
-    def __send(self,message):
+    def _send(self,message):
         self.serial.write(message.encode())
+
+    def set_action(self,action:MotorAction):
+        self._action=action
     
-    def move_camera(self,direction):
-        out=""
-        if direction=="up":
-           out="cam_up"
-        elif direction=="down":
-            out="cam_down"
-        if out:
-            self.__send(out)
-    def move_car(self,direction):
-        out=""
-        if direction=="forward":
-            out="move_forward"
-        elif direction=="backward":
-            out="move_backward"
-        elif direction=="left":
-            out="move_left"
-        elif direction=="right":
-            out="move_right"
-        if out:
-            self.__send(out)
-
-
-
-motor_control=MotorControl()
+    def start(self):
+        print("start motor")
+        while True:
+            with self.condition:
+                self.condition.wait()
+            self.move()
+        print("stop motor")
+    
+    def move(self):
+        self._send(self._action.value)
+    
