@@ -38,11 +38,12 @@ def video_stream():
 #     motor_control.move_camera(direction)
 #     return "success"
 
-# @app.route("/car-motor",methods=["POST"])
-# def move_car():
-#     direction=request.form.get("move")
-#     motor_control.move_car(direction)
-#     return "success"
+@bp.route("/car-motor",methods=["POST"])
+def move_car():
+    direction=request.form.get("move")
+    brain=current_app.config["brain"]
+    brain.let_us_move(direction)
+    return "success"
 
 # @app.route("/faces",methods=["POST"])
 # def add_face():

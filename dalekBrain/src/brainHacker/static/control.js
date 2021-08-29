@@ -7,16 +7,16 @@ $("#cam_down").click(function(){
 });
 
 $("#car_forward").click(function(){
-    $.post("/car-motor", {move:"forward"})
+    $.post("/car-motor", {move:"move_forward"})
 });
 $("#car_backward").click(function(){
-    $.post("/car-motor", {move:"backward"})
+    $.post("/car-motor", {move:"move_backward"})
 });
 $("#car_left").click(function(){
-    $.post("/car-motor", {move:"left"})
+    $.post("/car-motor", {move:"move_left"})
 });
 $("#car_right").click(function(){
-    $.post("/car-motor", {move:"right"})
+    $.post("/car-motor", {move:"move_right"})
 });
 
 

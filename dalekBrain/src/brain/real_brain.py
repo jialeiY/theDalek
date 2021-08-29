@@ -58,6 +58,17 @@ class RealBrain(object):
             
     #         time.sleep(4)
 
+    def let_us_move(self,action_str):
+        with self.dong.condition:
+            try:
+                action=MotorAction(action_str)
+            except Exception as e:
+                print(f"not a valid action {action_str}")
+                return
+            self.dong.set_action(action)
+            self.dong.condition.notify_all()
+            print(f"move action: {action}")
+
     def get_vision_output(self):
         # with self.vision_condition:
         #     self.vision_condition.wait()
