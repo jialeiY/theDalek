@@ -8,7 +8,7 @@ from brain.executors.motor import MotorAction
 
 class RealBrain(object):
 
-    def __init__(self,eyes,mouth,dong,vision_recognizers=[],rules=[]):
+    def __init__(self,eyes,mouth,dong,vision_width,vision_height,vision_recognizers=[],rules=[]):
         self.eyes=eyes
         self.mouth=mouth
         self.dong=dong
@@ -22,8 +22,8 @@ class RealBrain(object):
 
         self.vision_condition=threading.Condition()
         self.vision_output=None
-        self.vision_width=480
-        self.vision_height=320
+        self.vision_width=vision_width
+        self.vision_height=vision_height
 
         self.rules=rules
 
@@ -91,8 +91,8 @@ class RealBrain(object):
 
                 for recognizer in self.vision_recognizers:
                     output=recognizer.recognize(img)
-
-                    recognizer_output_map[recognizer.get_name()]=output
+                    if len(output)>0:
+                        recognizer_output_map[recognizer.get_name()]=output
 
 
                 recognized_img=self._build_recognized_img(img,recognizer_output_map)
@@ -112,7 +112,7 @@ class RealBrain(object):
                 self.vision_output=output
                 self.vision_condition.notify_all()
                 
-            process_this_frame=process_this_frame^True
+            # process_this_frame=process_this_frame^True
 
     def _build_recognized_img(self,img,output_map):
 

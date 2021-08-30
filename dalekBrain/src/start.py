@@ -21,7 +21,7 @@ if __name__=="__main__":
     face_recognizer=FaceRecognizer(FACE_MODEL_PATH,FACE_SCALE,FACE_THR)
     dalek_recognizer=DaleksRecognizer(DALEK_MODEL_PATH,DALEK_LABEL_PATH,DALEK_SCALE,DALEK_THR)
 
-    the_brain=RealBrain(eyes=camera,mouth=speaker,dong=dong,vision_recognizers=[face_recognizer,dalek_recognizer],rules=rules)
+    the_brain=RealBrain(eyes=camera,mouth=speaker,dong=dong,vision_width=VISION_WIDTH,vision_height=VISION_HEIGHT,vision_recognizers=[face_recognizer,dalek_recognizer],rules=rules)
 
     hacker_app=create_app(the_brain)
     hacker_p=threading.Thread(target=run_app,args=(hacker_app,))

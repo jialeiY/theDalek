@@ -1,7 +1,7 @@
 import os
 
-VISION_WIDTH= 480
-VISION_HEIGHT= 340
+VISION_WIDTH= 640
+VISION_HEIGHT= 480
 
 CAMERA_NAME=os.environ.get('CAMERA_NAME',"jetsoncamera")
 

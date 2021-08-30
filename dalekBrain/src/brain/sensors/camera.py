@@ -94,8 +94,7 @@ class JetsonCamera(BaseCamera):
             if output_stream is not None:
                 output_stream=cv2.cvtColor(output_stream , cv2.COLOR_BGR2RGB)
 
-
-            yield output_stream
+                yield output_stream
 
 
 
