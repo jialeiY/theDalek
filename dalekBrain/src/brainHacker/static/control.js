@@ -1,9 +1,9 @@
 $("#cam_up").click(function(){
-    $.post("/cam-motor", {move:"up"})
+    $.post("/cam-motor", {move:"cam_up"})
 });
 
 $("#cam_down").click(function(){
-    $.post("/cam-motor", {move:"down"})
+    $.post("/cam-motor", {move:"cam_down"})
 });
 
 $("#car_forward").click(function(){

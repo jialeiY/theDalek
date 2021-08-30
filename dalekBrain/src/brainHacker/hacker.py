@@ -32,11 +32,12 @@ def video_stream():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-# @app.route("/cam-motor",methods=["POST"])
-# def move_camera():
-#     direction=request.form.get('move')
-#     motor_control.move_camera(direction)
-#     return "success"
+@bp.route("/cam-motor",methods=["POST"])
+def move_camera():
+    direction=request.form.get('move')
+    brain=current_app.config["brain"]
+    brain.let_us_move(direction)
+    return "success"
 
 @bp.route("/car-motor",methods=["POST"])
 def move_car():
