@@ -5,10 +5,13 @@ class RecognizerOutput(object):
         self.label=label
         self.score=score
 
-        self.x0=x0 #left
+        self.x0=x0  #left
         self.y0=y0  #top
         self.x1=x1  #right
         self.y1=y1  #bottom
+
+        self.id=None
+        self.new_obj=True
         
 class BaseRecognizer(object):
 
