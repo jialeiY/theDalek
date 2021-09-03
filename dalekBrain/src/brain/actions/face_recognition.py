@@ -6,7 +6,7 @@ import os
 from brain.actions.base_recognition import BaseRecognizer
 
 
-def _load_face_encodings(file_path):
+def _load_face_encodings(file_path,prefix=""):
     face_labels=[]
     face_encodings=[]
     with open(file_path,newline='') as csvfile:
@@ -16,7 +16,7 @@ def _load_face_encodings(file_path):
             name=row[0]
             encoding=np.asarray(row[1:],dtype=np.float64)
 
-            face_labels.append(name)
+            face_labels.append(prefix+name)
             face_encodings.append(encoding)
     return face_encodings,face_labels
 
@@ -78,14 +78,16 @@ class FaceRecognizer(BaseRecognizer):
         self.face_labels=[]
         self.face_encodings=[]
 
+        self.unknwon_label="face_unknown"
+        self.label_prefix="face_"
+
         self._load_model()
     
     def get_name(self):
         return "FaceRecognizer"
         
     def _load_model(self):
-        self.face_encodings,self.face_labels=_load_face_encodings(self.model_path)
-
+        self.face_encodings,self.face_labels=_load_face_encodings(self.model_path,self.label_prefix)
     
     def _predict(self,img):
 
@@ -96,7 +98,7 @@ class FaceRecognizer(BaseRecognizer):
         probs=[]
 
         for face_encoding in face_encodings:
-            name="unknown"
+            name=self.unknwon_label
             face_score=1
 
             if self.face_encodings:

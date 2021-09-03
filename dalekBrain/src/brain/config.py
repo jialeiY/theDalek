@@ -28,7 +28,7 @@ VISION_TEST_PATH="test_data/vision_output"
 # rules
 # TODO: priority?
 rules=[
-        {"name":"isFaceAndDaleks","criteria":["FaceRecognizer","DaleksRecognizer"],"output":DALEK_FACE_DETECTED_SOUND},
-        {"name":"isFace","criteria":["FaceRecognizer"],"output":FACE_DETECTED_SOUND},
-        {"name":"isDaleks","criteria":["DaleksRecognizer"],"output":DALEK_DETECTED_SOUND}
+        {"name":"isFaceAndDaleks","criteria":["face_","dalek"],"output":DALEK_FACE_DETECTED_SOUND},
+        {"name":"isFace","criteria":["face_"],"output":FACE_DETECTED_SOUND},
+        {"name":"isDaleks","criteria":["dalek"],"output":DALEK_DETECTED_SOUND}
     ]

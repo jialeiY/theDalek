@@ -33,7 +33,7 @@ class DaleksRecognizer(BaseRecognizer):
         self.model = create_mobilenetv1_ssd_predictor(net, candidate_size=200)
 
     def _predict(self,img):
-        boxes, label_ids, probs = self.model.predict(img, 10,self.threshold)
+        boxes, label_ids, probs = self.model.predict(image=img, top_k=10,prob_threshold=self.threshold)
         
         labels=[self.labels[i] for i in label_ids]
 

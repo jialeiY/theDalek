@@ -65,7 +65,7 @@ class JetsonCamera(BaseCamera):
 
 
 
-    def _get_jetson_gstreamer_source(self,capture_width=640, capture_height=480, display_width=640, display_height=480, framerate=15, flip_method=0):
+    def _get_jetson_gstreamer_source(self,capture_width=1024, capture_height=680, display_width=640, display_height=480, framerate=15, flip_method=0):
         """
         Return an OpenCV-compatible video source description that uses gstreamer to capture video from the RPI camera on a Jetson Nano
         """
@@ -139,9 +139,9 @@ class OpenCVCamera(BaseCamera):
 class MockCamera(BaseCamera):
 
     # imgs = [open(join(dirname(abspath(__file__)),f"../../test_data/mock{n}.jpg"), 'rb').read() for n in ['1', '2', '3']]
-    imgs=[cv2.imread(join(dirname(abspath(__file__)),f"../../test_data/mock{n}.jpg")) for n in ['1', '2', '3']]
+    imgs=[cv2.imread(join(dirname(abspath(__file__)),f"../../test_data/mock{n}.jpg")) for n in ['1', '2', '3','4']]
 
     def frames(self):
         while True:
-            time.sleep(1)
-            yield MockCamera.imgs[int(time.time()) % 3]
+            time.sleep(2)
+            yield MockCamera.imgs[int(time.time()) % 4]

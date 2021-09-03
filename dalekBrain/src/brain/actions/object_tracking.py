@@ -16,9 +16,15 @@ class CentroidObjectTracker(object):
         self.next_id=0
         self.existing_objs=OrderedDict()
         self.disappeared_objs={}
-        self.timeout=30
+        self.timeout=5
 
     def track(self,objects):
+
+        if len(objects)==0:
+            for i in list(self.existing_objs.keys()):
+                self.deregister(i)
+
+            return objects
 
         new_obj_centroids=np.asarray([self._calc_centroid(obj) for obj in objects])
 
