@@ -5,6 +5,8 @@ import time
 import os
 import functools
 from brain.executors.motor import MotorAction
+from brain.actions.object_tracking import CentroidObjectTracker
+
 
 class RealBrain(object):
 
@@ -26,6 +28,8 @@ class RealBrain(object):
         self.vision_height=vision_height
 
         self.rules=rules
+
+        self.tracker=CentroidObjectTracker()
 
 
     def start(self):
@@ -92,6 +96,7 @@ class RealBrain(object):
                 for recognizer in self.vision_recognizers:
                     output=recognizer.recognize(img)
                     if len(output)>0:
+                        output=self.tracker.track(output)
                         recognizer_output_map[recognizer.get_name()]=output
 
 
@@ -122,6 +127,8 @@ class RealBrain(object):
                     cv2.rectangle(img, (o.x0,o.y0), (o.x1,o.y1), (0,255,0), 2)
                     cv2.putText(img, o.label, (o.x0+5,o.y0-5), font, 1, (255,255,255), 2)
                     cv2.putText(img, f"{o.score:.2f}", (o.x0+5,o.y0-20), font, 1, (255,255,255), 2)
+                    if o.id is not None:
+                        cv2.putText(img, f"{o.id}", (int((o.x0+o.x1)/2),int((o.y0+o.y1)/2)), font, 1, (255,255,255), 2)
 
 
             if IS_SAVE_OUTPUT and len(output_map)>0:

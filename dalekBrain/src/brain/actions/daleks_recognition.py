@@ -1,7 +1,7 @@
 import cv2
 import os
 from nnLib.ssd.mobilenetv1_ssd import create_mobilenetv1_ssd_predictor,create_mobilenetv1_ssd
-from brain.actions.base_recognition import BaseRecognizer,RecognizerOutput
+from brain.actions.base_recognition import BaseRecognizer
 
 
 class DaleksRecognizer(BaseRecognizer):

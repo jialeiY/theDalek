@@ -1,4 +1,5 @@
 import cv2
+from brain.actions.object_tracking import CentroidObjectTracker
 
 class RecognizerOutput(object):
     def __init__(self,label,score,x0,y0,x1,y1):
@@ -11,7 +12,7 @@ class RecognizerOutput(object):
         self.y1=y1  #bottom
 
         self.id=None
-        self.new_obj=True
+        self.is_new_obj=True
         
 class BaseRecognizer(object):
 

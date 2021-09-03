@@ -3,7 +3,7 @@ import face_recognition
 import cv2
 import csv
 import os
-from brain.actions.base_recognition import BaseRecognizer,RecognizerOutput
+from brain.actions.base_recognition import BaseRecognizer
 
 
 def _load_face_encodings(file_path):
