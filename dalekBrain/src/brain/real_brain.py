@@ -5,6 +5,9 @@ import time
 import os
 import functools
 from brain.executors.motor import MotorAction
+from brain.actions.object_tracking import CentroidObjectTracker
+import re
+
 
 class RealBrain(object):
 
@@ -26,6 +29,8 @@ class RealBrain(object):
         self.vision_height=vision_height
 
         self.rules=rules
+
+        self.tracker=CentroidObjectTracker()
 
 
     def start(self):
@@ -78,6 +83,7 @@ class RealBrain(object):
 
     def _vision_recognition_and_play_sound(self):
 
+
         process_this_frame = True
 
 
@@ -87,18 +93,22 @@ class RealBrain(object):
             recognized_img=img
             if process_this_frame:
 
-                recognizer_output_map={}
+                recognizer_outputs=[]
 
                 for recognizer in self.vision_recognizers:
-                    output=recognizer.recognize(img)
-                    if len(output)>0:
-                        recognizer_output_map[recognizer.get_name()]=output
+                    recognizer_outputs+=recognizer.recognize(img)
+                
+                # track
+                recognizer_outputs=self.tracker.track(recognizer_outputs)
 
+                recognized_img=self._build_recognized_img(img,recognizer_outputs)
 
-                recognized_img=self._build_recognized_img(img,recognizer_output_map)
+                hit_labels=set(o.label for o in recognizer_outputs if o.is_new_obj)
+                hit_labels_prefix=set(o.label[:o.label.index("_")+1] for o in recognizer_outputs if o.is_new_obj and "_" in o.label)
 
                 for rule in self.rules:
-                    is_hit=functools.reduce(lambda a,b:a and len(recognizer_output_map.get(b,[]))>0,rule["criteria"],True)
+                    is_hit=functools.reduce(lambda a,b:a and (b in hit_labels) or (b in hit_labels_prefix),rule["criteria"],True)
+
                     print(f"rule {rule['name']}: {is_hit}")
                     if is_hit:
                         with self.mouth.condition:
@@ -114,17 +124,18 @@ class RealBrain(object):
                 
             # process_this_frame=process_this_frame^True
 
-    def _build_recognized_img(self,img,output_map):
+    def _build_recognized_img(self,img,outputs):
 
             font=cv2.FONT_HERSHEY_SIMPLEX
-            for outputs in output_map.values():
-                for o in outputs:
-                    cv2.rectangle(img, (o.x0,o.y0), (o.x1,o.y1), (0,255,0), 2)
-                    cv2.putText(img, o.label, (o.x0+5,o.y0-5), font, 1, (255,255,255), 2)
-                    cv2.putText(img, f"{o.score:.2f}", (o.x0+5,o.y0-20), font, 1, (255,255,255), 2)
+            for o in outputs:
+                cv2.rectangle(img, (o.x0,o.y0), (o.x1,o.y1), (0,255,0), 2)
+                cv2.putText(img, o.label, (o.x0+5,o.y0-5), font, 1, (255,255,255), 2)
+                cv2.putText(img, f"{o.score:.2f}", (o.x0+5,o.y0-20), font, 1, (255,255,255), 2)
+                if o.id is not None:
+                    cv2.putText(img, f"{o.id}", (int((o.x0+o.x1)/2),int((o.y0+o.y1)/2)), font, 1, (255,255,255), 2)
 
 
-            if IS_SAVE_OUTPUT and len(output_map)>0:
+            if IS_SAVE_OUTPUT and len(outputs)>0:
                 cv2.imwrite(os.path.join(VISION_TEST_PATH,f"vision_{int(time.time())}.jpg"), img)
 
             return img

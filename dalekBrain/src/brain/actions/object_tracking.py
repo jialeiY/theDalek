@@ -9,20 +9,6 @@ from collections import OrderedDict
 from scipy.spatial import distance_matrix
 import numpy as np
 
-class RecognizerOutput(object):
-    def __init__(self,label,score,x0,y0,x1,y1):
-        self.label=label
-        self.score=score
-
-        self.x0=x0  #left
-        self.y0=y0  #top
-        self.x1=x1  #right
-        self.y1=y1  #bottom
-
-        self.id=None
-        self.new_obj=True
-
-
 class CentroidObjectTracker(object):
 
     def __init__(self):
@@ -30,9 +16,15 @@ class CentroidObjectTracker(object):
         self.next_id=0
         self.existing_objs=OrderedDict()
         self.disappeared_objs={}
-        self.timeout=0
+        self.timeout=5
 
-    def track(self,objects:List[RecognizerOutput])->List[RecognizerOutput]:
+    def track(self,objects):
+
+        if len(objects)==0:
+            for i in list(self.existing_objs.keys()):
+                self.deregister(i)
+
+            return objects
 
         new_obj_centroids=np.asarray([self._calc_centroid(obj) for obj in objects])
 
@@ -61,7 +53,7 @@ class CentroidObjectTracker(object):
                 objects[col].is_new_obj=False
                 objects[col].id=exist_id
 
-                visited_cols.add(row)
+                visited_rows.add(row)
                 visited_cols.add(col)
             
         else:
@@ -97,7 +89,7 @@ class CentroidObjectTracker(object):
         else:
             self.disappeared_objs[obj_id]=disappear_duration
 
-    def _calc_centroid(self,obj:RecognizerOutput):
+    def _calc_centroid(self,obj):
         
         x=(obj.x0+obj.x1)/2
         y=(obj.y0+obj.y1)/2
@@ -105,9 +97,9 @@ class CentroidObjectTracker(object):
         return x,y
     
 
-if __name__=="__main__":
-    tracker=CentroidObjectTracker()
+# if __name__=="__main__":
+#     tracker=CentroidObjectTracker()
 
-    tracker.track([RecognizerOutput('dalek',1,1,1,2,2),RecognizerOutput('dalek',1,3,3,4,4)])
+#     tracker.track([RecognizerOutput('dalek',1,1,1,2,2),RecognizerOutput('dalek',1,3,3,4,4)])
 
-    tracker.track([RecognizerOutput('dalek',1,1.5,1.5,2.5,2.5),RecognizerOutput('dalek',1,2.5,2.5,3.5,3.5)])
+#     tracker.track([RecognizerOutput('dalek',1,1.5,1.5,2.5,2.5),RecognizerOutput('dalek',1,2.5,2.5,3.5,3.5)])
