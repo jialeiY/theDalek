@@ -1,0 +1,1 @@
+cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dt_probe.ko := ld -r -EL  -maarch64elf -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dt_probe.ko /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dt_probe.o /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dt_probe.mod.o;  true

@@ -1,0 +1,1 @@
+cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/modules.order := {   echo /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dt_probe.ko;   echo /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dev.ko; :; } > /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/modules.order

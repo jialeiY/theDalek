@@ -1,0 +1,1 @@
+cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dev.ko := ld -r -EL  -maarch64elf -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dev.ko /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dev.o /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dev.mod.o;  true

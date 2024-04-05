@@ -4,6 +4,7 @@
 #include <linux/property.h>
 #include <linux/platform_device.h>
 #include <linux/of_device.h>
+#include <linux/gpio/consumer.h>
 
 /* Meta Information */
 MODULE_LICENSE("GPL");
@@ -29,6 +30,11 @@ static struct platform_driver my_driver = {
 		.of_match_table = my_driver_ids,
 	},
 };
+
+// GPIO variable
+
+static struct gpio_desc *my_gpio = NULL;
+
 
 /**
  * @brief This function is called on loading the driver 

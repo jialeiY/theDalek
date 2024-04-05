@@ -1,0 +1,1 @@
+cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dev.mod := printf '%s\n'   dev.o | awk '!x[$$0]++ { print("/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/"$$0) }' > /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dev.mod
