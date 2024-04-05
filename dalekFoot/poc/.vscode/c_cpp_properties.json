@@ -1,0 +1,22 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "dalek",
+            // "compilerPath": "",
+            //"compilerPath": "@C:\\Users\\heqichen\\Documents\\Arduino\\hardware\\esp8266com\\esp8266\\tools\\warnings\\none-g++",
+            "compilerArgs": [],
+            "intelliSenseMode": "gcc-x64",
+            "includePath": [
+                "${workspaceFolder}",
+                "/home/heqichen/workspace/reference/linux-rpi-6.1.y/include",
+                "/home/heqichen/workspace/reference/linux-rpi-6.1.y/arch/arm64/include"
+                //"/home/heqichen/workspace/reference/linux-rpi-6.1.y/arch/arm64/include/generated"
+            ],
+            "forcedInclude": [],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "defines": []
+        }
+    ]
+}

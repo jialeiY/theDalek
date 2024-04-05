@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "module.h": "c",
+        "platform_device.h": "c",
+        "of_device.h": "c",
+        "list.h": "c",
+        "container_of.h": "c",
+        "build_bug.h": "c",
+        "compiler.h": "c",
+        "consumer.h": "c",
+        "compiler_types.h": "c",
+        "types.h": "c",
+        "stddef.h": "c",
+        "fs.h": "c"
+    },
+    "editor.formatOnSave": true
+}
