@@ -1,1 +1,0 @@
-cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dt_probe.mod := printf '%s\n'   dt_probe.o | awk '!x[$$0]++ { print("/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/"$$0) }' > /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/dt_probe.mod

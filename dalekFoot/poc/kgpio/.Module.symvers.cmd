@@ -1,1 +1,0 @@
-cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/Module.symvers :=  sed 's/ko$$/o/'  /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/modules.order | scripts/mod/modpost -m -a    -o /home/heqichen/workspace/theDalek/dalekFoot/poc/kgpio/Module.symvers -e -i Module.symvers -T - 

@@ -1,1 +1,0 @@
-cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/ktimer/ktimer.mod := printf '%s\n'   ktimer.o | awk '!x[$$0]++ { print("/home/heqichen/workspace/theDalek/dalekFoot/poc/ktimer/"$$0) }' > /home/heqichen/workspace/theDalek/dalekFoot/poc/ktimer/ktimer.mod

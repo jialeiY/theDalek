@@ -1,2 +1,11 @@
 spi
 spitest
+*.ko
+*.o
+*.cmd
+*.cmd.c
+*.swp
+*.symvers
+*.mod
+*.mod.c
+*.order

@@ -1,1 +1,0 @@
-cmd_/home/heqichen/workspace/theDalek/dalekFoot/poc/ktimer/ktimer.ko := ld -r -EL  -maarch64elf -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/heqichen/workspace/theDalek/dalekFoot/poc/ktimer/ktimer.ko /home/heqichen/workspace/theDalek/dalekFoot/poc/ktimer/ktimer.o /home/heqichen/workspace/theDalek/dalekFoot/poc/ktimer/ktimer.mod.o;  true

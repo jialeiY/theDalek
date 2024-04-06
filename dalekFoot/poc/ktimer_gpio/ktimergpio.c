@@ -18,11 +18,14 @@
 #include <linux/timer.h>
 #include <linux/jiffies.h>
 #include <linux/err.h>
+#include <linux/gpio.h>
+#include <linux/gpio/consumer.h>
 // Timer Variable
 #define TIMEOUT 1000 // milliseconds
 
 static struct timer_list etx_timer;
 static unsigned int count = 0;
+static int gs = 0;
 
 dev_t dev = 0;
 static struct class *dev_class;
@@ -54,13 +57,19 @@ static struct file_operations fops =
 void timer_callback(struct timer_list *data)
 {
     /* do your timer stuff here */
-    pr_info("Timer Callback function Called [%d], jf:[%ld]\n", count++, jiff);
+    // pr_info("Timer Callback function Called [%d], jf:[%ld], sysjif: [%ld]\n", count++, jiff, jiffies);
+
+    gs = 1 - gs;
+    gpio_set_value(16, 1);
+    gpio_set_value(16, 0);
+    // gpio_set_value(16, gs);
 
     /*
        Re-enable timer. Because this function will be called only first time.
        If we re-enable this will work like periodic timer.
     */
-    mod_timer(&etx_timer, jiffies + msecs_to_jiffies(TIMEOUT));
+    // mod_timer(&etx_timer, jiffies + msecs_to_jiffies(TIMEOUT));
+    mod_timer(&etx_timer, jiffies + jiff);
 }
 
 /*
@@ -106,6 +115,8 @@ static ssize_t etx_write(struct file *filp,
 */
 static int __init etx_driver_init(void)
 {
+    int gpio_err = 0;
+
     /*Allocating Major number*/
     if ((alloc_chrdev_region(&dev, 0, 1, "etx_Dev")) < 0)
     {
@@ -139,11 +150,29 @@ static int __init etx_driver_init(void)
     }
 
     /* setup your timer to call my_timer_callback */
-    timer_setup(&etx_timer, timer_callback, 0); // If you face some issues and using older kernel version, then you can try setup_timer API(Change Callback function's argument to unsingned long instead of struct timer_list *.
+    // If you face some issues and using older kernel version, then you can try setup_timer API(Change Callback function's argument to unsingned long instead of struct timer_list *.
+    timer_setup(&etx_timer, timer_callback, 0);
 
     /* setup timer interval to based on TIMEOUT Macro */
     jiff = msecs_to_jiffies(TIMEOUT);
+    jiff = 0;
     mod_timer(&etx_timer, jiffies + jiff);
+
+    // Setup GPIO
+    gpio_err = gpio_request(16, "Cooboc");
+    if (gpio_err != 0)
+    {
+        printk("GPIO request failed");
+    }
+    // Set output
+    gpio_err = gpio_direction_output(16, 1);
+    if (gpio_err != 0)
+    {
+        printk("Setting GPIO direction failed");
+        gpio_free(16);
+    }
+    // Set default value;
+    gpio_set_value(16, 0);
 
     pr_info("Device Driver Insert...Done!!!\n");
     return 0;
@@ -165,6 +194,8 @@ static void __exit etx_driver_exit(void)
     class_destroy(dev_class);
     cdev_del(&etx_cdev);
     unregister_chrdev_region(dev, 1);
+    // release GPIO
+    gpio_free(16);
     pr_info("Device Driver Remove...Done!!!\n");
 }
 
@@ -172,6 +203,6 @@ module_init(etx_driver_init);
 module_exit(etx_driver_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("EmbeTronicX <embetronicx@gmail.com>");
+MODULE_AUTHOR("HEQichen <heqichen@gmail.com>");
 MODULE_DESCRIPTION("A simple device driver - Kernel Timer");
 MODULE_VERSION("1.21");
