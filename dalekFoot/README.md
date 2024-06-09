@@ -51,4 +51,25 @@ Offset | Name | Content | Width<br />(Bytes)
 ![Timeout Scenario](images/timeout_scenario.png)
 
 
+# stm32
+
+## Interrupt NVIC
+
+* Systick is the top piority timer
+
+## Timer
+
+* Systick is the top piority timer
+* Systick should not block other event, It should be async and just make a notify
+
+
+
+## TODO
+
+
+o communication with SPI in slave mode
+o communication with SPI and calculate the CPU usage
+
+
+
 
