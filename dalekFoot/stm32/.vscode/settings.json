@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "main.h": "c"
+    },
+    "cSpell.words": [
+        "GPIO",
+        "GPIOC",
+        "hadc",
+        "hspi",
+        "htim",
+        "huart",
+        "Systick",
+        "USART"
+    ]
+}

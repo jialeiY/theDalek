@@ -81,6 +81,16 @@ static void MX_USART1_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+void foo() {
+    __asm("nop");
+}
+
+void delay() {
+    for (int i=0; i<1000000; ++i) {
+        foo();
+    }
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -132,7 +142,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);    
+    delay();
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);    
+    delay();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
