@@ -62,11 +62,13 @@ Offset | Name | Content | Width<br />(Bytes)
 * Systick is the top piority timer
 * Systick should not block other event, It should be async and just make a notify
 
+## SPI
 
+* Max speed = 1/2 PCLK, SPI2 = 21MHz; SPI1 = 42MHz
 
 ## TODO
 
-
+o DMA for SPI communication
 o communication with SPI in slave mode
 o communication with SPI and calculate the CPU usage
 
