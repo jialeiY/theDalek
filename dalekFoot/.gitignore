@@ -1,3 +1,4 @@
 build
 .~*#
 *.vc.db*
+node_modules
