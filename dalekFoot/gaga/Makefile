@@ -112,6 +112,3 @@ clean:
 flash: $(BUILD_DIR)/$(TARGET).elf
 	openocd -f /usr/share/openocd/scripts/interface/stlink.cfg -f /usr/share/openocd/scripts/target/stm32f4x.cfg -c "program $< verify reset exit"
 
-#$(CC)  $(SOURCES)  $(C_DEFS) -c $(INCLUDES) -MT"Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o" -o "Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o"
-#$(CXX) $(SOURCES)  $(C_DEFS) -c $(INCLUDES) -o "Core/Src/main.o"
-#$(CC) -mcpu=cortex-m4 -c -x assembler-with-cpp -MMD -MP -MF"Core/Startup/startup_stm32f407vetx.d" -MT"Core/Startup/startup_stm32f407vetx.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Startup/startup_stm32f407vetx.o" "../Core/Startup/startup_stm32f407vetx.s"
