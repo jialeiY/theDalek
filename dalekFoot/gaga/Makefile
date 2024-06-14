@@ -28,7 +28,7 @@ C_SOURCES += board/core/sysmem.c
 C_SOURCES += board/core/stm32f4xx_hal_msp.c
 C_SOURCES += board/core/stm32f4xx_it.c
 C_SOURCES += board/core/syscalls.c
-C_SOURCES += hal/printf.c
+C_SOURCES += third_party/printf/printf.c
 
 CPP_SOURCES += board/core/main.cpp
 

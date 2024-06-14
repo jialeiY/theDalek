@@ -1,8 +1,8 @@
 #include "gaga.h"
 #include <cstdint>
 #include <cstring>
-#include "hal/printf.h"
 #include "stm32f4xx_hal.h"
+#include "third_party/printf/printf.h"
 
 // Test code end
 
@@ -73,7 +73,7 @@ void Gaga::tick() {
 
     // printf("hello ");
     double f = 2.31323;
-    int len  = sprintf(txData, "hello world  %lf\r\n", f);
+    int len  = sprintf(txData, "hello world  %u\r\n", HAL_GetTick());
     HAL_UART_Transmit_DMA(huart1_, (std::uint8_t *)txData, len);
 
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
