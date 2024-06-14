@@ -28,6 +28,7 @@ C_SOURCES += board/core/sysmem.c
 C_SOURCES += board/core/stm32f4xx_hal_msp.c
 C_SOURCES += board/core/stm32f4xx_it.c
 C_SOURCES += board/core/syscalls.c
+C_SOURCES += hal/printf.c
 
 CPP_SOURCES += board/core/main.cpp
 
@@ -54,11 +55,11 @@ LINK := $(CXX)
 HEX := $(CP) -O ihex
 BIN := $(CP) -O binary -S
 
-CPU := -mcpu=cortex-m4
+
 FPU := -mfpu=fpv4-sp-d16
 # float-abi
 FLOAT-ABI = -mfloat-abi=hard
-C_DEFS := -DUSE_HAL_DRIVER -DSTM32F407xx
+
 OPT := -Os
 MCU := $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 
@@ -78,29 +79,28 @@ SOURCES += $(ASMM_SOURCES)
 
 OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
+CPU := -mcpu=cortex-m4
+DEFINES := -DUSE_HAL_DRIVER -DSTM32F407xx
+DBG := -g -O0
+OPT := -Os
 
-# all:
-# 	echo $(C_SOURCES)
-# 	echo $(OBJECTS)
+BUILD_OPT := $(DBG)
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	mkdir -p $(dir $@)
-	$(CC) "$<" -mcpu=cortex-m4 -std=gnu11 -DUSE_HAL_DRIVER -DSTM32F407xx -c $(INCLUDES) -Os -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+	$(CC) "$<" $(CPU) -std=gnu11 $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 $(BUILD_DIR)/%.o: %.cpp Makefile | $(BUILD_DIR)
 	mkdir -p $(dir $@)
-	$(CXX) "$<" -mcpu=cortex-m4 -std=gnu++14 -DUSE_HAL_DRIVER -DSTM32F407xx -c $(INCLUDES) -Os -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"$(addsuffix .d,$(basename $@))" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
+	$(CXX) "$<" $(CPU) -std=gnu++14 $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP -MF"$(addsuffix .d,$(basename $@))" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	mkdir -p $(dir $@)
-	$(AS) "$<" -mcpu=cortex-m4 -c -MMD -MP -MF"$(addsuffix .d,$(basename $@))" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
-
-$(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
-	$(AS) -c $(CFLAGS) $< -o $@
+	$(AS) "$<" $(CPU) -c -MMD -MP -MF"$(addsuffix .d,$(basename $@))" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	mkdir -p $(dir $@)
-	$(LINK) -o "$@" $(OBJECTS) -mcpu=cortex-m4 -T"board/STM32F407VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="$(addsuffix .map,$(basename $@))" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+	$(LINK) $(BUILD_OPT) $(OBJECTS) $(CPU) -o "$@" -T"board/STM32F407VETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="$(addsuffix .map,$(basename $@))" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	$(SZ) $@
 
 $(BUILD_DIR):
@@ -118,6 +118,9 @@ flash: $(BUILD_DIR)/$(TARGET).elf
 
 f: flash
 
+.PHONY: debug
+debug:	$(BUILD_DIR)/$(TARGET).elf flash
+	openocd -f /usr/share/openocd/scripts/interface/stlink.cfg -f /usr/share/openocd/scripts/target/stm32f4x.cfg
 
 # check the setting of a tty
 #stty -F /def/ttyCH341USB0

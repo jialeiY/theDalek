@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "GDB Remote Attach",
+            "type": "cppdbg",
+            "request": "launch",
+            "externalConsole": false,
+            "stopAtEntry": true,
+            "program": "${workspaceFolder}/build/gaga.elf",
+            "MIMode": "gdb",
+            "cwd": "${workspaceFolder}",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerServerAddress": "127.0.0.1:3333",
+            "miDebuggerArgs": " -ex 'handle all print nostop noignore'",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            //"preLaunchTask": "Build embedded application with debug information"
+        }
+    ]
+}
