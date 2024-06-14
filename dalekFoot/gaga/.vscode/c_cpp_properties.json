@@ -21,6 +21,7 @@
             ],
             //"intelliSenseMode": "linux-gcc-x86",
             "includePath": [
+                "${workspaceFolder}",
                 "${workspaceFolder}/board/Drivers/STM32F4xx_HAL_Driver/Inc",
                 "${workspaceFolder}/board/core",
                 "${workspaceFolder}/board/Drivers/CMSIS/Device/ST/STM32F4xx/Include",

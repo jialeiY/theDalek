@@ -31,9 +31,13 @@ C_SOURCES += board/core/syscalls.c
 
 CPP_SOURCES += board/core/main.cpp
 
+CPP_SOURCES += hal/serial.cpp
+CPP_SOURCES += hal/gaga.cpp
+
 ASM_SOURCES +=  board/startup/startup_stm32f407vetx.s
 
-INCLUDES := -I./board/Drivers/STM32F4xx_HAL_Driver/Inc
+INCLUDES := -I./
+INCLUDES += -I./board/Drivers/STM32F4xx_HAL_Driver/Inc
 INCLUDES += -I./board/core
 INCLUDES += -I./board/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDES += -I./board/Drivers/CMSIS/Include
