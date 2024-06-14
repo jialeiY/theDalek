@@ -112,9 +112,12 @@ clean:
 	-rm -fR $(BUILD_DIR)
 
 
-.PHONY: flash
+.PHONY: flash f
 flash: $(BUILD_DIR)/$(TARGET).elf
 	openocd -f /usr/share/openocd/scripts/interface/stlink.cfg -f /usr/share/openocd/scripts/target/stm32f4x.cfg -c "program $< verify reset exit"
+
+f: flash
+
 
 # check the setting of a tty
 #stty -F /def/ttyCH341USB0
