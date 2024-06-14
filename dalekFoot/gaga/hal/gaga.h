@@ -12,16 +12,19 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
 }
 #endif
 
+
+extern UART_HandleTypeDef huart1;
 namespace cooboc {
 namespace hal {
+
+
 class Gaga {
   public:
-    Gaga(UART_HandleTypeDef *huart1);
+    Gaga();
     void setup();
     void tick();
 
   private:
-    UART_HandleTypeDef *huart1_;
 };
 }    // namespace hal
 }    // namespace cooboc

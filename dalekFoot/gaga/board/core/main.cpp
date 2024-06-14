@@ -132,7 +132,7 @@ int main(void) {
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    cooboc::hal::Gaga gaga(&huart1);
+    cooboc::hal::Gaga gaga;
     gaga.setup();
     while (true) { gaga.tick(); }
     while (1) {
