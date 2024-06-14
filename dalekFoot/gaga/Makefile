@@ -116,3 +116,12 @@ clean:
 flash: $(BUILD_DIR)/$(TARGET).elf
 	openocd -f /usr/share/openocd/scripts/interface/stlink.cfg -f /usr/share/openocd/scripts/target/stm32f4x.cfg -c "program $< verify reset exit"
 
+# check the setting of a tty
+#stty -F /def/ttyCH341USB0
+#screen /def/ttyCH341USB0 115200
+# quit screen
+# Ctrl-a + \ , not Ctrl-a + Ctrl-\ 
+# screen -ls
+# screen -R
+
+
