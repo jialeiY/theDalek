@@ -116,6 +116,8 @@ clean:
 flash: $(BUILD_DIR)/$(TARGET).elf
 	openocd -f /usr/share/openocd/scripts/interface/stlink.cfg -f /usr/share/openocd/scripts/target/stm32f4x.cfg -c "program $< verify reset exit"
 
+
+
 f: flash
 
 .PHONY: debug
