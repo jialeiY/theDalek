@@ -14,7 +14,6 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
 #endif
 
 
-extern UART_HandleTypeDef huart1;
 namespace cooboc {
 namespace hal {
 
