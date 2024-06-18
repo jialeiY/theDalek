@@ -87,6 +87,12 @@ static void MX_USART1_UART_Init(void);
 
 /* USER CODE END 0 */
 
+namespace cooboc {
+namespace hal {
+extern cooboc::hal::Gaga gaga;
+}    // namespace hal
+}    // namespace cooboc
+
 /**
  * @brief  The application entry point.
  * @retval int
@@ -96,9 +102,11 @@ int main(void) {
 
     /* USER CODE END 1 */
 
-    /* MCU Configuration--------------------------------------------------------*/
+    /* MCU
+     * Configuration--------------------------------------------------------*/
 
-    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+    /* Reset of all peripherals, Initializes the Flash interface and the
+     * Systick. */
     HAL_Init();
 
     /* USER CODE BEGIN Init */
@@ -132,9 +140,9 @@ int main(void) {
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    cooboc::hal::Gaga gaga;
-    gaga.setup();
-    while (true) { gaga.tick(); }
+
+    cooboc::hal::gaga.setup();
+    while (true) { cooboc::hal::gaga.tick(); }
     while (1) {
         /* USER CODE END WHILE */
 
@@ -201,8 +209,8 @@ static void MX_ADC1_Init(void) {
 
     /* USER CODE END ADC1_Init 1 */
 
-    /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of
-     * conversion)
+    /** Configure the global features of the ADC (Clock, Resolution, Data
+     * Alignment and number of conversion)
      */
     hadc1.Instance                   = ADC1;
     hadc1.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV4;
@@ -220,8 +228,8 @@ static void MX_ADC1_Init(void) {
         Error_Handler();
     }
 
-    /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and
-     * its sample time.
+    /** Configure for the selected ADC regular channel its corresponding rank in
+     * the sequencer and its sample time.
      */
     sConfig.Channel      = ADC_CHANNEL_TEMPSENSOR;
     sConfig.Rank         = 1;
@@ -250,8 +258,8 @@ static void MX_ADC2_Init(void) {
 
     /* USER CODE END ADC2_Init 1 */
 
-    /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of
-     * conversion)
+    /** Configure the global features of the ADC (Clock, Resolution, Data
+     * Alignment and number of conversion)
      */
     hadc2.Instance                   = ADC2;
     hadc2.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV4;
@@ -269,8 +277,8 @@ static void MX_ADC2_Init(void) {
         Error_Handler();
     }
 
-    /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and
-     * its sample time.
+    /** Configure for the selected ADC regular channel its corresponding rank in
+     * the sequencer and its sample time.
      */
     sConfig.Channel      = ADC_CHANNEL_2;
     sConfig.Rank         = 1;
@@ -299,8 +307,8 @@ static void MX_ADC3_Init(void) {
 
     /* USER CODE END ADC3_Init 1 */
 
-    /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of
-     * conversion)
+    /** Configure the global features of the ADC (Clock, Resolution, Data
+     * Alignment and number of conversion)
      */
     hadc3.Instance                   = ADC3;
     hadc3.Init.ClockPrescaler        = ADC_CLOCK_SYNC_PCLK_DIV4;
@@ -318,8 +326,8 @@ static void MX_ADC3_Init(void) {
         Error_Handler();
     }
 
-    /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and
-     * its sample time.
+    /** Configure for the selected ADC regular channel its corresponding rank in
+     * the sequencer and its sample time.
      */
     sConfig.Channel      = ADC_CHANNEL_10;
     sConfig.Rank         = 1;
@@ -739,7 +747,8 @@ static void MX_GPIO_Init(void) {
  */
 void Error_Handler(void) {
     /* USER CODE BEGIN Error_Handler_Debug */
-    /* User can add his own implementation to report the HAL error return state */
+    /* User can add his own implementation to report the HAL error return state
+     */
     __disable_irq();
     while (1) {}
     /* USER CODE END Error_Handler_Debug */
@@ -755,8 +764,9 @@ void Error_Handler(void) {
  */
 void assert_failed(uint8_t *file, uint32_t line) {
     /* USER CODE BEGIN 6 */
-    /* User can add his own implementation to report the file name and line number,
-       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+    /* User can add his own implementation to report the file name and line
+       number, ex: printf("Wrong parameters value: file %s on line %d\r\n",
+       file, line) */
     /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

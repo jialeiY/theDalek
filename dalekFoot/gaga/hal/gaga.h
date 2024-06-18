@@ -1,6 +1,7 @@
 #ifndef __HAL_GAGA_H__
 #define __HAL_GAGA_H__
 
+#include "spi.h"
 #include "stm32f4xx_hal.h"
 
 #ifdef __cplusplus
@@ -25,6 +26,7 @@ class Gaga {
     void tick();
 
   private:
+    void onSpiDataReceived(const SpiProtocol &spi);
 };
 }    // namespace hal
 }    // namespace cooboc

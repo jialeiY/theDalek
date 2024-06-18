@@ -34,6 +34,7 @@ CPP_SOURCES += board/core/main.cpp
 
 CPP_SOURCES += hal/serial.cpp
 CPP_SOURCES += hal/gaga.cpp
+CPP_SOURCES += hal/spi.cpp
 
 ASM_SOURCES +=  board/startup/startup_stm32f407vetx.s
 
