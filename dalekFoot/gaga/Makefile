@@ -36,6 +36,9 @@ CPP_SOURCES += hal/serial.cpp
 CPP_SOURCES += hal/gaga.cpp
 CPP_SOURCES += hal/spi.cpp
 CPP_SOURCES += hal/motor.cpp
+CPP_SOURCES += intents/common/intent_manager.cpp
+CPP_SOURCES += intents/common/pub_sub_stub.cpp
+CPP_SOURCES += intents/power_controlling_intent/power_controlling_intent.cpp
 
 ASM_SOURCES +=  board/startup/startup_stm32f407vetx.s
 
