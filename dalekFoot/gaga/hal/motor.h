@@ -10,6 +10,9 @@ class Motor {
     void setup();
     void tick();
 };
+
+
+extern Motor motor;
 }    // namespace hal
 }    // namespace cooboc
 #endif

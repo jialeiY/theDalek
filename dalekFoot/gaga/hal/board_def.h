@@ -8,6 +8,8 @@ extern "C" {
 #endif
 extern SPI_HandleTypeDef hspi2;
 extern UART_HandleTypeDef huart1;
+
+extern TIM_HandleTypeDef htim4;
 #ifdef __cplusplus
 }
 #endif

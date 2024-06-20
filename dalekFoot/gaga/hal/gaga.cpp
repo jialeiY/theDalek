@@ -15,6 +15,7 @@ namespace hal {
 Gaga::Gaga() {}
 
 void Gaga::setup() {
+    motor.setup();
     gagaSerial.setup();
     gagaSpi.setup([this](const SpiProtocol &spi) { onSpiDataReceived(spi); });
     intents::intentManager.setup();
