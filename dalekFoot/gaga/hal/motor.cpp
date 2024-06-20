@@ -30,13 +30,27 @@ namespace hal {
 
 Motor::Motor() {}
 void Motor::setup() {
-    //
     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET);
+    // HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+
     HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
-    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 3000);
+    __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 10240);
 }
 void Motor::tick() {}
+
+void Motor::setPower(std::int16_t value) {
+    if (value > 0) {
+        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_SET);
+        // __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, value);
+    } else {
+        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_SET);
+
+        // __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, 1024);
+    }
+}
 
 Motor motor;
 

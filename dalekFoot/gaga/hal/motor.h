@@ -1,6 +1,8 @@
 #ifndef __HAL_MOTOR_H__
 #define __HAL_MOTOR_H__
 
+#include <cstdint>
+
 namespace cooboc {
 namespace hal {
 
@@ -9,6 +11,7 @@ class Motor {
     Motor();
     void setup();
     void tick();
+    void setPower(std::int16_t value);
 };
 
 
