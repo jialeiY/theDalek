@@ -17,7 +17,8 @@ namespace hal {
 Gaga::Gaga() {}
 
 void Gaga::setup() {
-    motor.setup();
+    for (const Motor &motor : gagaMotors) { motor.setup(); }
+
     gagaSerial.setup();
     gagaSpi.setup([this](const SpiProtocol &spi) { onSpiDataReceived(spi); });
     intents::intentManager.setup();
@@ -54,7 +55,7 @@ void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
                  -2048,
                  2048);
     // motor.setPower(motorPower);
-    // motor.setPower(-1500);
+    //  motor.setPower(-1500);
     gagaSerial.println("motor power: %d", motorPower);
 
     // Turn the led on

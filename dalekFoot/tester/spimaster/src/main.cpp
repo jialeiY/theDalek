@@ -82,7 +82,7 @@ extern "C"
         while (true)
         {
             ch341.test();
-            usleep(500ULL * 1000LL);
+            usleep(50ULL * 1000LL);
         }
 
         return 0;
