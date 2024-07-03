@@ -1,5 +1,14 @@
 $fn = 100;
 
+module screw()
+{
+    cylinder(100, 1.8/2, 1.8/2, true);
+    translate([0, 0, -1])cylinder(1, 1.8/2, 2.8/2);
+}
+
+
+difference() {
+union() { 
 difference() {
 // main body
 translate([-3, -(22.4+6)/2, 0]) cube([37+3, 22.4+6, 12]);
@@ -48,11 +57,10 @@ union() {
 translate([0, -22.6/2, -3])cube([37, 22.6, 3]);
 translate([-50, -3.5, -3]) cube([100, 7, 3]);
 }
-}
+} // end of edge difference
+} // end of union
+translate([-5+2, 0, 0]) cube([10,7, 100], true);
+} // end of difference
 
-module screw()
-{
-    cylinder(100, 1.8/2, 1.8/2, true);
-    translate([0, 0, -1])cylinder(1, 1.8/2, 2.8/2);
-}
+
 
