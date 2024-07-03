@@ -59,7 +59,10 @@ translate([-50, -3.5, -3]) cube([100, 7, 3]);
 }
 } // end of edge difference
 } // end of union
+union() {
 translate([-5+2, 0, 0]) cube([10,7, 100], true);
+    translate([11.3, -5, 12-5]) cube([100, 10, 5]);
+}
 } // end of difference
 
 
