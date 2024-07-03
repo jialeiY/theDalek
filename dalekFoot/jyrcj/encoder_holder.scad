@@ -7,7 +7,7 @@ translate([-3, -(22.4+6)/2, 0]) cube([37+3, 22.4+6, 12]);
 
 union() {
 // main shaft
-translate([11.3, 0, 0]) cylinder(100, 6.5, 6.5, true);
+translate([11.3, 0, 0]) cylinder(100, 7, 7, true);
 
 translate([22.33, 0, 0]) cylinder(100, 4.5/2, 4.5/2, true);
 
