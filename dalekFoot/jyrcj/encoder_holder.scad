@@ -18,7 +18,7 @@ union() {
 // main shaft
 translate([11.3, 0, 0]) cylinder(100, 7, 7, true);
 
-translate([22.33, 0, 0]) cylinder(100, 4.5/2, 4.5/2, true);
+translate([22.33, 0, 0]) cylinder(100, 5/2, 5/2, true);
 
 // suspension
 translate([31.8, 8.5, 0]) translate([-10, -10, -20])cube([20, 20, 40]);;
