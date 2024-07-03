@@ -2,7 +2,7 @@ $fn = 100;
 
 difference() {
 // main body
-translate([-3, -(22.4+6)/2, 0]) cube([37+3, 22.4+6, 16]);
+translate([-3, -(22.4+6)/2, 0]) cube([37+3, 22.4+6, 12]);
 
 
 union() {
@@ -26,7 +26,7 @@ rotate([90, 0, 0]) cylinder(100, 1.5, 1.5, true);
 
 // screw for encoder
 
-translate([11.3, 0, 0]) translate([0, 0, 16])
+translate([11.3, 0, 0]) translate([0, 0, 12])
 for (i = [0:3]) {
     rotate([0, 0, 45+i*90])
     translate([12, 0, 0])
