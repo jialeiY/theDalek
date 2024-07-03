@@ -30,7 +30,7 @@ translate([31.8, -8.5, 5]) union() {
 }
 
 //fix
-translate([1, 0, 3])
+translate([4, 0, 3])
 rotate([90, 0, 0]) cylinder(100, 1.5, 1.5, true);
 
 // screw for encoder
