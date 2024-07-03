@@ -2,3 +2,5 @@ build
 .~*#
 *.vc.db*
 node_modules
+*.dxf~
+\#*.dxf
