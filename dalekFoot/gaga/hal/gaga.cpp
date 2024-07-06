@@ -31,10 +31,13 @@ void Gaga::setup() {
 
 
 void Gaga::tick() {
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
-    HAL_Delay(500);
-    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-    HAL_Delay(500);
+    LED2_TOGGLE;
+    HAL_Delay(400);
+
+    // LED1_ON;
+    // HAL_Delay(50);
+    // LED1_OFF;
+    // HAL_Delay(50);
 }
 
 void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
