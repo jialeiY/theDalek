@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <limits>
 #include "hal/board_def.h"
+#include "hal/i2c.h"
 #include "hal/motor.h"
 #include "hal/serial.h"
 #include "hal/spi.h"
@@ -21,6 +22,8 @@ void Gaga::setup() {
 
     gagaSerial.setup();
     gagaSpi.setup([this](const SpiProtocol &spi) { onSpiDataReceived(spi); });
+    gagaI2c.setup();
+
     intents::intentManager.setup();
 
 
@@ -31,8 +34,8 @@ void Gaga::setup() {
 
 
 void Gaga::tick() {
-    LED2_TOGGLE;
-    HAL_Delay(400);
+    // LED2_TOGGLE;
+    // HAL_Delay(400);
 
     // LED1_ON;
     // HAL_Delay(50);

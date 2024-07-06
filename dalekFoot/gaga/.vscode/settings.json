@@ -44,6 +44,10 @@
         "ranges": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "printf.h": "c"
+        "printf.h": "c",
+        "stm32f4xx_hal_conf.h": "c"
+    },
+    "search.exclude": {
+        "build/**": true
     }
 }

@@ -135,8 +135,8 @@ int main(void) {
     MX_TIM2_Init();
     MX_TIM3_Init();
     MX_TIM4_Init();
-    MX_USART1_UART_Init();
     MX_TIM5_Init();
+    MX_USART1_UART_Init();
     /* USER CODE BEGIN 2 */
 
     /* USER CODE END 2 */
@@ -145,8 +145,7 @@ int main(void) {
     /* USER CODE BEGIN WHILE */
 
     cooboc::hal::gaga.setup();
-    // Setup the timer5
-    HAL_TIM_Base_Start_IT(&htim5);
+
 
     while (true) { cooboc::hal::gaga.tick(); }
     while (1) {
@@ -690,10 +689,10 @@ static void MX_TIM5_Init(void) {
 
     /* USER CODE END TIM5_Init 1 */
     htim5.Instance         = TIM5;
-    htim5.Init.Prescaler   = 567;
+    htim5.Init.Prescaler   = 71;
     htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
     // htim5.Init.Period            = 4294967295;
-    htim5.Init.Period            = 62499;
+    htim5.Init.Period            = 1000000;
     htim5.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
     htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
     if (HAL_TIM_Base_Init(&htim5) != HAL_OK) {
@@ -710,7 +709,6 @@ static void MX_TIM5_Init(void) {
         Error_Handler();
     }
     /* USER CODE BEGIN TIM5_Init 2 */
-
     /* USER CODE END TIM5_Init 2 */
 }
 
