@@ -7,7 +7,7 @@ extern "C" {
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (htim == &htim5) {
-        cooboc::hal::gagaI2c.__onCapture();
+        cooboc::hal::gagaI2C.__onCapture();
     }
 }
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
@@ -21,7 +21,8 @@ namespace cooboc {
 namespace hal {
 
 void I2C::setup() {
-    isWorknig_ = false;
+    isWorking_ = false;
+    bitOffset_ = 0U;
 
     // setup clock pin: PE8
     GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -42,10 +43,34 @@ void I2C::__onCapture() {
     //
     // HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
     //
-    HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_8);
+    // HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_8);
+
+    if (!isWorking_) {
+        return;
+    }
+    if (bitOffset_ < 16U) {
+        if (bitOffset_ % 2 == 0) {
+            HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET);
+        } else {
+            HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET);
+        }
+        bitOffset_++;
+    } else {
+        isWorking_ = false;
+    }
 }
 
-I2C gagaI2c;
+void I2C::__testTrigger() {
+    if (isWorking_) {
+        return;
+    }
+
+    // Start transmit, setup the state
+    isWorking_ = true;
+    bitOffset_ = 0U;
+}
+
+I2C gagaI2C;
 
 }    // namespace hal
 }    // namespace cooboc

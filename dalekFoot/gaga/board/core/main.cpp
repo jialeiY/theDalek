@@ -150,7 +150,6 @@ int main(void) {
     while (true) { cooboc::hal::gaga.tick(); }
     while (1) {
         /* USER CODE END WHILE */
-
         /* USER CODE BEGIN 3 */
     }
     /* USER CODE END 3 */
@@ -693,6 +692,7 @@ static void MX_TIM5_Init(void) {
     htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
     // htim5.Init.Period            = 4294967295;
     htim5.Init.Period = 1;
+    htim5.Init.Period = 100000;
     // Whatever the parameter has been changed, the highest frequecy is 300kHz
     htim5.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
     htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;

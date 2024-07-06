@@ -22,7 +22,7 @@ void Gaga::setup() {
 
     gagaSerial.setup();
     gagaSpi.setup([this](const SpiProtocol &spi) { onSpiDataReceived(spi); });
-    gagaI2c.setup();
+    gagaI2C.setup();
 
     intents::intentManager.setup();
 
@@ -41,6 +41,8 @@ void Gaga::tick() {
     // HAL_Delay(50);
     // LED1_OFF;
     // HAL_Delay(50);
+    gagaI2C.__testTrigger();
+    HAL_Delay(1000);
 }
 
 void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
