@@ -14,6 +14,7 @@ class I2C {
     void __onCapture();
 
   private:
+    bool isWorknig_ {false};
 };
 
 extern I2C gagaI2c;
