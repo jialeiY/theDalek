@@ -11,27 +11,53 @@ class I2C {
     I2C() = default;
     void setup();
     void tick();
+    bool isBusy();
+
 
     void __IT_onCapture();
     void __testTrigger();
+    std::uint8_t* __getData() { return dataOut_; };
 
   private:
     enum class OperationStatus : std::uint8_t {
         IDLE,
         START,
         WRITE,
+        READ,
         END,
     };
 
-    OperationStatus status_ {OperationStatus::IDLE};
-    std::size_t operationSequence_ {0U};
+    enum class Task : std::uint8_t {
+        IDLE,
+        READ,
+        WRITE,
+    };
+
+    OperationStatus __it_status_ {OperationStatus::IDLE};
+    Task __it_task_ {Task::IDLE};
+    std::size_t __it_operationSequence_ {0U};
+    // For Write
+    std::size_t __it_writeByteOffset_ {0U};
+    std::size_t __it_writeCount_ {0U};
+    std::uint8_t __it_writeBuffer_[4U] {0U};
+
+    // For Read
+    std::size_t __it_readByteOffset_ {0U};
+    std::size_t __it_readCount_ {0U};
+    std::uint8_t __it_readBuffer_[4U] {0U};
+
+    std::uint8_t __it_transByte_ {0U};
+
+    std::uint8_t dataOut_[4U] {0U};
     // std::size_t byteOffset_ {0U};
     // For debug
-    std::uint8_t transData_[2] {0x36 << 1U, 0x5A};
+    // std::uint8_t transData_[2] {0x36 << 1U, 0x5A};
 
 
     inline void __IT_transmitStart();
+    inline void __IT_statusTransitStartToReadWriteOrEnd();
     inline void __IT_transmitWrite();
+    inline void __IT_transmitRead();
     inline void __IT_transmitEnd();
     inline void __IT_sendByte();
     inline void __IT_sdaDown();

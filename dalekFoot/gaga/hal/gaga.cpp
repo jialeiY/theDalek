@@ -42,7 +42,16 @@ void Gaga::tick() {
     // LED1_OFF;
     // HAL_Delay(50);
     gagaI2C.__testTrigger();
-    HAL_Delay(3000);
+    HAL_Delay(50);
+    LED1_ON;
+    while (gagaI2C.isBusy());    // Wait until release
+    LED1_OFF;
+    const std::uint8_t *data = gagaI2C.__getData();
+    std::uint16_t value =
+      (static_cast<std::uint16_t>(data[0] & 0x0F) << 8U) | data[1];
+    gagaSerial.println("value: %d", value);
+
+    HAL_Delay(300);
 }
 
 void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
