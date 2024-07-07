@@ -42,7 +42,7 @@ void Gaga::tick() {
     // LED1_OFF;
     // HAL_Delay(50);
     gagaI2C.__testTrigger();
-    HAL_Delay(1000);
+    HAL_Delay(3000);
 }
 
 void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
