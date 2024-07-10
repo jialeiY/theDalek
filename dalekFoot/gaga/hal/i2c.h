@@ -12,11 +12,17 @@ class I2C {
     void setup();
     void tick();
     bool isBusy();
-
+    void write(const std::uint8_t devAddr,
+               const std::uint8_t regAddr,
+               const std::uint8_t *data,
+               const std::size_t size);
+    void read(const std::uint8_t devAddr,
+              const std::uint8_t regAddr,
+              const std::size_t size);
 
     void __IT_onCapture();
     void __testTrigger();
-    std::uint8_t* __getData() { return dataOut_; };
+    std::uint8_t *__getData() { return dataOut_; };
 
   private:
     enum class OperationStatus : std::uint8_t {
@@ -27,14 +33,7 @@ class I2C {
         END,
     };
 
-    enum class Task : std::uint8_t {
-        IDLE,
-        READ,
-        WRITE,
-    };
-
     OperationStatus __it_status_ {OperationStatus::IDLE};
-    Task __it_task_ {Task::IDLE};
     std::size_t __it_operationSequence_ {0U};
     // For Write
     std::size_t __it_writeByteOffset_ {0U};
@@ -59,7 +58,10 @@ class I2C {
     inline void __IT_transmitWrite();
     inline void __IT_transmitRead();
     inline void __IT_transmitEnd();
+
+
     inline void __IT_sendByte();
+    inline void __IT_receiveByte(bool ack);
     inline void __IT_sdaDown();
     inline void __IT_sdaUp();
     inline void __IT_clkDown();

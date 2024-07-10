@@ -26,6 +26,8 @@ class Gaga {
 
   private:
     void onSpiDataReceived(const SpiProtocol &spi);
+
+    void speedControlTest();
 };
 }    // namespace hal
 }    // namespace cooboc

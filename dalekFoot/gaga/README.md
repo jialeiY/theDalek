@@ -1,7 +1,9 @@
 [#] 1. refactor Serial port IO
 [#] 2. test SPI IO
 [#] 3. refactor SPI
-
+[ ] 4. test all combination of Prescaler and Period for tim5, to make main tread more efficiency
+[ ] 5. circle buffer for usart
+[ ] 6. disable motor pin on startup to avoid wheel turning on start
 
 
 Motor box design requirements

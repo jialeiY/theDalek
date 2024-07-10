@@ -1,6 +1,6 @@
 #ifndef __MATH_UTILS_H__
 #define __MATH_UTILS_H__
-
+#include <cstdint>
 
 namespace cooboc {
 namespace math {
@@ -13,6 +13,13 @@ Tout lerp(const Tin& x,
           const Tout& outEnd) {
     return (x - inStart) * (outEnd - outStart) / (inEnd - inStart) + outStart;
 }
+
+template<typename T>
+T clamp(const T& x, const T& min, const T& max) {
+    return std::max(std::min(x, max), min);
+}
+
+char* printBits(const std::uint8_t byte, char* buffer);
 
 
 }    // namespace math
