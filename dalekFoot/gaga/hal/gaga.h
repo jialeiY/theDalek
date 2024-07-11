@@ -28,6 +28,10 @@ class Gaga {
     void onSpiDataReceived(const SpiProtocol &spi);
 
     void speedControlTest();
+    void i2cfrequencyTest();
+    void initTimer5(const std::uint32_t pre, const std::uint32_t period);
+    void statisticizeI2cReading(const std::uint32_t pre,
+                                const std::uint32_t period);
 };
 }    // namespace hal
 }    // namespace cooboc

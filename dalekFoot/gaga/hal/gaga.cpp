@@ -94,12 +94,15 @@ void Gaga::tick() {
     // HAL_Delay(1);
 
     speedControlTest();
+    // i2cfrequencyTest();
 }
 
 void Gaga::speedControlTest() {
     // Read the value of encoder
     gagaI2C.read(0x36, 0x0E, 2U);
     while (gagaI2C.isBusy());    // Wait for encode read finished
+
+
     std::uint8_t *data    = gagaI2C.__getData();
     const std::uint8_t hb = data[0];
     const std::uint8_t lb = data[1];
@@ -137,8 +140,48 @@ void Gaga::speedControlTest() {
     // gagaMotors[0].setPower(1000);
 
 
-    HAL_Delay(1);
     gagaSerial.println("%f, %d, %f", controlValue, speed, errorSpeed);
+
+
+    HAL_Delay(2);
+}
+
+void Gaga::i2cfrequencyTest() {
+    for (std::uint32_t pre {7U}; pre < 100U; ++pre) {
+        for (std::uint32_t period {20U}; period < 200U; period += 5U) {
+            initTimer5(pre, period);
+            statisticizeI2cReading(pre, period);
+        }
+    }
+    while (true);
+}
+
+
+void Gaga::initTimer5(const std::uint32_t pre, const std::uint32_t period) {
+    __HAL_TIM_SET_PRESCALER(&htim5, pre);
+    __HAL_TIM_SET_AUTORELOAD(&htim5, period);
+}
+
+void Gaga::statisticizeI2cReading(const std::uint32_t pre,
+                                  const std::uint32_t period) {
+    constexpr std::size_t kCount {10U};
+    std::uint32_t totalTime {0U};
+    for (std::size_t i {0U}; i < kCount; ++i) {
+        HAL_Delay(2);
+        std::uint32_t startTick = uwTick;
+        std::uint32_t startTime = SysTick->VAL;
+        gagaI2C.read(0x36, 0x0E, 2U);
+        while (gagaI2C.isBusy());    // Wait for encode read finished
+
+
+        std::uint32_t endTime = SysTick->VAL;
+        std::uint32_t endTick = uwTick;
+
+        std::uint32_t thistime =
+          (endTick - startTick) * 180000U + startTime - endTime;
+        totalTime += (thistime);
+    }
+    gagaSerial.println("%d, %d, %d", pre, period, totalTime);
 }
 
 

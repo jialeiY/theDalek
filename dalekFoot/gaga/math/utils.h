@@ -1,5 +1,6 @@
 #ifndef __MATH_UTILS_H__
 #define __MATH_UTILS_H__
+#include <algorithm>
 #include <cstdint>
 
 namespace cooboc {
