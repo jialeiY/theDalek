@@ -13,5 +13,6 @@ char *printBits(const std::uint8_t byte, char *buffer) {
     return buffer;
 }
 
+
 }    // namespace math
 }    // namespace cooboc

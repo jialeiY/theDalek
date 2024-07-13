@@ -225,7 +225,7 @@ void I2C::__IT_sendByte() {
 
 void I2C::__IT_receiveByte(bool ack) {
     /**
-     *  Init status should be sda = 0, clk = 0
+     *  Init status should be sda = X, clk = 0
      *
      *  0 clk up for bit 1
      *  1 read and clock down for bit 1
@@ -236,7 +236,7 @@ void I2C::__IT_receiveByte(bool ack) {
      *  17 ack clock up
      *  18 ack clock down, release sda
      *  19 release sda
-     *  Quit Status: sda = 0, clk = 0
+     *  Quit Status: sda = 1, clk = 0
      */
     const std::size_t bitOffset = __it_operationSequence_ >> 1U;
     const bool isFirstPhase     = (__it_operationSequence_ & 0x01) == 0U;
@@ -271,11 +271,10 @@ void I2C::__IT_receiveByte(bool ack) {
             case (18): {
                 // clock down for ack and release
                 __IT_clkDown();
-                __IT_sdaUp();
                 break;
             }
             default: {
-                __IT_sdaDown();
+                __IT_sdaUp();
                 __it_operationSequence_ = 0U;
                 return;
             }
