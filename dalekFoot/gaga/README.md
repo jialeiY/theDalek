@@ -5,7 +5,7 @@
 [ ] 5. circle buffer for usart
 [#] 6. disable motor pin on startup to avoid wheel turning on start
 [#] 7. read systick counter
-8. can control static speed of motor
+[#] 8. can control static speed of motor
 9. control dynamic speed of motor
 10. control speed of motor from SPI
 11. the trajectory controlling

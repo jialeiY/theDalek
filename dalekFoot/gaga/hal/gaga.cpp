@@ -1,4 +1,5 @@
 #include "gaga.h"
+#include <cmath>
 #include <cstdint>
 #include <limits>
 #include "hal/board_def.h"
@@ -53,12 +54,25 @@ void Gaga::tick() {
 void Gaga::speedControlTest() {
     std::int32_t speed = readSpeedTest();
 
+    // Generate dynamic target speed
+    // cycle = 4000 milli seconds
+    // amplifer = 10 -> 40
+
+    constexpr int cycle {500};
+    const float timeShift = static_cast<float>(HAL_GetTick() % cycle) * 2.0F *
+                            3.1415926 / static_cast<float>(cycle);
+    const float targetSpeed =
+      math::lerp(std::sin(timeShift), -1.0F, 1.0F, 10.0F, 40.0F);
+
+
     // Control the motor
     static float integralError {0.0F};
-    constexpr float targetSpeed         = 40.0F;
-    constexpr float nominalControlValue = 36.27 * targetSpeed + 110.65;
-    constexpr float kp                  = 40.0f;
-    constexpr float ki                  = 0.1F;
+    // constexpr float targetSpeed         = 40.0F;
+    const float nominalControlValue = 28.27F * targetSpeed + 110.65;
+    // const float kp                  = 40.0f;
+    // const float ki                  = 0.1F;
+    const float kp = 40.0F;
+    const float ki = 0.10F;
 
     const float errorSpeed = targetSpeed - static_cast<float>(speed);
     integralError += errorSpeed;
@@ -89,7 +103,8 @@ void Gaga::speedControlTest() {
                              : nominalControlValue);
     lastControlValue = clampedControlValue;
 
-    gagaSerial.println("%d,%d,%d",
+    gagaSerial.println("%d,%d,%d,%d",
+                       (int)targetSpeed,
                        speed,
                        (int)clampedControlValue,
                        HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_1));
