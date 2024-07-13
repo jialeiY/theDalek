@@ -38,10 +38,10 @@ void Gaga::setup() {
     // constexpr std::uint8_t confRegAddr {0x07};
     // constexpr std::uint8_t statusRegAddr {0x0B};
 
+
     // // Read Configuration
     // gagaI2C.read(devAddr, confRegAddr, 2U);
     // while (gagaI2C.isBusy());    // Wait for finish
-
     // std::uint8_t *data = gagaI2C.__getData();
 
     // char b1[9];
@@ -50,7 +50,7 @@ void Gaga::setup() {
     // gagaSerial.println("conf: %s %s",
     //                    math::printBits(data[0], b1),
     //                    math::printBits(data[1], b2));
-    // HAL_Delay(50);
+    // HAL_Delay(5000);
 
     // // Read Status
     // gagaI2C.read(devAddr, statusRegAddr, 1U);
@@ -60,6 +60,7 @@ void Gaga::setup() {
 
     // gagaSerial.println("status: %s", math::printBits(data[0], b1));
     // HAL_Delay(50);
+    encoderConfReadTest();
 }
 
 
@@ -80,56 +81,49 @@ void Gaga::tick() {
     // if (speed < -2048)
     //     speed += 4096;
     // lastRead = value;
-
+    // gagaMotors[0].setPower(400);
     // char str[9];
-    // // gagaSerial.println(
-    // // "value: %d %d %s", speed, value, math::printBits(sb, str));
-    // gagaSerial.println("%d,%d", value, speed);
-
-
-    // gagaI2C.write(0x36, 0x00, nullptr, 0U);
-    // while (gagaI2C.isBusy());
-    // gagaSerial.println("done");
+    // // gagaSerial.println("%d\t%d\t%s%s%s",
+    // //                    speed,
+    // //                    value,
+    // //                    sb & 0x20 ? "4" : "",
+    // //                    sb & 0x10 ? "2" : "",
+    // //                    sb & 0x80 ? "0" : "");
+    // // gagaSerial.println("%d,%d", value, speed);
+    // gagaSerial.println("%f", static_cast<float>(value));
 
     // HAL_Delay(1);
 
-    speedControlTest();
+    // speedControlTest();
     // i2cfrequencyTest();
+    // calibrationMotorSpeed();
+    encoderReadTest();
 }
 
 void Gaga::speedControlTest() {
-    // Read the value of encoder
+    HAL_Delay(1);
+    // std::int32_t speed = readSpeedTest();
     gagaI2C.read(0x36, 0x0E, 2U);
     while (gagaI2C.isBusy());    // Wait for encode read finished
-
 
     std::uint8_t *data    = gagaI2C.__getData();
     const std::uint8_t hb = data[0];
     const std::uint8_t lb = data[1];
     std::uint16_t value   = (static_cast<std::uint16_t>(hb & 0x0F) << 8U) | lb;
 
-    // Calculate speed of motor
-    static std::uint16_t lastRead {0U};
-    std::int32_t speed = value - lastRead;
-    lastRead           = value;
-    if (speed > 2048)
-        speed -= 4096;
-    if (speed < -2048)
-        speed += 4096;
-    speed = -speed;
 
     // Control the motor
     static float integralError {0.0F};
-    constexpr float targetSpeed         = 25.0f;
-    constexpr float nominalControlValue = 1024;
+    constexpr float targetSpeed         = 25.0F;
+    constexpr float nominalControlValue = 36.27 * targetSpeed + 110.65;
     constexpr float kp                  = 100.0f;
     constexpr float ki                  = 0.05F;
 
-    const float errorSpeed = static_cast<float>(speed) - targetSpeed;
-    integralError += errorSpeed;
+    // const float errorSpeed = static_cast<float>(speed) - targetSpeed;
+    // integralError += errorSpeed;
 
     float controlValue =
-      nominalControlValue - kp * errorSpeed - ki * integralError;
+      nominalControlValue;    //-kp * errorSpeed - ki * integralError;
 
     // TODO: clamp to value range of int16
 
@@ -140,10 +134,10 @@ void Gaga::speedControlTest() {
     // gagaMotors[0].setPower(1000);
 
 
-    gagaSerial.println("%f, %d, %f", controlValue, speed, errorSpeed);
+    gagaSerial.println("%f", static_cast<float>(value));
 
 
-    HAL_Delay(2);
+    // HAL_Delay(0);
 }
 
 void Gaga::i2cfrequencyTest() {
@@ -185,6 +179,55 @@ void Gaga::statisticizeI2cReading(const std::uint32_t pre,
 }
 
 
+void Gaga::calibrationMotorSpeed() {
+    // Init
+    readSpeedTest();
+
+    for (int power {100}; power < 2100; power += 100) {
+        // Step 1. setup a power
+        gagaMotors[0].setPower(power);
+        // Wait 1 second for stable output;
+        HAL_Delay(1000);
+        // Read Speed
+        std::uint32_t startMillis = HAL_GetTick();
+        std::int64_t odometry {0};
+        std::int32_t speed;
+        while ((HAL_GetTick() - startMillis) < 3000U) {
+            HAL_Delay(1);
+            speed = readSpeedTest();
+            odometry += speed;
+        }
+        gagaSerial.println("%d, %d, %d", power, odometry, speed);
+    }
+    gagaMotors[0].setPower(0);
+    while (true);
+}
+
+
+std::int32_t Gaga::readSpeedTest() {
+    static std::int32_t lastRead {0};
+
+    gagaI2C.read(0x36, 0x0E, 2U);
+    while (gagaI2C.isBusy());    // Wait for encode read finished
+
+    std::uint8_t *data    = gagaI2C.__getData();
+    const std::uint8_t hb = data[0];
+    const std::uint8_t lb = data[1];
+    std::uint16_t value   = (static_cast<std::uint16_t>(hb & 0x0F) << 8U) | lb;
+
+    std::int32_t speed = value - lastRead;
+    lastRead           = value;
+
+    if (speed > 2048) {
+        speed -= 4096;
+    }
+    if (speed < -2048) {
+        speed += 4096;
+    }
+
+    return -speed;
+}
+
 void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
     // Turn the led off
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_RESET);
@@ -210,6 +253,60 @@ void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
 }
 
+void Gaga::encoderConfReadTest() {
+    // Setup the encoder
+    constexpr std::uint8_t devAddr {0x36};
+    constexpr std::uint8_t confRegAddr {0x07};
+
+    // Read Configuration
+    gagaI2C.read(devAddr, confRegAddr, 2U);
+    while (gagaI2C.isBusy());    // Wait for finish
+    std::uint8_t *data = gagaI2C.__getData();
+
+    char b1[9];
+    char b2[9];
+
+    gagaSerial.println("conf: %s %s",
+                       math::printBits(data[0], b1),
+                       math::printBits(data[1], b2));
+
+    HAL_Delay(200);
+
+    constexpr std::uint8_t updatedConf[2] {0x03, 0x00};
+
+    gagaI2C.write(devAddr, confRegAddr, updatedConf, 2U);
+    HAL_Delay(1);
+    while (gagaI2C.isBusy());    // wait for waitting
+    HAL_Delay(5);                // wait for making effecting
+
+    // Lets read again
+    gagaI2C.read(devAddr, confRegAddr, 2U);
+    while (gagaI2C.isBusy());    // Wait for finish
+    data = gagaI2C.__getData();
+    gagaSerial.println("conf: %s %s",
+                       math::printBits(data[0], b1),
+                       math::printBits(data[1], b2));
+}
+
+
+void Gaga::encoderReadTest() {
+    HAL_Delay(1);    // align timing
+    gagaI2C.read(0x36, 0x0E, 2U);
+    while (gagaI2C.isBusy());
+    std::uint8_t *data    = gagaI2C.__getData();
+    const std::uint8_t hb = data[0];
+    const std::uint8_t lb = data[1];
+    std::uint16_t value   = (static_cast<std::uint16_t>(hb & 0x0F) << 8U) | lb;
+    HAL_Delay(1);
+    gagaI2C.read(0x36, 0x1A, 1U);
+    while (gagaI2C.isBusy());
+    data    = gagaI2C.__getData();
+    int agc = data[0];
+
+    gagaSerial.println("%d, %d", (int)(value), (int)agc);
+
+    HAL_Delay(10);
+}
 
 Gaga gaga;
 

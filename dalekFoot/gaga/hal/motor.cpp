@@ -44,9 +44,9 @@ Motor::Motor(GPIO_TypeDef* portA,
 
 void Motor::setup() const {
     HAL_GPIO_WritePin(portA_, pinA_, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(portB_, pinB_, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(portB_, pinB_, GPIO_PIN_RESET);
     HAL_TIM_PWM_Start(pwmTimer_, pwmChannel_);
-    __HAL_TIM_SET_COMPARE(pwmTimer_, pwmChannel_, 1024);
+    __HAL_TIM_SET_COMPARE(pwmTimer_, pwmChannel_, 0);
 }
 void Motor::tick() {}
 

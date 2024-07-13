@@ -32,7 +32,12 @@ class Gaga {
     void initTimer5(const std::uint32_t pre, const std::uint32_t period);
     void statisticizeI2cReading(const std::uint32_t pre,
                                 const std::uint32_t period);
+    void calibrationMotorSpeed();
+    inline std::int32_t readSpeedTest();
+    inline void encoderConfReadTest();
+    inline void encoderReadTest();
 };
+
 }    // namespace hal
 }    // namespace cooboc
 

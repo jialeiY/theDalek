@@ -688,9 +688,9 @@ static void MX_TIM5_Init(void) {
 
     /* USER CODE END TIM5_Init 1 */
     htim5.Instance         = TIM5;
-    htim5.Init.Prescaler   = 8;
+    htim5.Init.Prescaler   = 9;
     htim5.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim5.Init.Period      = 20;
+    htim5.Init.Period      = 10;
 
     //      Whatever the parameter has been changed, the highest frequecy is
     //      300kHz
