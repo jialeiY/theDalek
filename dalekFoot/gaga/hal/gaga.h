@@ -36,6 +36,7 @@ class Gaga {
     inline std::int32_t readSpeedTest();
     inline void encoderConfReadTest();
     inline void encoderReadTest();
+    std::int16_t testSpeed_{0};
 };
 
 }    // namespace hal

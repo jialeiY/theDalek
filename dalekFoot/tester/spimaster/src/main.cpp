@@ -4,14 +4,21 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <linux/byteorder/little_endian.h>
+#include <iostream>
 
 extern "C"
 {
 
-    constexpr char devicePath[]{"/dev/ch34x_pis3"};
+    constexpr char devicePath[]{"/dev/ch34x_pis1"};
 
     namespace cooboc
     {
+
+        struct SpiProtocol
+        {
+            std::int8_t motorPower[4];
+        };
+
         class Ch341
         {
         public:
@@ -49,15 +56,21 @@ extern "C"
 
             void test()
             {
-                std::uint8_t buffer[sizeof(int)];
-                *(int *)(buffer) = __cpu_to_le32(cnt_);
-                // buffer[0] = 0xAA;
-                // buffer[1] = 0xBB;
-                // buffer[2] = 0xCC;
-                // buffer[3] = 0xDD;
-                if (CH34xStreamSPI4(fd_, 0x80, sizeof(int), buffer))
+                SpiProtocol spi;
+                spi.motorPower[0] = 10;
+                int s;
+                std::cin >> s;
+                spi.motorPower[0] = s;
+
+                // std::uint8_t buffer[sizeof(int)];
+                // *(int *)(buffer) = __cpu_to_le32(cnt_);
+                // // buffer[0] = 0xAA;
+                // // buffer[1] = 0xBB;
+                // // buffer[2] = 0xCC;
+                // // buffer[3] = 0xDD;
+                if (CH34xStreamSPI4(fd_, 0x80, 4, &spi))
                 {
-                    std::printf("value: %d %x%x%x%x.\r\n", cnt_, buffer[0], buffer[1], buffer[2], buffer[3]);
+                    // std::printf("value: %d %x%x%x%x.\r\n", cnt_, buffer[0], buffer[1], buffer[2], buffer[3]);
                 }
                 else
                 {

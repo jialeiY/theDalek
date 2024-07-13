@@ -61,9 +61,10 @@ void Gaga::speedControlTest() {
     constexpr int cycle {500};
     const float timeShift = static_cast<float>(HAL_GetTick() % cycle) * 2.0F *
                             3.1415926 / static_cast<float>(cycle);
-    const float targetSpeed =
+    float targetSpeed =
       math::lerp(std::sin(timeShift), -1.0F, 1.0F, 10.0F, 40.0F);
 
+    targetSpeed = testSpeed_;
 
     // Control the motor
     static float integralError {0.0F};
@@ -220,10 +221,11 @@ void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
                  2048);
     // motor.setPower(motorPower);
     //  motor.setPower(-1500);
-    gagaSerial.println("motor power: %d", motorPower);
+    // gagaSerial.println("motor power: %d", motorPower);
 
     // Turn the led on
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6, GPIO_PIN_SET);
+    testSpeed_ = spi.motorPower[0];
 }
 
 void Gaga::encoderConfReadTest() {
