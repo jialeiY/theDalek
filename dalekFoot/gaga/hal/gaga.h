@@ -25,6 +25,10 @@ class Gaga {
     void tick();
 
   private:
+    struct Odometry {
+        std::uint16_t encoder {0U};
+        std::int32_t speed {0};
+    };
     void onSpiDataReceived(const SpiProtocol &spi);
 
     void speedControlTest();
@@ -33,10 +37,10 @@ class Gaga {
     void statisticizeI2cReading(const std::uint32_t pre,
                                 const std::uint32_t period);
     void calibrationMotorSpeed();
-    inline std::int32_t readSpeedTest();
+    inline Odometry readSpeedTest();
     inline void encoderConfReadTest();
     inline void encoderReadTest();
-    std::int16_t testSpeed_{0};
+    std::int16_t testSpeed_ {0};
 };
 
 }    // namespace hal

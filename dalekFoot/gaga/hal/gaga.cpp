@@ -52,17 +52,28 @@ void Gaga::tick() {
 }
 
 void Gaga::speedControlTest() {
-    std::int32_t speed = readSpeedTest();
+    Odometry odo       = readSpeedTest();
+    std::int32_t speed = odo.speed;
 
-    // Generate dynamic target speed
-    // cycle = 4000 milli seconds
-    // amplifer = 10 -> 40
 
-    constexpr int cycle {500};
-    const float timeShift = static_cast<float>(HAL_GetTick() % cycle) * 2.0F *
-                            3.1415926 / static_cast<float>(cycle);
-    float targetSpeed =
-      math::lerp(std::sin(timeShift), -1.0F, 1.0F, 10.0F, 40.0F);
+    float targetSpeed = 0.0F;
+    {
+        // Generate dynamic target speed
+        // cycle = 4000 milli seconds
+        // amplifer = 10 -> 40
+        constexpr int cycle {500};
+        const float timeShift = static_cast<float>(HAL_GetTick() % cycle) *
+                                2.0F * 3.1415926 / static_cast<float>(cycle);
+        targetSpeed =
+          math::lerp(std::sin(timeShift), -1.0F, 1.0F, 10.0F, 40.0F);
+    }
+    {
+        // Generate square wave
+        constexpr int cycle {1000};
+        const float timeShift = HAL_GetTick() % cycle;
+        targetSpeed           = timeShift < (cycle / 2) ? 10.0F : 40.0F;
+    }
+
 
     targetSpeed = testSpeed_;
 
@@ -72,8 +83,8 @@ void Gaga::speedControlTest() {
     const float nominalControlValue = 28.27F * targetSpeed + 110.65;
     // const float kp                  = 40.0f;
     // const float ki                  = 0.1F;
-    const float kp = 40.0F;
-    const float ki = 0.10F;
+    const float kp = 80.0F;
+    const float ki = 3.50F;
 
     const float errorSpeed = targetSpeed - static_cast<float>(speed);
     integralError += errorSpeed;
@@ -90,7 +101,7 @@ void Gaga::speedControlTest() {
     //   static_cast<std::int16_t>(math::clamp(controlValue, -2048.0F,
     //   2048.0F)));
 
-    constexpr float maxControlChangingRate = 100.0F;
+    constexpr float maxControlChangingRate = 10000.0F;
     const float clampedControlValue =
       math::clamp(math::clamp(controlValue,
                               lastControlValue - maxControlChangingRate,
@@ -104,11 +115,14 @@ void Gaga::speedControlTest() {
                              : nominalControlValue);
     lastControlValue = clampedControlValue;
 
-    gagaSerial.println("%d,%d,%d,%d",
-                       (int)targetSpeed,
-                       speed,
-                       (int)clampedControlValue,
-                       HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_1));
+    // gagaSerial.println("%d,%d,%d,%d",
+    //                    (int)targetSpeed,
+    //                    speed,
+    //                    (int)clampedControlValue,
+    //                    HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_1));
+
+
+    gagaSerial.println("%d,%d", (int)odo.encoder, (int)odo.speed);
 
 
     HAL_Delay(1);
@@ -168,7 +182,7 @@ void Gaga::calibrationMotorSpeed() {
         std::int32_t speed;
         while ((HAL_GetTick() - startMillis) < 3000U) {
             HAL_Delay(1);
-            speed = readSpeedTest();
+            speed = readSpeedTest().speed;
             odometry += speed;
         }
         gagaSerial.println("%d, %d, %d", power, odometry, speed);
@@ -178,7 +192,7 @@ void Gaga::calibrationMotorSpeed() {
 }
 
 
-std::int32_t Gaga::readSpeedTest() {
+Gaga::Odometry Gaga::readSpeedTest() {
     static std::int32_t lastRead {0};
     HAL_Delay(1);
     gagaI2C.read(0x36, 0x0E, 2U);
@@ -199,7 +213,7 @@ std::int32_t Gaga::readSpeedTest() {
         speed += 4096;
     }
 
-    return -speed;
+    return {value, -speed};
 }
 
 void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
