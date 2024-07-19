@@ -45,7 +45,7 @@ void Gaga::setup() {
 
 
 void Gaga::tick() {
-    speedControlTest();
+    // speedControlTest();
     // i2cfrequencyTest();
     // calibrationMotorSpeed();
     // encoderReadTest();

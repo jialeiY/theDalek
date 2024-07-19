@@ -9,8 +9,11 @@
 [#] 9. control dynamic speed of motor
 [#] 10. control speed of motor from SPI
 11. the trajectory controlling
-12. output the speed of motor
+12. output the speed of motor[DoD: output the speed simultaneously via USART, calculate the baudrate] (2)
 13. install all motors
+14. add timer for cycle [DoD: output the time interval between the interrupt] (1)
+15. control the speed of all motors (3)
+16. the architecture of the foot
 
 
 
