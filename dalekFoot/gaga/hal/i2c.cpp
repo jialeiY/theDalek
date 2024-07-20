@@ -2,18 +2,15 @@
 #include <algorithm>
 #include "hal/board_def.h"
 
+
+// The following lines could be removed
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (htim == &htim5) {
-        cooboc::hal::gagaI2C.__IT_onCapture();
-    }
-}
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) {
-    // LED2_TOGGLE;
-}
+
+// void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) { LED2_TOGGLE; }
 #ifdef __cplusplus
 }
 #endif

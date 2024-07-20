@@ -56,6 +56,7 @@ TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim5;
+TIM_HandleTypeDef htim9;
 
 UART_HandleTypeDef huart1;
 DMA_HandleTypeDef hdma_usart1_tx;
@@ -80,6 +81,8 @@ static void MX_TIM3_Init(void);
 static void MX_TIM4_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_TIM5_Init(void);
+static void MX_TIM9_Init(void);
+
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -144,6 +147,7 @@ int main(void) {
     MX_TIM3_Init();
     MX_TIM4_Init();
     MX_TIM5_Init();
+    MX_TIM9_Init();
     MX_USART1_UART_Init();
     /* USER CODE BEGIN 2 */
 
@@ -719,6 +723,40 @@ static void MX_TIM5_Init(void) {
     }
     /* USER CODE BEGIN TIM5_Init 2 */
     /* USER CODE END TIM5_Init 2 */
+}
+
+/**
+ * @brief TIM9 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_TIM9_Init(void) {
+    /* USER CODE BEGIN TIM9_Init 0 */
+
+    /* USER CODE END TIM9_Init 0 */
+
+    TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+
+    /* USER CODE BEGIN TIM9_Init 1 */
+
+    /* USER CODE END TIM9_Init 1 */
+    // APB2 clock 168MHz
+    htim9.Instance               = TIM9;
+    htim9.Init.Prescaler         = 5;
+    htim9.Init.CounterMode       = TIM_COUNTERMODE_UP;
+    htim9.Init.Period            = 55999;
+    htim9.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
+    htim9.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    if (HAL_TIM_Base_Init(&htim9) != HAL_OK) {
+        Error_Handler();
+    }
+    sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+    if (HAL_TIM_ConfigClockSource(&htim9, &sClockSourceConfig) != HAL_OK) {
+        Error_Handler();
+    }
+    /* USER CODE BEGIN TIM9_Init 2 */
+
+    /* USER CODE END TIM9_Init 2 */
 }
 
 

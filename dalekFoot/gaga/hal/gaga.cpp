@@ -12,6 +12,24 @@
 #include "stm32f4xx_hal.h"
 #include "third_party/printf/printf.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    if (htim == &htim5) {
+        cooboc::hal::gagaI2C.__IT_onCapture();
+    }
+    if (htim == &htim9) {
+        LED1_TOGGLE;
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_0);
+    }
+}
+// void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) { LED2_TOGGLE; }
+#ifdef __cplusplus
+}
+#endif
+
 namespace cooboc {
 namespace hal {
 
@@ -38,9 +56,25 @@ void Gaga::setup() {
     gagaSerial.println("begin");
     HAL_Delay(50);
 
+    // Start tick
+    __HAL_TIM_ENABLE_IT(&htim9, TIM_IT_UPDATE);
+    HAL_TIM_Base_Start_IT(&htim9);
+
     encoderConfReadTest();
     // Init speed register
     readSpeedTest();
+
+
+    // Set the PA0 to output, just for test
+    {
+        GPIO_InitTypeDef GPIO_InitStruct = {0};
+        GPIO_InitStruct.Pin              = GPIO_PIN_0;
+        GPIO_InitStruct.Mode             = GPIO_MODE_OUTPUT_PP;
+        GPIO_InitStruct.Pull             = GPIO_NOPULL;
+        GPIO_InitStruct.Speed            = GPIO_SPEED_FREQ_LOW;
+        HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+    }
 }
 
 
