@@ -3,18 +3,6 @@
 #include "hal/board_def.h"
 
 
-// The following lines could be removed
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-
-// void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) { LED2_TOGGLE; }
-#ifdef __cplusplus
-}
-#endif
-
 namespace cooboc {
 namespace hal {
 
@@ -45,11 +33,13 @@ void I2C::setup() {
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
     HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET);
+}
 
-
+void I2C::begin() {
     __HAL_TIM_ENABLE_IT(&htim5, TIM_IT_UPDATE);
     HAL_TIM_Base_Start_IT(&htim5);
 }
+
 void I2C::tick() {}
 bool I2C::isBusy() {
     __disable_irq();

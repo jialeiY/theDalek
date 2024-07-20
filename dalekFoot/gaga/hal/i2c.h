@@ -10,6 +10,7 @@ class I2C {
   public:
     I2C() = default;
     void setup();
+    void begin();
     void tick();
     bool isBusy();
     void write(const std::uint8_t devAddr,

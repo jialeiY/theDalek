@@ -157,9 +157,10 @@ int main(void) {
     /* USER CODE BEGIN WHILE */
 
     cooboc::hal::gaga.setup();
+    cooboc::hal::gaga.begin();
+    while (true);
 
-
-    while (true) { cooboc::hal::gaga.tick(); }
+    // while (true) { cooboc::hal::gaga.tick(); }
     while (1) {
         /* USER CODE END WHILE */
         /* USER CODE BEGIN 3 */

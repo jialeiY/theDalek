@@ -12,6 +12,12 @@
 #include "stm32f4xx_hal.h"
 #include "third_party/printf/printf.h"
 
+
+namespace cooboc {
+namespace hal {
+extern cooboc::hal::Gaga gaga;
+}
+}    // namespace cooboc
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,8 +27,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
         cooboc::hal::gagaI2C.__IT_onCapture();
     }
     if (htim == &htim9) {
-        LED1_TOGGLE;
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_0);
+        cooboc::hal::gaga.__IT_onTimeout();
+        // LED1_TOGGLE;
+        // HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_0);
     }
 }
 // void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim) { LED2_TOGGLE; }
@@ -51,18 +58,15 @@ void Gaga::setup() {
     gagaI2C.setup();
 
     intents::intentManager.setup();
-    gagaSpi.begin();
+
 
     gagaSerial.println("begin");
     HAL_Delay(50);
 
-    // Start tick
-    __HAL_TIM_ENABLE_IT(&htim9, TIM_IT_UPDATE);
-    HAL_TIM_Base_Start_IT(&htim9);
 
-    encoderConfReadTest();
+    // encoderConfReadTest();
     // Init speed register
-    readSpeedTest();
+    // readSpeedTest();
 
 
     // Set the PA0 to output, just for test
@@ -77,8 +81,18 @@ void Gaga::setup() {
     }
 }
 
+void Gaga::begin() {
+    gagaI2C.begin();
+    gagaSpi.begin();
+    // Start main cycle tick
+    __HAL_TIM_ENABLE_IT(&htim9, TIM_IT_UPDATE);
+    HAL_TIM_Base_Start_IT(&htim9);
+}
+
+void Gaga::__IT_onTimeout() { tick(); }
 
 void Gaga::tick() {
+    intents::intentManager.tick();
     // speedControlTest();
     // i2cfrequencyTest();
     // calibrationMotorSpeed();
@@ -260,7 +274,6 @@ void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
     //                    spi.motorPower[2],
     //                    spi.motorPower[3]);
 
-    intents::intentManager.launch();
     std::int32_t motorPower =
       math::lerp(spi.motorPower[0],
                  std::numeric_limits<std::int8_t>::min(),

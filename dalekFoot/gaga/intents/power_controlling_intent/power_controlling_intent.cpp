@@ -3,5 +3,6 @@
 namespace cooboc {
 namespace intents {
 void PowerControllingIntent::setup() {}
+void PowerControllingIntent::tick() {}
 }    // namespace intents
 }    // namespace cooboc

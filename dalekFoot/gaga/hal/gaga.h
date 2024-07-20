@@ -22,7 +22,10 @@ class Gaga {
   public:
     Gaga();
     void setup();
-    void tick();
+    void begin();
+    inline void tick();
+
+    void __IT_onTimeout();
 
   private:
     struct Odometry {
