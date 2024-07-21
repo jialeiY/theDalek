@@ -38,7 +38,7 @@ void I2CPort::initHardware() {
     // Setup SDA pin
     GPIO_InitStruct.Pin   = sdaPin_;
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_OD;
-    GPIO_InitStruct.Pull  = GPIO_NOPULL;    // use external pull-up resister
+    GPIO_InitStruct.Pull  = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     HAL_GPIO_Init(sdaPort_, &GPIO_InitStruct);
     HAL_GPIO_WritePin(sdaPort_, sdaPin_, GPIO_PIN_SET);
@@ -171,8 +171,11 @@ void I2C::__IT_statusTransitStartToReadWriteOrEnd() {
 }
 
 void I2C::__IT_transmitWrite() {
-    ports_[0U].setTransByte(
-      (ports_[0U].getWriteBufferPtr())[__it_writeByteOffset_]);
+    for (std::size_t i {0U}; i < ports_.size(); ++i) {
+        ports_[i].setTransByte(
+          (ports_[i].getWriteBufferPtr())[__it_writeByteOffset_]);
+    }
+
     __IT_sendByte();
     if (0U == __it_operationSequence_) {
         // Send byte finished
@@ -232,7 +235,7 @@ void I2C::__IT_sendByte() {
             }
             case (18): {
                 // read ack and clk down
-
+                // TODO:
                 // bool ack = __IT_sdaRead();
                 __IT_clkDown();
                 // if (ack)
@@ -312,7 +315,7 @@ void I2C::__IT_transmitRead() {
     if (__it_readByteOffset_ == 0U) {
         // Generate read address
         for (std::size_t i {0U}; i < ports_.size(); ++i) {
-            ports_[i].setTransByte(ports_[i].getWriteBufferPtr()[0] | 0x01);
+            ports_[i].setTransByte(ports_[i].getWriteBufferPtr()[0U] | 0x01);
         }
         __IT_sendByte();
     } else {
@@ -368,10 +371,22 @@ void I2C::__IT_transmitEnd() {
     }
 }
 
-void I2C::__IT_sdaDown() { ports_[0U].sdaDown(); }
-void I2C::__IT_sdaUp() { ports_[0U].sdaUp(); }
-void I2C::__IT_clkDown() { ports_[0U].clkDown(); }
-void I2C::__IT_clkUp() { ports_[0U].clkUp(); }
+void I2C::__IT_sdaDown() {
+    ports_[0U].sdaDown();
+    ports_[1U].sdaDown();
+}
+void I2C::__IT_sdaUp() {
+    ports_[0U].sdaUp();
+    ports_[1U].sdaUp();
+}
+void I2C::__IT_clkDown() {
+    ports_[0U].clkDown();
+    ports_[1U].clkDown();
+}
+void I2C::__IT_clkUp() {
+    ports_[0U].clkUp();
+    ports_[1U].clkUp();
+}
 // bool I2C::__IT_sdaRead() { return ports_[0U].readSda(); }
 
 void I2C::write(const std::uint8_t devAddr,
