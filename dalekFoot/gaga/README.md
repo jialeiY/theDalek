@@ -12,8 +12,8 @@
 [#] 12. output the speed of motor[DoD: output the speed simultaneously via USART, calculate the baudrate] (2)
 [#] 13. install all motors
 [#] 14. add timer for cycle [DoD: output the time interval between the interrupt] (1)
-15. control the speed of all motors (3)
-16. the architecture of the foot
+[#] 15. control the speed of all motors (3)
+[#] 16. the architecture of the foot
 [#] 17. check board/core/stm32f4xx_it.c:TIM1_BRK_TIM9_IRQHandler() HAL_TIM_IRQHandler(&htim1);
 [#] 18. remove __it_transByte_ in i2c
 
