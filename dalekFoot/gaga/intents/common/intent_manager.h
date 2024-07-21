@@ -13,7 +13,7 @@ class IntentManager {
     void tick();
 
   private:
-    std::array<IntentBase *, 4U> intents_;
+    std::array<IntentBase *, 5U> intents_;
 };
 
 extern IntentManager intentManager;

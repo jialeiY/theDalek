@@ -6,6 +6,7 @@
 #include "intents/encoder_reading_intent/encoder_reading_intent.h"
 #include "intents/encoder_reading_trigger_intent/encoder_reading_trigger_intent.h"
 #include "intents/power_controlling_intent/power_controlling_intent.h"
+#include "intents/wheel_odometry_intent/wheel_odometry_intent.h"
 
 namespace cooboc {
 namespace intents {
@@ -17,9 +18,10 @@ void IntentManager::setup() {
 
     // Instance all intents
     intents_[0U] = new EncoderReadingTriggerIntent();
-    intents_[1U] = new PowerControllingIntent();
-    intents_[2U] = new EncoderReadingIntent();
-    intents_[3U] = new DebugDataIntent();
+    intents_[1U] = new WheelOdometryIntent();
+    intents_[2U] = new PowerControllingIntent();
+    intents_[3U] = new EncoderReadingIntent();
+    intents_[4U] = new DebugDataIntent();
 
     for (IntentBase *intentP : intents_) { intentP->setup(); }
 }

@@ -11,7 +11,9 @@ void EncoderReadingIntent::tick() {
     hal::Encoder::EncoderReadings readings {hal::gagaEncoder.getReadings()};
 
     for (std::size_t i {0U}; i < readings.size(); ++i) {
-        data::encoderReadingOutput.encoder[i].value = readings[i].value;
+        data::encoderReadingTopic.encoder[i].value = readings[i].value;
+        // TODO
+        data::encoderReadingTopic.encoder[i].qualifier = data::Qualifier::GOOD;
     }
 }
 }    // namespace intents

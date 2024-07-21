@@ -6,6 +6,7 @@
 namespace cooboc {
 namespace intents {
 class PowerControllingIntent : public IntentBase {
+  public:
     virtual void setup() override;
     virtual void tick() override;
 };

@@ -32,20 +32,21 @@ C_SOURCES += third_party/printf/printf.c
 
 CPP_SOURCES += board/core/main.cpp
 
-CPP_SOURCES += hal/gaga_it.cpp
-CPP_SOURCES += hal/encoder.cpp
-CPP_SOURCES += hal/serial.cpp
-CPP_SOURCES += hal/gaga.cpp
-CPP_SOURCES += hal/spi.cpp
-CPP_SOURCES += hal/motor.cpp
 CPP_SOURCES += hal/driver/i2c.cpp
+CPP_SOURCES += hal/encoder.cpp
+CPP_SOURCES += hal/gaga.cpp
+CPP_SOURCES += hal/gaga_it.cpp
+CPP_SOURCES += hal/motor.cpp
+CPP_SOURCES += hal/serial.cpp
+CPP_SOURCES += hal/spi.cpp
+CPP_SOURCES += intents/common/data_pool.cpp
 CPP_SOURCES += intents/common/intent_manager.cpp
-CPP_SOURCES += math/utils.cpp
-CPP_SOURCES += intents/encoder_reading_trigger_intent/encoder_reading_trigger_intent.cpp
 CPP_SOURCES += intents/debug_data_intent/debug_data_intent.cpp
 CPP_SOURCES += intents/encoder_reading_intent/encoder_reading_intent.cpp
+CPP_SOURCES += intents/encoder_reading_trigger_intent/encoder_reading_trigger_intent.cpp
 CPP_SOURCES += intents/power_controlling_intent/power_controlling_intent.cpp
-CPP_SOURCES += intents/common/data_pool.cpp
+CPP_SOURCES += intents/wheel_odometry_intent/wheel_odometry_intent.cpp
+CPP_SOURCES += math/utils.cpp
 
 
 ASM_SOURCES +=  board/startup/startup_stm32f407vetx.s
