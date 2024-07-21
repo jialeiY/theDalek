@@ -4,14 +4,11 @@
 namespace cooboc {
 namespace intents {
 
-void setupParameters();
+namespace parameters {
+constexpr bool kEncoderDirection[4U] {false, false, true, true};
+constexpr bool kMotorDirection[6U] {true, false, false, true, false, false};
 
-struct Parameters {
-    bool encoderDirection[4U];
-    bool motorDirection[6U];
-};
-
-extern Parameters parameters;
+}    // namespace parameters
 }    // namespace intents
 }    // namespace cooboc
 

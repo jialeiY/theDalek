@@ -8,7 +8,8 @@ namespace intents {
 void PowerControllingIntent::setup() {}
 void PowerControllingIntent::tick() {
     for (int i = 0; i < 4; ++i) {
-        hal::gagaMotors[i].setPower(parameters.motorDirection[i] ? 400 : -400);
+        hal::gagaMotors[i].setPower(parameters::kMotorDirection[i] ? 400
+                                                                   : -400);
     }
 }
 }    // namespace intents

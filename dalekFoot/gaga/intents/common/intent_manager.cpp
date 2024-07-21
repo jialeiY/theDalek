@@ -15,8 +15,6 @@ namespace intents {
 
 IntentManager::IntentManager() {}
 void IntentManager::setup() {
-    setupParameters();
-
     // Instance all intents
     intents_[0U] = new EncoderReadingTriggerIntent();
     intents_[1U] = new TargetManeuverIntent();

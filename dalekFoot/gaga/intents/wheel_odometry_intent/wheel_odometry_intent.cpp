@@ -22,7 +22,7 @@ void WheelOdometryIntent::tick() {
         data::wheelOdometryTopic.wheelSpeed[i] =
           calculateSingleWheelSpeed(currentEncoderReading,
                                     lastEncoderReading_[i],
-                                    !parameters.encoderDirection[i]);
+                                    !parameters::kEncoderDirection[i]);
         lastEncoderReading_[i] = currentEncoderReading;
     }
 }
