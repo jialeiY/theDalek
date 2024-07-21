@@ -20,7 +20,8 @@ class WheelOdometryIntent : public IntentBase {
 
     data::WheelSpeed calculateSingleWheelSpeed(
       const data::EncoderReading currentEncoderReading,
-      const data::EncoderReading lastEncoderReading);
+      const data::EncoderReading lastEncoderReading,
+      const bool isReversed);
 };
 }    // namespace intents
 }    // namespace cooboc

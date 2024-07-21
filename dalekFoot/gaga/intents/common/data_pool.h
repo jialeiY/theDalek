@@ -2,6 +2,7 @@
 #define __INTENTS_COMMON_DATA_POOL_H__
 
 #include "intents/common/data_defs/encoder_reading_topic.h"
+#include "intents/common/data_defs/target_maneuver_topic.h"
 #include "intents/common/data_defs/wheel_odometry_topic.h"
 
 namespace cooboc {
@@ -24,6 +25,11 @@ extern data::EncoderReadingTopic encoderReadingTopic;
  */
 extern data::WheelOdometryTopic wheelOdometryTopic;
 
+
+/**
+ * OUtput: TargetManeuverIntent
+ */
+extern data::TargetManeuverTopic targetManeuverTopic;
 
 }    // namespace data
 }    // namespace cooboc

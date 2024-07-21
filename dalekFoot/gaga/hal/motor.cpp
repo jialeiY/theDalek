@@ -29,48 +29,45 @@ namespace hal {
  *
  */
 
-Motor::Motor(GPIO_TypeDef* portA,
-             const std::uint16_t pinA,
-             GPIO_TypeDef* portB,
-             const std::uint16_t pinB,
-             TIM_HandleTypeDef* pwmTimer,
-             const uint32_t pwmChannel) :
-    portA_ {portA},
-    pinA_ {pinA},
-    portB_ {portB},
-    pinB_ {pinB},
-    pwmTimer_ {pwmTimer},
-    pwmChannel_ {pwmChannel} {}
 
-void Motor::setup() const {
+void Motor::setup(GPIO_TypeDef* portA,
+                  const std::uint16_t pinA,
+                  GPIO_TypeDef* portB,
+                  const std::uint16_t pinB,
+                  TIM_HandleTypeDef* pwmTimer,
+                  const uint32_t pwmChannel) {
+    portA_      = portA;
+    pinA_       = pinA;
+    portB_      = portB;
+    pinB_       = pinB;
+    pwmTimer_   = pwmTimer;
+    pwmChannel_ = pwmChannel;
+
     HAL_GPIO_WritePin(portA_, pinA_, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(portB_, pinB_, GPIO_PIN_RESET);
     HAL_TIM_PWM_Start(pwmTimer_, pwmChannel_);
     __HAL_TIM_SET_COMPARE(pwmTimer_, pwmChannel_, 0);
 }
-void Motor::tick() {}
 
 void Motor::setPower(std::int16_t value) {
-    if (value > 0) {
-        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
-        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, value);
+    if (0 == value) {
+        HAL_GPIO_WritePin(portA_, pinA_, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(portB_, pinB_, GPIO_PIN_RESET);
+        __HAL_TIM_SET_COMPARE(pwmTimer_, pwmChannel_, 0);
     } else {
-        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_0, GPIO_PIN_RESET);
-        HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET);
-        __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, -value);
+        if (value > 0) {
+            HAL_GPIO_WritePin(portA_, pinA_, GPIO_PIN_SET);
+            HAL_GPIO_WritePin(portB_, pinB_, GPIO_PIN_RESET);
+            __HAL_TIM_SET_COMPARE(pwmTimer_, pwmChannel_, value);
+        } else {
+            HAL_GPIO_WritePin(portA_, pinA_, GPIO_PIN_RESET);
+            HAL_GPIO_WritePin(portB_, pinB_, GPIO_PIN_SET);
+            __HAL_TIM_SET_COMPARE(pwmTimer_, pwmChannel_, -value);
+        }
     }
 }
 
-std::array<Motor, 6U> gagaMotors {
-  Motor {GPIOD, GPIO_PIN_0, GPIOD, GPIO_PIN_1, &htim4, TIM_CHANNEL_1},
-  Motor {GPIOD, GPIO_PIN_2, GPIOD, GPIO_PIN_3, &htim4, TIM_CHANNEL_2},
-  Motor {GPIOD, GPIO_PIN_4, GPIOD, GPIO_PIN_5, &htim4, TIM_CHANNEL_3},
-  Motor {GPIOD, GPIO_PIN_6, GPIOD, GPIO_PIN_7, &htim4, TIM_CHANNEL_4},
-  Motor {GPIOD, GPIO_PIN_8, GPIOD, GPIO_PIN_9, &htim3, TIM_CHANNEL_3},
-  Motor {GPIOD, GPIO_PIN_10, GPIOD, GPIO_PIN_11, &htim2, TIM_CHANNEL_1},
-
-};
+std::array<Motor, 6U> gagaMotors;
 
 }    // namespace hal
 }    // namespace cooboc

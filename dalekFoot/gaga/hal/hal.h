@@ -2,6 +2,7 @@
 #define __HAL_HAL_H__
 
 #include "hal/encoder.h"
+#include "hal/motor.h"
 #include "hal/serial.h"
 
 namespace cooboc {

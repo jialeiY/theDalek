@@ -41,10 +41,12 @@ CPP_SOURCES += hal/serial.cpp
 CPP_SOURCES += hal/spi.cpp
 CPP_SOURCES += intents/common/data_pool.cpp
 CPP_SOURCES += intents/common/intent_manager.cpp
+CPP_SOURCES += intents/common/parameters.cpp
 CPP_SOURCES += intents/debug_data_intent/debug_data_intent.cpp
 CPP_SOURCES += intents/encoder_reading_intent/encoder_reading_intent.cpp
 CPP_SOURCES += intents/encoder_reading_trigger_intent/encoder_reading_trigger_intent.cpp
 CPP_SOURCES += intents/power_controlling_intent/power_controlling_intent.cpp
+CPP_SOURCES += intents/target_maneuver_intent/target_maneuver_intent.cpp
 CPP_SOURCES += intents/wheel_odometry_intent/wheel_odometry_intent.cpp
 CPP_SOURCES += math/utils.cpp
 

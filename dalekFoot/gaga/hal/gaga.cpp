@@ -27,7 +27,20 @@ void Gaga::setup() {
         HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
     }
     // End of Debug
-    for (const Motor &motor : gagaMotors) { motor.setup(); }
+
+    // Init motors
+    gagaMotors[0U].setup(
+      GPIOD, GPIO_PIN_0, GPIOD, GPIO_PIN_1, &htim4, TIM_CHANNEL_1);
+    gagaMotors[1U].setup(
+      GPIOD, GPIO_PIN_2, GPIOD, GPIO_PIN_3, &htim4, TIM_CHANNEL_2);
+    gagaMotors[2U].setup(
+      GPIOD, GPIO_PIN_4, GPIOD, GPIO_PIN_5, &htim4, TIM_CHANNEL_3);
+    gagaMotors[3U].setup(
+      GPIOD, GPIO_PIN_6, GPIOD, GPIO_PIN_7, &htim4, TIM_CHANNEL_4);
+    gagaMotors[4U].setup(
+      GPIOD, GPIO_PIN_8, GPIOD, GPIO_PIN_9, &htim3, TIM_CHANNEL_3);
+    gagaMotors[5U].setup(
+      GPIOD, GPIO_PIN_10, GPIOD, GPIO_PIN_11, &htim2, TIM_CHANNEL_1);
 
     gagaSerial.setup();
     gagaSpi.setup([this](const SpiProtocol &spi) { onSpiDataReceived(spi); });
@@ -56,7 +69,7 @@ void Gaga::setup() {
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
         HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
     }
-}
+}    // namespace hal
 
 void Gaga::begin() {
     gagaEncoder.begin();

@@ -1,6 +1,7 @@
 #include "intents/wheel_odometry_intent/wheel_odometry_intent.h"
 #include <cstdint>
 #include "intents/common/data_pool.h"
+#include "intents/common/parameters.h"
 
 namespace cooboc {
 namespace intents {
@@ -18,16 +19,18 @@ void WheelOdometryIntent::tick() {
     for (std::size_t i {0U}; i < 4U; ++i) {
         const data::EncoderReading &currentEncoderReading =
           data::encoderReadingTopic.encoder[i];
-        data::wheelOdometryTopic.wheelSpeed[i] = calculateSingleWheelSpeed(
-          currentEncoderReading, lastEncoderReading_[i]);
-
+        data::wheelOdometryTopic.wheelSpeed[i] =
+          calculateSingleWheelSpeed(currentEncoderReading,
+                                    lastEncoderReading_[i],
+                                    !parameters.encoderDirection[i]);
         lastEncoderReading_[i] = currentEncoderReading;
     }
 }
 
 data::WheelSpeed WheelOdometryIntent::calculateSingleWheelSpeed(
   const data::EncoderReading currentEncoderReading,
-  const data::EncoderReading lastEncoderReading) {
+  const data::EncoderReading lastEncoderReading,
+  const bool isReversed) {
     data::WheelSpeed ret {data::Qualifier::BAD, 0.0F};
     if ((currentEncoderReading.qualifier == data::Qualifier::GOOD) &&
         (lastEncoderReading.qualifier == data::Qualifier::GOOD)) {
@@ -40,7 +43,8 @@ data::WheelSpeed WheelOdometryIntent::calculateSingleWheelSpeed(
             diff += 4096;
         }
         ret.qualifier = data::Qualifier::GOOD;
-        ret.speed     = static_cast<float>(diff);
+        ret.speed =
+          isReversed ? -static_cast<float>(diff) : static_cast<float>(diff);
     }
     return ret;
 }
