@@ -6,7 +6,7 @@ namespace intents {
 
 void TargetManeuverIntent::setup() {
     for (std::size_t i {0U}; i < 4U; ++i) {
-        data::targetManeuverTopic.speed[i] = 10.0F;
+        data::targetManeuverTopic.speed[i] = 2.0F;
     }
 }
 void TargetManeuverIntent::tick() {}

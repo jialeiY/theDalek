@@ -21,13 +21,15 @@ extern data::EncoderReadingTopic encoderReadingTopic;
 
 
 /**
- * Output: WheelOdometryIntent
+ * Output:  WheelOdometryIntent
+ * Input:   PowerControllingIntent
  */
 extern data::WheelOdometryTopic wheelOdometryTopic;
 
 
 /**
- * OUtput: TargetManeuverIntent
+ * Output:  TargetManeuverIntent
+ * Input:   PowerControllingIntent
  */
 extern data::TargetManeuverTopic targetManeuverTopic;
 
