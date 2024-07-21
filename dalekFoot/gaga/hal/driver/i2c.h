@@ -91,20 +91,10 @@ class I2C {
     // For Write
     std::size_t __it_writeByteOffset_ {0U};
     std::size_t __it_writeCount_ {0U};
-    // std::uint8_t __it_writeBuffer_[4U] {0U};
 
     // For Read
     std::size_t __it_readByteOffset_ {0U};
     std::size_t __it_readCount_ {0U};
-    // std::uint8_t __it_readBuffer_[4U] {0U};
-
-    // std::uint8_t __it_transByte_ {0U};
-
-    // std::uint8_t dataOut_[4U] {0U};
-    // std::size_t byteOffset_ {0U};
-    // For debug
-    // std::uint8_t transData_[2] {0x36 << 1U, 0x5A};
-
 
     inline void __IT_transmitStart();
     inline void __IT_statusTransitStartToReadWriteOrEnd();
@@ -118,7 +108,6 @@ class I2C {
     inline void __IT_sdaUp();
     inline void __IT_clkDown();
     inline void __IT_clkUp();
-    // inline bool __IT_sdaRead();
 };
 
 extern I2C gagaI2C;

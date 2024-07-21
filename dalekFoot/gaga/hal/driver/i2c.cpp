@@ -77,8 +77,6 @@ void I2CPort::pushBitToTransByte(bool status) {
 
 void I2C::setup() {
     // Hardware initialization
-    // setup clock pin: PE8
-    // Setup SDA pin: PE7
     ports_[0U].setup(GPIOE, GPIO_PIN_8, GPIOE, GPIO_PIN_7);
     ports_[1U].setup(GPIOE, GPIO_PIN_6, GPIOE, GPIO_PIN_5);
     ports_[2U].setup(GPIOC, GPIO_PIN_9, GPIOA, GPIO_PIN_8);
@@ -461,43 +459,8 @@ std::array<I2C::I2CResult, detail::PORT_NUMBER> I2C::getData() {
     return ret;
 }
 
-// void I2C::__testTrigger() {
-//     __disable_irq();
-//     if (__it_status_ != OperationStatus::IDLE) {
-//         // I2C in working, quit
-//         __enable_irq();
-//         return;
-//     }
-
-//     // // test: write data
-//     // //  Start transmit, setup the state
-//     // __it_operationSequence_ = 0U;
-//     // __it_writeByteOffset_   = 0U;
-//     // __it_writeCount_        = 2U;
-//     // __it_writeBuffer_[0]    = 0x36 << 1U;
-//     // __it_writeBuffer_[1]    = 0x0E;
-//     // __it_readByteOffset_    = 0U;
-//     // __it_readCount_         = 0U;
-//     // __it_status_            = OperationStatus::START;
-
-
-//     // test: read data
-//     // Start transmit, setup the state
-//     __it_operationSequence_ = 0U;
-//     __it_writeByteOffset_   = 0U;
-//     __it_writeCount_        = 2U;
-//     __it_writeBuffer_[0]    = 0x36 << 1U;
-//     __it_writeBuffer_[1]    = 0x0E;
-//     __it_readByteOffset_    = 0U;
-//     __it_readCount_         = 2U;
-//     __it_status_            = OperationStatus::START;
-
-
-//     __enable_irq();
-// }
 
 I2C gagaI2C;
 
 }    // namespace hal
 }    // namespace cooboc
-     // HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_7);
