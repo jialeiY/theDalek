@@ -6,7 +6,8 @@ namespace intents {
 EncoderReadingTriggerIntent::EncoderReadingTriggerIntent() {}
 void EncoderReadingTriggerIntent::setup() {}
 void EncoderReadingTriggerIntent::tick() {
-    // hal::gagaI2C.read();
+    //
+    hal::gagaI2C.read(0x36, 0x0E, 2U);
 }
 }    // namespace intents
 }    // namespace cooboc

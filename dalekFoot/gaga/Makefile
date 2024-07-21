@@ -43,6 +43,8 @@ CPP_SOURCES += intents/encoder_reading_trigger_intent/encoder_reading_trigger_in
 CPP_SOURCES += intents/debug_data_intent/debug_data_intent.cpp
 CPP_SOURCES += intents/encoder_reading_intent/encoder_reading_intent.cpp
 CPP_SOURCES += intents/power_controlling_intent/power_controlling_intent.cpp
+CPP_SOURCES += intents/common/data_pool.cpp
+
 
 ASM_SOURCES +=  board/startup/startup_stm32f407vetx.s
 
