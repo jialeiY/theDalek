@@ -32,24 +32,24 @@ Encoder::EncoderReadings Encoder::getReadings() {
 
 
     std::uint8_t *data {nullptr};
+    std::uint16_t value[4] {0U, 0U, 0U, 0U};
+
     std::uint8_t hb {0U};
     std::uint8_t lb {0U};
 
-    data                 = result[0].dataBufferPtr;
-    hb                   = data[0];
-    lb                   = data[1];
-    std::uint16_t value0 = (static_cast<std::uint16_t>(hb & 0x0F) << 8U) | lb;
+    for (std::size_t i {0U}; i < 4U; ++i) {
+        data     = result[i].dataBufferPtr;
+        hb       = data[0];
+        lb       = data[1];
+        value[i] = (static_cast<std::uint16_t>(hb & 0x0F) << 8U) | lb;
+    }
 
-    data                 = result[1].dataBufferPtr;
-    hb                   = data[0];
-    lb                   = data[1];
-    std::uint16_t value1 = (static_cast<std::uint16_t>(hb & 0x0F) << 8U) | lb;
 
     // Mock
-    return {EncoderReading {value0, Encoder::I2CStatus::OK},
-            EncoderReading {value1, Encoder::I2CStatus::OK},
-            EncoderReading {0U, Encoder::I2CStatus::OK},
-            EncoderReading {0U, Encoder::I2CStatus::OK}};
+    return {EncoderReading {value[0], Encoder::I2CStatus::OK},
+            EncoderReading {value[1], Encoder::I2CStatus::OK},
+            EncoderReading {value[2], Encoder::I2CStatus::OK},
+            EncoderReading {value[3], Encoder::I2CStatus::OK}};
 }
 
 ///// Following code is FOR Test, need to be refactor //////////////

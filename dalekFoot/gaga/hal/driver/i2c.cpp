@@ -81,6 +81,8 @@ void I2C::setup() {
     // Setup SDA pin: PE7
     ports_[0U].setup(GPIOE, GPIO_PIN_8, GPIOE, GPIO_PIN_7);
     ports_[1U].setup(GPIOE, GPIO_PIN_6, GPIOE, GPIO_PIN_5);
+    ports_[2U].setup(GPIOC, GPIO_PIN_9, GPIOA, GPIO_PIN_8);
+    ports_[3U].setup(GPIOB, GPIO_PIN_11, GPIOB, GPIO_PIN_10);
 
     __it_status_            = OperationStatus::IDLE;
     __it_operationSequence_ = 0U;
@@ -372,20 +374,16 @@ void I2C::__IT_transmitEnd() {
 }
 
 void I2C::__IT_sdaDown() {
-    ports_[0U].sdaDown();
-    ports_[1U].sdaDown();
+    for (auto &p : ports_) { p.sdaDown(); }
 }
 void I2C::__IT_sdaUp() {
-    ports_[0U].sdaUp();
-    ports_[1U].sdaUp();
+    for (auto &p : ports_) { p.sdaUp(); }
 }
 void I2C::__IT_clkDown() {
-    ports_[0U].clkDown();
-    ports_[1U].clkDown();
+    for (auto &p : ports_) { p.clkDown(); }
 }
 void I2C::__IT_clkUp() {
-    ports_[0U].clkUp();
-    ports_[1U].clkUp();
+    for (auto &p : ports_) { p.clkUp(); }
 }
 // bool I2C::__IT_sdaRead() { return ports_[0U].readSda(); }
 
@@ -451,12 +449,15 @@ void I2C::read(const std::uint8_t devAddr,
     return;
 }
 
-std::array<I2C::I2CResult, 4U> I2C::getData() {
-    std::array<I2CResult, 4U> ret;
-    ret[0].dataBufferPtr = ports_[0].getOutputBufferPtr();
-    ret[0].dataHealth    = 0x00;
-    ret[1].dataBufferPtr = ports_[1].getOutputBufferPtr();
-    ret[1].dataHealth    = 0x00;
+std::array<I2C::I2CResult, detail::PORT_NUMBER> I2C::getData() {
+    std::array<I2CResult, detail::PORT_NUMBER> ret;
+
+    // TODO
+    for (std::size_t i {0U}; i < detail::PORT_NUMBER; ++i) {
+        ret[i].dataBufferPtr = ports_[i].getOutputBufferPtr();
+        ret[i].dataHealth    = 0x00;
+    }
+
     return ret;
 }
 

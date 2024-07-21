@@ -11,6 +11,7 @@ namespace hal {
 namespace detail {
 constexpr std::size_t WRITE_BUFFER_SIZE {4U};
 constexpr std::size_t OUTPUT_BUFFER_SIZE {4U};
+constexpr std::size_t PORT_NUMBER {4U};
 
 class I2CPort {
   public:
@@ -48,6 +49,7 @@ class I2CPort {
 
 class I2C {
   public:
+    using PortsType = std::array<detail::I2CPort, detail::PORT_NUMBER>;
     struct I2CResult {
         std::uint8_t *dataBufferPtr {0U};
         std::uint8_t *dataHealth {0U};
@@ -70,7 +72,7 @@ class I2C {
 
     // void __testTrigger();
     // std::uint8_t *__getData() { return dataOut_; };
-    std::array<I2CResult, 4U> getData();
+    std::array<I2CResult, detail::PORT_NUMBER> getData();
 
 
   private:
@@ -82,7 +84,7 @@ class I2C {
         END,
     };
 
-    std::array<detail::I2CPort, 2U> ports_;
+    PortsType ports_;
 
     OperationStatus __it_status_ {OperationStatus::IDLE};
     std::size_t __it_operationSequence_ {0U};
