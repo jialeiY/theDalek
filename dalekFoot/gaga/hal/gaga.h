@@ -4,15 +4,6 @@
 #include "spi.h"
 #include "stm32f4xx_hal.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 namespace cooboc {
 namespace hal {
@@ -20,7 +11,7 @@ namespace hal {
 
 class Gaga {
   public:
-    Gaga();
+    Gaga() = default;
     void setup();
     void begin();
     inline void tick();
@@ -34,15 +25,11 @@ class Gaga {
     };
     void onSpiDataReceived(const SpiProtocol &spi);
 
-    void speedControlTest();
-    void i2cfrequencyTest();
-    void initTimer5(const std::uint32_t pre, const std::uint32_t period);
-    void statisticizeI2cReading(const std::uint32_t pre,
-                                const std::uint32_t period);
-    void calibrationMotorSpeed();
-    inline Odometry readSpeedTest();
-    inline void encoderConfReadTest();
-    inline void encoderReadTest();
+    // void speedControlTest();
+    // void calibrationMotorSpeed();
+    // inline Odometry readSpeedTest();
+    // inline void encoderConfReadTest();
+    // inline void encoderReadTest();
     std::int16_t testSpeed_ {0};
 };
 

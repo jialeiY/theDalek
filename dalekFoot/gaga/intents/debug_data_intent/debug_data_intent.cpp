@@ -7,9 +7,11 @@ namespace cooboc {
 namespace intents {
 void DebugDataIntent::setup() {}
 void DebugDataIntent::tick() {
-    const auto value {data::encoderReadingOutput.encoder[0].value};
-
-    hal::gagaSerial.println("%d\r\n", (int)(value));
+    hal::gagaSerial.println("%d,%d,%d,%d\r\n",
+                            (int)(data::encoderReadingOutput.encoder[0].value),
+                            (int)(data::encoderReadingOutput.encoder[1].value),
+                            (int)(data::encoderReadingOutput.encoder[2].value),
+                            (int)(data::encoderReadingOutput.encoder[3].value));
 }
 }    // namespace intents
 }    // namespace cooboc

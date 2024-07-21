@@ -1,7 +1,7 @@
 #ifndef __HAL_HAL_H__
 #define __HAL_HAL_H__
 
-#include "hal/i2c.h"
+#include "hal/encoder.h"
 #include "hal/serial.h"
 
 namespace cooboc {

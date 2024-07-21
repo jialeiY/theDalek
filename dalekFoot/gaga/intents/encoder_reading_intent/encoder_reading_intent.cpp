@@ -8,20 +8,11 @@ namespace intents {
 EncoderReadingIntent::EncoderReadingIntent() {}
 void EncoderReadingIntent::setup() {}
 void EncoderReadingIntent::tick() {
-    // hal::gagaSerial.println("-");
-    // wait for data transmitting
-    while (hal::gagaI2C.isBusy()) {
-        // do nothing
+    hal::Encoder::EncoderReadings readings {hal::gagaEncoder.getReadings()};
+
+    for (std::size_t i {0U}; i < readings.size(); ++i) {
+        data::encoderReadingOutput.encoder[i].value = readings[i].value;
     }
-
-    // hal::gagaSerial.println(".");
-    hal::gagaI2C.__getData();
-    std::uint8_t *data    = hal::gagaI2C.__getData();
-    const std::uint8_t hb = data[0];
-    const std::uint8_t lb = data[1];
-    std::uint16_t value   = (static_cast<std::uint16_t>(hb & 0x0F) << 8U) | lb;
-
-    data::encoderReadingOutput.encoder[0].value = value;
 }
 }    // namespace intents
 }    // namespace cooboc

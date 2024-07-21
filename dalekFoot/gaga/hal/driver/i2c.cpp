@@ -1,38 +1,93 @@
-#include "hal/i2c.h"
+#include "hal/driver/i2c.h"
 #include <algorithm>
+#include <cstring>
 #include "hal/board_def.h"
-
 
 namespace cooboc {
 namespace hal {
 
+namespace detail {
+
+void I2CPort::setup(GPIO_TypeDef *const clkPort,
+                    const std::uint16_t clkPin,
+                    GPIO_TypeDef *const sdaPort,
+                    const std::uint16_t sdaPin) {
+    clkPort_ = clkPort;
+    clkPin_  = clkPin;
+    sdaPort_ = sdaPort;
+    sdaPin_  = sdaPin;
+
+    transByte_ = 0U;
+    std::memset(writeBuffer_, 0U, WRITE_BUFFER_SIZE);
+
+    initHardware();
+}
+
+
+void I2CPort::initHardware() {
+    // setup clock pin
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    GPIO_InitStruct.Pin   = clkPin_;
+    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull  = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    HAL_GPIO_Init(clkPort_, &GPIO_InitStruct);
+    HAL_GPIO_WritePin(clkPort_, clkPin_, GPIO_PIN_SET);
+
+    // Setup SDA pin
+    GPIO_InitStruct.Pin   = sdaPin_;
+    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStruct.Pull  = GPIO_NOPULL;    // use external pull-up resister
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    HAL_GPIO_Init(sdaPort_, &GPIO_InitStruct);
+    HAL_GPIO_WritePin(sdaPort_, sdaPin_, GPIO_PIN_SET);
+}
+
+
+void I2CPort::clkDown() {
+    //
+    HAL_GPIO_WritePin(clkPort_, clkPin_, GPIO_PIN_RESET);
+}
+void I2CPort::clkUp() {
+    //
+    HAL_GPIO_WritePin(clkPort_, clkPin_, GPIO_PIN_SET);
+}
+void I2CPort::sdaDown() {
+    //
+    HAL_GPIO_WritePin(sdaPort_, sdaPin_, GPIO_PIN_RESET);
+}
+void I2CPort::sdaUp() {
+    //
+    HAL_GPIO_WritePin(sdaPort_, sdaPin_, GPIO_PIN_SET);
+}
+bool I2CPort::readSda() {
+    //
+    return HAL_GPIO_ReadPin(sdaPort_, sdaPin_) == GPIO_PIN_SET;
+}
+
+void I2CPort::pushBitToTransByte(bool status) {
+    transByte_ <<= 1U;
+    if (status) {
+        transByte_ |= 0x01;
+    }
+}
+
+}    // namespace detail
+
 void I2C::setup() {
+    // Hardware initialization
+    // setup clock pin: PE8
+    // Setup SDA pin: PE7
+    ports_[0U].setup(GPIOE, GPIO_PIN_8, GPIOE, GPIO_PIN_7);
+    ports_[1U].setup(GPIOE, GPIO_PIN_6, GPIOE, GPIO_PIN_5);
+
     __it_status_            = OperationStatus::IDLE;
     __it_operationSequence_ = 0U;
     __it_writeByteOffset_   = 0U;
     __it_writeCount_        = 0U;
     __it_readByteOffset_    = 0U;
     __it_readCount_         = 0U;
-    __it_transByte_         = 0U;
-
-
-    // setup clock pin: PE8
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-    GPIO_InitStruct.Pin   = GPIO_PIN_8;
-    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull  = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET);
-
-    // Setup SDA pin: PE7
-    GPIO_InitStruct.Pin   = GPIO_PIN_7;
-    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_OD;
-    GPIO_InitStruct.Pull  = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-    HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET);
 }
 
 void I2C::begin() {
@@ -49,26 +104,6 @@ bool I2C::isBusy() {
 }
 
 void I2C::__IT_onCapture() {
-    //
-    // HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_6);
-    //
-    // HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_8);
-
-    // if (__it_status_ == OperationStatus::IDLE) {
-    //     return;
-    // }
-
-    // if (bitOffset_ < 16U) {
-    //     if (bitOffset_ % 2 == 0) {
-    //         HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET);
-    //     } else {
-    //         HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET);
-    //     }
-    //     bitOffset_++;
-    // } else {
-    //     __it_status_ = OperationStatus::IDLE;
-    // }
-
     switch (__it_status_) {
         case (OperationStatus::IDLE): {
             // DO nothing
@@ -136,7 +171,8 @@ void I2C::__IT_statusTransitStartToReadWriteOrEnd() {
 }
 
 void I2C::__IT_transmitWrite() {
-    __it_transByte_ = __it_writeBuffer_[__it_writeByteOffset_];
+    ports_[0U].setTransByte(
+      (ports_[0U].getWriteBufferPtr())[__it_writeByteOffset_]);
     __IT_sendByte();
     if (0U == __it_operationSequence_) {
         // Send byte finished
@@ -172,10 +208,12 @@ void I2C::__IT_sendByte() {
             __IT_clkDown();
             // Send MSB first
             const std::uint8_t mask = 0x01 << (7U - bitOffset);
-            if (__it_transByte_ & mask) {
-                __IT_sdaUp();
-            } else {
-                __IT_sdaDown();
+            for (std::size_t i {0U}; i < ports_.size(); ++i) {
+                if (ports_[i].getTransByte() & mask) {
+                    ports_[i].sdaUp();
+                } else {
+                    ports_[i].sdaDown();
+                }
             }
         } else {
             __IT_clkUp();
@@ -194,10 +232,11 @@ void I2C::__IT_sendByte() {
             }
             case (18): {
                 // read ack and clk down
-                bool ack = __IT_sdaRead();
+
+                // bool ack = __IT_sdaRead();
                 __IT_clkDown();
-                if (ack)
-                    LED2_ON;
+                // if (ack)
+                // LED2_ON;
                 break;
             }
             default: {
@@ -233,9 +272,8 @@ void I2C::__IT_receiveByte(bool ack) {
             __IT_sdaUp();
             __IT_clkUp();
         } else {
-            __it_transByte_ <<= 1U;
-            if (__IT_sdaRead()) {
-                __it_transByte_ |= 0x01;
+            for (std::size_t i {0U}; i < ports_.size(); ++i) {
+                ports_[i].pushBitToTransByte(ports_[i].readSda());
             }
             __IT_clkDown();
         }
@@ -272,7 +310,10 @@ void I2C::__IT_receiveByte(bool ack) {
 
 void I2C::__IT_transmitRead() {
     if (__it_readByteOffset_ == 0U) {
-        __it_transByte_ = __it_writeBuffer_[0] | 0x01;
+        // Generate read address
+        for (std::size_t i {0U}; i < ports_.size(); ++i) {
+            ports_[i].setTransByte(ports_[i].getWriteBufferPtr()[0] | 0x01);
+        }
         __IT_sendByte();
     } else {
         const bool isNeedAck = (__it_readByteOffset_ < __it_readCount_);
@@ -281,7 +322,10 @@ void I2C::__IT_transmitRead() {
 
     if (0U == __it_operationSequence_) {
         if (__it_readByteOffset_ > 0U) {
-            dataOut_[__it_readByteOffset_ - 1U] = __it_transByte_;
+            for (std::size_t i {0U}; i < ports_.size(); ++i) {
+                ports_[i].getOutputBufferPtr()[__it_readByteOffset_ - 1U] =
+                  ports_[i].getTransByte();
+            }
         }
         __it_readByteOffset_++;
         if (__it_readByteOffset_ > __it_readCount_) {
@@ -324,22 +368,17 @@ void I2C::__IT_transmitEnd() {
     }
 }
 
-void I2C::__IT_sdaDown() {
-    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_RESET);
-}
-void I2C::__IT_sdaUp() { HAL_GPIO_WritePin(GPIOE, GPIO_PIN_7, GPIO_PIN_SET); }
-void I2C::__IT_clkDown() {
-    HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_RESET);
-}
-void I2C::__IT_clkUp() { HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET); }
-bool I2C::__IT_sdaRead() {
-    return HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_7) == GPIO_PIN_SET;
-}
+void I2C::__IT_sdaDown() { ports_[0U].sdaDown(); }
+void I2C::__IT_sdaUp() { ports_[0U].sdaUp(); }
+void I2C::__IT_clkDown() { ports_[0U].clkDown(); }
+void I2C::__IT_clkUp() { ports_[0U].clkUp(); }
+// bool I2C::__IT_sdaRead() { return ports_[0U].readSda(); }
 
 void I2C::write(const std::uint8_t devAddr,
                 const std::uint8_t regAddr,
                 const std::uint8_t *data,
                 const std::size_t size) {
+    // TODO: is it necessary to disable interrupt for such long time?
     __disable_irq();
     if (__it_status_ != OperationStatus::IDLE) {
         __enable_irq();
@@ -349,10 +388,18 @@ void I2C::write(const std::uint8_t devAddr,
     __it_operationSequence_ = 0U;
     __it_writeByteOffset_   = 0U;
     __it_writeCount_        = std::min(size + 2U, 4U);
-    __it_writeBuffer_[0]    = devAddr << 1U;
-    __it_writeBuffer_[1]    = regAddr;
-    for (std::size_t i {0U}; i < std::min(size, 4U - 2U); ++i) {
-        __it_writeBuffer_[2U + i] = data[i];
+    for (std::size_t i {0U}; i < ports_.size(); ++i) {
+        std::uint8_t *portWriteBuffer = ports_[i].getWriteBufferPtr();
+        portWriteBuffer[0]            = devAddr << 1U;
+        portWriteBuffer[1]            = regAddr;
+
+        // Copy data to write_buffer
+        static_assert(detail::WRITE_BUFFER_SIZE > 2U);
+        for (std::size_t j {0U};
+             j < std::min(size, detail::WRITE_BUFFER_SIZE - 2U);
+             ++j) {
+            portWriteBuffer[2U + i] = data[i];
+        }
     }
 
     // Nothing for read
@@ -376,49 +423,62 @@ void I2C::read(const std::uint8_t devAddr,
     __it_operationSequence_ = 0U;
     __it_writeByteOffset_   = 0U;
     __it_writeCount_        = 2U;
-    __it_writeBuffer_[0]    = devAddr << 1U;
-    __it_writeBuffer_[1]    = regAddr;
-    __it_readByteOffset_    = 0U;
-    __it_readCount_         = std::min(size, 4U);
-    __it_status_            = OperationStatus::START;
+    for (std::size_t i {0U}; i < ports_.size(); ++i) {
+        std::uint8_t *portWriteBuffer = ports_[i].getWriteBufferPtr();
+        portWriteBuffer[0]            = devAddr << 1U;
+        portWriteBuffer[1]            = regAddr;
+    }
+    __it_readByteOffset_ = 0U;
+    __it_readCount_      = std::min(size, 4U);
+    __it_status_         = OperationStatus::START;
 
     __enable_irq();
     return;
 }
-void I2C::__testTrigger() {
-    __disable_irq();
-    if (__it_status_ != OperationStatus::IDLE) {
-        // I2C in working, quit
-        __enable_irq();
-        return;
-    }
 
-    // // test: write data
-    // //  Start transmit, setup the state
-    // __it_operationSequence_ = 0U;
-    // __it_writeByteOffset_   = 0U;
-    // __it_writeCount_        = 2U;
-    // __it_writeBuffer_[0]    = 0x36 << 1U;
-    // __it_writeBuffer_[1]    = 0x0E;
-    // __it_readByteOffset_    = 0U;
-    // __it_readCount_         = 0U;
-    // __it_status_            = OperationStatus::START;
-
-
-    // test: read data
-    // Start transmit, setup the state
-    __it_operationSequence_ = 0U;
-    __it_writeByteOffset_   = 0U;
-    __it_writeCount_        = 2U;
-    __it_writeBuffer_[0]    = 0x36 << 1U;
-    __it_writeBuffer_[1]    = 0x0E;
-    __it_readByteOffset_    = 0U;
-    __it_readCount_         = 2U;
-    __it_status_            = OperationStatus::START;
-
-
-    __enable_irq();
+std::array<I2C::I2CResult, 4U> I2C::getData() {
+    std::array<I2CResult, 4U> ret;
+    ret[0].dataBufferPtr = ports_[0].getOutputBufferPtr();
+    ret[0].dataHealth    = 0x00;
+    ret[1].dataBufferPtr = ports_[1].getOutputBufferPtr();
+    ret[1].dataHealth    = 0x00;
+    return ret;
 }
+
+// void I2C::__testTrigger() {
+//     __disable_irq();
+//     if (__it_status_ != OperationStatus::IDLE) {
+//         // I2C in working, quit
+//         __enable_irq();
+//         return;
+//     }
+
+//     // // test: write data
+//     // //  Start transmit, setup the state
+//     // __it_operationSequence_ = 0U;
+//     // __it_writeByteOffset_   = 0U;
+//     // __it_writeCount_        = 2U;
+//     // __it_writeBuffer_[0]    = 0x36 << 1U;
+//     // __it_writeBuffer_[1]    = 0x0E;
+//     // __it_readByteOffset_    = 0U;
+//     // __it_readCount_         = 0U;
+//     // __it_status_            = OperationStatus::START;
+
+
+//     // test: read data
+//     // Start transmit, setup the state
+//     __it_operationSequence_ = 0U;
+//     __it_writeByteOffset_   = 0U;
+//     __it_writeCount_        = 2U;
+//     __it_writeBuffer_[0]    = 0x36 << 1U;
+//     __it_writeBuffer_[1]    = 0x0E;
+//     __it_readByteOffset_    = 0U;
+//     __it_readCount_         = 2U;
+//     __it_status_            = OperationStatus::START;
+
+
+//     __enable_irq();
+// }
 
 I2C gagaI2C;
 
