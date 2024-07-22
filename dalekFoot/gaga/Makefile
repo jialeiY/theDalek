@@ -49,6 +49,7 @@ CPP_SOURCES += intents/power_controlling_intent/power_controlling_intent.cpp
 CPP_SOURCES += intents/target_maneuver_intent/target_maneuver_intent.cpp
 CPP_SOURCES += intents/wheel_odometry_intent/wheel_odometry_intent.cpp
 CPP_SOURCES += utils/math.cpp
+CPP_SOURCES += utils/time.cpp
 
 
 ASM_SOURCES +=  board/startup/startup_stm32f407vetx.s
