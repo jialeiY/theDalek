@@ -1,7 +1,8 @@
-#include "math/utils.h"
+#include "utils/math.h"
 #include <cstdint>
 
 namespace cooboc {
+namespace utils {
 namespace math {
 
 
@@ -13,6 +14,6 @@ char *printBits(const std::uint8_t byte, char *buffer) {
     return buffer;
 }
 
-
 }    // namespace math
+}    // namespace utils
 }    // namespace cooboc

@@ -1,8 +1,8 @@
-#ifndef __INTENTS_COMMON_DATA_DEFS_WHEEL_ODOMETRY_TOPIC_H__
-#define __INTENTS_COMMON_DATA_DEFS_WHEEL_ODOMETRY_TOPIC_H__
+#ifndef __COMMON_DATA_DEFS_WHEEL_ODOMETRY_TOPIC_H__
+#define __COMMON_DATA_DEFS_WHEEL_ODOMETRY_TOPIC_H__
 
 #include <cstdint>
-#include "intents/common/data_defs/qualifier.h"
+#include "common/data_defs/qualifier.h"
 
 namespace cooboc {
 namespace data {

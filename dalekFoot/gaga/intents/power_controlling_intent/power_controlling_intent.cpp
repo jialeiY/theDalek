@@ -3,7 +3,7 @@
 #include "hal/hal.h"
 #include "intents/common/data_pool.h"
 #include "intents/common/parameters.h"
-#include "math/utils.h"
+#include "utils/math.h"
 
 class PID {
   public:
@@ -47,7 +47,7 @@ void PowerControllingIntent::tick() {
         pids[i].tick(data::wheelOdometryTopic.wheelSpeed[i].speed);
         float output        = pids[i].getOutput();
         output              = parameters::kMotorDirection[i] ? output : -output;
-        float clampedOutput = math::clamp(output, -2048.0F, 2048.0F);
+        float clampedOutput = utils::math::clamp(output, -2048.0F, 2048.0F);
 
 
         hal::gagaMotors[i].setPower(static_cast<std::int16_t>(clampedOutput));

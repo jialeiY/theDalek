@@ -1,9 +1,10 @@
-#ifndef __MATH_UTILS_H__
-#define __MATH_UTILS_H__
+#ifndef __UTILS_MATH_H__
+#define __UTILS_MATH_H__
 #include <algorithm>
 #include <cstdint>
 
 namespace cooboc {
+namespace utils {
 namespace math {
 
 template<typename Tin, typename Tout>
@@ -22,8 +23,8 @@ T clamp(const T& x, const T& min, const T& max) {
 
 char* printBits(const std::uint8_t byte, char* buffer);
 
-
 }    // namespace math
+}    // namespace utils
 }    // namespace cooboc
 
 #endif

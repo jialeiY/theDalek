@@ -9,9 +9,9 @@
 #include "hal/serial.h"
 #include "hal/spi.h"
 #include "intents/common/intent_manager.h"
-#include "math/utils.h"
 #include "stm32f4xx_hal.h"
 #include "third_party/printf/printf.h"
+#include "utils/math.h"
 
 
 namespace cooboc {
@@ -228,11 +228,11 @@ void Gaga::onSpiDataReceived(const SpiProtocol &spi) {
     //                    spi.motorPower[3]);
 
     std::int32_t motorPower =
-      math::lerp(spi.motorPower[0],
-                 std::numeric_limits<std::int8_t>::min(),
-                 std::numeric_limits<std::int8_t>::max(),
-                 -2048,
-                 2048);
+      utils::math::lerp(spi.motorPower[0],
+                        std::numeric_limits<std::int8_t>::min(),
+                        std::numeric_limits<std::int8_t>::max(),
+                        -2048,
+                        2048);
     // motor.setPower(motorPower);
     //  motor.setPower(-1500);
     // gagaSerial.println("motor power: %d", motorPower);

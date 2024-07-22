@@ -1,5 +1,5 @@
-#ifndef __INTENTS_COMMON_INTENT_MANAGER_H__
-#define __INTENTS_COMMON_INTENT_MANAGER_H__
+#ifndef __COMMON_INTENT_MANAGER_H__
+#define __COMMON_INTENT_MANAGER_H__
 
 #include <array>
 #include "intents/common/intent_base.h"

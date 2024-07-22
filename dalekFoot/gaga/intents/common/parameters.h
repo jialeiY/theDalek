@@ -1,5 +1,5 @@
-#ifndef __INTENTS_COMMON_PARAMETERS_H__
-#define __INTENTS_COMMON_PARAMETERS_H__
+#ifndef __COMMON_PARAMETERS_H__
+#define __COMMON_PARAMETERS_H__
 
 namespace cooboc {
 namespace intents {
