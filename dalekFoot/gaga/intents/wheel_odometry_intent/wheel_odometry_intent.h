@@ -2,6 +2,7 @@
 #define __INTENTS_WHEEL_ODOMETRY_INTENT_WHEEL_ODOMETRY_INTENT_H__
 
 #include <cstdint>
+#include "common/data_defs/duration.h"
 #include "intents/common/data_pool.h"
 #include "intents/common/intent_base.h"
 
@@ -21,6 +22,7 @@ class WheelOdometryIntent : public IntentBase {
     data::WheelSpeed calculateSingleWheelSpeed(
       const data::EncoderReading currentEncoderReading,
       const data::EncoderReading lastEncoderReading,
+      const data::Duration &duration,
       const bool isReversed);
 };
 }    // namespace intents

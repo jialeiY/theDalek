@@ -20,7 +20,7 @@ void DebugDataIntent::tick() {
     // data::Duration d = now - zero;
 
 
-    hal::gagaSerial.println("%.2F,%.2F,%.2F,%.2F\r\n",
+    hal::gagaSerial.println("%.3F,%.3F,%.3F,%.3F\r\n",
                             data::wheelOdometryTopic.wheelSpeed[0].speed,
                             data::wheelOdometryTopic.wheelSpeed[1].speed,
                             data::wheelOdometryTopic.wheelSpeed[2].speed,

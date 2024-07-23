@@ -15,12 +15,15 @@ class PID {
     }
     void setTarget(float target) { target_ = target; }
     void tick(float current) {
-        const float nominalValue = 28.27F * target_ + 110.65;
+        // const float nominalValue = (28.27F * target_) * 652 + 110.65;
         // const float kp                  = 40.0f;
         // const float ki                  = 0.1F;
-        const float kp    = 30.0F;
-        const float ki    = 3.50F;
-        const float error = target_ - current;
+        // const float kp    = 30.0F / 652;
+        // const float ki    = 3.50F / 652;
+        const float nominalValue = target_ * 2000.0F;
+        const float kp           = 700.0F;
+        const float ki           = 30.0F;
+        const float error        = target_ - current;
         integralError_ += error;
 
         output_ = nominalValue + kp * error + ki * integralError_;

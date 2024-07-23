@@ -1,8 +1,12 @@
 #include "intents/wheel_odometry_intent/wheel_odometry_intent.h"
 #include <cstdint>
+#include "common/data_defs/distance.h"
+#include "common/data_defs/duration.h"
 #include "hal/hal.h"
 #include "intents/common/data_pool.h"
 #include "intents/common/parameters.h"
+#include "utils/math.h"
+
 
 namespace cooboc {
 namespace intents {
@@ -25,23 +29,20 @@ void WheelOdometryIntent::tick() {
             data::wheelOdometryTopic.wheelSpeed[i] =
               calculateSingleWheelSpeed(currentEncoderReading,
                                         lastEncoderReading_.encoder[i],
+                                        duration,
                                         !parameters::kEncoderDirection[i]);
         }
     } else {
         data::wheelOdometryTopic.qualifier = data::Qualifier::BAD;
     }
-    // hal::gagaSerial.println(
-    //   "%d,%d,%d,%d",
-    //   (int)(data::encoderReadingTriggerTopic.isTriggerSuccessful),
-    //   (int)(currentEncoderReading.qualifier),
-    //   (int)(currentEncoderReading.encoder[0].qualifier),
-    //   (int)(currentEncoderReading.encoder[0].value));
+
     lastEncoderReading_ = currentEncoderReading;
 }
 
 data::WheelSpeed WheelOdometryIntent::calculateSingleWheelSpeed(
   const data::EncoderReading currentEncoderReading,
   const data::EncoderReading lastEncoderReading,
+  const data::Duration &duration,
   const bool isReversed) {
     data::WheelSpeed ret {data::Qualifier::BAD, 0.0F};
     if ((currentEncoderReading.qualifier == data::Qualifier::GOOD) &&
@@ -54,9 +55,12 @@ data::WheelSpeed WheelOdometryIntent::calculateSingleWheelSpeed(
         if (diff < -2048) {
             diff += 4096;
         }
+
+        const float degree = 2.0F * utils::math::PI / 4096.0F * diff;
+        const data::Distance dist {parameters::kWheelDiameter / 2.0F * degree};
+        float speed   = dist / duration;
+        ret.speed     = isReversed ? -speed : speed;
         ret.qualifier = data::Qualifier::GOOD;
-        ret.speed =
-          isReversed ? -static_cast<float>(diff) : static_cast<float>(diff);
     }
     return ret;
 }

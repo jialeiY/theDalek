@@ -7,6 +7,9 @@ namespace cooboc {
 namespace utils {
 namespace math {
 
+constexpr float PI {
+  3.141592653589793238462643383279502884197169399375105820974944F};
+
 template<typename Tin, typename Tout>
 Tout lerp(const Tin& x,
           const Tin& inStart,
