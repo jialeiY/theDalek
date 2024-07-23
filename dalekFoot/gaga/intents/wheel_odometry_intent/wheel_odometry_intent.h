@@ -16,7 +16,7 @@ class WheelOdometryIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    data::EncoderReading lastEncoderReading_[4U];
+    data::EncoderReadingTopic lastEncoderReading_;
 
     data::WheelSpeed calculateSingleWheelSpeed(
       const data::EncoderReading currentEncoderReading,

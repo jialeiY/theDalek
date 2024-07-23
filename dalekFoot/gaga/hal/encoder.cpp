@@ -11,8 +11,8 @@ void Encoder::begin() {
 }
 
 
-void Encoder::beginReading() {
-    gagaI2C.read(0x36, 0x0E, 2U);
+bool Encoder::triggerReading() {
+    return gagaI2C.read(0x36, 0x0E, 2U);
     //  | |
     //  | |
     // \   /

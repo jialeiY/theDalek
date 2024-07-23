@@ -16,7 +16,8 @@
 [#] 16. the architecture of the foot
 [#] 17. check board/core/stm32f4xx_it.c:TIM1_BRK_TIM9_IRQHandler() HAL_TIM_IRQHandler(&htim1);
 [#] 18. remove __it_transByte_ in i2c
-
+[ ] 19. main cycle timer larger than 2ms
+[ ] 20. no output now.
 
 
 Motor box design requirements

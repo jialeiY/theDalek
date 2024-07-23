@@ -1,13 +1,19 @@
 #include "intents/encoder_reading_trigger_intent/encoder_reading_trigger_intent.h"
 #include "hal/hal.h"
+#include "intents/common/data_pool.h"
 #include "stm32f4xx_hal.h"
+#include "utils/time.h"
+
 
 namespace cooboc {
 namespace intents {
 EncoderReadingTriggerIntent::EncoderReadingTriggerIntent() {}
 void EncoderReadingTriggerIntent::setup() {}
 void EncoderReadingTriggerIntent::tick() {
-    hal::gagaEncoder.beginReading();
+    data::encoderReadingTriggerTopic.timestamp = utils::time::now();
+    bool result = hal::gagaEncoder.triggerReading();
+    data::encoderReadingTriggerTopic.isTriggerSuccessful = result;
+
     // setup clock pin
     // GPIO_InitTypeDef GPIO_InitStruct = {0};
 
@@ -15,8 +21,8 @@ void EncoderReadingTriggerIntent::tick() {
     // // Setup SDA pin
     // GPIO_InitStruct.Pin   = GPIO_PIN_5;
     // GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_OD;
-    // GPIO_InitStruct.Pull  = GPIO_PULLUP;    // use external pull-up resister
-    // GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    // GPIO_InitStruct.Pull  = GPIO_PULLUP;    // use external pull-up
+    // resister GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
     // HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
 

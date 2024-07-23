@@ -20,7 +20,7 @@ class Encoder {
     Encoder() = default;
     void setup();
     void begin();
-    void beginReading();
+    bool triggerReading();
     EncoderReadings getReadings();
 
   private:

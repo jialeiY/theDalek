@@ -2,6 +2,7 @@
 #define __COMMON_DATA_POOL_H__
 
 #include "common/data_defs/encoder_reading_topic.h"
+#include "common/data_defs/encoder_reading_trigger_topic.h"
 #include "common/data_defs/target_maneuver_topic.h"
 #include "common/data_defs/wheel_odometry_topic.h"
 
@@ -10,13 +11,18 @@ namespace data {
 
 
 /**
+ * Output:  EncoderReadingTriggerIntent
+ * Input:   EncoderReadingIntent
+ */
+extern EncoderReadingTriggerTopic encoderReadingTriggerTopic;
+
+/**
  * Output:  EncoderReadingIntent
  * Input:   DebugDataIntent
  *          -- Next Cycle --
  *          WheelodometryIntent
  *
  */
-
 extern data::EncoderReadingTopic encoderReadingTopic;
 
 

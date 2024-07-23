@@ -63,7 +63,7 @@ class I2C {
                const std::uint8_t regAddr,
                const std::uint8_t *data,
                const std::size_t size);
-    void read(const std::uint8_t devAddr,
+    bool read(const std::uint8_t devAddr,
               const std::uint8_t regAddr,
               const std::size_t size);
 

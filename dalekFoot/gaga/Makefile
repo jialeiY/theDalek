@@ -61,6 +61,8 @@ INCLUDES += -I./board/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDES += -I./board/Drivers/CMSIS/Include
 
 
+
+
 PREFIX := arm-none-eabi-
 CC := $(PREFIX)gcc
 CXX := $(PREFIX)g++
@@ -83,6 +85,8 @@ MCU := $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 CFLAGS += -std=gnu11 $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" --specs=nano.specs
 CXXFLAGS += -std=gnu++14 $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"$(@:%.o=%.d)" --specs=nano.specs -fno-exceptions -fno-rtti -fno-use-cxa-atexit 
 
+TEST_CPP_SOURCES += test/common/data_defs/timepoint_test.cpp
+
 
 
 #######################################
@@ -101,7 +105,7 @@ DEFINES := -DUSE_HAL_DRIVER -DSTM32F407xx
 DBG := -g -O0
 OPT := -Os
 
-BUILD_OPT := $(DBG)
+BUILD_OPT := $(OPT)
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	mkdir -p $(dir $@)

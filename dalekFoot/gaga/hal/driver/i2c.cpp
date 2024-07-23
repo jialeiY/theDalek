@@ -423,13 +423,13 @@ void I2C::write(const std::uint8_t devAddr,
 }
 
 
-void I2C::read(const std::uint8_t devAddr,
+bool I2C::read(const std::uint8_t devAddr,
                const std::uint8_t regAddr,
                const std::size_t size) {
     __disable_irq();
     if (__it_status_ != OperationStatus::IDLE) {
         __enable_irq();
-        return;
+        return false;
     }
     __it_operationSequence_ = 0U;
     __it_writeByteOffset_   = 0U;
@@ -444,7 +444,7 @@ void I2C::read(const std::uint8_t devAddr,
     __it_status_         = OperationStatus::START;
 
     __enable_irq();
-    return;
+    return true;
 }
 
 std::array<I2C::I2CResult, detail::PORT_NUMBER> I2C::getData() {

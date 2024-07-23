@@ -3,6 +3,8 @@
 
 #include <cstdint>
 #include "common/data_defs/qualifier.h"
+#include "common/data_defs/timepoint.h"
+
 
 namespace cooboc {
 namespace data {
@@ -15,7 +17,10 @@ struct EncoderReading {
 
 
 struct EncoderReadingTopic {
-    cooboc::data::EncoderReading encoder[4U];
+    EncoderReadingTopic() : timestamp {}, encoder {} {}
+    Timepoint timestamp {};
+    Qualifier qualifier {Qualifier::BAD};
+    cooboc::data::EncoderReading encoder[4U] {};
 };
 
 }    // namespace data
