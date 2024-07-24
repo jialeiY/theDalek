@@ -43,7 +43,7 @@ void TargetManeuverIntent::tick() {
               static_cast<float>((time + i * cycle / 4) % cycle) * 2.0F *
               utils::math::PI / static_cast<float>(cycle);
             data::targetManeuverTopic.speed[i] =
-              utils::math::lerp(std::sin(timeShift), -1.0F, 1.0F, 0.1F, 0.4F);
+              utils::math::lerp(std::sin(timeShift), -1.0F, 1.0F, 0.03F, 0.1F);
         }
     }
 }
