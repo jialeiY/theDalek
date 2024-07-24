@@ -69,6 +69,8 @@ struct Timepoint {
         }
     }
 
+    std::uint32_t milliseconds() const { return systick_; }
+
   private:
     std::uint32_t systick_ {0U};
     std::uint32_t systickVal_ {0U};

@@ -12,6 +12,7 @@ class PID {
         target_        = 0.0F;
         output_        = 0.0F;
         integralError_ = 0.0F;
+        previousError_ = 0.0F;
     }
     void setTarget(float target) { target_ = target; }
     void tick(float current) {
@@ -20,20 +21,24 @@ class PID {
         // const float ki                  = 0.1F;
         // const float kp    = 30.0F / 652;
         // const float ki    = 3.50F / 652;
-        const float nominalValue = target_ * 2000.0F;
-        const float kp           = 700.0F;
-        const float ki           = 30.0F;
+        const float nominalValue = target_ * 1240.0F + 110.65;
+        const float kp           = 1290.0F;
+        const float ki           = 150.0F;
+        const float kd           = 1500.0F;
         const float error        = target_ - current;
         integralError_ += error;
 
-        output_ = nominalValue + kp * error + ki * integralError_;
+        output_ = nominalValue + (kp * error) + (ki * integralError_) +
+                  (kd * (error - previousError_));
+        previousError_ = error;
     }
     float getOutput() { return output_; }
 
   private:
-    float target_;
-    float output_;
-    float integralError_;
+    float target_ {0.0F};
+    float output_ {0.0F};
+    float integralError_ {0.0F};
+    float previousError_ {0.0F};
 };
 
 std::array<PID, 4> pids;
