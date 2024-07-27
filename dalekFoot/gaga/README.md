@@ -21,10 +21,17 @@
 [#] 21. speed calibration and PID parameter calibration
 [#] 22. PID architecture refactoring
 [ ] 23. odometry from wheel calculation
+[ ] 24. increase the UART speed
+
+# Milestones
+1. Trajectory Follower
+a. the simplest one, use velocity only
+2. communication with RPI using SPI
+
+
 
 
 Motor box design requirements
-
 
 * speed requirements
 output speed = 2000mm/s
