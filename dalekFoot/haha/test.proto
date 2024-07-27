@@ -1,0 +1,7 @@
+syntax = "proto2";
+
+package cooboc.data;
+
+message Test {
+    optional int32 id = 1;
+}
