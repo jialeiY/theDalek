@@ -1,4 +1,4 @@
-TARGET := gaga
+TARGET := haha
 BUILD_DIR := build
 
 C_SOURCES = 
@@ -6,6 +6,10 @@ ASM_SOURCES =
 
 CPP_SOURCES = main.cpp
 CPP_SOURCES += gen/test.pb.cc
+CPP_SOURCES += intents/intent_manager.cpp
+CPP_SOURCES += intents/behavior_generator/behavior_generator_intent.cpp
+
+
 
 INCLUDES += -I./
 INCLUDES += -I./third_party
