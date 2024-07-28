@@ -13,6 +13,12 @@ std::uint64_t nanoseconds() {
       .count();
 }
 
+std::uint64_t milliseconds() {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(
+             std::chrono::system_clock::now().time_since_epoch())
+      .count();
+}
+
 }    // namespace time
 }    // namespace utils
 }    // namespace cooboc

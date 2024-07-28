@@ -8,9 +8,10 @@ namespace cooboc {
 namespace utils {
 namespace time {
 
+std::uint64_t milliseconds();
 std::uint64_t nanoseconds();
 
-}
+}    // namespace time
 }    // namespace utils
 }    // namespace cooboc
 
