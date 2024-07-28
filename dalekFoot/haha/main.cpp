@@ -20,7 +20,10 @@ int main(int argc, char *argv[], char **envs) {
 
     // trigger by loop, simulate the time
 
-    while (gSignalStatus != SIGINT) { intentManager.tick(); }
+    while (gSignalStatus != SIGINT) {
+        intentManager.tick();
+        usleep(10000ULL);
+    }
 
 
     return 0;
