@@ -3,13 +3,20 @@ import { initExamplePanel } from "./ExamplePanel";
 import { LinePrimitive } from "@foxglove/schemas";
 import { LineType } from "@foxglove/schemas/schemas/typescript/LineType"
 
-type PlanningRequestTopic = {
-  targetPositionX: number;
-  targetPositionY: number;
 
-  targetVelocityX: number;
-  targetVelocityY: number;
-  targetVelocitySpeed: number;
+type Position2D = {
+  x: number;
+  y: number;
+}
+
+type Vector2D = {
+  orientation: number;
+  value: number;
+}
+type PlanningRequestTopic = {
+  fromPosition: Position2D;
+  targetPosition: Position2D;
+  targetVelocity: Vector2D;
 };
 
 export function activate(extensionContext: ExtensionContext): void {
@@ -32,8 +39,8 @@ export function activate(extensionContext: ExtensionContext): void {
         scale_invariant: true,
 
         points: [
-          { x: 0, y: 0, z: 0 },
-          { x: inputMessage.targetPositionX, y: inputMessage.targetPositionY, z: 0 }
+          { x: inputMessage.fromPosition.x, y: inputMessage.fromPosition.y, z: 0 },
+          { x: inputMessage.targetPosition.x, y: inputMessage.targetPosition.y, z: 0 }
         ],
         // color 0 - 1
         color: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },

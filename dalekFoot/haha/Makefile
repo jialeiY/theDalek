@@ -6,13 +6,17 @@ C_SOURCES =
 ASM_SOURCES =
 
 PROTO_FILES += data/proto/planning_request_topic.proto
+PROTO_FILES += data/proto/position2d.proto
+PROTO_FILES += data/proto/vector2d.proto
 
 CPP_SOURCES = main.cpp
-CPP_SOURCES += intents/intent_manager.cpp
-CPP_SOURCES += intents/behavior_generator/behavior_generator_intent.cpp
-CPP_SOURCES += intents/topics/topics.cpp
-CPP_SOURCES += intents/debug_writer_intent/debug_writer_intent.cpp
 CPP_SOURCES += data/codec/planning_request_topic_codec.cpp
+CPP_SOURCES += data/codec/position2d_codec.cpp
+CPP_SOURCES += data/codec/vector2d_codec.cpp
+CPP_SOURCES += intents/behavior_generator/behavior_generator_intent.cpp
+CPP_SOURCES += intents/debug_writer_intent/debug_writer_intent.cpp
+CPP_SOURCES += intents/intent_manager.cpp
+CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += utils/time.cpp
 
 INCLUDES += -I./

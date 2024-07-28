@@ -20,7 +20,6 @@
                 "${workspaceFolder}/third_party"
             ],
             "defines": [
-                "MCAP_IMPLEMENTATION",
                 "MCAP_COMPRESSION_NO_LZ4",
                 "MCAP_COMPRESSION_NO_ZSTD"
             ],
