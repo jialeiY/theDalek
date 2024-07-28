@@ -1,17 +1,22 @@
 TARGET := haha
 BUILD_DIR := build
+GEN_DIR := gen
 
 C_SOURCES = 
 ASM_SOURCES =
 
+PROTO_FILES += data/proto/planning_request_topic.proto
+
 CPP_SOURCES = main.cpp
-CPP_SOURCES += gen/test.pb.cc
 CPP_SOURCES += intents/intent_manager.cpp
 CPP_SOURCES += intents/behavior_generator/behavior_generator_intent.cpp
-
-
+CPP_SOURCES += intents/topics/topics.cpp
+CPP_SOURCES += intents/debug_writer_intent/debug_writer_intent.cpp
+CPP_SOURCES += data/codec/planning_request_topic_codec.cpp
+CPP_SOURCES += utils/time.cpp
 
 INCLUDES += -I./
+INCLUDES += -I./gen
 INCLUDES += -I./third_party
 
 PREFIX := 
@@ -25,40 +30,49 @@ LINK := $(CXX)
 HEX := $(CP) -O ihex
 BIN := $(CP) -O binary -S
 
-
 CFLAGS += -std=gnu11
 CXXFLAGS += -std=gnu++17
 
 #######################################
 # build the application
 #######################################
+PROTO_SOURCES := $(addprefix $(GEN_DIR)/, $(addsuffix .pb.cc, $(basename $(PROTO_FILES))))
+
+
 # list of objects
 SOURCES += $(C_SOURCES)
 SOURCES += $(CPP_SOURCES)
 SOURCES += $(ASM_SOURCES)
 SOURCES += $(ASMM_SOURCES)
-
+SOURCES += $(PROTO_SOURCES)
 OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-DEFINES := -DMCAP_IMPLEMENTATION -DMCAP_COMPRESSION_NO_LZ4 -DMCAP_COMPRESSION_NO_ZSTD
+DEFINES := -DMCAP_COMPRESSION_NO_LZ4 -DMCAP_COMPRESSION_NO_ZSTD
 DBG := -g -O0
 OPT := -Os
 
 BUILD_OPT := $(DBG)
 
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
+$(GEN_DIR)/%.pb.cc: %.proto Makefile
+	mkdir -p $(dir $@)
+	protoc --cpp_out=$(GEN_DIR)/ $<
+
+$(BUILD_DIR)/%.pb.o: %.cc | $(BUILD_DIR)
+	$(CC) "$<" $(CFLAGS) $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -o "$@"
+
+$(BUILD_DIR)/%.o: %.c Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
 	$(CC) "$<" $(CFLAGS) $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -o "$@"
 
-$(BUILD_DIR)/%.o: %.cpp Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.cpp Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
 	$(CXX) "$<" $(CXXFLAGS) $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -o "$@"
 
-$(BUILD_DIR)/%.o: %.cc Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.cc Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
 	$(CXX) "$<" $(CXXFLAGS) $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -o "$@"
 
-$(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.s Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
 	$(AS) "$<" -c -o "$@"
 
@@ -71,11 +85,12 @@ $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 $(BUILD_DIR):
 	mkdir $@
 
+.PRECIOUS: $(GEN_DIR)/%.pb.cc $(GEN_DIR)/%.pb.h
 
 .PHONY: clean 
 clean:
 	-rm -fR $(BUILD_DIR)
-
+	-rm -rf $(GEN_DIR)
 
 .PHONY: run r
 run: $(BUILD_DIR)/$(TARGET).elf

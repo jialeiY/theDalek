@@ -50,19 +50,22 @@ void TargetManeuverIntent::tick() {
 
     {
         // square wave
-        std::uint32_t time = utils::time::now().milliseconds();
-        time %= 1000;
-        float target = 0.0F;
-        if (time < 500) {
-            target = 0.1F;
-        } else {
-            target = 0.3F;
-        }
+
 
         for (std::size_t i {0U}; i < 4U; ++i) {
-            data::targetManeuverTopic.speed[i] = 0;
+            std::uint32_t time = utils::time::now().milliseconds();
+            time += i * 250;
+            time %= 1000;
+            float target = 0.0F;
+            if (time < 500) {
+                target = 0.1F;
+            } else {
+                target = 0.3F;
+            }
+            data::targetManeuverTopic.speed[i] = target;
         }
-        data::targetManeuverTopic.speed[2U] = target;
+        data::targetManeuverTopic.speed[1U] = 0.2;
+        data::targetManeuverTopic.speed[2U] = 0.3;
     }
 }
 

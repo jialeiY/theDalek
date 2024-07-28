@@ -12,7 +12,7 @@ volatile std::sig_atomic_t gSignalStatus = 0;    // nosignal
 void signalHandler(int signum) { gSignalStatus = signum; }
 
 int main(int argc, char *argv[], char **envs) {
-    cooboc::intents::IntentManager intentManager;
+    cooboc::intent::IntentManager intentManager;
     intentManager.setup();
 
     // Handle signal interrupt
@@ -20,7 +20,7 @@ int main(int argc, char *argv[], char **envs) {
 
     // trigger by loop, simulate the time
 
-    while (gSignalStatus != SIGINT) {}
+    while (gSignalStatus != SIGINT) { intentManager.tick(); }
 
 
     return 0;

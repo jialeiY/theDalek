@@ -5,7 +5,7 @@
 #include <array>
 
 namespace cooboc {
-namespace intents {
+namespace intent {
 
 
 class IntentManager {
@@ -16,9 +16,9 @@ class IntentManager {
     void tick();
 
   private:
-    std::array<IntentBase *, 1U> intents_;
+    std::array<IntentBase *, 2U> intents_;
 };
-}    // namespace intents
+}    // namespace intent
 }    // namespace cooboc
 
 #endif

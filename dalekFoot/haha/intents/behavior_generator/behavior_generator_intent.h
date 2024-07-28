@@ -4,14 +4,16 @@
 #include "intents/intent_base.h"
 
 namespace cooboc {
-namespace intents {
+namespace intent {
 
 class BehaviorGeneratorIntent : public IntentBase {
   public:
-    virtual void setup() override {}
-    virtual void tick() override {}
+    BehaviorGeneratorIntent();
+    virtual ~BehaviorGeneratorIntent();
+    virtual void setup() override;
+    virtual void tick() override;
 };
 
-}    // namespace intents
+}    // namespace intent
 }    // namespace cooboc
 #endif

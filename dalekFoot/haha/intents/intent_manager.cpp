@@ -1,11 +1,16 @@
 #include "intents/intent_manager.h"
 #include <intents/behavior_generator/behavior_generator_intent.h>
+#include <intents/debug_writer_intent/debug_writer_intent.h>
 #include <intents/intent_base.h>
 
-namespace cooboc {
-namespace intents {
 
-IntentManager::IntentManager() { intents_[0] = new BehaviorGeneratorIntent(); }
+namespace cooboc {
+namespace intent {
+
+IntentManager::IntentManager() {
+    intents_[0] = new BehaviorGeneratorIntent();
+    intents_[1] = new DebugWriterIntent();
+}
 IntentManager::~IntentManager() {
     for (IntentBase *intentPtr : intents_) { delete (intentPtr); }
 }
@@ -18,5 +23,5 @@ void IntentManager::tick() {
 }
 
 
-}    // namespace intents
+}    // namespace intent
 }    // namespace cooboc

@@ -45,7 +45,12 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "printf.h": "c",
-        "stm32f4xx_hal_conf.h": "c"
+        "stm32f4xx_hal_conf.h": "c",
+        "map": "cpp",
+        "unordered_set": "cpp",
+        "fstream": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp"
     },
     "search.exclude": {
         "build/**": true
