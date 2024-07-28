@@ -41,6 +41,6 @@ See documentation here: https://docs.foxglove.dev/docs/visualization/extensions/
 
 
 [#] 1. coordnate
-2. timestamp
-3. draw line
-4. name of the extension
+[#] 2. timestamp
+[#] 3. draw line
+[#] 4. name of the extension
