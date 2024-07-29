@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+message Position2D {
+    optional float x = 1;
+    optional float y = 2;
+}

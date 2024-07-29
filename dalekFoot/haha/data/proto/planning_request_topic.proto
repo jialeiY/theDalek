@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+import "data/proto/position2d.proto";
+import "data/proto/vector2d.proto";
+
+message PlanningRequestTopic {
+    optional Position2D fromPosition = 1;
+    optional Position2D targetPosition = 2;
+    optional Vector2D targetVelocity = 3;
+}

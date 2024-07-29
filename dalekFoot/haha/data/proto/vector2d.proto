@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+message Vector2D {
+    optional float orientation = 1;
+    optional float value = 2;
+}
