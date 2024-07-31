@@ -1,15 +1,16 @@
 #include "intents/intent_manager.h"
-#include <intents/behavior_generator/behavior_generator_intent.h>
-#include <intents/debug_writer_intent/debug_writer_intent.h>
-#include <intents/intent_base.h>
-
+#include "intents/behavior_generator/behavior_generator_intent.h"
+#include "intents/debug_writer_intent/debug_writer_intent.h"
+#include "intents/intent_base.h"
+#include "intents/positioning_intent/positioning_intent.h"
 
 namespace cooboc {
 namespace intent {
 
 IntentManager::IntentManager() {
-    intents_[0] = new BehaviorGeneratorIntent();
-    intents_[1] = new DebugWriterIntent();
+    intents_[0] = new PositioningIntent();
+    intents_[1] = new BehaviorGeneratorIntent();
+    intents_[2] = new DebugWriterIntent();
 }
 IntentManager::~IntentManager() {
     for (IntentBase *intentPtr : intents_) { delete (intentPtr); }
