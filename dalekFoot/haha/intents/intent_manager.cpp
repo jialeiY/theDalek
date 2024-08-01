@@ -2,13 +2,13 @@
 #include "intents/behavior_generator/behavior_generator_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
 #include "intents/intent_base.h"
-#include "intents/positioning_intent/positioning_intent.h"
+#include "intents/odometry_intent/odometry_intent.h"
 
 namespace cooboc {
 namespace intent {
 
 IntentManager::IntentManager() {
-    intents_[0] = new PositioningIntent();
+    intents_[0] = new OdometryIntent();
     intents_[1] = new BehaviorGeneratorIntent();
     intents_[2] = new DebugWriterIntent();
 }

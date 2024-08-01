@@ -18,7 +18,7 @@ CPP_SOURCES += intents/debug_writer_intent/debug_writer_intent.cpp
 CPP_SOURCES += intents/intent_manager.cpp
 CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += utils/time.cpp
-CPP_SOURCES += intents/positioning_intent/positioning_intent.cpp
+CPP_SOURCES += intents/odometry_intent/odometry_intent.cpp
 
 
 INCLUDES += -I./
