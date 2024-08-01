@@ -7,9 +7,9 @@
 namespace cooboc {
 namespace data {
 
-struct Pose {
-    Position2D position;
-    Orientation orientation;
+struct Pose2D {
+    Position2D position {0.0F, 0.0F};
+    Orientation orientation {0.0F};
 };
 
 }    // namespace data

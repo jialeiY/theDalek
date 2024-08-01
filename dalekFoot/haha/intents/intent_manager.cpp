@@ -8,9 +8,9 @@ namespace cooboc {
 namespace intent {
 
 IntentManager::IntentManager() {
-    intents_[0] = new OdometryIntent();
-    intents_[1] = new BehaviorGeneratorIntent();
-    intents_[2] = new DebugWriterIntent();
+    intents_.push_back(new OdometryIntent());
+    intents_.push_back(new BehaviorGeneratorIntent());
+    intents_.push_back(new DebugWriterIntent());
 }
 IntentManager::~IntentManager() {
     for (IntentBase *intentPtr : intents_) { delete (intentPtr); }

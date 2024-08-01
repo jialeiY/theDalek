@@ -2,7 +2,7 @@
 #define __INTENTS_INTENT_MANAGER_H__
 
 #include <intents/intent_base.h>
-#include <array>
+#include <vector>
 
 namespace cooboc {
 namespace intent {
@@ -16,7 +16,7 @@ class IntentManager {
     void tick();
 
   private:
-    std::array<IntentBase *, 2U> intents_;
+    std::vector<IntentBase *> intents_;
 };
 }    // namespace intent
 }    // namespace cooboc

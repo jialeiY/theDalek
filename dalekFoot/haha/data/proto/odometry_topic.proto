@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+import "data/proto/pose2d.proto";
+
+message OdometryTopic {
+    optional Pose2D pose = 1;
+}

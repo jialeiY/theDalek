@@ -4,8 +4,11 @@
 #include <google/protobuf/descriptor.pb.h>
 #include <cstdint>
 #include <mcap/writer.hpp>
+#include "data/codec/odometry_topic_codec.h"
 #include "data/codec/planning_request_topic_codec.h"
+#include "gen/data/proto/odometry_topic.pb.h"
 #include "gen/data/proto/planning_request_topic.pb.h"
+#include "intents/topics/odometry_topic.h"
 #include "intents/topics/topics.h"
 #include "utils/time.h"
 
@@ -47,13 +50,21 @@ mcap::Schema createSchema(const google::protobuf::Descriptor *d) {
 
 DebugWriterIntent::DebugWriterIntent() :
     planningRequestTopicSchema_ {nullptr},
-    planningRequestTopicChannel_ {nullptr} {}
+    planningRequestTopicChannel_ {nullptr},
+    odometryTopicSchema_ {nullptr},
+    odometryTopicChannel_ {nullptr} {}
 DebugWriterIntent::~DebugWriterIntent() {
     if (planningRequestTopicSchema_ != nullptr) {
         delete planningRequestTopicSchema_;
     }
     if (planningRequestTopicChannel_ != nullptr) {
         delete planningRequestTopicChannel_;
+    }
+    if (odometryTopicSchema_ != nullptr) {
+        delete odometryTopicSchema_;
+    }
+    if (odometryTopicChannel_ != nullptr) {
+        delete odometryTopicChannel_;
     }
     writer_.close();
 }
@@ -74,24 +85,53 @@ void DebugWriterIntent::setup() {
       "/planning/behavior", "protobuf", planningRequestTopicSchema_->id);
     writer_.addChannel(
       *planningRequestTopicChannel_);    // Assigned channel id written to
-                                         // planningRequestTopicChannel.id
+    // planningRequestTopicChannel.id
+
+    // Odometry Schema
+    odometryTopicSchema_ = new mcap::Schema();
+    *odometryTopicSchema_ =
+      createSchema(cooboc::proto::OdometryTopic::descriptor());
+    writer_.addSchema(*odometryTopicSchema_);
+
+    // Register channel
+    odometryTopicChannel_ = new mcap::Channel();
+    *odometryTopicChannel_ =
+      mcap::Channel("/odometry", "protobuf", odometryTopicSchema_->id);
+    writer_.addChannel(*odometryTopicChannel_);
 }
+
 void DebugWriterIntent::tick() {
     static std::uint32_t sequence {0U};
 
-    proto::PlanningRequestTopic payloadMsg =
-      data::convert(planningRequestTopic);
-    const std::string payload = payloadMsg.SerializeAsString();
+    {
+        proto::PlanningRequestTopic payloadMsg =
+          data::convert(planningRequestTopic);
+        const std::string payload = payloadMsg.SerializeAsString();
 
-    mcap::Message message;
-    message.channelId   = planningRequestTopicChannel_->id;
-    message.sequence    = sequence++;
-    message.logTime     = utils::time::nanoseconds();
-    message.publishTime = utils::time::nanoseconds();
-    message.data        = reinterpret_cast<const std::byte *>(payload.data());
-    message.dataSize    = payload.size();
+        mcap::Message message;
+        message.channelId   = planningRequestTopicChannel_->id;
+        message.sequence    = sequence++;
+        message.logTime     = utils::time::nanoseconds();
+        message.publishTime = utils::time::nanoseconds();
+        message.data     = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize = payload.size();
 
-    std::ignore = writer_.write(message);
+        std::ignore = writer_.write(message);
+    }
+    {
+        proto::OdometryTopic payloadMsg = data::convert(odometryTopic);
+        const std::string payload       = payloadMsg.SerializeAsString();
+
+        mcap::Message message;
+        message.channelId   = odometryTopicChannel_->id;
+        message.sequence    = sequence++;
+        message.logTime     = utils::time::nanoseconds();
+        message.publishTime = utils::time::nanoseconds();
+        message.data     = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize = payload.size();
+
+        std::ignore = writer_.write(message);
+    }
 }
 }    // namespace intent
 }    // namespace cooboc
