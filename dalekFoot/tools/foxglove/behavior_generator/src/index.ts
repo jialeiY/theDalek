@@ -20,14 +20,14 @@ type PlanningRequestTopic = {
 };
 
 export function activate(extensionContext: ExtensionContext): void {
-  extensionContext.registerPanel({ name: "example-panel", initPanel: initExamplePanel });
+  // extensionContext.registerPanel({ name: "example-panel", initPanel: initExamplePanel });
 
   extensionContext.registerMessageConverter({
     fromSchemaName: "cooboc.proto.PlanningRequestTopic",
     toSchemaName: "foxglove.SceneUpdate",
     converter: (inputMessage: PlanningRequestTopic) => {
       // https://docs.foxglove.dev/docs/visualization/message-schemas/line-primitive
-      console.log(inputMessage);
+      // console.log(inputMessage);
       // logic to turn sensors.MyGps messages into foxglove.LocationFix messages
       const lines: LinePrimitive[] = [{
         type: LineType.LINE_LIST,
