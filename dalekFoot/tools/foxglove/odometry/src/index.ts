@@ -1,6 +1,20 @@
 import { ExtensionContext } from "@foxglove/extension";
-import {ModelPrimitive, SceneUpdate} from "@foxglove/schemas";
-type OdometryTopic = {};
+import { ModelPrimitive, SceneUpdate } from "@foxglove/schemas";
+import { robot } from "./asset/robot_model";
+
+type Position2D = {
+  x: number;
+  y: number;
+};
+
+type Pose2D = {
+  position: Position2D;
+  orientation: number;
+};
+
+type OdometryTopic = {
+  pose: Pose2D;
+};
 
 export function activate(extensionContext: ExtensionContext): void {
   // extensionContext.registerPanel({ name: "example-panel", initPanel: initExamplePanel });
@@ -9,18 +23,21 @@ export function activate(extensionContext: ExtensionContext): void {
     toSchemaName: "foxglove.SceneUpdate",
     converter: (inputMessage: OdometryTopic) => {
       console.log(inputMessage);
-      const robotModel:ModelPrimitive[]  = [{
+      // let angle = (inputMessage.pose.orientation / 3.141592653589793238462643383279502884197) % 1;
+      const w = Math.cos(inputMessage.pose.orientation / 2.0);
+      const z = Math.sqrt(1 - (w * w));
+      const robotModel: ModelPrimitive[] = [{
         pose: {
           position: {
-            x: 0,
-            y: 0,
+            x: inputMessage.pose.position.x,
+            y: inputMessage.pose.position.y,
             z: 0
           },
           orientation: {
             x: 0,
             y: 0,
-            z: 0,
-            w: 1.0
+            z: z,
+            w: w
           }
         },
         scale: {
@@ -30,16 +47,16 @@ export function activate(extensionContext: ExtensionContext): void {
         },
         color: { r: 1.0, g: 1.0, b: 0.0, a: 1.0 },
         override_color: false,
-        url: "package://asset/robot.glb",
-        media_type: "glTF",
-        data: Uint8Array.from([])
+        url: "",
+        media_type: "model/gltf-binary",
+        data: robot
       }];
-      const sceneUpdateMessage:SceneUpdate = {
+      const sceneUpdateMessage: SceneUpdate = {
         deletions: [],
         entities: [
           {
             id: "Odometry",
-            timestamp: {sec: 0, nsec: 0},
+            timestamp: { sec: 0, nsec: 0 },
             frame_id: "WORLD",
             lifetime: { sec: 10, nsec: 0 },
             frame_locked: false,
