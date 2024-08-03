@@ -8,7 +8,7 @@
 [#] 8. the codec of routetopic
 [#] 9. output from debug
 [#] 10. the plugin to show he route
-[ ] 11. lateral planning of motion
+[/] 11. lateral planning of motion
 [ ] 12. longitudinal planning of motion
 
 
