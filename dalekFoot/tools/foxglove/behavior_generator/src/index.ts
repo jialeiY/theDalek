@@ -1,5 +1,5 @@
 import { ExtensionContext } from "@foxglove/extension";
-import { initExamplePanel } from "./ExamplePanel";
+// import { initExamplePanel } from "./ExamplePanel";
 import { LinePrimitive } from "@foxglove/schemas";
 import { LineType } from "@foxglove/schemas/schemas/typescript/LineType"
 
