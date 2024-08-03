@@ -7,7 +7,7 @@
 namespace cooboc {
 namespace data {
 proto::Pose2D convert(const data::Pose2D &);
-}
+}    // namespace data
 }    // namespace cooboc
 
 #endif

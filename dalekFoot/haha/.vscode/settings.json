@@ -62,5 +62,6 @@
         "stop_token": "cpp",
         "thread": "cpp",
         "csignal": "cpp"
-    }
+    },
+    "editor.formatOnSave": true
 }

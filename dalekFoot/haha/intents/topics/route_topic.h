@@ -4,13 +4,20 @@
 #include <cstdint>
 #include "data/defs/position2d.h"
 
+
 namespace cooboc {
 namespace intent {
+
+using RouteId = std::uint64_t;
+
+
 struct RouteTopic {
+    static constexpr std::size_t kPolylineLength {100U};
+
     bool hasValue;
-    std::uint64_t routeId;
+    RouteId routeId;
     std::size_t polylineLength;
-    data::Position2D polyline[100U];
+    data::Position2D polyline[kPolylineLength];
 };
 }    // namespace intent
 }    // namespace cooboc
