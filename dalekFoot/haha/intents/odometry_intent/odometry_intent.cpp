@@ -14,6 +14,7 @@ OdometryIntent::OdometryIntent() :
 OdometryIntent::~OdometryIntent() {}
 
 void OdometryIntent::setup() {
+    odometryTopic.timestamp        = 0U;
     odometryTopic.pose.position.x  = 0.0F;
     odometryTopic.pose.position.y  = 0.0F;
     odometryTopic.pose.orientation = 0.0F;
@@ -21,6 +22,7 @@ void OdometryIntent::setup() {
 
 
 void OdometryIntent::tick() {
+    odometryTopic.timestamp        = utils::time::nanoseconds();
     odometryTopic.pose.position.x  = randomDistribution_(randomGen_);
     odometryTopic.pose.position.y  = randomDistribution_(randomGen_);
     odometryTopic.pose.orientation = randomDistribution_(randomGen_) * 5.4F;

@@ -1,5 +1,5 @@
-#ifndef __DATA_CODEC_ODOMETRY_TOPIC_H__
-#define __DATA_CODEC_ODOMETRY_TOPIC_H__
+#ifndef __DATA_CODEC_ODOMETRY_TOPIC_CODEC_H__
+#define __DATA_CODEC_ODOMETRY_TOPIC_CODEC_H__
 
 #include "gen/data/proto/odometry_topic.pb.h"
 #include "intents/topics/odometry_topic.h"

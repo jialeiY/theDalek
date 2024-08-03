@@ -4,7 +4,7 @@ package cooboc.proto;
 
 import "data/proto/pose2d.proto";
 
-message OdometryTopic {
-    optional uint64 timestamp = 1 [default = 0];
+message Waypoint {
+    optional uint64 timepoint = 1 [default = 0];
     optional Pose2D pose = 2;
 }

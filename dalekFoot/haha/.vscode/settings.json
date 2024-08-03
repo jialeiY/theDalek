@@ -61,7 +61,12 @@
         "semaphore": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "csignal": "cpp"
+        "csignal": "cpp",
+        "charconv": "cpp",
+        "format": "cpp",
+        "iomanip": "cpp",
+        "span": "cpp",
+        "sstream": "cpp"
     },
     "editor.formatOnSave": true
 }

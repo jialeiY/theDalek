@@ -25,6 +25,9 @@ class DebugWriterIntent : public IntentBase {
 
     mcap::Schema *routeTopicSchema_ {nullptr};
     mcap::Channel *routeTopicChannel_ {nullptr};
+
+    mcap::Schema *motionPlanningDebugTopicSchema_ {nullptr};
+    mcap::Channel *motionPlanningDebugTopicChannel_ {nullptr};
 };
 }    // namespace intent
 }    // namespace cooboc

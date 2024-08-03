@@ -2,6 +2,7 @@
 #include "intents/behavior_generator/behavior_generator_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
 #include "intents/intent_base.h"
+#include "intents/motion_planning_intent/motion_planning_intent.h"
 #include "intents/odometry_intent/odometry_intent.h"
 #include "intents/route_provision_intent/route_provision_intent.h"
 
@@ -15,7 +16,9 @@ IntentManager::IntentManager() {
     intents_.push_back(new BehaviorGeneratorIntent());
     // The route that ego need to follow based on the task and localization
     intents_.push_back(new RouteProvisionIntent());
-    // Debug
+    // MotionPlanning plan the waypoints of maneuver state of ego based on all
+    intents_.push_back(new MotionPlanningIntent());
+    // information Debug
     intents_.push_back(new DebugWriterIntent());
 }
 IntentManager::~IntentManager() {

@@ -4,9 +4,11 @@
 #include <google/protobuf/descriptor.pb.h>
 #include <cstdint>
 #include <mcap/writer.hpp>
+#include "data/codec/motion_planning_debug_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/planning_request_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
+#include "gen/data/proto/motion_planning_debug_topic.pb.h"
 #include "gen/data/proto/odometry_topic.pb.h"
 #include "gen/data/proto/planning_request_topic.pb.h"
 #include "gen/data/proto/route_topic.pb.h"
@@ -56,7 +58,9 @@ DebugWriterIntent::DebugWriterIntent() :
     odometryTopicSchema_ {nullptr},
     odometryTopicChannel_ {nullptr},
     routeTopicSchema_ {nullptr},
-    routeTopicChannel_ {nullptr} {}
+    routeTopicChannel_ {nullptr},
+    motionPlanningDebugTopicSchema_ {nullptr},
+    motionPlanningDebugTopicChannel_ {nullptr} {}
 DebugWriterIntent::~DebugWriterIntent() {
     if (planningRequestTopicSchema_ != nullptr) {
         delete planningRequestTopicSchema_;
@@ -78,37 +82,39 @@ DebugWriterIntent::~DebugWriterIntent() {
     if (routeTopicChannel_ != nullptr) {
         delete routeTopicChannel_;
     }
+
+    if (motionPlanningDebugTopicSchema_ != nullptr) {
+        delete motionPlanningDebugTopicSchema_;
+    }
+    if (motionPlanningDebugTopicChannel_ != nullptr) {
+        delete motionPlanningDebugTopicChannel_;
+    }
     writer_.close();
 }
 
 void DebugWriterIntent::setup() {
-    std::ignore =
-      writer_.open("runtime/output.mcap", mcap::McapWriterOptions("haha"));
+    std::ignore = writer_.open("runtime/output.mcap", mcap::McapWriterOptions("haha"));
 
     // Create and Register Schema
-    planningRequestTopicSchema_ = new mcap::Schema();
-    *planningRequestTopicSchema_ =
-      createSchema(cooboc::proto::PlanningRequestTopic::descriptor());
+    planningRequestTopicSchema_  = new mcap::Schema();
+    *planningRequestTopicSchema_ = createSchema(cooboc::proto::PlanningRequestTopic::descriptor());
     writer_.addSchema(*planningRequestTopicSchema_);
 
     // Create and Register Channel
-    planningRequestTopicChannel_  = new mcap::Channel();
-    *planningRequestTopicChannel_ = mcap::Channel(
-      "/planning/behavior", "protobuf", planningRequestTopicSchema_->id);
-    writer_.addChannel(
-      *planningRequestTopicChannel_);    // Assigned channel id written to
+    planningRequestTopicChannel_ = new mcap::Channel();
+    *planningRequestTopicChannel_ =
+      mcap::Channel("/planning/behavior", "protobuf", planningRequestTopicSchema_->id);
+    writer_.addChannel(*planningRequestTopicChannel_);    // Assigned channel id written to
     // planningRequestTopicChannel.id
 
     // Odometry Schema
-    odometryTopicSchema_ = new mcap::Schema();
-    *odometryTopicSchema_ =
-      createSchema(cooboc::proto::OdometryTopic::descriptor());
+    odometryTopicSchema_  = new mcap::Schema();
+    *odometryTopicSchema_ = createSchema(cooboc::proto::OdometryTopic::descriptor());
     writer_.addSchema(*odometryTopicSchema_);
 
     // Register channel
-    odometryTopicChannel_ = new mcap::Channel();
-    *odometryTopicChannel_ =
-      mcap::Channel("/odometry", "protobuf", odometryTopicSchema_->id);
+    odometryTopicChannel_  = new mcap::Channel();
+    *odometryTopicChannel_ = mcap::Channel("/odometry", "protobuf", odometryTopicSchema_->id);
     writer_.addChannel(*odometryTopicChannel_);
 
     // Route Topic
@@ -118,10 +124,22 @@ void DebugWriterIntent::setup() {
     writer_.addSchema(*routeTopicSchema_);
 
     // Register channel
-    routeTopicChannel_ = new mcap::Channel();
-    *routeTopicChannel_ =
-      mcap::Channel("/route", "protobuf", routeTopicSchema_->id);
+    routeTopicChannel_  = new mcap::Channel();
+    *routeTopicChannel_ = mcap::Channel("/route", "protobuf", routeTopicSchema_->id);
     writer_.addChannel(*routeTopicChannel_);
+
+    // MotionPlanningDebugTopic
+    // route Schema
+    motionPlanningDebugTopicSchema_ = new mcap::Schema();
+    *motionPlanningDebugTopicSchema_ =
+      createSchema(cooboc::proto::MotionPlanningDebugTopic::descriptor());
+    writer_.addSchema(*motionPlanningDebugTopicSchema_);
+
+    // Register channel
+    motionPlanningDebugTopicChannel_ = new mcap::Channel();
+    *motionPlanningDebugTopicChannel_ =
+      mcap::Channel("/debug/motion_planning", "protobuf", motionPlanningDebugTopicSchema_->id);
+    writer_.addChannel(*motionPlanningDebugTopicChannel_);
 }
 
 void DebugWriterIntent::tick() {
@@ -129,17 +147,16 @@ void DebugWriterIntent::tick() {
 
     // Planning Request
     {
-        proto::PlanningRequestTopic payloadMsg =
-          data::convert(planningRequestTopic);
-        const std::string payload = payloadMsg.SerializeAsString();
+        proto::PlanningRequestTopic payloadMsg = data::convert(planningRequestTopic);
+        const std::string payload              = payloadMsg.SerializeAsString();
 
         mcap::Message message;
         message.channelId   = planningRequestTopicChannel_->id;
         message.sequence    = sequence++;
         message.logTime     = utils::time::nanoseconds();
         message.publishTime = utils::time::nanoseconds();
-        message.data     = reinterpret_cast<const std::byte *>(payload.data());
-        message.dataSize = payload.size();
+        message.data        = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize    = payload.size();
 
         std::ignore = writer_.write(message);
     }
@@ -153,8 +170,8 @@ void DebugWriterIntent::tick() {
         message.sequence    = sequence++;
         message.logTime     = utils::time::nanoseconds();
         message.publishTime = utils::time::nanoseconds();
-        message.data     = reinterpret_cast<const std::byte *>(payload.data());
-        message.dataSize = payload.size();
+        message.data        = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize    = payload.size();
 
         std::ignore = writer_.write(message);
     }
@@ -168,9 +185,24 @@ void DebugWriterIntent::tick() {
         message.sequence    = sequence++;
         message.logTime     = utils::time::nanoseconds();
         message.publishTime = utils::time::nanoseconds();
-        message.data     = reinterpret_cast<const std::byte *>(payload.data());
-        message.dataSize = payload.size();
-        std::ignore      = writer_.write(message);
+        message.data        = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize    = payload.size();
+        std::ignore         = writer_.write(message);
+    }
+
+    // Motion Planning Debug Topic
+    {
+        proto::MotionPlanningDebugTopic payloadMsg = data::convert(motionPlanningDebugTopic);
+        const std::string payload                  = payloadMsg.SerializeAsString();
+
+        mcap::Message message;
+        message.channelId   = motionPlanningDebugTopicChannel_->id;
+        message.sequence    = sequence++;
+        message.logTime     = utils::time::nanoseconds();
+        message.publishTime = utils::time::nanoseconds();
+        message.data        = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize    = payload.size();
+        std::ignore         = writer_.write(message);
     }
 }
 }    // namespace intent
