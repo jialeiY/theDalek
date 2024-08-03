@@ -6,8 +6,8 @@
 [#] 6. output of the topic
 [#] 7. the proto file of routetopic
 [#] 8. the codec of routetopic
-9. output from debug
-10. the plugin to show he route
+[#] 9. output from debug
+[#] 10. the plugin to show he route
 
 
 

@@ -22,7 +22,6 @@ export function activate(extensionContext: ExtensionContext): void {
     fromSchemaName: "cooboc.proto.OdometryTopic",
     toSchemaName: "foxglove.SceneUpdate",
     converter: (inputMessage: OdometryTopic) => {
-      console.log(inputMessage);
       // let angle = (inputMessage.pose.orientation / 3.141592653589793238462643383279502884197) % 1;
       const w = Math.cos(inputMessage.pose.orientation / 2.0);
       const z = Math.sqrt(1 - (w * w));

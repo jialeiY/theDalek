@@ -16,7 +16,14 @@ void RouteProvisionIntent::setup() {
     }
 }
 
-void RouteProvisionIntent::tick() {}
+void RouteProvisionIntent::tick() {
+    routeTopic.hasValue       = true;
+    routeTopic.routeId        = uniqueRouteId_;
+    routeTopic.polylineLength = 3U;
+    routeTopic.polyline[0]    = data::Position2D {0.0F, 0.0F};
+    routeTopic.polyline[1]    = data::Position2D {1.0F, 0.0F};
+    routeTopic.polyline[2]    = data::Position2D {1.2F, 0.1F};
+}
 
 }    // namespace intent
 }    // namespace cooboc
