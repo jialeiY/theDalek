@@ -9,6 +9,7 @@ namespace cooboc {
 namespace intent {
 
 extern OdometryTopic odometryTopic;
+extern RouteTopic routeTopic;
 extern PlanningRequestTopic planningRequestTopic;
 
 }    // namespace intent
