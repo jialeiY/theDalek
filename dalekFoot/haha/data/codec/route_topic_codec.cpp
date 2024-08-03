@@ -16,6 +16,7 @@ proto::RouteTopic convert(const intent::RouteTopic &in) {
         proto::Position2D *position = out.add_polyline();
         *position                   = convert(in.polyline[i]);
     }
+    return out;
 }
 
 }    // namespace data

@@ -6,8 +6,10 @@
 #include <mcap/writer.hpp>
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/planning_request_topic_codec.h"
+#include "data/codec/route_topic_codec.h"
 #include "gen/data/proto/odometry_topic.pb.h"
 #include "gen/data/proto/planning_request_topic.pb.h"
+#include "gen/data/proto/route_topic.pb.h"
 #include "intents/topics/odometry_topic.h"
 #include "intents/topics/topics.h"
 #include "utils/time.h"
@@ -52,7 +54,9 @@ DebugWriterIntent::DebugWriterIntent() :
     planningRequestTopicSchema_ {nullptr},
     planningRequestTopicChannel_ {nullptr},
     odometryTopicSchema_ {nullptr},
-    odometryTopicChannel_ {nullptr} {}
+    odometryTopicChannel_ {nullptr},
+    routeTopicSchema_ {nullptr},
+    routeTopicChannel_ {nullptr} {}
 DebugWriterIntent::~DebugWriterIntent() {
     if (planningRequestTopicSchema_ != nullptr) {
         delete planningRequestTopicSchema_;
@@ -60,11 +64,19 @@ DebugWriterIntent::~DebugWriterIntent() {
     if (planningRequestTopicChannel_ != nullptr) {
         delete planningRequestTopicChannel_;
     }
+
     if (odometryTopicSchema_ != nullptr) {
         delete odometryTopicSchema_;
     }
     if (odometryTopicChannel_ != nullptr) {
         delete odometryTopicChannel_;
+    }
+
+    if (routeTopicSchema_ != nullptr) {
+        delete routeTopicSchema_;
+    }
+    if (routeTopicChannel_ != nullptr) {
+        delete routeTopicChannel_;
     }
     writer_.close();
 }
@@ -98,11 +110,24 @@ void DebugWriterIntent::setup() {
     *odometryTopicChannel_ =
       mcap::Channel("/odometry", "protobuf", odometryTopicSchema_->id);
     writer_.addChannel(*odometryTopicChannel_);
+
+    // Route Topic
+    // route Schema
+    routeTopicSchema_  = new mcap::Schema();
+    *routeTopicSchema_ = createSchema(cooboc::proto::RouteTopic::descriptor());
+    writer_.addSchema(*routeTopicSchema_);
+
+    // Register channel
+    routeTopicChannel_ = new mcap::Channel();
+    *routeTopicChannel_ =
+      mcap::Channel("/route", "protobuf", routeTopicSchema_->id);
+    writer_.addChannel(*routeTopicChannel_);
 }
 
 void DebugWriterIntent::tick() {
     static std::uint32_t sequence {0U};
 
+    // Planning Request
     {
         proto::PlanningRequestTopic payloadMsg =
           data::convert(planningRequestTopic);
@@ -118,6 +143,7 @@ void DebugWriterIntent::tick() {
 
         std::ignore = writer_.write(message);
     }
+    // Odometry
     {
         proto::OdometryTopic payloadMsg = data::convert(odometryTopic);
         const std::string payload       = payloadMsg.SerializeAsString();
@@ -131,6 +157,20 @@ void DebugWriterIntent::tick() {
         message.dataSize = payload.size();
 
         std::ignore = writer_.write(message);
+    }
+    // Route
+    {
+        proto::RouteTopic payloadMsg = data::convert(routeTopic);
+        const std::string payload    = payloadMsg.SerializeAsString();
+
+        mcap::Message message;
+        message.channelId   = routeTopicChannel_->id;
+        message.sequence    = sequence++;
+        message.logTime     = utils::time::nanoseconds();
+        message.publishTime = utils::time::nanoseconds();
+        message.data     = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize = payload.size();
+        std::ignore      = writer_.write(message);
     }
 }
 }    // namespace intent
