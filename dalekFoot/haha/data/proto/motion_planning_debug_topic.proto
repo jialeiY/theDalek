@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+import "data/proto/waypoint.proto";
+
+message MotionPlanningDebugTopic {
+    optional uint32 numberOfWaypoints = 1 [default = 0];
+    repeated Waypoint waypoints = 2;
+
+    repeated uint64 waypoint_timepoint = 3;
+    repeated float waypoint_position_x = 4;
+    repeated float waypoint_position_y = 5;
+}
