@@ -12,7 +12,12 @@
 [ ] 12. longitudinal planning of motion
 [#] 13. vector2D -> PolarVector2D
 [#] 14. position2D -> Vector2D
-[ ] 15. remove data/codec/position2d_codec.cpp
+[#] 15. remove data/codec/position2d_codec.cpp
+16. add ego state topic proto
+17. add ego state topic convert
+18. Frame translate in foxglove
+
+
 
 
 
