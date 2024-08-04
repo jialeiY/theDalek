@@ -1,5 +1,5 @@
 import { ExtensionContext } from "@foxglove/extension";
-import { ModelPrimitive, SceneUpdate } from "@foxglove/schemas";
+import { ModelPrimitive, SceneUpdate, FrameTransform } from "@foxglove/schemas";
 import { robot } from "./asset/robot_model";
 
 type Position2D = {
@@ -21,23 +21,47 @@ export function activate(extensionContext: ExtensionContext): void {
     // extensionContext.registerPanel({ name: "example-panel", initPanel: initExamplePanel });
     extensionContext.registerMessageConverter({
         fromSchemaName: "cooboc.proto.OdometryTopic",
-        toSchemaName: "foxglove.SceneUpdate",
-        converter: (inputMessage: OdometryTopic) => {
-            // let angle = (inputMessage.pose.orientation / 3.141592653589793238462643383279502884197) % 1;
+        toSchemaName: "foxglove.FrameTransform",
+        converter: (inputMessage: OdometryTopic):FrameTransform => {
             const w = Math.cos(inputMessage.pose.orientation / 2.0);
             const z = Math.sqrt(1 - (w * w));
+            const frameTransform:FrameTransform = {
+                timestamp: { sec: 0, nsec: 0 },
+                parent_frame_id: "WORLD",
+                child_frame_id: "EGO",
+                translation: {
+                    x: inputMessage.pose.position.x,
+                    y: inputMessage.pose.position.y,
+                    z: 0
+                },
+                rotation: {
+                    x: 0,
+                    y: 0,
+                    z: z,
+                    w: w
+                }
+            };
+            return frameTransform
+        }
+    });
+
+    extensionContext.registerMessageConverter({
+        fromSchemaName: "cooboc.proto.OdometryTopic",
+        toSchemaName: "foxglove.SceneUpdate",
+        converter: (_: OdometryTopic) => {
+            // let angle = (inputMessage.pose.orientation / 3.141592653589793238462643383279502884197) % 1;
             const robotModel: ModelPrimitive[] = [{
                 pose: {
                     position: {
-                        x: inputMessage.pose.position.x,
-                        y: inputMessage.pose.position.y,
+                        x: 0,
+                        y: 0,
                         z: 0
                     },
                     orientation: {
                         x: 0,
                         y: 0,
-                        z: z,
-                        w: w
+                        z: 0,
+                        w: 1
                     }
                 },
                 scale: {
@@ -57,7 +81,7 @@ export function activate(extensionContext: ExtensionContext): void {
                     {
                         id: "Odometry",
                         timestamp: { sec: 0, nsec: 0 },
-                        frame_id: "WORLD",
+                        frame_id: "EGO",
                         lifetime: { sec: 10, nsec: 0 },
                         frame_locked: false,
                         metadata: [],
@@ -75,5 +99,5 @@ export function activate(extensionContext: ExtensionContext): void {
 
             return sceneUpdateMessage;
         }
-    })
+    });
 }
