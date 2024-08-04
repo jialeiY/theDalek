@@ -17,13 +17,19 @@ type OdometryTopic = {
     pose: Pose2D;
 };
 
+const PI = 3.141592653589793238462643383279502884197;
+
 export function activate(extensionContext: ExtensionContext): void {
     // extensionContext.registerPanel({ name: "example-panel", initPanel: initExamplePanel });
     extensionContext.registerMessageConverter({
         fromSchemaName: "cooboc.proto.OdometryTopic",
         toSchemaName: "foxglove.FrameTransform",
         converter: (inputMessage: OdometryTopic):FrameTransform => {
-            const w = Math.cos(inputMessage.pose.orientation / 2.0);
+            let transAngle = (inputMessage.pose.orientation / 2.0) % PI;
+            if (transAngle < 0) {
+                transAngle += PI;
+            }
+            const w = Math.cos(transAngle);
             const z = Math.sqrt(1 - (w * w));
             const frameTransform:FrameTransform = {
                 timestamp: { sec: 0, nsec: 0 },

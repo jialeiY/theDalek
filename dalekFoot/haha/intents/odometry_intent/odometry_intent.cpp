@@ -33,7 +33,7 @@ void OdometryIntent::tick() {
     odometryTopic.pose.orientation = randomDistribution_(randomGen_) * 5.4F;
 
     egoStateTopic.velocity.orientation = randomDistribution_(randomGen_) * 3.9F;
-    egoStateTopic.velocity.value       = randomDistribution_(randomGen_) + 0.5;
+    egoStateTopic.velocity.value       = randomDistribution_(randomGen_) * 3.0 + 0.5;
 
 
     // std::uint64_t fromm = utils::time::milliseconds();
