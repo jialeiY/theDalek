@@ -22,13 +22,13 @@ export function activate(extensionContext: ExtensionContext): void {
         converter: (inputMessage: EgoStateTopic) => {
             let arrows:ArrowPrimitive[] = [];
             // velocity
-            let transAngle = (inputMessage.velocity.orientation / 2.0) % PI;
-            if (transAngle < 0) {
-                transAngle += PI;
+            let va = (inputMessage.velocity.orientation / 2.0) % PI;
+            if (va < 0) {
+                va += PI;
             }
-            const vw = Math.cos(transAngle);
+            const vw = Math.cos(va);
             const vz = Math.sqrt(1 - (vw * vw));
-            const arrowLength = inputMessage.velocity.value;
+
             arrows.push({
                 pose: {
                     position: {
@@ -43,11 +43,41 @@ export function activate(extensionContext: ExtensionContext): void {
                         w: vw
                     }
                 },
-                shaft_length: arrowLength* 0.9,
+                shaft_length: inputMessage.velocity.value* 0.9,
                 shaft_diameter: 0.02,
-                head_length: arrowLength*0.2,
+                head_length: inputMessage.velocity.value*0.1,
                 head_diameter:0.03,
                 color: { r: 0.0, g: 0.0, b: 1.0, a: 1.0 },
+            });
+
+
+            // acceleration
+            let aa = (inputMessage.acceleration.orientation / 2.0) % PI;
+            if (aa < 0) {
+                aa += PI;
+            }
+            const aw = Math.cos(aa);
+            const az = Math.sqrt(1 - (aw * aw));
+
+            arrows.push({
+                pose: {
+                    position: {
+                        x: inputMessage.velocity.value * Math.cos(inputMessage.velocity.orientation),
+                        y: inputMessage.velocity.value * Math.sin(inputMessage.velocity.orientation),
+                        z: 0
+                    },
+                    orientation: {
+                        x: 0,
+                        y: 0,
+                        z: az,
+                        w: aw
+                    }
+                },
+                shaft_length: inputMessage.acceleration.value* 0.9,
+                shaft_diameter: 0.015,
+                head_length: inputMessage.acceleration.value*0.1,
+                head_diameter:0.03,
+                color: { r: 1.0, g: 0.0, b: 0.0, a: 1.0 },
             });
 
             const sceneUpdateMessage: SceneUpdate = {

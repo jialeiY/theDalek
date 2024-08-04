@@ -35,6 +35,9 @@ void OdometryIntent::tick() {
     egoStateTopic.velocity.orientation = randomDistribution_(randomGen_) * 3.9F;
     egoStateTopic.velocity.value       = randomDistribution_(randomGen_) * 3.0 + 0.5;
 
+    egoStateTopic.acceleration.orientation = randomDistribution_(randomGen_) * 39.4F;
+    egoStateTopic.acceleration.value       = randomDistribution_(randomGen_) * 4.7;
+
 
     // std::uint64_t fromm = utils::time::milliseconds();
     // fromm %= 5000;

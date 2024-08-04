@@ -17,7 +17,7 @@
 [#] 17. add ego state topic convert
 [#] 18. Frame translate in foxglove
 [#] 19. write ego state to debug
-[/] 20. show ego state in foxglove
+[#] 20. show ego state in foxglove
 
 
 
