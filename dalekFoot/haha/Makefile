@@ -12,6 +12,7 @@ PROTO_FILES += data/proto/motion_planning_debug_topic.proto
 PROTO_FILES += data/proto/odometry_topic.proto
 PROTO_FILES += data/proto/planning_request_topic.proto
 PROTO_FILES += data/proto/pose2d.proto
+PROTO_FILES += data/proto/vector2d.proto
 PROTO_FILES += data/proto/position2d.proto
 PROTO_FILES += data/proto/route_topic.proto
 PROTO_FILES += data/proto/polar_vector2d.proto

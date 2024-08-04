@@ -9,7 +9,7 @@ namespace data {
 
 proto::Position2D convert(const data::Position2D &);
 
-}
+}    // namespace data
 }    // namespace cooboc
 
 #endif
