@@ -10,9 +10,9 @@
 [#] 10. the plugin to show he route
 [/] 11. lateral planning of motion
 [ ] 12. longitudinal planning of motion
-[ ] 13. vector2D -> PolarVector2D
-[ ] 14. position2D -> Vector2D
-
+[#] 13. vector2D -> PolarVector2D
+[#] 14. position2D -> Vector2D
+[ ] 15. remove data/codec/position2d_codec.cpp
 
 
 

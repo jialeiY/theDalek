@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-import "data/proto/position2d.proto";
+import "data/proto/vector2d.proto";
 
 package cooboc.proto;
 
@@ -8,5 +8,5 @@ message RouteTopic {
     optional bool hasValue = 1 [default = false];
     optional uint64 routeId = 2 [default = 0];
     optional uint32 polylineLength = 3 [default = 0];
-    repeated Position2D polyline = 4;
+    repeated Vector2D polyline = 4;
 }

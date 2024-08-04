@@ -1,6 +1,7 @@
 #include "data/codec/route_topic_codec.h"
 #include <cstdint>
 #include "data/codec/position2d_codec.h"
+#include "data/proto/position2d.h"
 #include "gen/data/proto/route_topic.pb.h"
 #include "intents/topics/route_topic.h"
 
