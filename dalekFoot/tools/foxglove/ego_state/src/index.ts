@@ -73,9 +73,9 @@ export function activate(extensionContext: ExtensionContext): void {
                         w: aw
                     }
                 },
-                shaft_length: inputMessage.acceleration.value* 0.9,
+                shaft_length: inputMessage.acceleration.value* 0.7,
                 shaft_diameter: 0.015,
-                head_length: inputMessage.acceleration.value*0.1,
+                head_length: inputMessage.acceleration.value*0.3,
                 head_diameter:0.03,
                 color: { r: 1.0, g: 0.0, b: 0.0, a: 1.0 },
             });
