@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package cooboc.proto;
 
-message Vector2D {
+message PolarVector2D {
     optional float orientation = 1 [default = 0.0];
     optional float value = 2 [default = 0.0];
 }
