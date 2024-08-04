@@ -23,6 +23,9 @@ class DebugWriterIntent : public IntentBase {
     mcap::Schema *odometryTopicSchema_ {nullptr};
     mcap::Channel *odometryTopicChannel_ {nullptr};
 
+    mcap::Schema *egoStateTopicSchema_ {nullptr};
+    mcap::Channel *egoStateTopicChannel_ {nullptr};
+
     mcap::Schema *routeTopicSchema_ {nullptr};
     mcap::Channel *routeTopicChannel_ {nullptr};
 

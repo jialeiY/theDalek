@@ -16,6 +16,7 @@ PROTO_FILES += data/proto/pose2d.proto
 PROTO_FILES += data/proto/route_topic.proto
 PROTO_FILES += data/proto/vector2d.proto
 PROTO_FILES += data/proto/waypoint.proto
+PROTO_FILES += data/proto/ego_state_topic.proto
 
 CPP_SOURCES += data/codec/motion_planning_debug_topic_codec.cpp
 CPP_SOURCES += data/codec/odometry_topic_codec.cpp
@@ -34,7 +35,7 @@ CPP_SOURCES += intents/route_provision_intent/route_provision_intent.cpp
 CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += main.cpp
 CPP_SOURCES += utils/time.cpp
-
+CPP_SOURCES += data/codec/ego_state_topic_codec.cpp
 
 INCLUDES += -I./
 INCLUDES += -I./gen

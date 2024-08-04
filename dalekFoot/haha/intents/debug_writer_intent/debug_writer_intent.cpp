@@ -4,10 +4,12 @@
 #include <google/protobuf/descriptor.pb.h>
 #include <cstdint>
 #include <mcap/writer.hpp>
+#include "data/codec/ego_state_topic_codec.h"
 #include "data/codec/motion_planning_debug_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/planning_request_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
+#include "gen/data/proto/ego_state_topic.pb.h"
 #include "gen/data/proto/motion_planning_debug_topic.pb.h"
 #include "gen/data/proto/odometry_topic.pb.h"
 #include "gen/data/proto/planning_request_topic.pb.h"
@@ -57,6 +59,8 @@ DebugWriterIntent::DebugWriterIntent() :
     planningRequestTopicChannel_ {nullptr},
     odometryTopicSchema_ {nullptr},
     odometryTopicChannel_ {nullptr},
+    egoStateTopicSchema_ {nullptr},
+    egoStateTopicChannel_ {nullptr},
     routeTopicSchema_ {nullptr},
     routeTopicChannel_ {nullptr},
     motionPlanningDebugTopicSchema_ {nullptr},
@@ -69,11 +73,20 @@ DebugWriterIntent::~DebugWriterIntent() {
         delete planningRequestTopicChannel_;
     }
 
+    // OdometryTopic
     if (odometryTopicSchema_ != nullptr) {
         delete odometryTopicSchema_;
     }
     if (odometryTopicChannel_ != nullptr) {
         delete odometryTopicChannel_;
+    }
+
+    // EgoStateTopic
+    if (egoStateTopicSchema_ != nullptr) {
+        delete egoStateTopicSchema_;
+    }
+    if (egoStateTopicChannel_ != nullptr) {
+        delete egoStateTopicChannel_;
     }
 
     if (routeTopicSchema_ != nullptr) {
@@ -116,6 +129,18 @@ void DebugWriterIntent::setup() {
     odometryTopicChannel_  = new mcap::Channel();
     *odometryTopicChannel_ = mcap::Channel("/odometry", "protobuf", odometryTopicSchema_->id);
     writer_.addChannel(*odometryTopicChannel_);
+
+    // EgoStateTopic
+    // Register Schema
+    egoStateTopicSchema_  = new mcap::Schema();
+    *egoStateTopicSchema_ = createSchema(cooboc::proto::EgoStateTopic::descriptor());
+    writer_.addSchema(*egoStateTopicSchema_);
+
+    // Register channel
+    egoStateTopicChannel_  = new mcap::Channel();
+    *egoStateTopicChannel_ = mcap::Channel("/ego_state", "protobuf", egoStateTopicSchema_->id);
+    writer_.addChannel(*egoStateTopicChannel_);
+
 
     // Route Topic
     // route Schema
@@ -175,6 +200,22 @@ void DebugWriterIntent::tick() {
 
         std::ignore = writer_.write(message);
     }
+    // EgoState
+    {
+        proto::EgoStateTopic payloadMsg = data::convert(egoStateTopic);
+        const std::string payload       = payloadMsg.SerializeAsString();
+
+        mcap::Message message;
+        message.channelId   = egoStateTopicChannel_->id;
+        message.sequence    = sequence++;
+        message.logTime     = utils::time::nanoseconds();
+        message.publishTime = utils::time::nanoseconds();
+        message.data        = reinterpret_cast<const std::byte *>(payload.data());
+        message.dataSize    = payload.size();
+
+        std::ignore = writer_.write(message);
+    }
+
     // Route
     {
         proto::RouteTopic payloadMsg = data::convert(routeTopic);

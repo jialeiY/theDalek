@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+import "data/proto/polar_vector2d.proto";
+
+message EgoStateTopic {
+    required PolarVector2D velocity = 1;
+    required PolarVector2D acceleration = 2;
+    required float angularVelocity = 3;
+    required float angularAcceleration = 4;
+}
