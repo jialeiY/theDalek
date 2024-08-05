@@ -1,4 +1,5 @@
 #include "intents/motion_planning_intent/motion_planning_intent.h"
+#include <array>
 #include <cstdio>
 #include <iostream>
 #include <limits>
@@ -10,7 +11,7 @@ namespace cooboc {
 namespace intent {
 
 namespace detail {
-data::Position2D calculatePositionInFrene(const data::Pose2D &odometry, const RouteTopic &route) {
+ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const RouteTopic &route) {
     std::cout << "odo: " << odometry.position.x << ", " << odometry.position.y << std::endl;
     // TODO, assume route always has data now
 
@@ -47,13 +48,17 @@ data::Position2D calculatePositionInFrene(const data::Pose2D &odometry, const Ro
         s += veca.dot(vecb) / veca.abs();
     }
 
-    data::Position2D ret {s,
-                          calculateDistanceFromPointToSegment(odometry.position,
-                                                              route.polyline[closestSegmentId],
-                                                              route.polyline[closestSegmentId + 1U],
-                                                              false,
-                                                              false)};
-    return ret;
+    const float y {calculateDistanceFromPointToSegment(odometry.position,
+                                                       route.polyline[closestSegmentId],
+                                                       route.polyline[closestSegmentId + 1U],
+                                                       false,
+                                                       false)};
+
+    data::Vector2D refSegVec {
+      (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
+    data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
+
+    return {s, y, refSegPolarVec.orientation};
 }
 
 float calculateDistanceFromPointToSegment(const data::Position2D &point,
@@ -127,16 +132,42 @@ void MotionPlanningIntent::tick() {
     // Reference path
     const RouteTopic &route = routeTopic;
 
-    // 1. Odometry to frenet
-    const data::Position2D initPosition = detail::calculatePositionInFrene(odometry, route);
-    // Generate trajectory of 10 waypoints
+    // 1. key reference path where odometry is on it
+    detail::ReferencePose refPose = detail::calculatePositionInFrene(odometry, route);
 
-    motionPlanningDebugTopic.numberOfWaypoints = 10U;
-    for (std::size_t i {0U}; i < 10U; ++i) {
+    data::Pose2D initOdometryInFrenet {{refPose.s, refPose.y},
+                                       odometryTopic.pose.orientation - refPose.orientation};
+    data::PolarVector2D initVelocityInFrenet {
+      egoStateTopic.velocity.orientation - refPose.orientation, egoStateTopic.velocity.value};
+    data::PolarVector2D initAccelerationInFrenet {
+      egoStateTopic.acceleration.orientation - refPose.orientation,
+      egoStateTopic.acceleration.value};
+
+    planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
+}
+
+void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
+                                         const data::PolarVector2D &initVelocity,
+                                         const data::PolarVector2D &initAcceleration) {
+    // Generate trajectory of 100 waypoints
+
+    motionPlanningDebugTopic.numberOfWaypoints = 100U;
+
+    // lateral first
+
+    std::array<float, 100U> lateralPositionList;
+    data::Vector2D splitVelocity     = utils::math::to<data::Vector2D>(initVelocity);
+    data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
+
+    data::Pose2D egoPose {inintOdometry};
+
+    for (std::size_t i {0U}; i < 100; ++i) {
         data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};
-        waypoint.timepoint        = odometryTopic.timestamp + (10U * 1000U * i);
-        waypoint.pose.orientation = odometry.orientation;
-        waypoint.pose.position    = initPosition;
+        waypoint.timepoint = odometryTopic.timestamp + (10U * 1000U * i);    // 10 ms
+
+        egoPose.position.y += splitVelocity.y * 0.01;
+
+        waypoint.pose = egoPose;
     }
 }
 

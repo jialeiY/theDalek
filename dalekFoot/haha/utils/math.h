@@ -3,7 +3,9 @@
 
 #include <cmath>
 #include <cstdint>
+#include "data/defs/polar_vector2d.h"
 #include "data/defs/position2d.h"
+#include "data/defs/vector2d.h"
 
 namespace cooboc {
 namespace utils {
@@ -13,7 +15,8 @@ constexpr float FLOAT_EPSILON {1e-6F};
 
 
 template<typename Tin, typename Tout>
-Tout lerp(const Tin& x, const Tin& inStart, const Tin& inEnd, const Tout& outStart, const Tout& outEnd) {
+Tout lerp(
+  const Tin& x, const Tin& inStart, const Tin& inEnd, const Tout& outStart, const Tout& outEnd) {
     return (x - inStart) * (outEnd - outStart) / (inEnd - inStart) + outStart;
 }
 
@@ -30,6 +33,21 @@ inline bool equals<float>(const float& a, const float& b) {
 template<>
 inline bool equals<data::Position2D>(const data::Position2D& a, const data::Position2D& b) {
     return equals(a.x, b.x) && equals(a.y, b.y);
+}
+
+template<typename Ta, typename Tb>
+inline Ta to(const Tb& in) {
+    return Ta();
+}
+
+template<>
+inline data::PolarVector2D to<data::PolarVector2D, data::Vector2D>(const data::Vector2D& in) {
+    return {std::sqrt((in.x * in.x) + (in.y * in.y)), std::atan2(in.y, in.x)};
+}
+
+template<>
+inline data::Vector2D to<data::Vector2D, data::PolarVector2D>(const data::PolarVector2D& in) {
+    return {std::cos(in.orientation) * in.value, std::sin(in.orientation) * in.value};
 }
 
 

@@ -9,13 +9,21 @@ namespace cooboc {
 namespace intent {
 
 namespace detail {
-data::Position2D calculatePositionInFrene(const data::Pose2D &odometry,
-                                          const RouteTopic &route);
+
+struct ReferencePose {
+    float s {0.0};              // the s on the reference path
+    float y {0.0};              // ego lateral based on reference path
+    float orientation {0.0};    // the angle of reference path
+};
+
+ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const RouteTopic &route);
 float calculateDistanceFromPointToSegment(const data::Position2D &point,
                                           const data::Position2D &segmentStart,
                                           const data::Position2D &segmentEnd,
                                           const bool isStartClosed = true,
                                           const bool isEndClosed   = true);
+
+
 }    // namespace detail
 
 class MotionPlanningIntent : public IntentBase {
@@ -26,6 +34,9 @@ class MotionPlanningIntent : public IntentBase {
     virtual void tick() override;
 
   private:
+    void planEgoMotion(const data::Pose2D &inintOdometry,
+                       const data::PolarVector2D &initVelocity,
+                       const data::PolarVector2D &initAcceleration);
 };
 
 }    // namespace intent

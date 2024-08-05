@@ -6,6 +6,8 @@
 namespace cooboc {
 namespace data {
 
+struct Vector2D;
+
 struct PolarVector2D {
     Orientation orientation {0.0F};
     float value {0.0F};
