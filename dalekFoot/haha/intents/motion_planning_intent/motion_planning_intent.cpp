@@ -12,7 +12,6 @@ namespace intent {
 
 namespace detail {
 ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const RouteTopic &route) {
-    std::cout << "odo: " << odometry.position.x << ", " << odometry.position.y << std::endl;
     // TODO, assume route always has data now
 
     // Find the segment
@@ -29,8 +28,6 @@ ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const Route
             closestDistance  = dist;
         }
     }
-
-    std::cout << "closest id: " << closestSegmentId << " dist = " << closestDistance << std::endl;
 
 
     float s = 0.0F;
@@ -57,6 +54,9 @@ ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const Route
     data::Vector2D refSegVec {
       (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
     data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
+    std::cout << "closestSegmentId: " << closestSegmentId << " vec(" << refSegVec.x << ","
+              << refSegVec.y << ")" << std::endl;
+    std::cout << "ref seg ori: " << refSegPolarVec.orientation << std::endl;
 
     return {s, y, refSegPolarVec.orientation};
 }
@@ -142,6 +142,10 @@ void MotionPlanningIntent::tick() {
     data::PolarVector2D initAccelerationInFrenet {
       egoStateTopic.acceleration.orientation - refPose.orientation,
       egoStateTopic.acceleration.value};
+    std::cout << "velo orig: " << egoStateTopic.velocity.orientation
+              << " ref ori: " << refPose.orientation << std::endl;
+    std::cout << "velo in Frenet: " << initVelocityInFrenet.orientation
+              << " v: " << initVelocityInFrenet.value << std::endl;
 
     planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
 }
@@ -160,6 +164,8 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
     data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
 
     data::Pose2D egoPose {inintOdometry};
+
+    std::cout << "vy: " << splitVelocity.y << std::endl;
 
     for (std::size_t i {0U}; i < 100; ++i) {
         data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};

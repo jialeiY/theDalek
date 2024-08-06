@@ -42,7 +42,7 @@ inline Ta to(const Tb& in) {
 
 template<>
 inline data::PolarVector2D to<data::PolarVector2D, data::Vector2D>(const data::Vector2D& in) {
-    return {std::sqrt((in.x * in.x) + (in.y * in.y)), std::atan2(in.y, in.x)};
+    return {std::atan2(in.y, in.x), std::sqrt((in.x * in.x) + (in.y * in.y))};
 }
 
 template<>
