@@ -54,10 +54,6 @@ ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const Route
     data::Vector2D refSegVec {
       (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
     data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
-    std::cout << "closestSegmentId: " << closestSegmentId << " vec(" << refSegVec.x << ","
-              << refSegVec.y << ")" << std::endl;
-    std::cout << "ref seg ori: " << refSegPolarVec.orientation << std::endl;
-
     return {s, y, refSegPolarVec.orientation};
 }
 
@@ -142,10 +138,6 @@ void MotionPlanningIntent::tick() {
     data::PolarVector2D initAccelerationInFrenet {
       egoStateTopic.acceleration.orientation - refPose.orientation,
       egoStateTopic.acceleration.value};
-    std::cout << "velo orig: " << egoStateTopic.velocity.orientation
-              << " ref ori: " << refPose.orientation << std::endl;
-    std::cout << "velo in Frenet: " << initVelocityInFrenet.orientation
-              << " v: " << initVelocityInFrenet.value << std::endl;
 
     planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
 }
@@ -155,7 +147,7 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
                                          const data::PolarVector2D &initAcceleration) {
     // Generate trajectory of 100 waypoints
 
-    motionPlanningDebugTopic.numberOfWaypoints = 100U;
+    motionPlanningDebugTopic.numberOfWaypoints = 1000U;
 
     // lateral first
 
@@ -167,13 +159,30 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
 
     std::cout << "vy: " << splitVelocity.y << std::endl;
 
-    for (std::size_t i {0U}; i < 100; ++i) {
+    float y      = egoPose.position.y;
+    float lastvy = splitVelocity.y;
+
+    float intergal = 0.0F;
+    float lastDiff = 0.0F;
+    for (std::size_t i {0U}; i < 1000; ++i) {
         data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};
         waypoint.timepoint = odometryTopic.timestamp + (10U * 1000U * i);    // 10 ms
 
-        egoPose.position.y += splitVelocity.y * 0.01;
 
-        waypoint.pose = egoPose;
+        float diff = -y;
+
+        const float expectv = diff * 1.0F;    // PID only P
+
+        float expectA = expectv - lastvy;
+
+        float actualA = utils::math::clamp(expectA, -0.05F, 0.05F);
+        float actualV = lastvy + actualA;
+
+        // update position
+        y += actualV * 0.01F;
+
+
+        waypoint.pose = {{egoPose.position.x, y}, 0};
     }
 }
 

@@ -13,11 +13,15 @@ namespace math {
 constexpr float PI {3.141592653589793238462643383279502884197F};
 constexpr float FLOAT_EPSILON {1e-6F};
 
-
 template<typename Tin, typename Tout>
 Tout lerp(
   const Tin& x, const Tin& inStart, const Tin& inEnd, const Tout& outStart, const Tout& outEnd) {
     return (x - inStart) * (outEnd - outStart) / (inEnd - inStart) + outStart;
+}
+
+template<typename T>
+T clamp(const T& in, const T& minv, const T& maxv) {
+    return std::min(std::max(in, minv), maxv);
 }
 
 template<typename T>
