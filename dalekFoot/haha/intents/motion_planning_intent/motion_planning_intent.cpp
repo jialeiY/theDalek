@@ -177,7 +177,7 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
         // the acceleration regarding to the velocity
         float expectA = expectv - lastvy;
 
-        float actualA = utils::math::clamp(expectA, -0.05F, 0.05F);
+        float actualA = utils::math::clamp(expectA, -0.001F, 0.001F);
         float actualV = lastvy + actualA;
         lastvy        = actualV;
 
