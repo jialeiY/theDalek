@@ -10,6 +10,9 @@ namespace data {
 struct Waypoint {
     Timestamp timepoint {0U};
     Pose2D pose {};
+
+    float velocityY {0.0F};        // Debug
+    float accelerationY {0.0F};    // Deubg
 };
 
 }    // namespace data

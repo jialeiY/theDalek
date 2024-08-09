@@ -23,6 +23,9 @@ proto::MotionPlanningDebugTopic convert(const intent::MotionPlanningDebugTopic &
         out.add_waypoint_timepoint(in.waypoints[i].timepoint);
         out.add_waypoint_position_x(in.waypoints[i].pose.position.x);
         out.add_waypoint_position_y(in.waypoints[i].pose.position.y);
+
+        out.add_waypoint_velocity_y(in.waypoints[i].velocityY);            // Debug
+        out.add_waypoint_acceleration_y(in.waypoints[i].accelerationY);    // Debug
     }
 
     return out;

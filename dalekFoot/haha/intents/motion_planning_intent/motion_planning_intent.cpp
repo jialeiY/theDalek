@@ -168,21 +168,26 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
         data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};
         waypoint.timepoint = odometryTopic.timestamp + (10U * 1000U * i);    // 10 ms
 
-
+        // Calculate the error
         float diff = -y;
 
+        // The target velocity
         const float expectv = diff * 1.0F;    // PID only P
 
+        // the acceleration regarding to the velocity
         float expectA = expectv - lastvy;
 
         float actualA = utils::math::clamp(expectA, -0.05F, 0.05F);
         float actualV = lastvy + actualA;
+        lastvy        = actualV;
 
         // update position
         y += actualV * 0.01F;
 
 
-        waypoint.pose = {{egoPose.position.x, y}, 0};
+        waypoint.pose          = {{egoPose.position.x, y}, 0};
+        waypoint.velocityY     = actualV;
+        waypoint.accelerationY = actualA;
     }
 }
 

@@ -19,7 +19,7 @@
 [#] 19. write ego state to debug
 [#] 20. show ego state in foxglove
 [ ] 21. Bug. the maximum a not working, output a list to mcap
-[ ] 22. Bug. sometimes, the pid not working
+[#] 22. Bug. sometimes, the pid not working
 
 
 

@@ -7,4 +7,7 @@ import "data/proto/pose2d.proto";
 message Waypoint {
     optional uint64 timepoint = 1 [default = 0];
     optional Pose2D pose = 2;
+
+    optional float velocityY = 3; // debug
+    optional float accelerationY = 4; // debug
 }
