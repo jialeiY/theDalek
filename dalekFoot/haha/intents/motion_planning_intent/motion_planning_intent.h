@@ -4,6 +4,7 @@
 #include "data/defs/pose2d.h"
 #include "intents/intent_base.h"
 #include "intents/topics/route_topic.h"
+#include "utils/algo/pid.h"
 
 namespace cooboc {
 namespace intent {
@@ -37,6 +38,9 @@ class MotionPlanningIntent : public IntentBase {
     void planEgoMotion(const data::Pose2D &inintOdometry,
                        const data::PolarVector2D &initVelocity,
                        const data::PolarVector2D &initAcceleration);
+
+  private:
+    algo::PID<float> lateralPid_ {};
 };
 
 }    // namespace intent

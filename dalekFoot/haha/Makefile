@@ -18,6 +18,7 @@ PROTO_FILES += data/proto/vector2d.proto
 PROTO_FILES += data/proto/waypoint.proto
 PROTO_FILES += data/proto/ego_state_topic.proto
 
+CPP_SOURCES += data/codec/ego_state_topic_codec.cpp
 CPP_SOURCES += data/codec/motion_planning_debug_topic_codec.cpp
 CPP_SOURCES += data/codec/odometry_topic_codec.cpp
 CPP_SOURCES += data/codec/planning_request_topic_codec.cpp
@@ -34,8 +35,8 @@ CPP_SOURCES += intents/odometry_intent/odometry_intent.cpp
 CPP_SOURCES += intents/route_provision_intent/route_provision_intent.cpp
 CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += main.cpp
+CPP_SOURCES += utils/algo/pid.cpp
 CPP_SOURCES += utils/time.cpp
-CPP_SOURCES += data/codec/ego_state_topic_codec.cpp
 
 INCLUDES += -I./
 INCLUDES += -I./gen
@@ -53,7 +54,7 @@ HEX := $(CP) -O ihex
 BIN := $(CP) -O binary -S
 
 CFLAGS += -std=gnu11
-CXXFLAGS += -std=gnu++17
+CXXFLAGS += -std=gnu++17 -Wunused-variable -Wall
 
 #######################################
 # build the application

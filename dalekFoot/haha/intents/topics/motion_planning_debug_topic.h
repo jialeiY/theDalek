@@ -8,7 +8,7 @@ namespace cooboc {
 namespace intent {
 
 struct MotionPlanningDebugTopic {
-    static constexpr std::size_t kWaypointNumber {1000U};
+    static constexpr std::size_t kWaypointNumber {500U};
 
     std::size_t numberOfWaypoints {0U};
     data::Waypoint waypoints[kWaypointNumber];

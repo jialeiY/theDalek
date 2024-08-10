@@ -5,6 +5,7 @@
 #include <limits>
 #include "data/defs/pose2d.h"
 #include "intents/topics/topics.h"
+#include "utils/algo/pid.h"
 #include "utils/math.h"
 
 namespace cooboc {
@@ -109,7 +110,7 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
 }    // namespace detail
 
 
-MotionPlanningIntent::MotionPlanningIntent() {
+MotionPlanningIntent::MotionPlanningIntent() : lateralPid_ {} {
     motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
@@ -117,7 +118,15 @@ MotionPlanningIntent::MotionPlanningIntent() {
     }
 }
 MotionPlanningIntent::~MotionPlanningIntent() {}
-void MotionPlanningIntent::setup() {}
+
+void MotionPlanningIntent::setup() {
+    constexpr float kLateralP {0.1F};
+    constexpr float kLateralI {0.0F};
+    constexpr float kLateralD {0.0F};
+    // Make it to parameter file
+    lateralPid_.updatePID(kLateralP, kLateralI, kLateralD);
+    lateralPid_.reset();
+}
 
 
 void MotionPlanningIntent::tick() {
@@ -145,49 +154,46 @@ void MotionPlanningIntent::tick() {
 void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
                                          const data::PolarVector2D &initVelocity,
                                          const data::PolarVector2D &initAcceleration) {
-    // Generate trajectory of 100 waypoints
-
-    motionPlanningDebugTopic.numberOfWaypoints = 1000U;
+    // Generate trajectory of waypoints
+    motionPlanningDebugTopic.numberOfWaypoints = MotionPlanningDebugTopic::kWaypointNumber;
 
     // lateral first
-
-    std::array<float, 100U> lateralPositionList;
-    data::Vector2D splitVelocity     = utils::math::to<data::Vector2D>(initVelocity);
-    data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
+    data::Vector2D splitVelocity = utils::math::to<data::Vector2D>(initVelocity);
+    // data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
 
     data::Pose2D egoPose {inintOdometry};
 
-    std::cout << "vy: " << splitVelocity.y << std::endl;
+    // Way point [0] is the init state that can not changed. Based on the init state, this module
+    // send the control signal to control the states following that.
+    // The velocity and acceleration is the control signal for changing this state. That means the
+    // velocity and acceleration is the motion state that the vehicle must to reach in the next
+    // cycle.
+    // And the Planner plans the waypoint 5 times of the vehicle that. It means haha generates the
+    // cycles number is 10ms(gaga cycle) * 10(points) * 3(times) = 500 waypoints.
 
-    float y      = egoPose.position.y;
-    float lastvy = splitVelocity.y;
-
-    float intergal = 0.0F;
-    float lastDiff = 0.0F;
-    for (std::size_t i {0U}; i < 1000; ++i) {
+    // Initialize the velocity and acceleration
+    motionPlanningDebugTopic.numberOfWaypoints = MotionPlanningDebugTopic::kWaypointNumber;
+    float lastVy                               = splitVelocity.y;
+    // float ay     = splitAcceleration.y;
+    for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};
         waypoint.timepoint = odometryTopic.timestamp + (10U * 1000U * i);    // 10 ms
 
-        // Calculate the error
-        float diff = -y;
+        waypoint.pose = egoPose;
 
-        // The target velocity
-        const float expectv = diff * 1.0F;    // PID only P
+        // Update lateral position based on velocity
+        float egoy = egoPose.position.y;
+        egoy += lastVy;
+        egoPose.position.y = lastVy;
 
-        // the acceleration regarding to the velocity
-        float expectA = expectv - lastvy;
-
-        float actualA = utils::math::clamp(expectA, -0.001F, 0.001F);
-        float actualV = lastvy + actualA;
-        lastvy        = actualV;
-
-        // update position
-        y += actualV * 0.01F;
-
-
-        waypoint.pose          = {{egoPose.position.x, y}, 0};
-        waypoint.velocityY     = actualV;
-        waypoint.accelerationY = actualA;
+        // Calcualt the control value
+        float error = 0 - egoPose.position.y;
+        lateralPid_.updateError(error);
+        float vy               = lateralPid_.getOutput();
+        float ay               = vy - lastVy;
+        waypoint.velocityY     = vy;
+        waypoint.accelerationY = ay;
+        lastVy                 = vy;
     }
 }
 

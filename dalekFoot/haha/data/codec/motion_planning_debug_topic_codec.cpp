@@ -17,6 +17,7 @@ proto::MotionPlanningDebugTopic convert(const intent::MotionPlanningDebugTopic &
         *waypoint                 = convert(in.waypoints[i]);
     }
 
+    // To flattern the data for visualization only
     const std::size_t waypointLength {
       std::min(intent::MotionPlanningDebugTopic::kWaypointNumber, in.numberOfWaypoints)};
     for (std::size_t i {0U}; i < waypointLength; ++i) {
