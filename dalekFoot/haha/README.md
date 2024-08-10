@@ -4,8 +4,8 @@
 [#] 4. create proto files
 [#] 5. write the topic into mcap
 [#] 6. output of the topic
-[#] 7. the proto file of routetopic
-[#] 8. the codec of routetopic
+[#] 7. the proto file of RouteTopic
+[#] 8. the codec of RouteTopic
 [#] 9. output from debug
 [#] 10. the plugin to show he route
 [/] 11. lateral planning of motion
@@ -21,7 +21,8 @@
 [#] 21. Bug. the maximum a not working, output a list to mcap
 [#] 22. Bug. sometimes, the pid not working
 [#] 23. Position not correct
-[ ] 24. the velocity not correct
+[#] 24. the velocity not correct
+[#] 25. coredump on abort
 
 
 

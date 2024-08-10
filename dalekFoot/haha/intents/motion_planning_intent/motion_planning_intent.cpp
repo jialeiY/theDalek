@@ -143,9 +143,10 @@ void MotionPlanningIntent::tick() {
     data::Pose2D initOdometryInFrenet {{refPose.s, refPose.y},
                                        odometryTopic.pose.orientation - refPose.orientation};
     data::PolarVector2D initVelocityInFrenet {
-      egoStateTopic.velocity.orientation - refPose.orientation, egoStateTopic.velocity.value};
+      egoStateTopic.velocity.orientation + odometry.orientation - refPose.orientation,
+      egoStateTopic.velocity.value};
     data::PolarVector2D initAccelerationInFrenet {
-      egoStateTopic.acceleration.orientation - refPose.orientation,
+      egoStateTopic.acceleration.orientation + odometry.orientation - refPose.orientation,
       egoStateTopic.acceleration.value};
 
     planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);

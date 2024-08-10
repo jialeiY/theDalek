@@ -5,9 +5,12 @@
     "dictionaries": [],
     "words": [
         "cooboc",
+        "coredump",
         "Frenet",
+        "mcap",
         "odometry",
         "polyline",
+        "proto",
         "timepoint"
     ],
     "ignoreWords": [],
