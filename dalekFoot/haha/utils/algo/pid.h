@@ -6,7 +6,7 @@ namespace algo {
 template<typename T>
 class PID {
   public:
-    PID() : kp_ {}, ki_ {}, kd_ {}, output_ {} {};
+    PID() : kp_ {}, ki_ {}, kd_ {}, lastError_ {}, output_ {} {};
     PID(const T kp, const T ki, const T kd) : kp_ {kp}, ki_ {ki}, kd_ {kd} {};
     ~PID() {};
 
@@ -18,12 +18,17 @@ class PID {
 
     void updateError(T e) {
         //
+        const float errorDiff = e - lastError_;
+        output_               = (kp_ * e) + (kd_ * errorDiff);
 
-        output_ = kp_ * e;
+        lastError_ = e;
     }
 
     float getOutput() const { return output_; }
-    void reset() { output_ = {}; };
+    void reset() {
+        lastError_ = T {};
+        output_    = T {};
+    };
 
 
   private:
@@ -31,6 +36,7 @@ class PID {
     T ki_ {};
     T kd_ {};
 
+    T lastError_ {};
     T output_ {};
 };
 }    // namespace algo

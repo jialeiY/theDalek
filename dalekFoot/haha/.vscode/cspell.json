@@ -1,0 +1,15 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "cooboc",
+        "Frenet",
+        "odometry",
+        "polyline",
+        "timepoint"
+    ],
+    "ignoreWords": [],
+    "import": []
+}

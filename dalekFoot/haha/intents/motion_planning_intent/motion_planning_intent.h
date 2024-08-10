@@ -17,7 +17,7 @@ struct ReferencePose {
     float orientation {0.0};    // the angle of reference path
 };
 
-ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const RouteTopic &route);
+ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route);
 float calculateDistanceFromPointToSegment(const data::Position2D &point,
                                           const data::Position2D &segmentStart,
                                           const data::Position2D &segmentEnd,

@@ -12,7 +12,7 @@ namespace cooboc {
 namespace intent {
 
 namespace detail {
-ReferencePose calculatePositionInFrene(const data::Pose2D &odometry, const RouteTopic &route) {
+ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route) {
     // TODO, assume route always has data now
 
     // Find the segment
@@ -120,9 +120,9 @@ MotionPlanningIntent::MotionPlanningIntent() : lateralPid_ {} {
 MotionPlanningIntent::~MotionPlanningIntent() {}
 
 void MotionPlanningIntent::setup() {
-    constexpr float kLateralP {10.0F};
+    constexpr float kLateralP {3.0F};    // 3 is the optimized number
     constexpr float kLateralI {0.0F};
-    constexpr float kLateralD {0.0F};
+    constexpr float kLateralD {60.0F};
     // Make it to parameter file
     lateralPid_.updatePID(kLateralP, kLateralI, kLateralD);
     lateralPid_.reset();
@@ -138,7 +138,7 @@ void MotionPlanningIntent::tick() {
     const RouteTopic &route = routeTopic;
 
     // 1. key reference path where odometry is on it
-    detail::ReferencePose refPose = detail::calculatePositionInFrene(odometry, route);
+    detail::ReferencePose refPose = detail::calculatePositionInFrenet(odometry, route);
 
     data::Pose2D initOdometryInFrenet {{refPose.s, refPose.y},
                                        odometryTopic.pose.orientation - refPose.orientation};
@@ -151,7 +151,7 @@ void MotionPlanningIntent::tick() {
     planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
 }
 
-void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
+void MotionPlanningIntent::planEgoMotion(const data::Pose2D &initOdometry,
                                          const data::PolarVector2D &initVelocity,
                                          const data::PolarVector2D &initAcceleration) {
     // Generate trajectory of waypoints
@@ -161,7 +161,7 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
     data::Vector2D splitVelocity     = utils::math::to<data::Vector2D>(initVelocity);
     data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
 
-    data::Pose2D egoPose {inintOdometry};
+    data::Pose2D egoPose {initOdometry};
 
     // Way point [0] is the init state that can not changed. Based on the init state, this module
     // send the control signal to control the states following that.
@@ -173,8 +173,10 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
 
     // Initialize the velocity and acceleration
     motionPlanningDebugTopic.numberOfWaypoints = MotionPlanningDebugTopic::kWaypointNumber;
-    float lastVy                               = splitVelocity.y;
-    float ay                                   = splitAcceleration.y;
+
+    float lastVy = splitVelocity.y;
+    float lastAy = splitAcceleration.y;
+
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};
         waypoint.timepoint = odometryTopic.timestamp + (100U * 1000U * i);    // 10 ms
@@ -182,22 +184,26 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
         // 1. Write out current Status
         waypoint.pose = egoPose;
 
-        // 2. Calculate the manuver state
+        // 2. Calculate the maneuver state
         // Update lateral position based on velocity
         float egoy {egoPose.position.y};
-        // Calcualt the control value
+        // Calculate the control value
         float error {0 - egoPose.position.y};
         lateralPid_.updateError(error);
-        float vy {lateralPid_.getOutput()};
-        float ay {(vy - lastVy) * 100.0F};    // 10ms
+        float expectV {lateralPid_.getOutput()};
+        float expectA {(expectV - lastVy) * 100.0F};    // 10ms
 
-        // 3. Write out manuver state
-        waypoint.velocityY     = vy;
-        waypoint.accelerationY = ay;
-        lastVy                 = vy;
+        // 3. Constrains the maneuver not too ridiculous
+        float actualA {utils::math::clamp(expectA, -0.3F, 0.3F)};
+        float actualV {lastVy + (actualA * 0.01F)};    // 10ms
+
+        // 3. Write out maneuver state
+        waypoint.velocityY     = actualV;
+        waypoint.accelerationY = actualA;
+        lastVy                 = actualV;
 
         // 4. Update ego for next waypoint
-        egoy += vy * 0.01F;    // 10ms
+        egoy += actualV * 0.01F;    // 10ms
         egoPose.position.y = egoy;
     }
 }
