@@ -120,7 +120,7 @@ MotionPlanningIntent::MotionPlanningIntent() : lateralPid_ {} {
 MotionPlanningIntent::~MotionPlanningIntent() {}
 
 void MotionPlanningIntent::setup() {
-    constexpr float kLateralP {0.1F};
+    constexpr float kLateralP {10.0F};
     constexpr float kLateralI {0.0F};
     constexpr float kLateralD {0.0F};
     // Make it to parameter file
@@ -158,8 +158,8 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
     motionPlanningDebugTopic.numberOfWaypoints = MotionPlanningDebugTopic::kWaypointNumber;
 
     // lateral first
-    data::Vector2D splitVelocity = utils::math::to<data::Vector2D>(initVelocity);
-    // data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
+    data::Vector2D splitVelocity     = utils::math::to<data::Vector2D>(initVelocity);
+    data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
 
     data::Pose2D egoPose {inintOdometry};
 
@@ -169,31 +169,36 @@ void MotionPlanningIntent::planEgoMotion(const data::Pose2D &inintOdometry,
     // velocity and acceleration is the motion state that the vehicle must to reach in the next
     // cycle.
     // And the Planner plans the waypoint 5 times of the vehicle that. It means haha generates the
-    // cycles number is 10ms(gaga cycle) * 10(points) * 3(times) = 500 waypoints.
+    // cycles number is 10ms(gaga cycle), 5second planning = 500 waypoints.
 
     // Initialize the velocity and acceleration
     motionPlanningDebugTopic.numberOfWaypoints = MotionPlanningDebugTopic::kWaypointNumber;
     float lastVy                               = splitVelocity.y;
-    // float ay     = splitAcceleration.y;
+    float ay                                   = splitAcceleration.y;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};
-        waypoint.timepoint = odometryTopic.timestamp + (10U * 1000U * i);    // 10 ms
+        waypoint.timepoint = odometryTopic.timestamp + (100U * 1000U * i);    // 10 ms
 
+        // 1. Write out current Status
         waypoint.pose = egoPose;
 
+        // 2. Calculate the manuver state
         // Update lateral position based on velocity
-        float egoy = egoPose.position.y;
-        egoy += lastVy;
-        egoPose.position.y = lastVy;
-
+        float egoy {egoPose.position.y};
         // Calcualt the control value
-        float error = 0 - egoPose.position.y;
+        float error {0 - egoPose.position.y};
         lateralPid_.updateError(error);
-        float vy               = lateralPid_.getOutput();
-        float ay               = vy - lastVy;
+        float vy {lateralPid_.getOutput()};
+        float ay {(vy - lastVy) * 100.0F};    // 10ms
+
+        // 3. Write out manuver state
         waypoint.velocityY     = vy;
         waypoint.accelerationY = ay;
         lastVy                 = vy;
+
+        // 4. Update ego for next waypoint
+        egoy += vy * 0.01F;    // 10ms
+        egoPose.position.y = egoy;
     }
 }
 
