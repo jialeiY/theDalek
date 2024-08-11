@@ -23,7 +23,8 @@
 [#] 23. Position not correct
 [#] 24. the velocity not correct
 [#] 25. coredump on abort
-
+[ ] 26. curve route longitudinal planning
+[ ] 27. refactor the intents
 
 
 
