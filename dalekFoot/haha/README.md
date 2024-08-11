@@ -26,7 +26,7 @@
 [ ] 26. curve route longitudinal planning
 [ ] 27. refactor the intents
 [ ] 28. the target of intent is BehaviorGeneratorIntent -> RouteIntent -> Trajectory -> TFC
-[ ] 29. Refine the BehaviorIntent [LOW priority]
+[ ] 29. Refine the BehaviorIntent [LOW priority] Rename
 [ ] 30. Refine RouteProvisionIntent [LOW priority]
 [ ] 31. TrajectoryIntent to get the resolution of a Route
 [ ] 32. Follow the Trajectory in real time
