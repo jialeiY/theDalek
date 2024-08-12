@@ -1,5 +1,5 @@
-#ifndef __INTENTS_TOPICS_PLANNING_REQUEST_TOPIC_H__
-#define __INTENTS_TOPICS_PLANNING_REQUEST_TOPIC_H__
+#ifndef __INTENTS_TOPICS_BEHAVIOR_TOPIC_H__
+#define __INTENTS_TOPICS_BEHAVIOR_TOPIC_H__
 
 #include "data/defs/polar_vector2d.h"
 #include "data/defs/position2d.h"
@@ -7,7 +7,7 @@
 namespace cooboc {
 namespace intent {
 
-struct PlanningRequestTopic {
+struct BehaviorTopic {
     data::Position2D fromPosition {};
     data::Position2D targetPosition {};
     data::PolarVector2D targetVelocity {};

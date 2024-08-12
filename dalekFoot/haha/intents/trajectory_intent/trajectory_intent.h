@@ -10,6 +10,8 @@ namespace intent {
 // TrajectoryIntent take the Route from RouteIntent and make a trajectory that vehicle can follow
 class TrajectoryIntent : public IntentBase {
   public:
+    // TrajectoryIntent take the Route from RouteIntent and make a trajectory that vehicle can
+    // follow
     TrajectoryIntent();
     virtual ~TrajectoryIntent();
     virtual void setup() override;

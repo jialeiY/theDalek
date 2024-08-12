@@ -1,5 +1,5 @@
 #include "intents/intent_manager.h"
-#include "intents/behavior_generator/behavior_generator_intent.h"
+#include "intents/behavior_intent/behavior_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
 #include "intents/intent_base.h"
 #include "intents/motion_planning_intent/motion_planning_intent.h"
@@ -14,7 +14,7 @@ IntentManager::IntentManager() {
     // Localization
     intents_.push_back(new OdometryIntent());
     // The specific task that ego need to do based on the result of localization
-    intents_.push_back(new BehaviorGeneratorIntent());
+    intents_.push_back(new BehaviorIntent());
     // The route that ego need to follow based on the task and localization
     intents_.push_back(new RouteProvisionIntent());
     // TrajectoryIntent read the Routes from RouteIntent and out put the trajectory that vehicle can

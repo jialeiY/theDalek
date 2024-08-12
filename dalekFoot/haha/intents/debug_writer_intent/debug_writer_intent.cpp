@@ -4,15 +4,15 @@
 #include <google/protobuf/descriptor.pb.h>
 #include <cstdint>
 #include <mcap/writer.hpp>
+#include "data/codec/behavior_topic_codec.h"
 #include "data/codec/ego_state_topic_codec.h"
 #include "data/codec/motion_planning_debug_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
-#include "data/codec/planning_request_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
+#include "gen/data/proto/behavior_topic.pb.h"
 #include "gen/data/proto/ego_state_topic.pb.h"
 #include "gen/data/proto/motion_planning_debug_topic.pb.h"
 #include "gen/data/proto/odometry_topic.pb.h"
-#include "gen/data/proto/planning_request_topic.pb.h"
 #include "gen/data/proto/route_topic.pb.h"
 #include "intents/topics/odometry_topic.h"
 #include "intents/topics/topics.h"
@@ -110,7 +110,7 @@ void DebugWriterIntent::setup() {
 
     // Create and Register Schema
     planningRequestTopicSchema_  = new mcap::Schema();
-    *planningRequestTopicSchema_ = createSchema(cooboc::proto::PlanningRequestTopic::descriptor());
+    *planningRequestTopicSchema_ = createSchema(cooboc::proto::BehaviorTopic::descriptor());
     writer_.addSchema(*planningRequestTopicSchema_);
 
     // Create and Register Channel
@@ -172,8 +172,8 @@ void DebugWriterIntent::tick() {
 
     // Planning Request
     {
-        proto::PlanningRequestTopic payloadMsg = data::convert(planningRequestTopic);
-        const std::string payload              = payloadMsg.SerializeAsString();
+        proto::BehaviorTopic payloadMsg = data::convert(behaviorTopic);
+        const std::string payload       = payloadMsg.SerializeAsString();
 
         mcap::Message message;
         message.channelId   = planningRequestTopicChannel_->id;

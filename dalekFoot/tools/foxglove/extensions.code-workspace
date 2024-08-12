@@ -7,11 +7,15 @@
             "path": "odometry"
         },
         {
-            "path": "behavior_generator"
+            "path": "ego_state"
         },
         {
-            "path": "ego_state"
+            "path": "behavior"
         }
     ],
-    "settings": {}
+    "settings": {
+        "cSpell.words": [
+            "cooboc"
+        ]
+    }
 }
