@@ -4,6 +4,7 @@
 
 #include <cstdint>
 #include "data/defs/position2d.h"
+#include "data/defs/route_id.h"
 
 namespace cooboc {
 namespace intent {
@@ -17,7 +18,10 @@ struct PassingPoint {
 struct TrajectoryTopic {
     static constexpr std::size_t kPassingPointCapacity {1000U};
 
+
     PassingPoint passingPoint[kPassingPointCapacity];
+
+    data::RouteId routeId {0U};
 };
 
 }    // namespace intent

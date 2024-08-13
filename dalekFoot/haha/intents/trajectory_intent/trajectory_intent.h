@@ -7,6 +7,11 @@
 namespace cooboc {
 namespace intent {
 
+namespace detail {
+float calculateApproximateRouteLength();
+}
+
+
 // TrajectoryIntent take the Route from RouteIntent and make a trajectory that vehicle can follow
 class TrajectoryIntent : public IntentBase {
   public:

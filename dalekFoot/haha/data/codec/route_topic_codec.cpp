@@ -13,7 +13,7 @@ proto::RouteTopic convert(const intent::RouteTopic &in) {
     out.set_hasvalue(in.hasValue);
     out.set_routeid(in.routeId);
     out.set_polylinelength(in.polylineLength);
-    for (std::size_t i {0U}; i < intent::RouteTopic::kPolylineLength; ++i) {
+    for (std::size_t i {0U}; i < intent::RouteTopic::kPolylineCapacity; ++i) {
         proto::Position2D *position = out.add_polyline();
         *position                   = convert(in.polyline[i]);
     }

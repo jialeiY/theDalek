@@ -1,22 +1,22 @@
-#include "intents/route_provision_intent/route_provision_intent.h"
+#include "intents/route_intent/route_intent.h"
 #include <cstdint>
 #include "intents/topics/topics.h"
 
 namespace cooboc {
 namespace intent {
-RouteProvisionIntent::RouteProvisionIntent() : uniqueRouteId_ {0U} {}
-RouteProvisionIntent::~RouteProvisionIntent() {}
+RouteIntent::RouteIntent() : uniqueRouteId_ {0U} {}
+RouteIntent::~RouteIntent() {}
 
-void RouteProvisionIntent::setup() {
+void RouteIntent::setup() {
     routeTopic.hasValue       = false;
     routeTopic.routeId        = uniqueRouteId_;
     routeTopic.polylineLength = 0U;
-    for (std::size_t i {0U}; i < RouteTopic::kPolylineLength; ++i) {
+    for (std::size_t i {0U}; i < RouteTopic::kPolylineCapacity; ++i) {
         routeTopic.polyline[i] = data::Position2D {0.0F, 0.0F};
     }
 }
 
-void RouteProvisionIntent::tick() {
+void RouteIntent::tick() {
     routeTopic.hasValue       = true;
     routeTopic.routeId        = uniqueRouteId_;
     routeTopic.polylineLength = 3U;

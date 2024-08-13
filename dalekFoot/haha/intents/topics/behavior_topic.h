@@ -8,6 +8,8 @@ namespace cooboc {
 namespace intent {
 
 struct BehaviorTopic {
+    // TODO: specify the target is speed, time or position priority
+
     data::Position2D fromPosition {};
     data::Position2D targetPosition {};
     data::PolarVector2D targetVelocity {};
