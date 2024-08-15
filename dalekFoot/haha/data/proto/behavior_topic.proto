@@ -6,7 +6,7 @@ import "data/proto/vector2d.proto";
 import "data/proto/polar_vector2d.proto";
 
 message BehaviorTopic {
-    optional Vector2D fromPosition = 1;
-    optional Vector2D targetPosition = 2;
+    optional Vector2D      fromPosition   = 1;
+    optional Vector2D      targetPosition = 2;
     optional PolarVector2D targetVelocity = 3;
 }

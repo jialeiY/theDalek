@@ -5,8 +5,8 @@ package cooboc.proto;
 import "data/proto/waypoint.proto";
 
 message MotionPlanningDebugTopic {
-    optional uint32 numberOfWaypoints = 1 [default = 0];
-    repeated Waypoint waypoints = 2;
+    optional uint32   numberOfWaypoints = 1 [default = 0];
+    repeated Waypoint waypoints         = 2;
 
     repeated uint64 waypoint_timepoint = 3;
 
@@ -14,6 +14,6 @@ message MotionPlanningDebugTopic {
     repeated float waypoint_position_x = 4;
     repeated float waypoint_position_y = 5;
 
-    repeated float waypoint_velocity_y = 6;     // Debug
-    repeated float waypoint_acceleration_y = 7; // Debug
+    repeated float waypoint_velocity_y     = 6;  // Debug
+    repeated float waypoint_acceleration_y = 7;  // Debug
 }

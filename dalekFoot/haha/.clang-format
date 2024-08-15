@@ -58,4 +58,11 @@ Standard: Cpp11
 TabWidth: '4'
 UseTab: Never
 ColumnLimit: 100
+---
+Language: Proto
+BasedOnStyle: Google
+AlignConsecutiveDeclarations: true
+AlignConsecutiveAssignments: true
+ColumnLimit: 0 
+IndentWidth: 4
 ...

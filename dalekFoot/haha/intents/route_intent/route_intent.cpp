@@ -11,18 +11,31 @@ void RouteIntent::setup() {
     routeTopic.hasValue       = false;
     routeTopic.routeId        = uniqueRouteId_;
     routeTopic.polylineLength = 0U;
+    routeTopic.startPoint     = data::Position2D {0.0F, 0.0F};
+
     for (std::size_t i {0U}; i < RouteTopic::kPolylineCapacity; ++i) {
-        routeTopic.polyline[i] = data::Position2D {0.0F, 0.0F};
+        data::RouteSegment &segment {routeTopic.routeSegment[i]};
+        segment.endPoint              = data::Position2D {0.0F, 0.0F};
+        segment.curvatureDistribution = data::CurvatureDistribution::DONT_CARE;
     }
 }
 
 void RouteIntent::tick() {
     routeTopic.hasValue       = true;
     routeTopic.routeId        = uniqueRouteId_;
-    routeTopic.polylineLength = 3U;
-    routeTopic.polyline[0]    = data::Position2D {0.0F, 0.0F};
-    routeTopic.polyline[1]    = data::Position2D {1.0F, 0.0F};
-    routeTopic.polyline[2]    = data::Position2D {1.2F, 0.1F};
+    routeTopic.polylineLength = 2U;
+
+    routeTopic.startPoint = data::Position2D {0.0F, 0.0F};
+    {
+        data::RouteSegment &segment {routeTopic.routeSegment[0U]};
+        segment.endPoint              = data::Position2D {1.0F, 0.0F};
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
+    }
+    {
+        data::RouteSegment &segment {routeTopic.routeSegment[1U]};
+        segment.endPoint              = data::Position2D {1.2F, 0.1F};
+        segment.curvatureDistribution = data::CurvatureDistribution::UNIFORM;
+    }
 }
 
 }    // namespace intent

@@ -2,14 +2,20 @@
 #define __INTENTS_TRAJECTORY_INTENT_TRAJECTORY_INTENT_H__
 
 
+#include <array>
 #include "intents/intent_base.h"
+#include "intents/topics/topics.h"
 
 namespace cooboc {
 namespace intent {
 
 namespace detail {
-float calculateApproximateRouteLength();
-}
+
+using RouteSegmentLengthArray = std::array<float, RouteTopic::kPolylineCapacity>;
+
+
+float calculateApproximateRouteLength(RouteSegmentLengthArray &routeSegmentLengthArray);
+}    // namespace detail
 
 
 // TrajectoryIntent take the Route from RouteIntent and make a trajectory that vehicle can follow

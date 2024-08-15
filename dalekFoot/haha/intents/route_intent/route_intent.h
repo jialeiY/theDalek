@@ -14,7 +14,7 @@ class RouteIntent : public IntentBase {
     virtual void tick();
 
   private:
-    RouteId uniqueRouteId_ {0U};
+    data::RouteId uniqueRouteId_ {0U};
 };
 }    // namespace intent
 }    // namespace cooboc

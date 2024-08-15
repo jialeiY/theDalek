@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+import "data/proto/vector2d.proto";
+import "data/proto/route_curvature_distribution.proto";
+
+package cooboc.proto;
+
+message RouteSegment {
+    optional Vector2D              endPoint              = 1;
+    optional CurvatureDistribution curvatureDistribution = 2 [default = DONT_CARE];
+}

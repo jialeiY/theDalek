@@ -13,49 +13,49 @@ namespace intent {
 
 namespace detail {
 ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route) {
-    // TODO, assume route always has data now
+    // // TODO, assume route always has data now
 
-    // Find the segment
-    std::size_t closestSegmentId {0U};
-    float closestDistance {std::numeric_limits<float>::max()};
+    // // Find the segment
+    // std::size_t closestSegmentId {0U};
+    // float closestDistance {std::numeric_limits<float>::max()};
 
-    const std::size_t segmentNumber = route.polylineLength - 1U;
-    for (std::size_t i {0U}; i < segmentNumber; ++i) {
-        bool firstNeedOpen = i != 0U;    // only first one open
-        float dist         = std::fabs(calculateDistanceFromPointToSegment(
-          odometry.position, route.polyline[i], route.polyline[i + 1U], firstNeedOpen, true));
-        if (dist < closestDistance) {
-            closestSegmentId = i;
-            closestDistance  = dist;
-        }
-    }
+    // const std::size_t segmentNumber = route.polylineLength - 1U;
+    // for (std::size_t i {0U}; i < segmentNumber; ++i) {
+    //     bool firstNeedOpen = i != 0U;    // only first one open
+    //     float dist         = std::fabs(calculateDistanceFromPointToSegment(
+    //       odometry.position, route.polyline[i], route.polyline[i + 1U], firstNeedOpen, true));
+    //     if (dist < closestDistance) {
+    //         closestSegmentId = i;
+    //         closestDistance  = dist;
+    //     }
+    // }
 
 
-    float s = 0.0F;
-    // Calculate all s before current segment
-    for (std::size_t i {0U}; (i + 1U) < closestSegmentId; ++i) {
-        s += route.polyline[i].distance(route.polyline[i + 1U]);
-    }
+    // float s = 0.0F;
+    // // Calculate all s before current segment
+    // for (std::size_t i {0U}; (i + 1U) < closestSegmentId; ++i) {
+    //     s += route.polyline[i].distance(route.polyline[i + 1U]);
+    // }
 
-    // Calculate s on current segment
-    if (!utils::math::equals(route.polyline[closestSegmentId],
-                             route.polyline[closestSegmentId + 1U])) {
-        const data::Position2D veca =
-          route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId];
-        const data::Position2D vecb = odometry.position - route.polyline[closestSegmentId];
-        s += veca.dot(vecb) / veca.abs();
-    }
+    // // Calculate s on current segment
+    // if (!utils::math::equals(route.polyline[closestSegmentId],
+    //                          route.polyline[closestSegmentId + 1U])) {
+    //     const data::Position2D veca =
+    //       route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId];
+    //     const data::Position2D vecb = odometry.position - route.polyline[closestSegmentId];
+    //     s += veca.dot(vecb) / veca.abs();
+    // }
 
-    const float y {calculateDistanceFromPointToSegment(odometry.position,
-                                                       route.polyline[closestSegmentId],
-                                                       route.polyline[closestSegmentId + 1U],
-                                                       false,
-                                                       false)};
+    // const float y {calculateDistanceFromPointToSegment(odometry.position,
+    //                                                    route.polyline[closestSegmentId],
+    //                                                    route.polyline[closestSegmentId + 1U],
+    //                                                    false,
+    //                                                    false)};
 
-    data::Vector2D refSegVec {
-      (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
-    data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
-    return {s, y, refSegPolarVec.orientation};
+    // data::Vector2D refSegVec {
+    //   (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
+    // data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
+    // return {s, y, refSegPolarVec.orientation};
 }
 
 float calculateDistanceFromPointToSegment(const data::Position2D &point,

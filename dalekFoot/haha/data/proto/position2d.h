@@ -5,7 +5,9 @@
 
 namespace cooboc {
 namespace proto {
+
 using Position2D = Vector2D;
+
 }    // namespace proto
 }    // namespace cooboc
 
