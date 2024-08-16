@@ -21,6 +21,7 @@
     "@foxglove/eslint-plugin": "1.0.1",
     "@foxglove/extension": "2.9.0",
     "@foxglove/schemas": "^1.6.4",
+    "@foxglove/tsconfig": "^2.0.0",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "@typescript-eslint/eslint-plugin": "6.21.0",
