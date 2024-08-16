@@ -1,9 +1,6 @@
 {
 	"folders": [
         {
-            "path": "route_provision"
-        },
-        {
             "path": "odometry"
         },
         {
@@ -11,14 +8,12 @@
         },
         {
             "path": "behavior"
-        },
-        {
-            "path": "common"
         }
     ],
     "settings": {
         "cSpell.words": [
-            "cooboc"
+            "cooboc",
+            "Odometry"
         ]
     }
 }

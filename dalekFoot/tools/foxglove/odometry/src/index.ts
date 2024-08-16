@@ -19,6 +19,7 @@ type OdometryTopic = {
 
 const PI = 3.141592653589793238462643383279502884197;
 
+
 export function activate(extensionContext: ExtensionContext): void {
     // extensionContext.registerPanel({ name: "example-panel", initPanel: initExamplePanel });
     extensionContext.registerMessageConverter({
