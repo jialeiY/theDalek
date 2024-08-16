@@ -34,7 +34,7 @@ void RouteIntent::tick() {
     {
         data::RouteSegment &segment {routeTopic.routeSegment[1U]};
         segment.endPoint              = data::Position2D {1.2F, 0.1F};
-        segment.curvatureDistribution = data::CurvatureDistribution::UNIFORM;
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSTANT;
     }
 }
 
