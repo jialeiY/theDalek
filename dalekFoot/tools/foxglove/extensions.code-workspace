@@ -1,5 +1,5 @@
 {
-	"folders": [
+    "folders": [
         {
             "path": "odometry"
         },
@@ -8,6 +8,9 @@
         },
         {
             "path": "behavior"
+        },
+        {
+            "path": "route"
         }
     ],
     "settings": {

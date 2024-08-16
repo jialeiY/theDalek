@@ -6,46 +6,65 @@ type Position2D = {
     y: number;
 };
 
+enum CurvatureDistribution {
+    FOLLOW_PREDECESSOR = 0,
+    FOLLOW_SUCCESSOR = 1,
+    CONSIDER_BOTH = 2,
+    UNIFORM = 3,    // the circle
+    DONT_CARE = 4,
+};
+
+type RouteSegment = {
+    endPoint: Position2D;
+    curvatureDistribution: CurvatureDistribution;
+};
+
 type RouteTopic = {
     hasValue: boolean;
     routeId: number;
     polylineLength: number;
-    polyline: Position2D[];
+    startPoint: Position2D;
+    routeSegment: RouteSegment[];
 };
+
+
 
 export function activate(extensionContext: ExtensionContext): void {
     extensionContext.registerMessageConverter({
         fromSchemaName: "cooboc.proto.RouteTopic",
         toSchemaName: "foxglove.SceneUpdate",
         converter: (inputMessage: RouteTopic) => {
+            //console.log(inputMessage);
             let spheres: SpherePrimitive[] = [];
             let lines: LinePrimitive[] = [];
             if ((inputMessage.hasValue) && (inputMessage.polylineLength > 0)) {
-                spheres.push({
-                    pose: {
-                        position: {
-                            x: inputMessage.polyline[0]?.x || 0,
-                            y: inputMessage.polyline[0]?.y || 0,
-                            z: 0
-                        },
-                        orientation: { x: 0, y: 0, z: 0, w: 1 }
-                    },
-                    size: {x: 0.030, y:0.030, z:0.030},
-                    color:{ r: 1.0, g: 1.0, b: 1.0, a: 0.7 }
-                });
-                spheres.push({
-                    pose: {
-                        position: {
-                            x: inputMessage.polyline[inputMessage.polylineLength-1]?.x || 0,
-                            y: inputMessage.polyline[inputMessage.polylineLength-1]?.y || 0,
-                            z: 0
-                        },
-                        orientation: { x: 0, y: 0, z: 0, w: 1 }
-                    },
-                    size: {x: 0.030, y:0.030, z:0.030},
-                    color:{ r: 1.0, g: 1.0, b: 1.0, a: 0.7 }
-                });
-                lines.push({
+                // spheres.push({
+                //     pose: {
+                //         position: {
+                //             x: inputMessage.polyline[0]?.x || 0,
+                //             y: inputMessage.polyline[0]?.y || 0,
+                //             z: 0
+                //         },
+                //         orientation: { x: 0, y: 0, z: 0, w: 1 }
+                //     },
+                //     size: { x: 0.030, y: 0.030, z: 0.030 },
+                //     color: { r: 1.0, g: 1.0, b: 1.0, a: 0.7 }
+                // });
+                // spheres.push({
+                //     pose: {
+                //         position: {
+                //             x: inputMessage.polyline[inputMessage.polylineLength - 1]?.x || 0,
+                //             y: inputMessage.polyline[inputMessage.polylineLength - 1]?.y || 0,
+                //             z: 0
+                //         },
+                //         orientation: { x: 0, y: 0, z: 0, w: 1 }
+                //     },
+                //     size: { x: 0.030, y: 0.030, z: 0.030 },
+                //     color: { r: 1.0, g: 1.0, b: 1.0, a: 0.7 }
+                // });
+
+                // Construct the lines for route segments
+                const polyline: LinePrimitive = {
                     type: LineType.LINE_STRIP,
                     pose: {
                         position: { x: 0, y: 0, z: 0 },
@@ -57,15 +76,25 @@ export function activate(extensionContext: ExtensionContext): void {
                     color: { r: 0.2, g: 0.2, b: 0.2, a: 0.7 },
                     colors: [],
                     indices: []
+                };
+
+                // Put the start point
+                polyline.points.push({
+                    x: inputMessage.startPoint.x,
+                    y: inputMessage.startPoint.y,
+                    z: 0
                 });
 
+                // Put the route segments into polyline
                 for (let i = 0; i < inputMessage.polylineLength; ++i) {
-                    lines[0]?.points.push({
-                        x: inputMessage.polyline[i]?.x || 0,
-                        y: inputMessage.polyline[i]?.y || 0,
+                    polyline.points.push({
+                        x: inputMessage.routeSegment[i]?.endPoint.x || 0,
+                        y: inputMessage.routeSegment[i]?.endPoint.y || 0,
                         z: 0
                     });
                 }
+
+                lines.push(polyline);
             }
 
 
