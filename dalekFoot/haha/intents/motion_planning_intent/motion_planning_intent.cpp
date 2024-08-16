@@ -56,6 +56,7 @@ ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const Rout
     //   (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
     // data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
     // return {s, y, refSegPolarVec.orientation};
+    return {};
 }
 
 float calculateDistanceFromPointToSegment(const data::Position2D &point,
