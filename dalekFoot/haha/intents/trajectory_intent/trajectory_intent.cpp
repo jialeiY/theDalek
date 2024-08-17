@@ -5,6 +5,7 @@
 #include <iostream>
 #include <optional>
 #include <vector>
+#include "data/defs/passing_point.h"
 #include "data/defs/polar_vector2d.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/topics.h"
@@ -42,12 +43,13 @@ void generateTrajectoriesBasedOnRoutes(const RouteTopic &routeTopic,
     trajectoryTopic.hasValue     = true;
     trajectoryTopic.trajectoryId = generateTrajectoryId();
 
-    // start point
-    trajectoryTopic.passingPointSize         = 1U;
-    trajectoryTopic.passingPoint[0].position = routeTopic.startPoint;
 
     std::optional<float> startPointOrientationOpt {};
     PassingPointList passingPointList;
+
+    // start point
+    passingPointList.push_back(data::PassingPoint {routeTopic.startPoint});
+
     const data::Position2D &currentSegmentEndpoint {routeTopic.routeSegment[0].endPoint};
     std::optional<float> nextSegmentOrientationOpt {};
     if (routeTopic.routeSegmentSize > 1U) {
@@ -63,13 +65,16 @@ void generateTrajectoriesBasedOnRoutes(const RouteTopic &routeTopic,
                            routeTopic.routeSegment[0].curvatureDistribution,
                            30U,
                            passingPointList);
-    //
-    std::size_t idx {0U};
-    for (; (idx < passingPointList.size()) && ((idx + 1U) < TrajectoryTopic::kPassingPointCapacity);
-         ++idx) {
-        trajectoryTopic.passingPoint[idx + 1U] = passingPointList[idx];
+
+    // End point
+    passingPointList.push_back(data::PassingPoint {currentSegmentEndpoint});
+    trajectoryTopic.passingPointSize =
+      std::min(TrajectoryTopic::kPassingPointCapacity, passingPointList.size());
+
+    // Move result into the trajectory topic
+    for (std::size_t idx {0U}; idx < trajectoryTopic.passingPointSize; ++idx) {
+        trajectoryTopic.passingPoint[idx] = passingPointList[idx];
     }
-    trajectoryTopic.passingPointSize = idx + 1U;
 }
 
 
@@ -97,6 +102,7 @@ float makeTrajectory(const data::Position2D &startPoint,
 
     switch (curvatureDistribution) {
         case (data::CurvatureDistribution::FOLLOW_PREDECESSOR): {
+            controlPoints.push_back(endPoint);
             const data::Vector2D predecessorVec = endPoint - startPoint;
             controlPoints.push_back(
               endPoint + data::PolarVector2D {
@@ -104,6 +110,7 @@ float makeTrajectory(const data::Position2D &startPoint,
             break;
         }
         case (data::CurvatureDistribution::FOLLOW_SUCCESSOR): {
+            controlPoints.push_back(endPoint);
             if (nextSegmentOrientationOpt.has_value()) {
                 controlPoints.push_back(endPoint +
                                         data::PolarVector2D {utils::math::to<data::PolarVector2D>(
@@ -119,13 +126,17 @@ float makeTrajectory(const data::Position2D &startPoint,
             if (nextSegmentOrientationOpt.has_value()) {
                 orientation = (orientation + nextSegmentOrientationOpt.value()) / 2.0F;
             }
-            controlPoints.push_back(endPoint + data::PolarVector2D {orientation, 1.0F});
+            controlPoints.push_back(endPoint - data::PolarVector2D {orientation, 1.0F});
+            controlPoints.push_back(endPoint);
+            break;
         }
         default: {
+            std::fprintf(stderr, "CurvatureDistribution not implemented yet\r\n");
+            controlPoints.push_back(endPoint);
             break;
         }
     }
-    controlPoints.push_back(endPoint);
+
     if (controlPoints.size() == 3U) {
         makeCubicBezierCurve(controlPoints[0U],
                              controlPoints[1U],
@@ -152,7 +163,7 @@ void makeCubicBezierCurve(const data::Position2D &pa,
         const data::Position2D ib = utils::math::interpolate(pb, pc, sampleValue);
 
         const data::Position2D point = utils::math::interpolate(ia, ib, sampleValue);
-        passingPointList.push_back(PassingPoint {point});
+        passingPointList.push_back(data::PassingPoint {point});
         sampleValue += percent;
     }
 }
@@ -165,7 +176,7 @@ void TrajectoryIntent::setup() {
     trajectoryTopic.hasValue         = false;
     trajectoryTopic.passingPointSize = 0U;
     for (std::size_t i {0U}; i < TrajectoryTopic::kPassingPointCapacity; ++i) {
-        PassingPoint &passingPoint {trajectoryTopic.passingPoint[i]};
+        data::PassingPoint &passingPoint {trajectoryTopic.passingPoint[i]};
         passingPoint.position = {0.0F, 0.0F};
     }
     trajectoryTopic.routeId = 0U;

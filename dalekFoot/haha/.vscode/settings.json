@@ -71,6 +71,7 @@
     "editor.formatOnSave": true,
     "makefile.configureOnOpen": true,
     "cSpell.words": [
-        "Bezier"
+        "Bezier",
+        "haha"
     ]
 }

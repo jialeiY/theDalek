@@ -5,6 +5,7 @@
 #include <array>
 #include <optional>
 #include <vector>
+#include "data/defs/passing_point.h"
 #include "intents/intent_base.h"
 #include "intents/topics/topics.h"
 
@@ -14,7 +15,7 @@ namespace intent {
 namespace detail {
 
 using RouteSegmentLengthArray = std::array<float, RouteTopic::kPolylineCapacity>;
-using PassingPointList        = std::vector<PassingPoint>;
+using PassingPointList        = std::vector<data::PassingPoint>;
 
 float calculateApproximateRouteLength(RouteSegmentLengthArray &routeSegmentLengthArray);
 

@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+import "data/proto/vector2d.proto";
+
+package cooboc.proto;
+
+message PassingPoint {
+    optional Vector2D position = 1;
+}

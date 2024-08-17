@@ -11,6 +11,9 @@
         },
         {
             "path": "route"
+        },
+        {
+            "path": "trajectory"
         }
     ],
     "settings": {
