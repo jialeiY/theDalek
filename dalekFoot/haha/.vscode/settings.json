@@ -68,5 +68,9 @@
         "span": "cpp",
         "sstream": "cpp"
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "makefile.configureOnOpen": true,
+    "cSpell.words": [
+        "Bezier"
+    ]
 }

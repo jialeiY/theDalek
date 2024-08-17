@@ -54,6 +54,17 @@ inline data::Vector2D to<data::Vector2D, data::PolarVector2D>(const data::PolarV
     return {std::cos(in.orientation) * in.value, std::sin(in.orientation) * in.value};
 }
 
+template<typename T>
+inline T interpolate(T from, T to, float percent) {
+    return from + ((to - from) * percent);
+}
+
+template<>
+inline data::Vector2D interpolate(data::Vector2D from, data::Vector2D to, float percent) {
+    return data::Vector2D {interpolate<float>(from.x, to.x, percent),
+                           interpolate<float>(from.y, to.y, percent)};
+}
+
 
 }    // namespace math
 }    // namespace utils

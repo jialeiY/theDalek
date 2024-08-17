@@ -15,9 +15,8 @@ struct RouteTopic {
 
     bool hasValue {false};
     data::RouteId routeId {0U};
-    std::size_t polylineLength {0U};
+    std::size_t routeSegmentSize {0U};
     data::Position2D startPoint {};
-
     data::RouteSegment routeSegment[kPolylineCapacity];
 };
 }    // namespace intent

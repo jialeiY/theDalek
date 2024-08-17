@@ -1,11 +1,16 @@
 #include "intents/trajectory_intent/trajectory_intent.h"
 #include <array>
 #include <cstdint>
+#include <cstdio>
 #include <iostream>
 #include <optional>
 #include <vector>
+#include "data/defs/polar_vector2d.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/topics.h"
+#include "utils/math.h"
+
+
 namespace cooboc {
 namespace intent {
 
@@ -13,7 +18,7 @@ namespace detail {
 
 
 float calculateApproximateRouteLength(RouteSegmentLengthArray &routeSegmentLengthArray) {
-    if (routeTopic.polylineLength < 2) {
+    if (routeTopic.routeSegmentSize < 2) {
         return 0.0F;
     }
 
@@ -32,13 +37,6 @@ static TrajectoryId trajectoryId {0U};
 
 TrajectoryId generateTrajectoryId() { return trajectoryId++; }
 
-void makeTrajectory(const data::Position2D &startPoint,
-                    const std::optional<float> &startPointOrientationOpt,
-                    const data::Position2D &endPoint,
-                    const data::CurvatureDistribution &curvatureDistribution,
-                    const std::size_t maximumPointNumber,
-                    PassingPointList &passingPointList);
-
 void generateTrajectoriesBasedOnRoutes(const RouteTopic &routeTopic,
                                        TrajectoryTopic &trajectoryTopic) {
     trajectoryTopic.hasValue     = true;
@@ -50,13 +48,114 @@ void generateTrajectoriesBasedOnRoutes(const RouteTopic &routeTopic,
 
     std::optional<float> startPointOrientationOpt {};
     PassingPointList passingPointList;
-    PassingPoint makeTrajectory(routeTopic.startPoint,
-                                startPointOrientationOpt,
-                                routeTopic.routeSegment[0].endPoint,
-                                routeTopic.routeSegment[0].curvatureDistribution,
-                                30U,
-                                passingPointList);
+    const data::Position2D &currentSegmentEndpoint {routeTopic.routeSegment[0].endPoint};
+    std::optional<float> nextSegmentOrientationOpt {};
+    if (routeTopic.routeSegmentSize > 1U) {
+        const data::Position2D &nextSegmentEndpoint {routeTopic.routeSegment[1U].endPoint};
+        nextSegmentOrientationOpt =
+          utils::math::to<data::PolarVector2D>(nextSegmentEndpoint - currentSegmentEndpoint)
+            .orientation;
+    }
+    detail::makeTrajectory(routeTopic.startPoint,
+                           startPointOrientationOpt,
+                           currentSegmentEndpoint,
+                           nextSegmentOrientationOpt,
+                           routeTopic.routeSegment[0].curvatureDistribution,
+                           30U,
+                           passingPointList);
+    //
+    std::size_t idx {0U};
+    for (; (idx < passingPointList.size()) && ((idx + 1U) < TrajectoryTopic::kPassingPointCapacity);
+         ++idx) {
+        trajectoryTopic.passingPoint[idx + 1U] = passingPointList[idx];
+    }
+    trajectoryTopic.passingPointSize = idx + 1U;
+}
 
+
+float makeTrajectory(const data::Position2D &startPoint,
+                     const std::optional<float> &startPointOrientationOpt,
+                     const data::Position2D &endPoint,
+                     std::optional<float> &nextSegmentOrientationOpt,
+                     const data::CurvatureDistribution &curvatureDistribution,
+                     const std::size_t maximumPointNumber,
+                     PassingPointList &passingPointList) {
+    std::printf(
+      "from (%f, %f) -> (%f, %f), %u\r\n",
+      startPoint.x,
+      startPoint.y,
+      endPoint.x,
+      endPoint.y,
+      static_cast<std::underlying_type<data::CurvatureDistribution>::type>(curvatureDistribution));
+
+    std::vector<data::Position2D> controlPoints {};
+    controlPoints.push_back(startPoint);
+    if (startPointOrientationOpt.has_value()) {
+        controlPoints.push_back(startPoint -
+                                data::PolarVector2D {startPointOrientationOpt.value(), 1.0F});
+    }
+
+    switch (curvatureDistribution) {
+        case (data::CurvatureDistribution::FOLLOW_PREDECESSOR): {
+            const data::Vector2D predecessorVec = endPoint - startPoint;
+            controlPoints.push_back(
+              endPoint + data::PolarVector2D {
+                           utils::math::to<data::PolarVector2D>(predecessorVec).orientation, 1.0F});
+            break;
+        }
+        case (data::CurvatureDistribution::FOLLOW_SUCCESSOR): {
+            if (nextSegmentOrientationOpt.has_value()) {
+                controlPoints.push_back(endPoint +
+                                        data::PolarVector2D {utils::math::to<data::PolarVector2D>(
+                                                               nextSegmentOrientationOpt.value())
+                                                               .orientation,
+                                                             1.0F});
+            }
+            break;
+        }
+        case (data::CurvatureDistribution::CONSIDER_BOTH): {
+            const data::Vector2D predecessorVec = endPoint - startPoint;
+            float orientation = utils::math::to<data::PolarVector2D>(predecessorVec).orientation;
+            if (nextSegmentOrientationOpt.has_value()) {
+                orientation = (orientation + nextSegmentOrientationOpt.value()) / 2.0F;
+            }
+            controlPoints.push_back(endPoint + data::PolarVector2D {orientation, 1.0F});
+        }
+        default: {
+            break;
+        }
+    }
+    controlPoints.push_back(endPoint);
+    if (controlPoints.size() == 3U) {
+        makeCubicBezierCurve(controlPoints[0U],
+                             controlPoints[1U],
+                             controlPoints[2U],
+                             maximumPointNumber - 1U,
+                             passingPointList);
+    }
+
+    printf("size: %ld\r\n", controlPoints.size());
+
+    return 0;
+}
+
+
+void makeCubicBezierCurve(const data::Position2D &pa,
+                          const data::Position2D &pb,
+                          const data::Position2D &pc,
+                          const std::size_t count,
+                          PassingPointList &passingPointList) {
+    const float percent = 1.0F / (count + 1U);
+    float sampleValue   = percent;
+    for (std::size_t i {0U}; i < count; ++i) {
+        const data::Position2D ia = utils::math::interpolate(pa, pb, sampleValue);
+        const data::Position2D ib = utils::math::interpolate(pb, pc, sampleValue);
+
+        const data::Position2D point = utils::math::interpolate(ia, ib, sampleValue);
+        passingPointList.push_back(PassingPoint {point});
+        sampleValue += percent;
+    }
+}
 
 }    // namespace detail
 
@@ -82,7 +181,7 @@ void TrajectoryIntent::tick() {
     // TODO, check the data validation
 
     if (routeTopic.hasValue) {
-        detail::generateTrajectoiesBasedOnRoutes(routeTopic, trajectoryTopic);
+        detail::generateTrajectoriesBasedOnRoutes(routeTopic, trajectoryTopic);
     } else {
         trajectoryTopic.hasValue = false;
     }

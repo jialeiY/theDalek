@@ -6,9 +6,9 @@ import "data/proto/vector2d.proto";
 package cooboc.proto;
 
 message RouteTopic {
-    optional bool         hasValue       = 1 [default = false];
-    optional uint64       routeId        = 2 [default = 0];
-    optional uint32       polylineLength = 3 [default = 0];
-    optional Vector2D     startPoint     = 4;
-    repeated RouteSegment routeSegment   = 5;
+    optional bool         hasValue         = 1 [default = false];
+    optional uint64       routeId          = 2 [default = 0];
+    optional uint32       routeSegmentSize = 3 [default = 0];
+    optional Vector2D     startPoint       = 4;
+    repeated RouteSegment routeSegment     = 5;
 }

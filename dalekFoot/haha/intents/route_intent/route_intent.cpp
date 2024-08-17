@@ -8,10 +8,10 @@ RouteIntent::RouteIntent() : uniqueRouteId_ {0U} {}
 RouteIntent::~RouteIntent() {}
 
 void RouteIntent::setup() {
-    routeTopic.hasValue       = false;
-    routeTopic.routeId        = uniqueRouteId_;
-    routeTopic.polylineLength = 0U;
-    routeTopic.startPoint     = data::Position2D {0.0F, 0.0F};
+    routeTopic.hasValue         = false;
+    routeTopic.routeId          = uniqueRouteId_;
+    routeTopic.routeSegmentSize = 0U;
+    routeTopic.startPoint       = data::Position2D {0.0F, 0.0F};
 
     for (std::size_t i {0U}; i < RouteTopic::kPolylineCapacity; ++i) {
         data::RouteSegment &segment {routeTopic.routeSegment[i]};
@@ -21,9 +21,9 @@ void RouteIntent::setup() {
 }
 
 void RouteIntent::tick() {
-    routeTopic.hasValue       = true;
-    routeTopic.routeId        = uniqueRouteId_;
-    routeTopic.polylineLength = 2U;
+    routeTopic.hasValue         = true;
+    routeTopic.routeId          = uniqueRouteId_;
+    routeTopic.routeSegmentSize = 2U;
 
     routeTopic.startPoint = data::Position2D {0.0F, 0.0F};
     {

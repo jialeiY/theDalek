@@ -3,6 +3,7 @@
 
 
 #include <array>
+#include <optional>
 #include <vector>
 #include "intents/intent_base.h"
 #include "intents/topics/topics.h"
@@ -22,12 +23,20 @@ TrajectoryId generateTrajectoryId();
 void generateTrajectoriesBasedOnRoutes(const RouteTopic &routeTopic,
                                        TrajectoryTopic &trajectoryTopic);
 
-void makeTrajectory(const data::Position2D &startPoint,
-                    const std::optional<float> &startPointOrientationOpt,
-                    const data::Position2D &endPoint,
-                    const data::CurvatureDistribution &curvatureDistribution,
-                    const std::size_t maximumPointNumber,
-                    PassingPointList &passingPointList);
+float makeTrajectory(const data::Position2D &startPoint,
+                     const std::optional<float> &startPointOrientationOpt,
+                     const data::Position2D &endPoint,
+                     std::optional<float> &nextSegmentOrientationOpt,
+                     const data::CurvatureDistribution &curvatureDistribution,
+                     const std::size_t maximumPointNumber,
+                     PassingPointList &passingPointList);
+
+// Generate point without endpoint
+void makeCubicBezierCurve(const data::Position2D &pa,
+                          const data::Position2D &pb,
+                          const data::Position2D &pc,
+                          const std::size_t count,
+                          PassingPointList &pointList);
 
 }    // namespace detail
 

@@ -13,7 +13,7 @@ proto::RouteTopic convert(const intent::RouteTopic &in) {
     proto::RouteTopic out;
     out.set_hasvalue(in.hasValue);
     out.set_routeid(in.routeId);
-    out.set_polylinelength(in.polylineLength);
+    out.set_routesegmentsize(in.routeSegmentSize);
 
     proto::Position2D *startPoint = out.mutable_startpoint();
     *startPoint                   = convert(in.startPoint);

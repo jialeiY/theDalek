@@ -39,6 +39,7 @@ CPP_SOURCES += intents/odometry_intent/odometry_intent.cpp
 CPP_SOURCES += intents/route_intent/route_intent.cpp
 CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += intents/trajectory_intent/trajectory_intent.cpp
+CPP_SOURCES += data/defs/vector2d.cpp
 CPP_SOURCES += main.cpp
 CPP_SOURCES += utils/algo/pid.cpp
 CPP_SOURCES += utils/time.cpp
