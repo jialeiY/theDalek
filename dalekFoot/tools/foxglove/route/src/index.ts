@@ -22,7 +22,7 @@ type RouteSegment = {
 type RouteTopic = {
     hasValue: boolean;
     routeId: number;
-    polylineLength: number;
+    routeSegmentSize: number;
     startPoint: Position2D;
     routeSegment: RouteSegment[];
 };
@@ -37,7 +37,7 @@ export function activate(extensionContext: ExtensionContext): void {
             //console.log(inputMessage);
             let spheres: SpherePrimitive[] = [];
             let lines: LinePrimitive[] = [];
-            if ((inputMessage.hasValue) && (inputMessage.polylineLength > 0)) {
+            if ((inputMessage.hasValue) && (inputMessage.routeSegmentSize > 0)) {
                 // spheres.push({
                 //     pose: {
                 //         position: {
@@ -86,7 +86,7 @@ export function activate(extensionContext: ExtensionContext): void {
                 });
 
                 // Put the route segments into polyline
-                for (let i = 0; i < inputMessage.polylineLength; ++i) {
+                for (let i = 0; i < inputMessage.routeSegmentSize; ++i) {
                     polyline.points.push({
                         x: inputMessage.routeSegment[i]?.endPoint.x || 0,
                         y: inputMessage.routeSegment[i]?.endPoint.y || 0,
