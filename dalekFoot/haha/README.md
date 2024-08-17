@@ -27,7 +27,7 @@
 [ ] 27. refactor the intents
 [ ] 28. the target of intent is BehaviorIntent -> RouteIntent -> Trajectory -> TFC
 [#] 29. Refine the BehaviorIntent [LOW priority] Rename
-[ ] 30. Refine RouteIntent [LOW priority]
+[#] 30. Refine RouteIntent [LOW priority]
 [ ] 31. TrajectoryIntent to get the resolution of a Route
 [ ] 32. Follow the Trajectory in real time
 

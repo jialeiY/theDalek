@@ -3,6 +3,7 @@
 
 
 #include <array>
+#include <vector>
 #include "intents/intent_base.h"
 #include "intents/topics/topics.h"
 
@@ -12,9 +13,22 @@ namespace intent {
 namespace detail {
 
 using RouteSegmentLengthArray = std::array<float, RouteTopic::kPolylineCapacity>;
-
+using PassingPointList        = std::vector<PassingPoint>;
 
 float calculateApproximateRouteLength(RouteSegmentLengthArray &routeSegmentLengthArray);
+
+// TODO: move these functions to TrajectoryIntent
+TrajectoryId generateTrajectoryId();
+void generateTrajectoriesBasedOnRoutes(const RouteTopic &routeTopic,
+                                       TrajectoryTopic &trajectoryTopic);
+
+void makeTrajectory(const data::Position2D &startPoint,
+                    const std::optional<float> &startPointOrientationOpt,
+                    const data::Position2D &endPoint,
+                    const data::CurvatureDistribution &curvatureDistribution,
+                    const std::size_t maximumPointNumber,
+                    PassingPointList &passingPointList);
+
 }    // namespace detail
 
 

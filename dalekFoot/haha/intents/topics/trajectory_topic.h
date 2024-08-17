@@ -9,15 +9,20 @@
 namespace cooboc {
 namespace intent {
 
-
+// WIP
 struct PassingPoint {
     data::Position2D position;    // in world
-    float speed;
+    // float speed;
+    //  orientation or curvature to the last segment
 };
+
+using TrajectoryId = std::size_t;
 
 struct TrajectoryTopic {
     static constexpr std::size_t kPassingPointCapacity {1000U};
-
+    bool hasValue {false};
+    TrajectoryId trajectoryId {0U};
+    std::size_t passingPointSize {0U};
 
     PassingPoint passingPoint[kPassingPointCapacity];
 
