@@ -38,6 +38,7 @@ CPP_SOURCES += data/codec/waypoint_codec.cpp
 CPP_SOURCES += data/defs/vector2d.cpp
 CPP_SOURCES += intents/behavior_intent/behavior_intent.cpp
 CPP_SOURCES += intents/debug_writer_intent/debug_writer_intent.cpp
+CPP_SOURCES += intents/gaga_intent/gaga_intent.cpp
 CPP_SOURCES += intents/intent_manager.cpp
 CPP_SOURCES += intents/motion_planning_intent/motion_planning_intent.cpp
 CPP_SOURCES += intents/odometry_intent/odometry_intent.cpp
