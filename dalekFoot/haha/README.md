@@ -36,5 +36,5 @@
 [/] 36. generate bezier based on different curvature distribution
 [#] 37. implement the skeleton of static vector
 38. move GagaIntent to ControlCommandIntent
-39. Create Vehicle Sensor intent
+[#] 39. Create Vehicle Sensor intent
 
