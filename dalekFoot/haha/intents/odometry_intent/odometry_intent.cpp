@@ -18,11 +18,6 @@ void OdometryIntent::setup() {
     odometryTopic.pose.position.x  = 0.0F;
     odometryTopic.pose.position.y  = 0.0F;
     odometryTopic.pose.orientation = 0.0F;
-
-    egoStateTopic.velocity            = {0.0F, 0.0F};
-    egoStateTopic.acceleration        = {0.0F, 0.0F};
-    egoStateTopic.angularVelocity     = 0.0F;
-    egoStateTopic.angularAcceleration = 0.0F;
 }
 
 
@@ -31,12 +26,6 @@ void OdometryIntent::tick() {
     odometryTopic.pose.position.x  = randomDistribution_(randomGen_);
     odometryTopic.pose.position.y  = randomDistribution_(randomGen_);
     odometryTopic.pose.orientation = randomDistribution_(randomGen_) * 5.4F;
-
-    egoStateTopic.velocity.orientation = randomDistribution_(randomGen_) * 3.9F;
-    egoStateTopic.velocity.value       = randomDistribution_(randomGen_) * 3.0 + 0.5;
-
-    egoStateTopic.acceleration.orientation = randomDistribution_(randomGen_) * 39.4F;
-    egoStateTopic.acceleration.value       = randomDistribution_(randomGen_) * 4.7;
 
 
     // std::uint64_t fromm = utils::time::milliseconds();

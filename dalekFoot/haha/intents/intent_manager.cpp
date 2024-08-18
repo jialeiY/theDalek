@@ -1,18 +1,22 @@
 #include "intents/intent_manager.h"
+#include "data/defs/vehicle_response.h"
 #include "intents/behavior_intent/behavior_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
+#include "intents/ego_state_intent/ego_state_intent.h"
 #include "intents/gaga_intent/gaga_intent.h"
 #include "intents/intent_base.h"
 #include "intents/motion_planning_intent/motion_planning_intent.h"
 #include "intents/odometry_intent/odometry_intent.h"
 #include "intents/route_intent/route_intent.h"
+#include "intents/topics/topics.h"
 #include "intents/trajectory_intent/trajectory_intent.h"
-
 
 namespace cooboc {
 namespace intent {
 
 IntentManager::IntentManager() {
+    // Decode vehicle status from gaga response, generate ego_motion
+    intents_.push_back(new EgoStateIntent());
     // Localization
     intents_.push_back(new OdometryIntent());
     // The specific task that ego need to do based on the result of localization
@@ -34,6 +38,11 @@ IntentManager::~IntentManager() {
 }
 void IntentManager::setup() {
     for (IntentBase *intentPtr : intents_) { intentPtr->setup(); }
+}
+
+void IntentManager::updateVehicleResponse(data::VehicleResponse vehicleResponse) {
+    // TODO: setup the vehicle topic
+    vehicleResponseTopic.response = vehicleResponse;
 }
 
 void IntentManager::tick() {

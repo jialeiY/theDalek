@@ -5,6 +5,7 @@
 #include "intents/topics/odometry_topic.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/trajectory_topic.h"
+#include "intents/topics/vehicle_response_topic.h"
 
 namespace cooboc {
 namespace intent {
@@ -15,6 +16,7 @@ RouteTopic routeTopic {};
 BehaviorTopic behaviorTopic {};
 MotionPlanningDebugTopic motionPlanningDebugTopic {};
 TrajectoryTopic trajectoryTopic {};
+VehicleResponseTopic vehicleResponseTopic {};
 
 }    // namespace intent
 }    // namespace cooboc

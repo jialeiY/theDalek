@@ -1,15 +1,15 @@
-#ifndef __INTENTS_GAGA_INTENT_GAGA_INTENT_H__
-#define __INTENTS_GAGA_INTENT_GAGA_INTENT_H__
+#ifndef __INTENTS_EGO_STATE_INTENT_EGO_STATE_INTENT_H__
+#define __INTENTS_EGO_STATE_INTENT_EGO_STATE_INTENT_H__
 
 #include "intents/intent_base.h"
 
 namespace cooboc {
 namespace intent {
 
-class GagaIntent : public IntentBase {
+class EgoStateIntent : public IntentBase {
   public:
-    GagaIntent();
-    virtual ~GagaIntent();
+    EgoStateIntent();
+    virtual ~EgoStateIntent();
     virtual void setup() override;
     virtual void tick() override;
 };
