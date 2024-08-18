@@ -143,15 +143,31 @@ float makeTrajectory(const data::Position2D &startPoint,
         }
     }
 
-    if (controlPoints.size() == 3U) {
-        makeCubicBezierCurve(controlPoints[0U],
-                             controlPoints[1U],
-                             controlPoints[2U],
-                             maximumPointNumber - 1U,
-                             passingPointList);
+    printf("size: %ld\r\n", controlPoints.size());
+    switch (controlPoints.size()) {
+        case (2U): {
+            std::fprintf(stderr, "direct line not implemented yet\r\n");
+            break;
+        }
+        case (3U): {
+            makeCubicBezierCurve(controlPoints[0U],
+                                 controlPoints[1U],
+                                 controlPoints[2U],
+                                 maximumPointNumber - 1U,
+                                 passingPointList);
+            break;
+        }
+        case (4U): {
+            // quadratic
+            break;
+        }
+        default: {
+            std::fprintf(stderr, "invalid curve define\r\n");
+            // TODO: add error log
+            break;
+        }
     }
 
-    printf("size: %ld\r\n", controlPoints.size());
 
     return 0;
 }

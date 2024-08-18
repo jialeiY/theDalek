@@ -30,9 +30,10 @@
 [#] 30. Refine RouteIntent [LOW priority]
 [ ] 31. TrajectoryIntent to get the resolution of a Route
 [ ] 32. Follow the Trajectory in real time
-[/] 33. check current trajectory generation
+[#] 33. check current trajectory generation
 [/] 34. generate all trajectory
-
+[ ] 35. generate bezier based on different start
+[ ] 36. generate bezier based on different curvature distribution
 
 
 
