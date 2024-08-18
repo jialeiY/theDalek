@@ -17,6 +17,7 @@ namespace intent {
 
 namespace detail {
 
+constexpr float kBezierSmoothRatio {0.3F};
 
 float calculateApproximateRouteLength(RouteSegmentLengthArray &routeSegmentLengthArray) {
     if (routeTopic.routeSegmentSize < 2) {
@@ -93,11 +94,14 @@ float makeTrajectory(const data::Position2D &startPoint,
       endPoint.y,
       static_cast<std::underlying_type<data::CurvatureDistribution>::type>(curvatureDistribution));
 
+    const float segmentLength = startPoint.distance(endPoint);
+
     std::vector<data::Position2D> controlPoints {};
     controlPoints.push_back(startPoint);
     if (startPointOrientationOpt.has_value()) {
         controlPoints.push_back(startPoint -
-                                data::PolarVector2D {startPointOrientationOpt.value(), 1.0F});
+                                data::PolarVector2D {startPointOrientationOpt.value(),
+                                                     segmentLength * kBezierSmoothRatio});
     }
 
     switch (curvatureDistribution) {
@@ -105,8 +109,9 @@ float makeTrajectory(const data::Position2D &startPoint,
             controlPoints.push_back(endPoint);
             const data::Vector2D predecessorVec = endPoint - startPoint;
             controlPoints.push_back(
-              endPoint + data::PolarVector2D {
-                           utils::math::to<data::PolarVector2D>(predecessorVec).orientation, 1.0F});
+              endPoint +
+              data::PolarVector2D {utils::math::to<data::PolarVector2D>(predecessorVec).orientation,
+                                   segmentLength * kBezierSmoothRatio});
             break;
         }
         case (data::CurvatureDistribution::FOLLOW_SUCCESSOR): {
@@ -116,7 +121,7 @@ float makeTrajectory(const data::Position2D &startPoint,
                                         data::PolarVector2D {utils::math::to<data::PolarVector2D>(
                                                                nextSegmentOrientationOpt.value())
                                                                .orientation,
-                                                             1.0F});
+                                                             segmentLength * kBezierSmoothRatio});
             }
             break;
         }
@@ -126,7 +131,8 @@ float makeTrajectory(const data::Position2D &startPoint,
             if (nextSegmentOrientationOpt.has_value()) {
                 orientation = (orientation + nextSegmentOrientationOpt.value()) / 2.0F;
             }
-            controlPoints.push_back(endPoint - data::PolarVector2D {orientation, 1.0F});
+            controlPoints.push_back(
+              endPoint - data::PolarVector2D {orientation, segmentLength * kBezierSmoothRatio});
             controlPoints.push_back(endPoint);
             break;
         }
