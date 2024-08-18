@@ -10,11 +10,11 @@ namespace cooboc {
 namespace data {
 
 enum class CurvatureDistribution : std::uint8_t {
-    FOLLOW_PREDECESSOR = 0,
-    FOLLOW_SUCCESSOR   = 1,
-    CONSIDER_BOTH      = 2,
-    CONSTANT           = 3,    // the circle
-    DONT_CARE          = 4,
+    CONSIDER_CURRENT = 0,
+    CONSIDER_NEXT    = 1,
+    CONSIDER_BOTH    = 2,
+    CONSTANT         = 3,    // the circle
+    DONT_CARE        = 4,
 };
 
 }    // namespace data

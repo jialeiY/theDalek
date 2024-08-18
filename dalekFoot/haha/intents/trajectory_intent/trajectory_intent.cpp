@@ -149,24 +149,22 @@ std::optional<float> makeTrajectory(const data::Position2D &startPoint,
     }
 
     switch (curvatureDistribution) {
-        case (data::CurvatureDistribution::FOLLOW_PREDECESSOR): {
-            controlPoints.push_back(endPoint);
-            const data::Vector2D predecessorVec = endPoint - startPoint;
+        case (data::CurvatureDistribution::CONSIDER_CURRENT): {
+            const data::Vector2D currentVec = endPoint - startPoint;
             controlPoints.push_back(
-              endPoint +
-              data::PolarVector2D {utils::math::to<data::PolarVector2D>(predecessorVec).orientation,
+              endPoint -
+              data::PolarVector2D {utils::math::to<data::PolarVector2D>(currentVec).orientation,
                                    segmentLength * kBezierSmoothRatio});
+            controlPoints.push_back(endPoint);
             break;
         }
-        case (data::CurvatureDistribution::FOLLOW_SUCCESSOR): {
-            controlPoints.push_back(endPoint);
+        case (data::CurvatureDistribution::CONSIDER_NEXT): {
             if (nextSegmentOrientationOpt.has_value()) {
-                controlPoints.push_back(endPoint +
-                                        data::PolarVector2D {utils::math::to<data::PolarVector2D>(
-                                                               nextSegmentOrientationOpt.value())
-                                                               .orientation,
+                controlPoints.push_back(endPoint -
+                                        data::PolarVector2D {nextSegmentOrientationOpt.value(),
                                                              segmentLength * kBezierSmoothRatio});
             }
+            controlPoints.push_back(endPoint);
             break;
         }
         case (data::CurvatureDistribution::CONSIDER_BOTH): {
@@ -234,6 +232,11 @@ std::optional<float> makeTrajectory(const data::Position2D &startPoint,
             // TODO: add error log
             break;
         }
+    }
+
+    if ((curvatureDistribution == data::CurvatureDistribution::CONSIDER_NEXT) &&
+        (nextSegmentOrientationOpt.has_value())) {
+        lastOrientationOpt = nextSegmentOrientationOpt;
     }
 
 

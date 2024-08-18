@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "GDB_GAGA",
+            "name": "GDB_HAHA",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/haha.elf",

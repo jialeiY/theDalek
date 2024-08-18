@@ -23,7 +23,7 @@ void RouteIntent::setup() {
 void RouteIntent::tick() {
     routeTopic.hasValue         = true;
     routeTopic.routeId          = uniqueRouteId_;
-    routeTopic.routeSegmentSize = 3U;
+    routeTopic.routeSegmentSize = 5U;
 
     routeTopic.startPoint = data::Position2D {0.0F, 0.0F};
     {
@@ -39,7 +39,17 @@ void RouteIntent::tick() {
     {
         data::RouteSegment &segment {routeTopic.routeSegment[2U]};
         segment.endPoint              = data::Position2D {2.0, 0.1F};
-        segment.curvatureDistribution = data::CurvatureDistribution::CONSTANT;
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_NEXT;
+    }
+    {
+        data::RouteSegment &segment {routeTopic.routeSegment[3U]};
+        segment.endPoint              = data::Position2D {2.0, -1.1F};
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_CURRENT;
+    }
+    {
+        data::RouteSegment &segment {routeTopic.routeSegment[4U]};
+        segment.endPoint              = data::Position2D {3.0, -0.1F};
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
     }
 }
 
