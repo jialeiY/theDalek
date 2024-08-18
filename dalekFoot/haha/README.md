@@ -34,6 +34,6 @@
 [/] 34. generate all trajectory
 [ ] 35. generate bezier based on different start
 [ ] 36. generate bezier based on different curvature distribution
-
+[ ] 37. implement the skeleton of static vector
 
 
