@@ -2,6 +2,8 @@
 #define __SIMULATOR_SIMULATOR_H__
 
 #include "data/defs/vehicle_response.h"
+#include "intents/topics/vehicle_request_topic.h"
+
 
 namespace cooboc {
 namespace sim {
@@ -12,6 +14,7 @@ class Simulator {
     Simulator();
     virtual ~Simulator();
     void tick();
+    void updateVehicleRequest(const intent::VehicleRequestTopic &vehicleRequest);
     data::VehicleResponse getVehicleResponse();
 
   private:

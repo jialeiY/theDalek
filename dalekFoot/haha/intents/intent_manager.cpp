@@ -8,8 +8,10 @@
 #include "intents/odometry_intent/odometry_intent.h"
 #include "intents/route_intent/route_intent.h"
 #include "intents/topics/topics.h"
+#include "intents/topics/vehicle_request_topic.h"
 #include "intents/trajectory_intent/trajectory_intent.h"
 #include "intents/vehicle_request_intent/vehicle_request_intent.h"
+
 
 namespace cooboc {
 namespace intent {

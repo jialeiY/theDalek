@@ -2,7 +2,9 @@
 #include <csignal>
 #include <iostream>
 #include "intents/intent_manager.h"
+#include "intents/topics/vehicle_request_topic.h"
 #include "simulator/simulator.h"
+
 
 namespace {
 volatile std::sig_atomic_t gSignalStatus = 0;    // nosignal
@@ -28,6 +30,9 @@ int main(int argc, char *argv[], char **envs) {
         // TODO
         // VehicleControlCommand &vcc = intentManager.getVehicleControlCommand();
         // simulator.setVehicleControlCommand(vcc);
+
+        const cooboc::intent::VehicleRequestTopic &vrt {intentManager.getVehicleRequest()};
+        simulator.updateVehicleRequest(vrt);
         simulator.tick();
 
 

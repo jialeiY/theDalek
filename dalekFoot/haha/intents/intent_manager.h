@@ -4,6 +4,8 @@
 #include <intents/intent_base.h>
 #include <vector>
 #include "data/defs/vehicle_response.h"
+#include "intents/topics/topics.h"
+#include "intents/topics/vehicle_request_topic.h"
 
 namespace cooboc {
 namespace intent {
@@ -16,6 +18,7 @@ class IntentManager {
     void setup();
 
     void updateVehicleResponse(data::VehicleResponse vehicleResponse);
+    inline const VehicleRequestTopic &getVehicleRequest() { return vehicleRequestTopic; }
     void tick();
 
 
