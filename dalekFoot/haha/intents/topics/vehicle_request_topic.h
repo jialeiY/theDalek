@@ -8,8 +8,10 @@
 namespace cooboc {
 namespace intent {
 
+using WheelSpeedPlanning = float[10];
+
 struct VehicleRequestTopic {
-    data::PolarVector2D velocity {};
+    WheelSpeedPlanning wheelSpeedPlanning[4];
 };
 }    // namespace intent
 }    // namespace cooboc
