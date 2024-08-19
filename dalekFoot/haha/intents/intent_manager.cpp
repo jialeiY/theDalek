@@ -3,13 +3,13 @@
 #include "intents/behavior_intent/behavior_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
 #include "intents/ego_state_intent/ego_state_intent.h"
-#include "intents/gaga_intent/gaga_intent.h"
 #include "intents/intent_base.h"
 #include "intents/motion_planning_intent/motion_planning_intent.h"
 #include "intents/odometry_intent/odometry_intent.h"
 #include "intents/route_intent/route_intent.h"
 #include "intents/topics/topics.h"
 #include "intents/trajectory_intent/trajectory_intent.h"
+#include "intents/vehicle_request_intent/vehicle_request_intent.h"
 
 namespace cooboc {
 namespace intent {
@@ -28,8 +28,8 @@ IntentManager::IntentManager() {
     intents_.push_back(new TrajectoryIntent());
     // MotionPlanning plan the waypoints of maneuver state of ego based on all
     intents_.push_back(new MotionPlanningIntent());
-    // GagaIntent generate communication packet to GAGA
-    intents_.push_back(new GagaIntent());
+    // VehicleRequestIntent generate communication packet to GAGA
+    intents_.push_back(new VehicleRequestIntent());
     // information Debug
     intents_.push_back(new DebugWriterIntent());
 }
