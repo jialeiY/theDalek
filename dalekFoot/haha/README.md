@@ -24,7 +24,7 @@
 [#] 24. the velocity not correct
 [#] 25. coredump on abort
 [ ] 26. curve route longitudinal planning
-[ ] 27. refactor the intents
+[#] 27. refactor the intents
 [ ] 28. the target of intent is BehaviorIntent -> RouteIntent -> Trajectory -> TFC
 [#] 29. Refine the BehaviorIntent [LOW priority] Rename
 [#] 30. Refine RouteIntent [LOW priority]
@@ -35,6 +35,6 @@
 [#] 35. generate bezier based on different start
 [/] 36. generate bezier based on different curvature distribution
 [#] 37. implement the skeleton of static vector
-38. move GagaIntent to ControlCommandIntent
+[#] 38. move GagaIntent to ControlCommandIntent
 [#] 39. Create Vehicle Sensor intent
-
+[ ] 40. refactor the mcap writer, 1) fix schema id problem

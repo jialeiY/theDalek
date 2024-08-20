@@ -1,10 +1,6 @@
-#define MCAP_IMPLEMENTATION
 
 #include "intents/debug_writer_intent/debug_writer_intent.h"
-#include <google/protobuf/descriptor.h>
-#include <google/protobuf/descriptor.pb.h>
 #include <cstdint>
-#include <mcap/writer.hpp>
 #include "data/codec/behavior_topic_codec.h"
 #include "data/codec/ego_state_topic_codec.h"
 #include "data/codec/motion_planning_debug_topic_codec.h"
@@ -24,42 +20,11 @@
 namespace cooboc {
 namespace intent {
 
-namespace {
-
-
-// Recursively adds all `fd` dependencies to `fd_set`.
-void fdSetInternal(google::protobuf::FileDescriptorSet &fd_set,
-                   std::unordered_set<std::string> &files,
-                   const google::protobuf::FileDescriptor *fd) {
-    for (int i = 0; i < fd->dependency_count(); ++i) {
-        const auto *dep    = fd->dependency(i);
-        auto [_, inserted] = files.insert(dep->name());
-        if (!inserted)
-            continue;
-        fdSetInternal(fd_set, files, fd->dependency(i));
-    }
-    fd->CopyTo(fd_set.add_file());
-}
-
-// Returns a serialized google::protobuf::FileDescriptorSet containing
-// the necessary google::protobuf::FileDescriptor's to describe d.
-std::string fdSet(const google::protobuf::Descriptor *d) {
-    std::string res;
-    std::unordered_set<std::string> files;
-    google::protobuf::FileDescriptorSet fd_set;
-    fdSetInternal(fd_set, files, d->file());
-    return fd_set.SerializeAsString();
-}
-
-mcap::Schema createSchema(const google::protobuf::Descriptor *d) {
-    mcap::Schema schema(d->full_name(), "protobuf", fdSet(d));
-    return schema;
-}
-}    // namespace
+namespace {}    // namespace
 
 DebugWriterIntent::DebugWriterIntent() :
-    planningRequestTopicSchema_ {nullptr},
-    planningRequestTopicChannel_ {nullptr},
+    // planningRequestTopicSchema_ {nullptr},
+    // planningRequestTopicChannel_ {nullptr},
     odometryTopicSchema_ {nullptr},
     odometryTopicChannel_ {nullptr},
     egoStateTopicSchema_ {nullptr},
@@ -69,14 +34,25 @@ DebugWriterIntent::DebugWriterIntent() :
     trajectoryTopicSchema_ {nullptr},
     trajectoryTopicChannel_ {nullptr},
     motionPlanningDebugTopicSchema_ {nullptr},
-    motionPlanningDebugTopicChannel_ {nullptr} {}
+    motionPlanningDebugTopicChannel_ {nullptr} {
+    mcapTopicConverterList_.push_back(
+      new McapTopicCoonverter(&behaviorTopic, "/planning/behavior"));
+}
+
+
 DebugWriterIntent::~DebugWriterIntent() {
-    if (planningRequestTopicSchema_ != nullptr) {
-        delete planningRequestTopicSchema_;
+    while (mcapTopicConverterList_.size() > 0U) {
+        IMcapTopicConverter *c = mcapTopicConverterList_.back();
+        mcapTopicConverterList_.pop_back();
+        delete c;
     }
-    if (planningRequestTopicChannel_ != nullptr) {
-        delete planningRequestTopicChannel_;
-    }
+
+    // if (planningRequestTopicSchema_ != nullptr) {
+    //     delete planningRequestTopicSchema_;
+    // }
+    // if (planningRequestTopicChannel_ != nullptr) {
+    //     delete planningRequestTopicChannel_;
+    // }
 
     // OdometryTopic
     if (odometryTopicSchema_ != nullptr) {
@@ -123,21 +99,30 @@ DebugWriterIntent::~DebugWriterIntent() {
 void DebugWriterIntent::setup() {
     std::ignore = writer_.open("runtime/output.mcap", mcap::McapWriterOptions("haha"));
 
-    // Create and Register Schema
-    planningRequestTopicSchema_  = new mcap::Schema();
-    *planningRequestTopicSchema_ = createSchema(cooboc::proto::BehaviorTopic::descriptor());
-    writer_.addSchema(*planningRequestTopicSchema_);
+    for (IMcapTopicConverter *mcapTopicPtr : mcapTopicConverterList_) {
+        mcapTopicPtr->setupSchema();
+        writer_.addSchema(*(mcapTopicPtr->getSchema()));
+        mcapTopicPtr->setupChannel();
+        writer_.addChannel(*(mcapTopicPtr->getChannel()));
+    }
 
-    // Create and Register Channel
-    planningRequestTopicChannel_ = new mcap::Channel();
-    *planningRequestTopicChannel_ =
-      mcap::Channel("/planning/behavior", "protobuf", planningRequestTopicSchema_->id);
-    writer_.addChannel(*planningRequestTopicChannel_);    // Assigned channel id written to
+
+    // // Create and Register Schema
+    // planningRequestTopicSchema_ = new mcap::Schema();
+    // *planningRequestTopicSchema_ =
+    //   mcap_helper::createSchema(cooboc::proto::BehaviorTopic::descriptor());
+    // writer_.addSchema(*planningRequestTopicSchema_);
+
+    // // Create and Register Channel
+    // planningRequestTopicChannel_ = new mcap::Channel();
+    // *planningRequestTopicChannel_ =
+    //   mcap::Channel("/planning/behavior", "protobuf", planningRequestTopicSchema_->id);
+    // writer_.addChannel(*planningRequestTopicChannel_);    // Assigned channel id written to
     // planningRequestTopicChannel.id
 
     // Odometry Schema
     odometryTopicSchema_  = new mcap::Schema();
-    *odometryTopicSchema_ = createSchema(cooboc::proto::OdometryTopic::descriptor());
+    *odometryTopicSchema_ = mcap_helper::createSchema(cooboc::proto::OdometryTopic::descriptor());
     writer_.addSchema(*odometryTopicSchema_);
     // Register channel
     odometryTopicChannel_  = new mcap::Channel();
@@ -147,7 +132,7 @@ void DebugWriterIntent::setup() {
     // EgoStateTopic
     // Register Schema
     egoStateTopicSchema_  = new mcap::Schema();
-    *egoStateTopicSchema_ = createSchema(cooboc::proto::EgoStateTopic::descriptor());
+    *egoStateTopicSchema_ = mcap_helper::createSchema(cooboc::proto::EgoStateTopic::descriptor());
     writer_.addSchema(*egoStateTopicSchema_);
     // Register channel
     egoStateTopicChannel_  = new mcap::Channel();
@@ -158,7 +143,7 @@ void DebugWriterIntent::setup() {
     // Route Topic
     // route Schema
     routeTopicSchema_  = new mcap::Schema();
-    *routeTopicSchema_ = createSchema(cooboc::proto::RouteTopic::descriptor());
+    *routeTopicSchema_ = mcap_helper::createSchema(cooboc::proto::RouteTopic::descriptor());
     writer_.addSchema(*routeTopicSchema_);
     // Register channel
     routeTopicChannel_  = new mcap::Channel();
@@ -167,8 +152,9 @@ void DebugWriterIntent::setup() {
 
     // Trajectory Topic
     // route Schema
-    trajectoryTopicSchema_  = new mcap::Schema();
-    *trajectoryTopicSchema_ = createSchema(cooboc::proto::TrajectoryTopic::descriptor());
+    trajectoryTopicSchema_ = new mcap::Schema();
+    *trajectoryTopicSchema_ =
+      mcap_helper::createSchema(cooboc::proto::TrajectoryTopic::descriptor());
     writer_.addSchema(*trajectoryTopicSchema_);
     // Register channel
     trajectoryTopicChannel_  = new mcap::Channel();
@@ -179,7 +165,7 @@ void DebugWriterIntent::setup() {
     // route Schema
     motionPlanningDebugTopicSchema_ = new mcap::Schema();
     *motionPlanningDebugTopicSchema_ =
-      createSchema(cooboc::proto::MotionPlanningDebugTopic::descriptor());
+      mcap_helper::createSchema(cooboc::proto::MotionPlanningDebugTopic::descriptor());
     writer_.addSchema(*motionPlanningDebugTopicSchema_);
 
     // Register channel
@@ -188,17 +174,18 @@ void DebugWriterIntent::setup() {
       mcap::Channel("/debug/motion_planning", "protobuf", motionPlanningDebugTopicSchema_->id);
     writer_.addChannel(*motionPlanningDebugTopicChannel_);
 }
-
+std::uint32_t sequence {0U};
 void DebugWriterIntent::tick() {
-    static std::uint32_t sequence {0U};
-
+    for (IMcapTopicConverter *mcapTopicPtr : mcapTopicConverterList_) {
+        // std::ignore = writer_.write(mcapTopicPtr->convertMessage());
+    }
     // Planning Request
     {
         proto::BehaviorTopic payloadMsg = data::convert(behaviorTopic);
         const std::string payload       = payloadMsg.SerializeAsString();
 
         mcap::Message message;
-        message.channelId   = planningRequestTopicChannel_->id;
+        message.channelId   = mcapTopicConverterList_.front()->getChannel()->id;
         message.sequence    = sequence++;
         message.logTime     = utils::time::nanoseconds();
         message.publishTime = utils::time::nanoseconds();
@@ -207,6 +194,8 @@ void DebugWriterIntent::tick() {
 
         std::ignore = writer_.write(message);
     }
+
+
     // Odometry
     {
         proto::OdometryTopic payloadMsg = data::convert(odometryTopic);

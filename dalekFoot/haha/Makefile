@@ -45,6 +45,7 @@ CPP_SOURCES += intents/odometry_intent/odometry_intent.cpp
 CPP_SOURCES += intents/route_intent/route_intent.cpp
 CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += intents/trajectory_intent/trajectory_intent.cpp
+CPP_SOURCES += intents/debug_writer_intent/mcap_helper.cpp
 CPP_SOURCES += intents/vehicle_request_intent/vehicle_request_intent.cpp
 CPP_SOURCES += main.cpp
 CPP_SOURCES += simulator/simulator.cpp
