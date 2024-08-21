@@ -8,7 +8,6 @@ namespace cooboc {
 namespace data {
 proto::EgoStateTopic convert(const intent::EgoStateTopic &in) {
     proto::EgoStateTopic out;
-    std::printf("convert:???\r\n");
     *out.mutable_velocity()     = convert(in.velocity);
     *out.mutable_acceleration() = convert(in.acceleration);
     out.set_angularvelocity(in.angularVelocity);

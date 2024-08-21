@@ -39,3 +39,5 @@
 [#] 39. Create Vehicle Sensor intent
 [#] 40. refactor the mcap writer, 1) fix schema id problem
 [ ] 41. Bug posy always positive
+[ ] 42. clean the code in debugWriter
+

@@ -54,10 +54,7 @@ class McapTopicCoonverter : public IMcapTopicConverter {
   public:
     McapTopicCoonverter(TInternal *topic, const std::string &channelName) :
         IMcapTopicConverter {channelName},
-        topic_ {topic}
-
-    //,        descriptor_ {d}
-    {}
+        topic_ {topic} {}
     McapTopicCoonverter(const McapTopicCoonverter &) = delete;
     McapTopicCoonverter(McapTopicCoonverter &&)      = delete;
     void operator=(const McapTopicCoonverter &)      = delete;
@@ -66,16 +63,7 @@ class McapTopicCoonverter : public IMcapTopicConverter {
     virtual void setupSchema() override {
         schema_     = new mcap::Schema();
         using TMcap = decltype(data::convert(*topic_));
-        // auto mcapTopic = data::convert(*topic_);
-        // using T2       = decltype(mcapTopic);
-
-        // std::printf("this type: %s, proto topic: %s, T2: %s\r\n",
-        //             typeid(*this).name(),
-        //             typeid(TMcap).name(),
-        //             typeid(T2).name());
-        *schema_ = mcap_helper::createSchema(TMcap::descriptor());
-        //*schema_ = mcap_helper::createSchema(cooboc::proto::BehaviorTopic::descriptor());
-        //*schema_ = mcap_helper::createSchema(descriptor_);
+        *schema_    = mcap_helper::createSchema(TMcap::descriptor());
     }
     virtual void setupChannel() override {
         channel_ = new mcap::Channel(channelName_, "protobuf", schema_->id);
@@ -86,8 +74,6 @@ class McapTopicCoonverter : public IMcapTopicConverter {
 
         const std::string payload = payloadMsg.SerializeAsString();
         extern std::uint32_t sequence;
-        // std::printf("msg: %s, velo: %f\r\n", payload.c_str(),
-        // payloadMsg.velocity().orientation());
 
         mcap::Message message;
         message.channelId   = channel_->id;
@@ -104,7 +90,6 @@ class McapTopicCoonverter : public IMcapTopicConverter {
 
   private:
     TInternal *topic_;
-    // const google::protobuf::Descriptor *descriptor_;
 };
 
 class DebugWriterIntent : public IntentBase {
@@ -116,25 +101,6 @@ class DebugWriterIntent : public IntentBase {
 
   private:
     mcap::McapWriter writer_;
-    // mcap::Schema *planningRequestTopicSchema_ {nullptr};
-    // mcap::Channel *planningRequestTopicChannel_ {nullptr};
-
-    // mcap::Schema *odometryTopicSchema_ {nullptr};
-    // mcap::Channel *odometryTopicChannel_ {nullptr};
-
-    // mcap::Schema *egoStateTopicSchema_ {nullptr};
-    // mcap::Channel *egoStateTopicChannel_ {nullptr};
-
-    // mcap::Schema *routeTopicSchema_ {nullptr};
-    // mcap::Channel *routeTopicChannel_ {nullptr};
-
-    // mcap::Schema *trajectoryTopicSchema_ {nullptr};
-    // mcap::Channel *trajectoryTopicChannel_ {nullptr};
-
-
-    // mcap::Schema *motionPlanningDebugTopicSchema_ {nullptr};
-    // mcap::Channel *motionPlanningDebugTopicChannel_ {nullptr};
-
     std::vector<IMcapTopicConverter *> mcapTopicConverterList_ {};
 };
 }    // namespace intent
