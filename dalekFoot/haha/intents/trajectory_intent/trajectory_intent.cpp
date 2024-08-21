@@ -124,13 +124,13 @@ std::optional<float> makeTrajectory(const data::Position2D &startPoint,
                                     PassingPointList &passingPointList) {
     std::optional<float> lastOrientationOpt {};
 
-    std::printf(
-      "from (%f, %f) -> (%f, %f), %u\r\n",
-      startPoint.x,
-      startPoint.y,
-      endPoint.x,
-      endPoint.y,
-      static_cast<std::underlying_type<data::CurvatureDistribution>::type>(curvatureDistribution));
+    // std::printf(
+    //   "from (%f, %f) -> (%f, %f), %u\r\n",
+    //   startPoint.x,
+    //   startPoint.y,
+    //   endPoint.x,
+    //   endPoint.y,
+    //   static_cast<std::underlying_type<data::CurvatureDistribution>::type>(curvatureDistribution));
     if (maximumPointNumber < 1U) {
         throw std::string("the maximumPointNumber should not less than 1");
         return lastOrientationOpt;
@@ -185,7 +185,7 @@ std::optional<float> makeTrajectory(const data::Position2D &startPoint,
         }
     }
 
-    printf("size: %ld\r\n", controlPoints.size());
+    // printf("size: %ld\r\n", controlPoints.size());
     switch (controlPoints.size()) {
         case (2U): {
             std::fprintf(stderr, "direct line not implemented yet\r\n");
