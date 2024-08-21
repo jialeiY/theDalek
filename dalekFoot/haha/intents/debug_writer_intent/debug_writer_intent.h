@@ -41,7 +41,7 @@ class IMcapTopicConverter {
     virtual void setupChannel() = 0;
     mcap::Schema *getSchema(void) const { return schema_; }
     mcap::Channel *getChannel(void) const { return channel_; }
-    virtual mcap::Message convertMessage(void) const = 0;
+    virtual mcap::Message convertMessage(mcap::McapWriter &writer) const = 0;
 
   protected:
     mcap::Schema *schema_ {nullptr};
@@ -54,7 +54,10 @@ class McapTopicCoonverter : public IMcapTopicConverter {
   public:
     McapTopicCoonverter(TInternal *topic, const std::string &channelName) :
         IMcapTopicConverter {channelName},
-        topic_ {topic} {}
+        topic_ {topic}
+
+    //,        descriptor_ {d}
+    {}
     McapTopicCoonverter(const McapTopicCoonverter &) = delete;
     McapTopicCoonverter(McapTopicCoonverter &&)      = delete;
     void operator=(const McapTopicCoonverter &)      = delete;
@@ -63,18 +66,28 @@ class McapTopicCoonverter : public IMcapTopicConverter {
     virtual void setupSchema() override {
         schema_     = new mcap::Schema();
         using TMcap = decltype(data::convert(*topic_));
-        // *schema_    = mcap_helper::createSchema(TMcap::descriptor());
-        *schema_ = mcap_helper::createSchema(cooboc::proto::BehaviorTopic::descriptor());
+        // auto mcapTopic = data::convert(*topic_);
+        // using T2       = decltype(mcapTopic);
+
+        // std::printf("this type: %s, proto topic: %s, T2: %s\r\n",
+        //             typeid(*this).name(),
+        //             typeid(TMcap).name(),
+        //             typeid(T2).name());
+        *schema_ = mcap_helper::createSchema(TMcap::descriptor());
+        //*schema_ = mcap_helper::createSchema(cooboc::proto::BehaviorTopic::descriptor());
+        //*schema_ = mcap_helper::createSchema(descriptor_);
     }
     virtual void setupChannel() override {
         channel_ = new mcap::Channel(channelName_, "protobuf", schema_->id);
     }
 
-    virtual mcap::Message convertMessage(void) const {
-        auto payloadMsg           = data::convert(*topic_);
-        const std::string payload = payloadMsg.SerializeAsString();
+    virtual mcap::Message convertMessage(mcap::McapWriter &writer) const {
+        auto payloadMsg = data::convert(*topic_);
 
+        const std::string payload = payloadMsg.SerializeAsString();
         extern std::uint32_t sequence;
+        // std::printf("msg: %s, velo: %f\r\n", payload.c_str(),
+        // payloadMsg.velocity().orientation());
 
         mcap::Message message;
         message.channelId   = channel_->id;
@@ -83,11 +96,15 @@ class McapTopicCoonverter : public IMcapTopicConverter {
         message.publishTime = utils::time::nanoseconds();
         message.data        = reinterpret_cast<const std::byte *>(payload.data());
         message.dataSize    = payload.size();
+
+        writer.write(message);
+
         return message;
     }
 
   private:
     TInternal *topic_;
+    // const google::protobuf::Descriptor *descriptor_;
 };
 
 class DebugWriterIntent : public IntentBase {
@@ -102,21 +119,21 @@ class DebugWriterIntent : public IntentBase {
     // mcap::Schema *planningRequestTopicSchema_ {nullptr};
     // mcap::Channel *planningRequestTopicChannel_ {nullptr};
 
-    mcap::Schema *odometryTopicSchema_ {nullptr};
-    mcap::Channel *odometryTopicChannel_ {nullptr};
+    // mcap::Schema *odometryTopicSchema_ {nullptr};
+    // mcap::Channel *odometryTopicChannel_ {nullptr};
 
-    mcap::Schema *egoStateTopicSchema_ {nullptr};
-    mcap::Channel *egoStateTopicChannel_ {nullptr};
+    // mcap::Schema *egoStateTopicSchema_ {nullptr};
+    // mcap::Channel *egoStateTopicChannel_ {nullptr};
 
-    mcap::Schema *routeTopicSchema_ {nullptr};
-    mcap::Channel *routeTopicChannel_ {nullptr};
+    // mcap::Schema *routeTopicSchema_ {nullptr};
+    // mcap::Channel *routeTopicChannel_ {nullptr};
 
-    mcap::Schema *trajectoryTopicSchema_ {nullptr};
-    mcap::Channel *trajectoryTopicChannel_ {nullptr};
+    // mcap::Schema *trajectoryTopicSchema_ {nullptr};
+    // mcap::Channel *trajectoryTopicChannel_ {nullptr};
 
 
-    mcap::Schema *motionPlanningDebugTopicSchema_ {nullptr};
-    mcap::Channel *motionPlanningDebugTopicChannel_ {nullptr};
+    // mcap::Schema *motionPlanningDebugTopicSchema_ {nullptr};
+    // mcap::Channel *motionPlanningDebugTopicChannel_ {nullptr};
 
     std::vector<IMcapTopicConverter *> mcapTopicConverterList_ {};
 };

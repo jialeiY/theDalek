@@ -37,4 +37,5 @@
 [#] 37. implement the skeleton of static vector
 [#] 38. move GagaIntent to ControlCommandIntent
 [#] 39. Create Vehicle Sensor intent
-[ ] 40. refactor the mcap writer, 1) fix schema id problem
+[#] 40. refactor the mcap writer, 1) fix schema id problem
+[ ] 41. Bug posy always positive
