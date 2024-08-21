@@ -1,0 +1,7 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+message WheelControlPlanning {
+    repeated float speed = 1;
+}

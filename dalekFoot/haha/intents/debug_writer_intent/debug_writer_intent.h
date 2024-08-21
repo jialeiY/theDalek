@@ -12,6 +12,7 @@
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
 #include "data/codec/trajectory_topic_codec.h"
+#include "data/codec/vehicle_request_topic_codec.h"
 #include "intents/debug_writer_intent/mcap_helper.h"
 #include "utils/time.h"
 
@@ -50,16 +51,16 @@ class IMcapTopicConverter {
 };
 
 template<typename TInternal>
-class McapTopicCoonverter : public IMcapTopicConverter {
+class McapTopicConverter : public IMcapTopicConverter {
   public:
-    McapTopicCoonverter(TInternal *topic, const std::string &channelName) :
+    McapTopicConverter(TInternal *topic, const std::string &channelName) :
         IMcapTopicConverter {channelName},
         topic_ {topic} {}
-    McapTopicCoonverter(const McapTopicCoonverter &) = delete;
-    McapTopicCoonverter(McapTopicCoonverter &&)      = delete;
-    void operator=(const McapTopicCoonverter &)      = delete;
-    void operator=(McapTopicCoonverter &&)           = delete;
-    virtual ~McapTopicCoonverter() {}
+    McapTopicConverter(const McapTopicConverter &) = delete;
+    McapTopicConverter(McapTopicConverter &&)      = delete;
+    void operator=(const McapTopicConverter &)     = delete;
+    void operator=(McapTopicConverter &&)          = delete;
+    virtual ~McapTopicConverter() {}
     virtual void setupSchema() override {
         schema_     = new mcap::Schema();
         using TMcap = decltype(data::convert(*topic_));

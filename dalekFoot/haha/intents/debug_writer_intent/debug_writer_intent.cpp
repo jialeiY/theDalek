@@ -7,14 +7,17 @@
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
 #include "data/codec/trajectory_topic_codec.h"
+#include "data/codec/vehicle_request_topic_codec.h"
 #include "gen/data/proto/behavior_topic.pb.h"
 #include "gen/data/proto/ego_state_topic.pb.h"
 #include "gen/data/proto/motion_planning_debug_topic.pb.h"
 #include "gen/data/proto/odometry_topic.pb.h"
 #include "gen/data/proto/route_topic.pb.h"
 #include "gen/data/proto/trajectory_topic.pb.h"
+#include "gen/data/proto/vehicle_request_topic.pb.h"
 #include "intents/topics/odometry_topic.h"
 #include "intents/topics/topics.h"
+#include "intents/topics/vehicle_request_topic.h"
 #include "utils/time.h"
 
 namespace cooboc {
@@ -24,15 +27,16 @@ namespace {}    // namespace
 
 DebugWriterIntent::DebugWriterIntent() {
     mcapTopicConverterList_.push_back(
-      new McapTopicCoonverter<cooboc::intent::EgoStateTopic>(&egoStateTopic, "/ego_state"));
-    mcapTopicConverterList_.push_back(new McapTopicCoonverter(&odometryTopic, "/odometry"));
+      new McapTopicConverter<cooboc::intent::EgoStateTopic>(&egoStateTopic, "/ego_state"));
+    mcapTopicConverterList_.push_back(new McapTopicConverter(&odometryTopic, "/odometry"));
+    mcapTopicConverterList_.push_back(new McapTopicConverter(&behaviorTopic, "/planning/behavior"));
+    mcapTopicConverterList_.push_back(new McapTopicConverter(&routeTopic, "/planning/route"));
     mcapTopicConverterList_.push_back(
-      new McapTopicCoonverter(&behaviorTopic, "/planning/behavior"));
-    mcapTopicConverterList_.push_back(new McapTopicCoonverter(&routeTopic, "/planning/route"));
+      new McapTopicConverter(&trajectoryTopic, "/planning/trajectory"));
     mcapTopicConverterList_.push_back(
-      new McapTopicCoonverter(&trajectoryTopic, "/planning/trajectory"));
+      new McapTopicConverter(&motionPlanningDebugTopic, "/debug/motion_planning"));
     mcapTopicConverterList_.push_back(
-      new McapTopicCoonverter(&motionPlanningDebugTopic, "/debug/motion_planning"));
+      new McapTopicConverter(&vehicleRequestTopic, "/vehicle/request"));
 }
 
 

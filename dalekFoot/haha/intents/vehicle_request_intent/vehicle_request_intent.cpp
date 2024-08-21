@@ -12,7 +12,7 @@ VehicleRequestIntent::~VehicleRequestIntent() {}
 void VehicleRequestIntent::setup() {
     for (std::size_t i {0U}; i < 4U; ++i) {
         for (std::size_t j {0U}; j < 10U; ++j) {
-            vehicleRequestTopic.wheelSpeedPlanning[i][j] = 0.0F;
+            vehicleRequestTopic.wheelControlPlanning[i].speed[j] = 0.0F;
         }
     }
 }
@@ -21,13 +21,18 @@ void VehicleRequestIntent::tick() {
 
     const data::PolarVector2D fakeVelocity = {utils::math::PI / 16.0F, 0.3F};
 
-    const data::Vector2D velocityVec = utils::math::to<data::Vector2D>(fakeVelocity);
-    const float rotation             = 0.5F;
 
-    vehicleRequestTopic.wheelSpeedPlanning[0U][0U] = velocityVec.x + velocityVec.y + rotation;
-    vehicleRequestTopic.wheelSpeedPlanning[1U][0U] = velocityVec.x - velocityVec.y + rotation;
-    vehicleRequestTopic.wheelSpeedPlanning[2U][0U] = velocityVec.x + velocityVec.y - rotation;
-    vehicleRequestTopic.wheelSpeedPlanning[3U][0U] = velocityVec.x - velocityVec.y - rotation;
+    const data::Vector2D velocityVec = utils::math::to<data::Vector2D>(fakeVelocity);
+    const float rotation             = 0.01F;
+
+    vehicleRequestTopic.wheelControlPlanning[0U].speed[0U] =
+      velocityVec.x + velocityVec.y + rotation;
+    vehicleRequestTopic.wheelControlPlanning[1U].speed[0U] =
+      velocityVec.x - velocityVec.y + rotation;
+    vehicleRequestTopic.wheelControlPlanning[2U].speed[0U] =
+      velocityVec.x + velocityVec.y - rotation;
+    vehicleRequestTopic.wheelControlPlanning[3U].speed[0U] =
+      velocityVec.x - velocityVec.y - rotation;
 
     // do nothing
 }

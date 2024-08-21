@@ -8,10 +8,12 @@
 namespace cooboc {
 namespace intent {
 
-using WheelSpeedPlanning = float[10];
+struct WheelControlPlanning {
+    float speed[10];
+};
 
 struct VehicleRequestTopic {
-    WheelSpeedPlanning wheelSpeedPlanning[4];
+    WheelControlPlanning wheelControlPlanning[4];
 };
 }    // namespace intent
 }    // namespace cooboc
