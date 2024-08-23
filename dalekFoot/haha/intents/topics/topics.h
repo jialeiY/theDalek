@@ -6,14 +6,15 @@
 #include "intents/topics/motion_planning_debug_topic.h"
 #include "intents/topics/odometry_topic.h"
 #include "intents/topics/route_topic.h"
+#include "intents/topics/system_debug_topic.h"
 #include "intents/topics/trajectory_topic.h"
 #include "intents/topics/vehicle_request_topic.h"
 #include "intents/topics/vehicle_response_topic.h"
 
-
 namespace cooboc {
 namespace intent {
 
+extern SystemDebugTopic systemDebugTopic;
 extern OdometryTopic odometryTopic;
 extern EgoStateTopic egoStateTopic;
 extern RouteTopic routeTopic;

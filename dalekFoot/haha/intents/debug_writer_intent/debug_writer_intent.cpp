@@ -62,6 +62,10 @@ void DebugWriterIntent::setup() {
 }
 std::uint32_t sequence {0U};
 void DebugWriterIntent::tick() {
+    systemDebugTopic.cycleEndTime = utils::time::nanoseconds();
+    const std::uint64_t duration  = systemDebugTopic.cycleEndTime - systemDebugTopic.cycleStartTime;
+    std::printf("druation: %lu\r\n", duration);
+
     for (IMcapTopicConverter *mcapTopicPtr : mcapTopicConverterList_) {
         mcapTopicPtr->convertMessage(writer_);
     }

@@ -93,6 +93,7 @@ DBG := -g -O0
 OPT := -Os
 
 BUILD_OPT := $(DBG)
+# BUILD_OPT := $(OPT)
 
 $(GEN_DIR)/%.pb.cc: %.proto Makefile
 	mkdir -p $(dir $@)

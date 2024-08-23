@@ -11,7 +11,7 @@
 #include "intents/topics/vehicle_request_topic.h"
 #include "intents/trajectory_intent/trajectory_intent.h"
 #include "intents/vehicle_request_intent/vehicle_request_intent.h"
-
+#include "utils/time.h"
 
 namespace cooboc {
 namespace intent {
@@ -48,6 +48,9 @@ void IntentManager::updateVehicleResponse(data::VehicleResponse vehicleResponse)
 }
 
 void IntentManager::tick() {
+    systemDebugTopic.cycleStartTime = utils::time::nanoseconds();
+    systemDebugTopic.cycleEndTime   = 0U;
+
     for (IntentBase *intentPtr : intents_) { intentPtr->tick(); }
 }
 
