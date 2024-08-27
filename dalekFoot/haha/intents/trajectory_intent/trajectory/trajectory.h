@@ -1,6 +1,7 @@
 #ifndef __INTENTS_TRAJECTORY_INTENT_TRAJECTORY_TRAJECTORY_H__
 #define __INTENTS_TRAJECTORY_INTENT_TRAJECTORY_TRAJECTORY_H__
 
+#include <array>
 #include <optional>
 #include "data/defs/position2d.h"
 #include "data/defs/route_segment.h"
@@ -14,6 +15,7 @@ namespace trajectory {
 
 using PassingPointList =
   data::StaticVector<data::Position2D, TrajectoryTopic::kPassingPointCapacity>;
+using PassingPointsOrientation = std::array<float, TrajectoryTopic::kPassingPointCapacity>;
 
 /**
  * Generate passing point list based on route information
@@ -28,6 +30,14 @@ void generatePassingPointListBasedOnRoute(const data::Position2D &startPoint,
                                           const std::size_t routeSegmentSize,
                                           PassingPointList &passingPointList);
 
+/**
+ * Calculate each trajectory segment's orientation
+ * @param passingPointList [in]: the trajectory passing point list
+ * @param passingPointsOrientation [out]: the orientation of each segment
+ * @return void
+ */
+void calculatePassingPointsOrientation(const PassingPointList &passingPointList,
+                                       PassingPointsOrientation &passingPointsOrientation);
 
 namespace detail {
 

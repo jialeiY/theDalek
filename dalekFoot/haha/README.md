@@ -40,6 +40,6 @@
 - [X] 40. refactor the mcap writer, 1) fix schema id problem
 - [ ] 41. Bug posy always positive
 - [X] 42. clean the code in debugWriter
-- [ ] 43. update trajectory, add more field (orientation)
-- [ ] 44. TrajectoryIntent, make internal trajectory cache, and copy result in the end
+- [X] 43. update trajectory, add more field (orientation)
+- [X] 44. TrajectoryIntent, make internal trajectory cache, and copy result in the end
 - [ ] 45. Change routeSegment to route point

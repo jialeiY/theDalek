@@ -39,7 +39,8 @@ class StaticVector {
 
     void push_back(T&& data) { emplace_back(std::move(data)); }
     const T& back() { return dataPtr_[size_ - 1U]; }
-    const T& operator[](std::size_t i) { return dataPtr_[i]; }
+    const T& operator[](const std::size_t i) { return dataPtr_[i]; }
+    const T& operator[](const std::size_t i) const { return dataPtr_[i]; }
 
     void reset() { size_ = 0U; }
 

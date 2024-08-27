@@ -50,6 +50,21 @@ void generatePassingPointListBasedOnRoute(const data::Position2D &startPoint_,
     }
 }
 
+void calculatePassingPointsOrientation(const PassingPointList &passingPointList,
+                                       PassingPointsOrientation &passingPointsOrientation) {
+    if (passingPointList.size() < 2U) {
+        return;
+    }
+    passingPointsOrientation[0U] = 0.0F;
+
+    for (std::size_t i {1U}; i < passingPointList.size(); ++i) {
+        const data::Position2D &beginPoint {passingPointList[i - 1U]};
+        const data::Position2D &endPoint {passingPointList[i]};
+        data::PolarVector2D vec     = utils::math::to<data::PolarVector2D>(endPoint - beginPoint);
+        passingPointsOrientation[i] = vec.orientation;
+    }
+}
+
 namespace detail {
 
 constexpr static float kBezierSmoothRatio {0.3F};
