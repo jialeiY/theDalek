@@ -1,4 +1,5 @@
 #include "intents/intent_manager.h"
+#include <cstdio>
 #include "data/defs/vehicle_response.h"
 #include "intents/behavior_intent/behavior_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
@@ -51,6 +52,7 @@ void IntentManager::tick() {
     systemDebugTopic.cycleStartTime = utils::time::nanoseconds();
     systemDebugTopic.cycleEndTime   = 0U;
 
+    std::printf("\r\n=======\r\n");
     for (IntentBase *intentPtr : intents_) { intentPtr->tick(); }
 }
 

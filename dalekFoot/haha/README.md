@@ -1,43 +1,45 @@
-[#] 1. remove lz and z
-[#] 2. setup .vscode c_cpp
-[#] 3. refactor topics files
-[#] 4. create proto files
-[#] 5. write the topic into mcap
-[#] 6. output of the topic
-[#] 7. the proto file of RouteTopic
-[#] 8. the codec of RouteTopic
-[#] 9. output from debug
-[#] 10. the plugin to show he route
-[/] 11. lateral planning of motion
-[ ] 12. longitudinal planning of motion
-[#] 13. vector2D -> PolarVector2D
-[#] 14. position2D -> Vector2D
-[#] 15. remove data/codec/position2d_codec.cpp
-[#] 16. add ego state topic proto
-[#] 17. add ego state topic convert
-[#] 18. Frame translate in foxglove
-[#] 19. write ego state to debug
-[#] 20. show ego state in foxglove
-[#] 21. Bug. the maximum a not working, output a list to mcap
-[#] 22. Bug. sometimes, the pid not working
-[#] 23. Position not correct
-[#] 24. the velocity not correct
-[#] 25. coredump on abort
-[ ] 26. curve route longitudinal planning
-[#] 27. refactor the intents
-[ ] 28. the target of intent is BehaviorIntent -> RouteIntent -> Trajectory -> TFC
-[#] 29. Refine the BehaviorIntent [LOW priority] Rename
-[#] 30. Refine RouteIntent [LOW priority]
-[ ] 31. TrajectoryIntent to get the resolution of a Route
-[ ] 32. Follow the Trajectory in real time
-[#] 33. check current trajectory generation
-[#] 34. generate all trajectory
-[#] 35. generate bezier based on different start
-[/] 36. generate bezier based on different curvature distribution
-[#] 37. implement the skeleton of static vector
-[#] 38. move GagaIntent to ControlCommandIntent
-[#] 39. Create Vehicle Sensor intent
-[#] 40. refactor the mcap writer, 1) fix schema id problem
-[ ] 41. Bug posy always positive
-[#] 42. clean the code in debugWriter
-
+- [X] 1. remove lz and z
+- [X] 2. setup .vscode c_cpp
+- [X] 3. refactor topics files
+- [X] 4. create proto files
+- [X] 5. write the topic into mcap
+- [X] 6. output of the topic
+- [X] 7. the proto file of RouteTopic
+- [X] 8. the codec of RouteTopic
+- [X] 9. output from debug
+- [X] 10. the plugin to show he route
+- [/] 11. lateral planning of motion
+- [ ] 12. longitudinal planning of motion
+- [X] 13. vector2D -> PolarVector2D
+- [X] 14. position2D -> Vector2D
+- [X] 15. remove data/codec/position2d_codec.cpp
+- [X] 16. add ego state topic proto
+- [X] 17. add ego state topic convert
+- [X] 18. Frame translate in foxglove
+- [X] 19. write ego state to debug
+- [X] 20. show ego state in foxglove
+- [X] 21. Bug. the maximum a not working, output a list to mcap
+- [X] 22. Bug. sometimes, the pid not working
+- [X] 23. Position not correct
+- [X] 24. the velocity not correct
+- [X] 25. coredump on abort
+- [ ] 26. curve route longitudinal planning
+- [X] 27. refactor the intents
+- [ ] 28. the target of intent is BehaviorIntent -> RouteIntent -> Trajectory -> TFC
+- [X] 29. Refine the BehaviorIntent [LOW priority] Rename
+- [X] 30. Refine RouteIntent [LOW priority]
+- [ ] 31. TrajectoryIntent to get the resolution of a Route
+- [ ] 32. Follow the Trajectory in real time
+- [X] 33. check current trajectory generation
+- [X] 34. generate all trajectory
+- [X] 35. generate bezier based on different start
+- [/] 36. generate bezier based on different curvature distribution
+- [X] 37. implement the skeleton of static vector
+- [X] 38. move GagaIntent to ControlCommandIntent
+- [X] 39. Create Vehicle Sensor intent
+- [X] 40. refactor the mcap writer, 1) fix schema id problem
+- [ ] 41. Bug posy always positive
+- [X] 42. clean the code in debugWriter
+- [ ] 43. update trajectory, add more field (orientation)
+- [ ] 44. TrajectoryIntent, make internal trajectory cache, and copy result in the end
+- [ ] 45. Change routeSegment to route point

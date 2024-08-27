@@ -8,6 +8,7 @@ namespace data {
 proto::PassingPoint convert(const data::PassingPoint &in) {
     proto::PassingPoint out;
     *out.mutable_position() = convert(in.position);
+    out.set_orientation(in.orientation);
     return out;
 }
 }    // namespace data

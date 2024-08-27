@@ -24,6 +24,7 @@ PROTO_FILES += data/proto/waypoint.proto
 PROTO_FILES += data/proto/vehicle_request_topic.proto
 PROTO_FILES += data/proto/wheel_control_planning.proto
 
+CPP_SOURCES += intents/trajectory_intent/trajectory/trajectory.cpp
 CPP_SOURCES += data/codec/behavior_topic_codec.cpp
 CPP_SOURCES += data/codec/ego_state_topic_codec.cpp
 CPP_SOURCES += data/codec/motion_planning_debug_topic_codec.cpp

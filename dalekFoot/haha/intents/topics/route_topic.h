@@ -13,6 +13,7 @@ namespace intent {
 struct RouteTopic {
     static constexpr std::size_t kPolylineCapacity {100U};
 
+    // TODO: change route segment to route point
     bool hasValue {false};
     data::RouteId routeId {0U};
     std::size_t routeSegmentSize {0U};

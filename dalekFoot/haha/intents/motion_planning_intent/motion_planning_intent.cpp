@@ -131,7 +131,6 @@ void MotionPlanningIntent::setup() {
 
 
 void MotionPlanningIntent::tick() {
-    std::cout << std::endl << std::endl << "=======" << std::endl;
     // 0. Setup the input data
     // Odometry
     const data::Pose2D &odometry = odometryTopic.pose;

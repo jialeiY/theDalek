@@ -9,6 +9,10 @@ namespace data {
 template<typename T, std::size_t N>
 class StaticVector {
   public:
+    explicit StaticVector() {
+        dataPtr_ = new T[N];
+        size_    = 0U;
+    }
     explicit StaticVector(T* dataPtr) : dataPtr_ {dataPtr}, size_ {0U} {}
     explicit StaticVector(const StaticVector&)   = delete;
     StaticVector& operator=(const StaticVector&) = delete;
@@ -35,6 +39,9 @@ class StaticVector {
 
     void push_back(T&& data) { emplace_back(std::move(data)); }
     const T& back() { return dataPtr_[size_ - 1U]; }
+    const T& operator[](std::size_t i) { return dataPtr_[i]; }
+
+    void reset() { size_ = 0U; }
 
   private:
     T* dataPtr_;
