@@ -19,7 +19,7 @@ namespace intent {
 
 TrajectoryIntent::TrajectoryIntent() :
     passingPointList_ {},
-    passingPointsOrientation_ {},
+    passingPointsSegment_ {},
     trajectoryId_ {0U} {}
 TrajectoryIntent::~TrajectoryIntent() {}
 void TrajectoryIntent::setup() {
@@ -44,7 +44,7 @@ void TrajectoryIntent::tick() {
                                                      routeTopic.routeSegment,
                                                      routeTopic.routeSegmentSize,
                                                      passingPointList_);
-    trajectory::calculatePassingPointsOrientation(passingPointList_, passingPointsOrientation_);
+    trajectory::calculatePassingPointsSegment(passingPointList_, passingPointsSegment_);
     outputTopic();
 }
 
@@ -53,8 +53,8 @@ void TrajectoryIntent::outputTopic() {
     trajectoryTopic.trajectoryId     = makeNewTrajectoryId();
     trajectoryTopic.passingPointSize = passingPointList_.size();
     for (std::size_t i {0U}; i < passingPointList_.size(); ++i) {
-        trajectoryTopic.passingPoint[i].position    = passingPointList_[i];
-        trajectoryTopic.passingPoint[i].orientation = passingPointsOrientation_[i];
+        trajectoryTopic.passingPoint[i].position = passingPointList_[i];
+        trajectoryTopic.passingPoint[i].segment  = passingPointsSegment_[i];
     }
     trajectoryTopic.routeId = routeTopic.routeId;
 }

@@ -36,7 +36,7 @@ int main(int argc, char *argv[], char **envs) {
         simulator.tick();
 
 
-        usleep(10000ULL);
+        // usleep(10000ULL);
         intentManager.updateVehicleResponse(simulator.getVehicleResponse());
     }
 

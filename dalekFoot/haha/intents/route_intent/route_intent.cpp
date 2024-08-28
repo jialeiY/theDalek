@@ -28,12 +28,12 @@ void RouteIntent::tick() {
     routeTopic.startPoint = data::Position2D {0.0F, 0.0F};
     {
         data::RouteSegment &segment {routeTopic.routeSegment[0U]};
-        segment.endPoint              = data::Position2D {1.0F, 0.0F};
+        segment.endPoint              = data::Position2D {0.3F, 0.0F};
         segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
     }
     {
         data::RouteSegment &segment {routeTopic.routeSegment[1U]};
-        segment.endPoint              = data::Position2D {1.2F, 0.1F};
+        segment.endPoint              = data::Position2D {0.7F, 0.3F};
         segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
     }
     {

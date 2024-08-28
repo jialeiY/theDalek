@@ -43,3 +43,4 @@
 - [X] 43. update trajectory, add more field (orientation)
 - [X] 44. TrajectoryIntent, make internal trajectory cache, and copy result in the end
 - [ ] 45. Change routeSegment to route point
+- [ ] 46. SystemDebugTopic to output the duration of calculation

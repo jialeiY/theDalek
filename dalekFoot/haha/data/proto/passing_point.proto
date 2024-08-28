@@ -1,10 +1,11 @@
 syntax = "proto2";
 
 import "data/proto/vector2d.proto";
+import "data/proto/polar_vector2d.proto";
 
 package cooboc.proto;
 
 message PassingPoint {
-    optional Vector2D position    = 1;
-    optional float    orientation = 2 [default = 0.0];
+    optional Vector2D      position = 1;
+    optional PolarVector2D segment  = 2;
 }

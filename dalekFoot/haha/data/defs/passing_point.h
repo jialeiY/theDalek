@@ -8,8 +8,8 @@ namespace cooboc {
 namespace data {
 
 struct PassingPoint {
-    Position2D position;        // in the world
-    Orientation orientation;    // in the World
+    Position2D position;    // in the world
+    PolarVector2D segment;
 };
 }    // namespace data
 }    // namespace cooboc

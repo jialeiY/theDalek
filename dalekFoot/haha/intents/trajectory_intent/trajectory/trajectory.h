@@ -15,7 +15,8 @@ namespace trajectory {
 
 using PassingPointList =
   data::StaticVector<data::Position2D, TrajectoryTopic::kPassingPointCapacity>;
-using PassingPointsOrientation = std::array<float, TrajectoryTopic::kPassingPointCapacity>;
+using PassingPointsSegment =
+  std::array<data::PolarVector2D, TrajectoryTopic::kPassingPointCapacity>;
 
 /**
  * Generate passing point list based on route information
@@ -31,13 +32,13 @@ void generatePassingPointListBasedOnRoute(const data::Position2D &startPoint,
                                           PassingPointList &passingPointList);
 
 /**
- * Calculate each trajectory segment's orientation
+ * Calculate each trajectory segment's vector
  * @param passingPointList [in]: the trajectory passing point list
- * @param passingPointsOrientation [out]: the orientation of each segment
+ * @param passingPointsOrientation [out]: the polar vector of each segment
  * @return void
  */
-void calculatePassingPointsOrientation(const PassingPointList &passingPointList,
-                                       PassingPointsOrientation &passingPointsOrientation);
+void calculatePassingPointsSegment(const PassingPointList &passingPointList,
+                                   PassingPointsSegment &passingPointsSegment);
 
 namespace detail {
 

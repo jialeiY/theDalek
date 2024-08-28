@@ -137,6 +137,10 @@ void MotionPlanningIntent::tick() {
     // Reference path
     const RouteTopic &route = routeTopic;
 
+    // Calculate lateral profile
+    // using lateralProfile
+
+
     // 1. key reference path where odometry is on it
     detail::ReferencePose refPose = detail::calculatePositionInFrenet(odometry, route);
 

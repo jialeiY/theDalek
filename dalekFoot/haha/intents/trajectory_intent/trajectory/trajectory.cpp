@@ -50,18 +50,18 @@ void generatePassingPointListBasedOnRoute(const data::Position2D &startPoint_,
     }
 }
 
-void calculatePassingPointsOrientation(const PassingPointList &passingPointList,
-                                       PassingPointsOrientation &passingPointsOrientation) {
+void calculatePassingPointsSegment(const PassingPointList &passingPointList,
+                                   PassingPointsSegment &passingPointsSegment) {
     if (passingPointList.size() < 2U) {
         return;
     }
-    passingPointsOrientation[0U] = 0.0F;
+    passingPointsSegment[0U] = data::PolarVector2D {0.0F, 0.0F};
 
     for (std::size_t i {1U}; i < passingPointList.size(); ++i) {
         const data::Position2D &beginPoint {passingPointList[i - 1U]};
         const data::Position2D &endPoint {passingPointList[i]};
-        data::PolarVector2D vec     = utils::math::to<data::PolarVector2D>(endPoint - beginPoint);
-        passingPointsOrientation[i] = vec.orientation;
+        data::PolarVector2D vec = utils::math::to<data::PolarVector2D>(endPoint - beginPoint);
+        passingPointsSegment[i] = vec;
     }
 }
 

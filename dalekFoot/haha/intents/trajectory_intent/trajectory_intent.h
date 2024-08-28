@@ -26,7 +26,7 @@ class TrajectoryIntent : public IntentBase {
 
   private:
     trajectory::PassingPointList passingPointList_ {};
-    trajectory::PassingPointsOrientation passingPointsOrientation_ {};
+    trajectory::PassingPointsSegment passingPointsSegment_ {};
     TrajectoryId trajectoryId_ {0U};
 
     void outputTopic();
