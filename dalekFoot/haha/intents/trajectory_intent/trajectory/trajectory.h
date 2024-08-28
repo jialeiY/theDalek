@@ -6,6 +6,7 @@
 #include "data/defs/position2d.h"
 #include "data/defs/route_segment.h"
 #include "data/defs/static_vector.h"
+#include "intents/topics/common.h"
 #include "intents/topics/trajectory_topic.h"
 
 namespace cooboc {
@@ -13,10 +14,8 @@ namespace intent {
 namespace trajectory {
 
 
-using PassingPointList =
-  data::StaticVector<data::Position2D, TrajectoryTopic::kPassingPointCapacity>;
-using PassingPointsSegment =
-  std::array<data::PolarVector2D, TrajectoryTopic::kPassingPointCapacity>;
+using PassingPointList     = data::StaticVector<data::Position2D, kTrajectoryPassingPointCapacity>;
+using PassingPointsSegment = std::array<data::PolarVector2D, kTrajectoryPassingPointCapacity>;
 
 /**
  * Generate passing point list based on route information

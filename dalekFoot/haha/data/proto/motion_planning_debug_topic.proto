@@ -4,6 +4,11 @@ package cooboc.proto;
 
 import "data/proto/waypoint.proto";
 
+message LongitudinalCurvatureProfile {
+    optional float s         = 1 [default = 0.0];
+    optional float curvature = 2 [default = 0.0];
+}
+
 message MotionPlanningDebugTopic {
     optional uint32   numberOfWaypoints = 1 [default = 0];
     repeated Waypoint waypoints         = 2;
@@ -16,4 +21,6 @@ message MotionPlanningDebugTopic {
 
     repeated float waypoint_velocity_y     = 6;  // Debug
     repeated float waypoint_acceleration_y = 7;  // Debug
+
+    repeated LongitudinalCurvatureProfile longitudinalCurvatureProfile = 8;
 }

@@ -1,5 +1,108 @@
 {
   "configById": {
+    "Plot!13t70s4": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/odometry.pose.position.x",
+          "enabled": false,
+          "color": "#4e98e2"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/odometry.pose.position.y",
+          "enabled": true,
+          "color": "#f5774d"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/odometry.pose.orientation",
+          "enabled": false,
+          "color": "#f7df71"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "currentCustom",
+      "sidebarDimension": 240
+    },
+    "Plot!2ysdrab": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/debug/motion_planning.waypoint_position_x[:]",
+          "enabled": false,
+          "color": "#4e98e2",
+          "label": "pos_x"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/debug/motion_planning.waypoint_position_y[:]",
+          "enabled": true,
+          "color": "#f5774d",
+          "label": "pos_y"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/debug/motion_planning.waypoint_velocity_y[:]",
+          "enabled": false,
+          "color": "#f7df71",
+          "label": "v_y"
+        },
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/debug/motion_planning.waypoint_acceleration_y[:]",
+          "enabled": false,
+          "color": "#5cd6a9",
+          "label": "a_y"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": true,
+      "legendDisplay": "left",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "index",
+      "sidebarDimension": 231,
+      "xAxisPath": {
+        "value": "/debug/motion_planning.waypoint_timepoint[:]"
+      }
+    },
+    "RawMessages!2s9z87o": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/debug/motion_planning",
+      "expansion": {}
+    },
+    "Plot!20fp9jf": {
+      "paths": [
+        {
+          "timestampMethod": "receiveTime",
+          "value": "/debug/motion_planning.longitudinalCurvatureProfile[:].curvature",
+          "enabled": true,
+          "color": "#4e98e2",
+          "label": "s-c"
+        }
+      ],
+      "showXAxisLabels": true,
+      "showYAxisLabels": true,
+      "showLegend": false,
+      "legendDisplay": "floating",
+      "showPlotValuesInLegend": false,
+      "isSynced": true,
+      "xAxisVal": "currentCustom",
+      "sidebarDimension": 240,
+      "xAxisPath": {
+        "value": "/debug/motion_planning.longitudinalCurvatureProfile[:].s"
+      }
+    },
     "3D!18i6zy7": {
       "layers": {
         "845139cb-26bc-40b3-8161-8ab60af4baf5": {
@@ -10,7 +113,7 @@
           "layerId": "foxglove.Grid",
           "divisions": 10,
           "lineWidth": 1,
-          "color": "#248eff",
+          "color": "#248eff88",
           "position": [
             0,
             0,
@@ -22,7 +125,8 @@
             0
           ],
           "order": 1,
-          "size": 1
+          "size": 1,
+          "frameId": "WORLD"
         },
         "816102c1-b562-40f0-9f9e-e201f291e824": {
           "visible": true,
@@ -30,6 +134,7 @@
           "label": "Grid",
           "instanceId": "816102c1-b562-40f0-9f9e-e201f291e824",
           "layerId": "foxglove.Grid",
+          "frameId": "WORLD",
           "size": 10,
           "divisions": 10,
           "lineWidth": 1,
@@ -52,9 +157,9 @@
           "label": "Grid",
           "instanceId": "4facfeb2-2746-4685-8bd3-da00cc87711a",
           "layerId": "foxglove.Grid",
+          "frameId": "WORLD",
           "divisions": 10,
-          "lineWidth": 1,
-          "color": "#248eff",
+          "color": "#248eff66",
           "position": [
             0,
             0,
@@ -66,18 +171,19 @@
             0
           ],
           "order": 3,
-          "size": 0.1
+          "size": 0.1,
+          "lineWidth": 0.3
         }
       },
       "cameraState": {
         "perspective": true,
-        "distance": 0.14537713419151163,
-        "phi": 73.63630634439838,
-        "thetaOffset": 88.4286208482603,
+        "distance": 4.078136514888493,
+        "phi": 18.81823911648746,
+        "thetaOffset": 3.3377118707019595,
         "targetOffset": [
-          0.025751727373724227,
-          0.04066394905583768,
-          -1.209105349622398e-18
+          1.4059001555446873,
+          -0.8971370115405681,
+          9.350782830287465e-18
         ],
         "target": [
           0,
@@ -112,13 +218,22 @@
           "visible": true
         },
         "/planning/behavior": {
-          "visible": true
+          "visible": false
         },
         "/route": {
           "visible": true,
           "showOutlines": true
         },
         "/ego_state": {
+          "visible": true
+        },
+        "/trajectory": {
+          "visible": true
+        },
+        "/planning/route": {
+          "visible": true
+        },
+        "/planning/trajectory": {
           "visible": true
         }
       },
@@ -134,142 +249,49 @@
       "imageMode": {},
       "followTf": "WORLD"
     },
-    "Plot!13t70s4": {
-      "paths": [
+    "Tab!213tkj": {
+      "activeTabIdx": 1,
+      "tabs": [
         {
-          "timestampMethod": "receiveTime",
-          "value": "/odometry.pose.position.x",
-          "enabled": false,
-          "color": "#4e98e2"
+          "title": "Overview",
+          "layout": {
+            "first": "Plot!13t70s4",
+            "second": "Plot!2ysdrab",
+            "direction": "column"
+          }
         },
         {
-          "timestampMethod": "receiveTime",
-          "value": "/odometry.pose.position.y",
-          "enabled": true,
-          "color": "#f5774d"
-        },
-        {
-          "timestampMethod": "receiveTime",
-          "value": "/odometry.pose.orientation",
-          "enabled": false,
-          "color": "#f7df71"
+          "title": "MotionPlanning",
+          "layout": {
+            "first": "RawMessages!2s9z87o",
+            "second": "Plot!20fp9jf",
+            "direction": "column",
+            "splitPercentage": 60.67415730337079
+          }
         }
-      ],
-      "showXAxisLabels": true,
-      "showYAxisLabels": true,
-      "showLegend": false,
-      "legendDisplay": "floating",
-      "showPlotValuesInLegend": false,
-      "isSynced": true,
-      "xAxisVal": "timestamp",
-      "sidebarDimension": 240
-    },
-    "Plot!2ysdrab": {
-      "paths": [
-        {
-          "timestampMethod": "receiveTime",
-          "value": "/debug/motion_planning.waypoint_position_x[:]",
-          "enabled": false,
-          "color": "#4e98e2",
-          "label": "pos_x"
-        },
-        {
-          "timestampMethod": "receiveTime",
-          "value": "/debug/motion_planning.waypoint_position_y[:]",
-          "enabled": true,
-          "color": "#f5774d",
-          "label": "pos_y"
-        },
-        {
-          "timestampMethod": "receiveTime",
-          "value": "/debug/motion_planning.waypoint_velocity_y[:]",
-          "enabled": true,
-          "color": "#f7df71",
-          "label": "v_y"
-        },
-        {
-          "timestampMethod": "receiveTime",
-          "value": "/debug/motion_planning.waypoint_acceleration_y[:]",
-          "enabled": true,
-          "color": "#5cd6a9",
-          "label": "a_y"
-        }
-      ],
-      "showXAxisLabels": true,
-      "showYAxisLabels": true,
-      "showLegend": true,
-      "legendDisplay": "left",
-      "showPlotValuesInLegend": false,
-      "isSynced": true,
-      "xAxisVal": "index",
-      "sidebarDimension": 231,
-      "xAxisPath": {
-        "value": "/debug/motion_planning.waypoint_timepoint[:]"
-      }
-    },
-    "Image!3mnp456": {
-      "cameraState": {
-        "distance": 20,
-        "perspective": true,
-        "phi": 60,
-        "target": [
-          0,
-          0,
-          0
-        ],
-        "targetOffset": [
-          0,
-          0,
-          0
-        ],
-        "targetOrientation": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "thetaOffset": 45,
-        "fovy": 45,
-        "near": 0.5,
-        "far": 5000
-      },
-      "followMode": "follow-pose",
-      "scene": {},
-      "transforms": {},
-      "topics": {},
-      "layers": {},
-      "publish": {
-        "type": "point",
-        "poseTopic": "/move_base_simple/goal",
-        "pointTopic": "/clicked_point",
-        "poseEstimateTopic": "/initialpose",
-        "poseEstimateXDeviation": 0.5,
-        "poseEstimateYDeviation": 0.5,
-        "poseEstimateThetaDeviation": 0.26179939
-      },
-      "imageMode": {}
+      ]
     },
     "RawMessages!os6rgs": {
       "diffEnabled": false,
       "diffMethod": "custom",
       "diffTopicPath": "",
       "showFullMessageForDiff": false,
-      "topicPath": "/debug/motion_planning",
-      "expansion": {}
+      "topicPath": "/ego_state"
     },
     "RawMessages!2426444": {
       "diffEnabled": false,
       "diffMethod": "custom",
       "diffTopicPath": "",
       "showFullMessageForDiff": false,
-      "topicPath": "/odometry"
+      "topicPath": "/planning/trajectory.passingPointSize"
     },
     "RawMessages!1vr7ed2": {
       "diffEnabled": false,
       "diffMethod": "custom",
       "diffTopicPath": "",
       "showFullMessageForDiff": false,
-      "topicPath": "/ego_state"
+      "topicPath": "/debug/motion_planning",
+      "expansion": {}
     }
   },
   "globalVariables": {},
@@ -278,19 +300,10 @@
     "speed": 1
   },
   "layout": {
-    "first": {
-      "first": "3D!18i6zy7",
-      "second": {
-        "first": "Plot!13t70s4",
-        "second": "Plot!2ysdrab",
-        "direction": "column",
-        "splitPercentage": 49.55555555555557
-      },
-      "direction": "column",
-      "splitPercentage": 51.08695652173913
-    },
+    "first": "3D!18i6zy7",
     "second": {
-      "first": "Image!3mnp456",
+      "direction": "row",
+      "first": "Tab!213tkj",
       "second": {
         "first": "RawMessages!os6rgs",
         "second": {
@@ -299,12 +312,10 @@
           "direction": "column"
         },
         "direction": "column",
-        "splitPercentage": 42.839506172839506
-      },
-      "direction": "column",
-      "splitPercentage": 11.956521739130435
+        "splitPercentage": 30.246913580246915
+      }
     },
     "direction": "row",
-    "splitPercentage": 70
+    "splitPercentage": 26.44787644787645
   }
 }

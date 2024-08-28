@@ -1,9 +1,13 @@
 #ifndef __INTENTS_MOTION_PLANNING_INTENT_MOTION_PLANNING_INTENT_H__
 #define __INTENTS_MOTION_PLANNING_INTENT_MOTION_PLANNING_INTENT_H__
 
+#include <tuple>
 #include "data/defs/pose2d.h"
+#include "data/defs/static_vector.h"
 #include "intents/intent_base.h"
+#include "intents/topics/common.h"
 #include "intents/topics/route_topic.h"
+#include "intents/topics/trajectory_topic.h"
 #include "utils/algo/pid.h"
 
 namespace cooboc {
@@ -24,6 +28,12 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
                                           const bool isStartClosed = true,
                                           const bool isEndClosed   = true);
 
+using CurvatureProfile =
+  data::StaticVector<std::tuple<float, float>, kTrajectoryPassingPointCapacity>;
+void calculateCurvatureProfile(const data::PassingPoint *passingPoint,
+                               const std::size_t &passingPointSize,
+                               CurvatureProfile &curvatureProfile);
+
 
 }    // namespace detail
 
@@ -39,8 +49,9 @@ class MotionPlanningIntent : public IntentBase {
                        const data::PolarVector2D &initVelocity,
                        const data::PolarVector2D &initAcceleration);
 
-  private:
+
     algo::PID<float> lateralPid_ {};
+    detail::CurvatureProfile curvatureProfile_;
 };
 
 }    // namespace intent

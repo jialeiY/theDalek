@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <iostream>
 #include <limits>
+#include <tuple>
 #include "data/defs/pose2d.h"
 #include "intents/topics/topics.h"
 #include "utils/algo/pid.h"
@@ -108,10 +109,33 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
     return dist2line;
 }
 
+void calculateCurvatureProfile(const data::PassingPoint *passingPoint,
+                               const std::size_t &passingPointSize,
+                               CurvatureProfile &curvatureProfile) {
+    curvatureProfile.push_back(std::make_tuple<float, float>(0.0F, 0.0F));
+    float totalLength {0.0F};
+    float lastOrientation {0.0F};
+    for (std::size_t i {1U}; i < passingPointSize; ++i) {
+        const data::PolarVector2D &segment {passingPoint[i].segment};
+        totalLength += segment.value;
+        const float diffOrientation = segment.orientation - lastOrientation;
+        lastOrientation             = segment.orientation;
+        float curvature             = std::fmod(diffOrientation, 2.0F * utils::math::PI);
+        if (curvature > utils::math::PI) {
+            curvature -= 2.0F * utils::math::PI;
+        }
+        if (curvature < -utils::math::PI) {
+            curvature += 2.0F * utils::math::PI;
+        }
+        curvatureProfile.push_back(
+          std::make_tuple<float, float>(std::move(totalLength), std::move(curvature)));
+    }
+}
+
 }    // namespace detail
 
 
-MotionPlanningIntent::MotionPlanningIntent() : lateralPid_ {} {
+MotionPlanningIntent::MotionPlanningIntent() : lateralPid_ {}, curvatureProfile_ {} {
     motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
@@ -137,8 +161,15 @@ void MotionPlanningIntent::tick() {
     // Reference path
     const RouteTopic &route = routeTopic;
 
-    // Calculate lateral profile
-    // using lateralProfile
+    // Calculate curvature profile
+    curvatureProfile_.reset();
+    detail::calculateCurvatureProfile(
+      trajectoryTopic.passingPoint, trajectoryTopic.passingPointSize, curvatureProfile_);
+
+    // Output
+    for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
+        motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
+    }
 
 
     // 1. key reference path where odometry is on it

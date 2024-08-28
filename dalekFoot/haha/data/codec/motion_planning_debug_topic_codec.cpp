@@ -29,6 +29,13 @@ proto::MotionPlanningDebugTopic convert(const intent::MotionPlanningDebugTopic &
         out.add_waypoint_acceleration_y(in.waypoints[i].accelerationY);    // Debug
     }
 
+    for (const auto &lcp : in.longitudinalCurvatureProfile) {
+        proto::LongitudinalCurvatureProfile *longitudinalCurvatureProfile =
+          out.add_longitudinalcurvatureprofile();
+
+        longitudinalCurvatureProfile->set_s(std::get<0U>(lcp));
+        longitudinalCurvatureProfile->set_curvature(std::get<1U>(lcp));
+    }
     return out;
 }
 

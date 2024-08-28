@@ -6,6 +6,7 @@
 #include "data/defs/passing_point.h"
 #include "data/defs/position2d.h"
 #include "data/defs/route_id.h"
+#include "intents/topics/common.h"
 
 namespace cooboc {
 namespace intent {
@@ -14,12 +15,11 @@ namespace intent {
 using TrajectoryId = std::uint64_t;
 
 struct TrajectoryTopic {
-    static constexpr std::size_t kPassingPointCapacity {1000U};
-    bool hasValue {false};
+        bool hasValue {false};
     TrajectoryId trajectoryId {0U};
     std::size_t passingPointSize {0U};
 
-    data::PassingPoint passingPoint[kPassingPointCapacity];
+    data::PassingPoint passingPoint[kTrajectoryPassingPointCapacity];
 
     data::RouteId routeId {0U};
 };

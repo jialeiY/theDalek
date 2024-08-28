@@ -8,6 +8,7 @@
 #include "data/defs/passing_point.h"
 #include "data/defs/polar_vector2d.h"
 #include "data/defs/static_vector.h"
+#include "intents/topics/common.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/topics.h"
 #include "intents/trajectory_intent/trajectory/trajectory.h"
@@ -25,7 +26,7 @@ TrajectoryIntent::~TrajectoryIntent() {}
 void TrajectoryIntent::setup() {
     trajectoryTopic.hasValue         = false;
     trajectoryTopic.passingPointSize = 0U;
-    for (std::size_t i {0U}; i < TrajectoryTopic::kPassingPointCapacity; ++i) {
+    for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
         data::PassingPoint &passingPoint {trajectoryTopic.passingPoint[i]};
         passingPoint.position = {0.0F, 0.0F};
     }
