@@ -113,13 +113,13 @@ void calculateCurvatureProfile(const data::PassingPoint *passingPoint,
                                const std::size_t &passingPointSize,
                                CurvatureProfile &curvatureProfile) {
     curvatureProfile.push_back(std::make_tuple<float, float>(0.0F, 0.0F));
-    float totalLength {0.0F};
-    float lastOrientation {0.0F};
-    for (std::size_t i {1U}; i < passingPointSize; ++i) {
+
+    float lastOrientation = passingPoint[1U].segment.orientation;
+    float totalLength     = passingPoint[1U].segment.value;
+
+    for (std::size_t i {2U}; i < passingPointSize; ++i) {
         const data::PolarVector2D &segment {passingPoint[i].segment};
-        totalLength += segment.value;
         const float diffOrientation = segment.orientation - lastOrientation;
-        lastOrientation             = segment.orientation;
         float curvature             = std::fmod(diffOrientation, 2.0F * utils::math::PI);
         if (curvature > utils::math::PI) {
             curvature -= 2.0F * utils::math::PI;
@@ -129,7 +129,11 @@ void calculateCurvatureProfile(const data::PassingPoint *passingPoint,
         }
         curvatureProfile.push_back(
           std::make_tuple<float, float>(std::move(totalLength), std::move(curvature)));
+
+        totalLength += segment.value;
+        lastOrientation = segment.orientation;
     }
+    curvatureProfile.push_back(std::make_tuple<float, float>(std::move(totalLength), 0.0F));
 }
 
 }    // namespace detail
