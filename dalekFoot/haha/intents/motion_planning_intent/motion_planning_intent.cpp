@@ -137,6 +137,9 @@ void MotionPlanningIntent::setup() {
 
 
 void MotionPlanningIntent::tick() {
+    constexpr float kMaximumAcceleration = 0.2F;    // m/s
+    constexpr float kMaximumVelocity     = 1.0F;    // m/s
+
     // 0. Setup the input data
     // Odometry
     const data::Pose2D &odometry = odometryTopic.pose;
@@ -149,7 +152,8 @@ void MotionPlanningIntent::tick() {
       trajectoryTopic.passingPoint, trajectoryTopic.passingPointSize, curvatureProfile_);
 
     motionProfile_.reset();
-    motion_planning::calculateMotionProfile(curvatureProfile_, 1.0F, 1.0F, motionProfile_);
+    motion_planning::calculateMotionProfile(
+      curvatureProfile_, kMaximumAcceleration, kMaximumVelocity, motionProfile_);
 
 
     // Output
