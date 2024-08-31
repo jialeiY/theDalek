@@ -5,6 +5,7 @@
 #include "data/defs/pose2d.h"
 #include "data/defs/static_vector.h"
 #include "intents/intent_base.h"
+#include "intents/motion_planning_intent/components/profile.h"
 #include "intents/topics/common.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/trajectory_topic.h"
@@ -28,12 +29,6 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
                                           const bool isStartClosed = true,
                                           const bool isEndClosed   = true);
 
-using CurvatureProfile =
-  data::StaticVector<std::tuple<float, float>, kTrajectoryPassingPointCapacity>;
-void calculateCurvatureProfile(const data::PassingPoint *passingPoint,
-                               const std::size_t &passingPointSize,
-                               CurvatureProfile &curvatureProfile);
-
 
 }    // namespace detail
 
@@ -51,7 +46,7 @@ class MotionPlanningIntent : public IntentBase {
 
 
     algo::PID<float> lateralPid_ {};
-    detail::CurvatureProfile curvatureProfile_;
+    motion_planning::CurvatureProfile curvatureProfile_;
 };
 
 }    // namespace intent

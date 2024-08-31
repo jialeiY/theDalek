@@ -34,6 +34,7 @@ CPP_SOURCES += data/codec/pose2d_codec.cpp
 CPP_SOURCES += data/codec/route_curvature_distribution_codec.cpp
 CPP_SOURCES += data/codec/route_segment_codec.cpp
 CPP_SOURCES += data/codec/route_topic_codec.cpp
+CPP_SOURCES += intents/motion_planning_intent/components/profile.cpp
 CPP_SOURCES += data/codec/trajectory_topic_codec.cpp
 CPP_SOURCES += data/codec/vector2d_codec.cpp
 CPP_SOURCES += data/codec/vehicle_request_topic_codec.cpp
