@@ -45,3 +45,4 @@
 - [ ] 45. Change routeSegment to route point
 - [ ] 46. SystemDebugTopic to output the duration of calculation
 - [X] 47. Correct the curvature profile array
+- [ ] 48. Bug: the length of profiles are not match
