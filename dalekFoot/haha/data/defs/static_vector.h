@@ -39,10 +39,24 @@ class StaticVector {
 
     void push_back(T&& data) { emplace_back(std::move(data)); }
     const T& back() { return dataPtr_[size_ - 1U]; }
+    const T& back() const { return dataPtr_[size_ - 1U]; }
     const T& operator[](const std::size_t i) { return dataPtr_[i]; }
     const T& operator[](const std::size_t i) const { return dataPtr_[i]; }
 
     void reset() { size_ = 0U; }
+    void reverse() {
+        if (size_ > 0U) {
+            std::size_t first = 0U;
+            std::size_t last  = size_ - 1U;
+            while (first < last) {
+                T temp          = std::move(dataPtr_[first]);
+                dataPtr_[first] = std::move(dataPtr_[last]);
+                dataPtr_[last]  = std::move(temp);
+                first++;
+                last--;
+            }
+        }
+    }
 
   private:
     T* dataPtr_;

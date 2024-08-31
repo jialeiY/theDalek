@@ -18,6 +18,9 @@ struct MotionPlanningDebugTopic {
 
     std::array<std::tuple<float, float>, kTrajectoryPassingPointCapacity>
       longitudinalCurvatureProfile {};
+
+    std::array<std::tuple<float, float>, kTrajectoryPassingPointCapacity>
+      longitudinalMotionProfile {};
 };
 
 }    // namespace intent

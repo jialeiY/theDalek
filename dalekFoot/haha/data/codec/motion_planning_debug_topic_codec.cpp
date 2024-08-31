@@ -36,6 +36,13 @@ proto::MotionPlanningDebugTopic convert(const intent::MotionPlanningDebugTopic &
         longitudinalCurvatureProfile->set_s(std::get<0U>(lcp));
         longitudinalCurvatureProfile->set_curvature(std::get<1U>(lcp));
     }
+
+    for (const auto &mcp : in.longitudinalMotionProfile) {
+        proto::LongitudinalMotionProfile *longitudinalMotionProfile =
+          out.add_longitudinalmotionprofile();
+        longitudinalMotionProfile->set_maximumvelocity(std::get<0U>(mcp));
+        longitudinalMotionProfile->set_maximumacceleration(std::get<1U>(mcp));
+    }
     return out;
 }
 

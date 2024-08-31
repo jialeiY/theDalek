@@ -114,7 +114,10 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
 }    // namespace detail
 
 
-MotionPlanningIntent::MotionPlanningIntent() : lateralPid_ {}, curvatureProfile_ {} {
+MotionPlanningIntent::MotionPlanningIntent() :
+    lateralPid_ {},
+    curvatureProfile_ {},
+    motionProfile_ {} {
     motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
@@ -145,9 +148,14 @@ void MotionPlanningIntent::tick() {
     motion_planning::calculateCurvatureProfile(
       trajectoryTopic.passingPoint, trajectoryTopic.passingPointSize, curvatureProfile_);
 
+    motionProfile_.reset();
+    motion_planning::calculateMotionProfile(curvatureProfile_, 1.0F, 1.0F, motionProfile_);
+
+
     // Output
     for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
         motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
+        motionPlanningDebugTopic.longitudinalMotionProfile[i]    = motionProfile_[i];
     }
 
 

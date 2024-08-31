@@ -9,6 +9,11 @@ message LongitudinalCurvatureProfile {
     optional float curvature = 2 [default = 0.0];
 }
 
+message LongitudinalMotionProfile {
+    optional float maximumVelocity     = 1 [default = 0.0];
+    optional float maximumAcceleration = 2 [default = 0.0];
+}
+
 message MotionPlanningDebugTopic {
     optional uint32   numberOfWaypoints = 1 [default = 0];
     repeated Waypoint waypoints         = 2;
@@ -23,4 +28,5 @@ message MotionPlanningDebugTopic {
     repeated float waypoint_acceleration_y = 7;  // Debug
 
     repeated LongitudinalCurvatureProfile longitudinalCurvatureProfile = 8;
+    repeated LongitudinalMotionProfile    longitudinalMotionProfile    = 9;
 }

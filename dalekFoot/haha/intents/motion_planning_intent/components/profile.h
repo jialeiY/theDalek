@@ -12,9 +12,12 @@ namespace intent {
 namespace motion_planning {
 
 
+// tuple = <the length on the trajectory, curvature changing between previous and next segment>
 using CurvatureProfile =
   data::StaticVector<std::tuple<float, float>, kTrajectoryPassingPointCapacity>;
 
+// tuple = <the maximum velocity, the maximum acceleration>
+using MotionProfile = data::StaticVector<std::tuple<float, float>, kTrajectoryPassingPointCapacity>;
 
 /**
  * Calculate the curvature changing on each passing point on the trajectory. The changing rate on
@@ -24,10 +27,16 @@ using CurvatureProfile =
  * @param curvatureProfile [out]: The curvature changing rate on each passing point.
  * @return void
  */
-
 void calculateCurvatureProfile(const data::PassingPoint *passingPoint,
                                const std::size_t &passingPointSize,
                                CurvatureProfile &curvatureProfile);
+
+
+void calculateMotionProfile(const CurvatureProfile &curvatureProfile,
+                            const float maximumAcceleration,
+                            const float maximumVelocity,
+                            MotionProfile &motionProfile);
+
 }    // namespace motion_planning
 }    // namespace intent
 }    // namespace cooboc

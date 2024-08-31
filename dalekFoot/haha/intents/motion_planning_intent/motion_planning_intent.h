@@ -47,6 +47,7 @@ class MotionPlanningIntent : public IntentBase {
 
     algo::PID<float> lateralPid_ {};
     motion_planning::CurvatureProfile curvatureProfile_;
+    motion_planning::MotionProfile motionProfile_;
 };
 
 }    // namespace intent
