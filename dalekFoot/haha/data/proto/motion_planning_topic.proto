@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+import "data/proto/waypoint.proto";
+
+message MotionPlanningTopic {
+    repeated Waypoint waypoints = 1;
+}

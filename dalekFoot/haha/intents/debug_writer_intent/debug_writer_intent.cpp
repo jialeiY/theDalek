@@ -11,6 +11,7 @@
 #include "gen/data/proto/behavior_topic.pb.h"
 #include "gen/data/proto/ego_state_topic.pb.h"
 #include "gen/data/proto/motion_planning_debug_topic.pb.h"
+#include "gen/data/proto/motion_planning_topic.pb.h"
 #include "gen/data/proto/odometry_topic.pb.h"
 #include "gen/data/proto/route_topic.pb.h"
 #include "gen/data/proto/trajectory_topic.pb.h"
@@ -33,6 +34,8 @@ DebugWriterIntent::DebugWriterIntent() {
     mcapTopicConverterList_.push_back(new McapTopicConverter(&routeTopic, "/planning/route"));
     mcapTopicConverterList_.push_back(
       new McapTopicConverter(&trajectoryTopic, "/planning/trajectory"));
+    mcapTopicConverterList_.push_back(
+      new McapTopicConverter(&motionPlanningTopic, "/planning/motion"));
     mcapTopicConverterList_.push_back(
       new McapTopicConverter(&motionPlanningDebugTopic, "/debug/motion_planning"));
     mcapTopicConverterList_.push_back(

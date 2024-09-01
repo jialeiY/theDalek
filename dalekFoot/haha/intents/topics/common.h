@@ -7,7 +7,7 @@ namespace cooboc {
 namespace intent {
 
 static constexpr std::size_t kTrajectoryPassingPointCapacity {1000U};
-
+constexpr std::size_t kPlanningSize {100U};
 
 }    // namespace intent
 }    // namespace cooboc

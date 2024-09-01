@@ -14,56 +14,56 @@
 namespace cooboc {
 namespace intent {
 
-namespace detail {
-ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route) {
-    // // TODO, assume route always has data now
+// namespace detail {
+// ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route) {
+//     // // TODO, assume route always has data now
 
-    // // Find the segment
-    // std::size_t closestSegmentId {0U};
-    // float closestDistance {std::numeric_limits<float>::max()};
+//     // // Find the segment
+//     // std::size_t closestSegmentId {0U};
+//     // float closestDistance {std::numeric_limits<float>::max()};
 
-    // const std::size_t segmentNumber = route.polylineLength - 1U;
-    // for (std::size_t i {0U}; i < segmentNumber; ++i) {
-    //     bool firstNeedOpen = i != 0U;    // only first one open
-    //     float dist         = std::fabs(calculateDistanceFromPointToSegment(
-    //       odometry.position, route.polyline[i], route.polyline[i + 1U], firstNeedOpen, true));
-    //     if (dist < closestDistance) {
-    //         closestSegmentId = i;
-    //         closestDistance  = dist;
-    //     }
-    // }
-
-
-    // float s = 0.0F;
-    // // Calculate all s before current segment
-    // for (std::size_t i {0U}; (i + 1U) < closestSegmentId; ++i) {
-    //     s += route.polyline[i].distance(route.polyline[i + 1U]);
-    // }
-
-    // // Calculate s on current segment
-    // if (!utils::math::equals(route.polyline[closestSegmentId],
-    //                          route.polyline[closestSegmentId + 1U])) {
-    //     const data::Position2D veca =
-    //       route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId];
-    //     const data::Position2D vecb = odometry.position - route.polyline[closestSegmentId];
-    //     s += veca.dot(vecb) / veca.abs();
-    // }
-
-    // const float y {calculateDistanceFromPointToSegment(odometry.position,
-    //                                                    route.polyline[closestSegmentId],
-    //                                                    route.polyline[closestSegmentId + 1U],
-    //                                                    false,
-    //                                                    false)};
-
-    // data::Vector2D refSegVec {
-    //   (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
-    // data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
-    // return {s, y, refSegPolarVec.orientation};
-    return {};
-}
+//     // const std::size_t segmentNumber = route.polylineLength - 1U;
+//     // for (std::size_t i {0U}; i < segmentNumber; ++i) {
+//     //     bool firstNeedOpen = i != 0U;    // only first one open
+//     //     float dist         = std::fabs(calculateDistanceFromPointToSegment(
+//     //       odometry.position, route.polyline[i], route.polyline[i + 1U], firstNeedOpen, true));
+//     //     if (dist < closestDistance) {
+//     //         closestSegmentId = i;
+//     //         closestDistance  = dist;
+//     //     }
+//     // }
 
 
-}    // namespace detail
+//     // float s = 0.0F;
+//     // // Calculate all s before current segment
+//     // for (std::size_t i {0U}; (i + 1U) < closestSegmentId; ++i) {
+//     //     s += route.polyline[i].distance(route.polyline[i + 1U]);
+//     // }
+
+//     // // Calculate s on current segment
+//     // if (!utils::math::equals(route.polyline[closestSegmentId],
+//     //                          route.polyline[closestSegmentId + 1U])) {
+//     //     const data::Position2D veca =
+//     //       route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId];
+//     //     const data::Position2D vecb = odometry.position - route.polyline[closestSegmentId];
+//     //     s += veca.dot(vecb) / veca.abs();
+//     // }
+
+//     // const float y {calculateDistanceFromPointToSegment(odometry.position,
+//     //                                                    route.polyline[closestSegmentId],
+//     //                                                    route.polyline[closestSegmentId + 1U],
+//     //                                                    false,
+//     //                                                    false)};
+
+//     // data::Vector2D refSegVec {
+//     //   (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
+//     // data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
+//     // return {s, y, refSegPolarVec.orientation};
+//     return {};
+// }
+
+
+// }    // namespace detail
 
 
 MotionPlanningIntent::MotionPlanningIntent() :
@@ -118,6 +118,15 @@ void MotionPlanningIntent::tick() {
                                                                  poseInFrenet_);
 
 
+    // Find out longitudinal and Lateral speed
+    data::PolarVector2D egoVelocity   = egoStateTopic.velocity;
+    egoVelocity.orientation           = egoVelocity.orientation - poseInFrenet_.orientation;
+    data::Vector2D resolutionVelocity = utils::math::to<data::Vector2D>(egoVelocity);
+
+    // Plan longitudinal
+    planLongitudinal(resolutionVelocity.x);
+
+
     // Output to debug
     for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
         motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
@@ -127,25 +136,35 @@ void MotionPlanningIntent::tick() {
     motionPlanningDebugTopic.poseInFrenet         = poseInFrenet_;
     motionPlanningDebugTopic.distanceToTrajectory = dist;
 
-    // 0. Setup the input data
-    // Odometry
-    const data::Pose2D &odometry = odometryTopic.pose;
-    // Reference path
-    const RouteTopic &route = routeTopic;
 
-    // 1. key reference path where odometry is on it
-    detail::ReferencePose refPose = detail::calculatePositionInFrenet(odometry, route);
+    // // 0. Setup the input data
+    // // Odometry
+    // const data::Pose2D &odometry = odometryTopic.pose;
+    // // Reference path
+    // const RouteTopic &route = routeTopic;
 
-    data::Pose2D initOdometryInFrenet {{refPose.s, refPose.y},
-                                       odometryTopic.pose.orientation - refPose.orientation};
-    data::PolarVector2D initVelocityInFrenet {
-      egoStateTopic.velocity.orientation + odometry.orientation - refPose.orientation,
-      egoStateTopic.velocity.value};
-    data::PolarVector2D initAccelerationInFrenet {
-      egoStateTopic.acceleration.orientation + odometry.orientation - refPose.orientation,
-      egoStateTopic.acceleration.value};
+    // // 1. key reference path where odometry is on it
+    // detail::ReferencePose refPose = detail::calculatePositionInFrenet(odometry, route);
 
-    planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
+    // data::Pose2D initOdometryInFrenet {{refPose.s, refPose.y},
+    //                                    odometryTopic.pose.orientation - refPose.orientation};
+    // data::PolarVector2D initVelocityInFrenet {
+    //   egoStateTopic.velocity.orientation + odometry.orientation - refPose.orientation,
+    //   egoStateTopic.velocity.value};
+    // data::PolarVector2D initAccelerationInFrenet {
+    //   egoStateTopic.acceleration.orientation + odometry.orientation - refPose.orientation,
+    //   egoStateTopic.acceleration.value};
+
+
+    // planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
+}
+
+void MotionPlanningIntent::planLongitudinal(const float initSpeed) {
+    float currentSpeed = initSpeed;
+    float currentS     = poseInFrenet_.position.x;
+    for (std::size_t i {0U}; i < kPlanningSize; ++i) {
+        longitudinalPlanning_[i] = std::make_tuple(currentS, currentSpeed);
+    }
 }
 
 void MotionPlanningIntent::planEgoMotion(const data::Pose2D &initOdometry,

@@ -1,6 +1,7 @@
 #ifndef __INTENTS_MOTION_PLANNING_INTENT_MOTION_PLANNING_INTENT_H__
 #define __INTENTS_MOTION_PLANNING_INTENT_MOTION_PLANNING_INTENT_H__
 
+#include <array>
 #include <tuple>
 #include "data/defs/pose2d.h"
 #include "data/defs/static_vector.h"
@@ -14,23 +15,24 @@
 namespace cooboc {
 namespace intent {
 
-namespace detail {
+// namespace detail {
 
-struct ReferencePose {
-    float s {0.0};              // the s on the reference path
-    float y {0.0};              // ego lateral based on reference path
-    float orientation {0.0};    // the angle of reference path
-};
+// struct ReferencePose {
+//     float s {0.0};              // the s on the reference path
+//     float y {0.0};              // ego lateral based on reference path
+//     float orientation {0.0};    // the angle of reference path
+// };
 
-ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route);
-float calculateDistanceFromPointToSegment(const data::Position2D &point,
-                                          const data::Position2D &segmentStart,
-                                          const data::Position2D &segmentEnd,
-                                          const bool isStartClosed = true,
-                                          const bool isEndClosed   = true);
+// ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route);
+// float calculateDistanceFromPointToSegment(const data::Position2D &point,
+//                                           const data::Position2D &segmentStart,
+//                                           const data::Position2D &segmentEnd,
+//                                           const bool isStartClosed = true,
+//                                           const bool isEndClosed   = true);
 
 
-}    // namespace detail
+// }    // namespace detail
+
 
 class MotionPlanningIntent : public IntentBase {
   public:
@@ -40,6 +42,9 @@ class MotionPlanningIntent : public IntentBase {
     virtual void tick() override;
 
   private:
+    void planLongitudinal(const float initSpeed);
+
+
     void planEgoMotion(const data::Pose2D &inintOdometry,
                        const data::PolarVector2D &initVelocity,
                        const data::PolarVector2D &initAcceleration);
@@ -49,6 +54,13 @@ class MotionPlanningIntent : public IntentBase {
     motion_planning::CurvatureProfile curvatureProfile_;
     motion_planning::MotionProfile motionProfile_;
     data::Pose2D poseInFrenet_ {};
+
+
+    /**
+     * tuple : < s - velocity >
+     */
+    using LongitudinalWaypoint = std::tuple<float, float>;
+    std::array<LongitudinalWaypoint, kPlanningSize> longitudinalPlanning_;
 };
 
 }    // namespace intent

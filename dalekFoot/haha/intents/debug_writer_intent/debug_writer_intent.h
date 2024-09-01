@@ -9,6 +9,7 @@
 #include "data/codec/behavior_topic_codec.h"
 #include "data/codec/ego_state_topic_codec.h"
 #include "data/codec/motion_planning_debug_topic_codec.h"
+#include "data/codec/motion_planning_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
 #include "data/codec/trajectory_topic_codec.h"

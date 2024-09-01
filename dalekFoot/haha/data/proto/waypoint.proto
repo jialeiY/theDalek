@@ -3,11 +3,13 @@ syntax = "proto2";
 package cooboc.proto;
 
 import "data/proto/pose2d.proto";
+import "data/proto/vector2d.proto";
 
 message Waypoint {
-    optional uint64 timepoint = 1 [default = 0];
-    optional Pose2D pose      = 2;
+    optional uint64   timepoint = 1 [default = 0];
+    optional Pose2D   pose      = 2;
+    optional Vector2D velocity  = 3;
 
-    optional float velocityY     = 3;  // debug
-    optional float accelerationY = 4;  // debug
+    optional float velocityY     = 4;  // debug
+    optional float accelerationY = 5;  // debug
 }

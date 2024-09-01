@@ -4,6 +4,7 @@
 #include "intents/topics/behavior_topic.h"
 #include "intents/topics/ego_state_topic.h"
 #include "intents/topics/motion_planning_debug_topic.h"
+#include "intents/topics/motion_planning_topic.h"
 #include "intents/topics/odometry_topic.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/system_debug_topic.h"
@@ -19,6 +20,7 @@ extern OdometryTopic odometryTopic;
 extern EgoStateTopic egoStateTopic;
 extern RouteTopic routeTopic;
 extern BehaviorTopic behaviorTopic;
+extern MotionPlanningTopic motionPlanningTopic;
 extern MotionPlanningDebugTopic motionPlanningDebugTopic;
 extern TrajectoryTopic trajectoryTopic;
 extern VehicleResponseTopic vehicleResponseTopic;

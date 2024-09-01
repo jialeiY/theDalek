@@ -19,11 +19,14 @@ void VehicleRequestIntent::setup() {
 void VehicleRequestIntent::tick() {
     // TODO: mock a speed
 
-    const data::PolarVector2D fakeVelocity = {utils::math::PI / 16.0F, 0.3F};
+    // const data::PolarVector2D fakeVelocity = {utils::math::PI / 16.0F, 0.3F};
+    // const float rotation             = 0.01F;
 
+    const data::PolarVector2D fakeVelocity = {0.0F, 0.0F};
+    const float rotation                   = 0.0F;
 
     const data::Vector2D velocityVec = utils::math::to<data::Vector2D>(fakeVelocity);
-    const float rotation             = 0.01F;
+
 
     vehicleRequestTopic.wheelControlPlanning[0U].speed[0U] =
       velocityVec.x + velocityVec.y + rotation;
