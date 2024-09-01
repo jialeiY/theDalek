@@ -1,9 +1,9 @@
 #include "intents/motion_planning_intent/components/frenet.h"
 #include <cstdint>
+#include <tuple>
 #include "data/defs/passing_point.h"
 #include "data/defs/pose2d.h"
 #include "utils/math.h"
-
 
 namespace cooboc {
 namespace intent {
@@ -60,10 +60,10 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
 }
 }    // namespace detail
 
-std::size_t calculatePoseInFrenet(const data::Pose2D &poseInWorld,
-                                  const data::PassingPoint *passingPoint,
-                                  const std::size_t &passingPointSize,
-                                  data::Pose2D &poseInFrenet) {
+std::tuple<std::size_t, float> calculatePoseInFrenet(const data::Pose2D &poseInWorld,
+                                                     const data::PassingPoint *passingPoint,
+                                                     const std::size_t &passingPointSize,
+                                                     data::Pose2D &poseInFrenet) {
     // TODO, assume route always has data now
 
     // Find the segment
@@ -79,6 +79,7 @@ std::size_t calculatePoseInFrenet(const data::Pose2D &poseInWorld,
             closestSegmentId = i - 1;
             closestDistance  = dist;
         }
+        lastPoint = passingPoint[i].position;
     }
 
     // calculate S
@@ -115,7 +116,7 @@ std::size_t calculatePoseInFrenet(const data::Pose2D &poseInWorld,
     poseInFrenet.position    = {s, y};
     poseInFrenet.orientation = orientation;
 
-    return closestSegmentId;
+    return {closestSegmentId, closestDistance};
     // data::Vector2D refSegVec {
     //   (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
     // data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);

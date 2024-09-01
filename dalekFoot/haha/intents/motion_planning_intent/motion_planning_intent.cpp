@@ -76,8 +76,9 @@ MotionPlanningIntent::MotionPlanningIntent() :
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
         motionPlanningDebugTopic.waypoints[i].timepoint = 0U;
     }
-    motionPlanningDebugTopic.trajectoryPointIdx = -1;
-    motionPlanningDebugTopic.poseInFrenet       = data::Pose2D {};
+    motionPlanningDebugTopic.trajectoryPointIdx   = -1;
+    motionPlanningDebugTopic.poseInFrenet         = data::Pose2D {};
+    motionPlanningDebugTopic.distanceToTrajectory = 0.0F;
 }
 MotionPlanningIntent::~MotionPlanningIntent() {}
 
@@ -109,10 +110,12 @@ void MotionPlanningIntent::tick() {
 
     // Calculate the position in frenet
     // TODO: check the length of trajectory
-    std::size_t idx = motion_planning::calculatePoseInFrenet(odometryTopic.pose,
-                                                             trajectoryTopic.passingPoint,
-                                                             trajectoryTopic.passingPointSize,
-                                                             poseInFrenet_);
+    std::size_t idx;
+    float dist;
+    std::tie(idx, dist) = motion_planning::calculatePoseInFrenet(odometryTopic.pose,
+                                                                 trajectoryTopic.passingPoint,
+                                                                 trajectoryTopic.passingPointSize,
+                                                                 poseInFrenet_);
 
 
     // Output to debug
@@ -120,8 +123,9 @@ void MotionPlanningIntent::tick() {
         motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
         motionPlanningDebugTopic.longitudinalMotionProfile[i]    = motionProfile_[i];
     }
-    motionPlanningDebugTopic.trajectoryPointIdx = idx;
-    motionPlanningDebugTopic.poseInFrenet       = poseInFrenet_;
+    motionPlanningDebugTopic.trajectoryPointIdx   = idx;
+    motionPlanningDebugTopic.poseInFrenet         = poseInFrenet_;
+    motionPlanningDebugTopic.distanceToTrajectory = dist;
 
     // 0. Setup the input data
     // Odometry

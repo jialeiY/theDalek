@@ -31,7 +31,7 @@ message MotionPlanningDebugTopic {
     repeated LongitudinalCurvatureProfile longitudinalCurvatureProfile = 8;
     repeated LongitudinalMotionProfile    longitudinalMotionProfile    = 9;
 
-    optional int64 trajectoryPointIdx = 10 [default = -1];
-    optional Pose2D poseInFrenet = 11;
-
+    optional int64  trajectoryPointIdx      = 10 [default = -1];
+    optional Pose2D poseInFrenet            = 11;
+    optional float  distanceToTrajectory = 12 [default = 0.0];
 }

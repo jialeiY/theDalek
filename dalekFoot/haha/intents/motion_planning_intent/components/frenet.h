@@ -2,6 +2,7 @@
 #define __INTENTS_MOTION_PLANNING_INTENT_COMPONENTS_FRENET_H__
 
 #include <cstdint>
+#include <tuple>
 #include "data/defs/passing_point.h"
 #include "data/defs/pose2d.h"
 
@@ -17,10 +18,10 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
                                           const bool isEndClosed);
 }    // namespace detail
 
-std::size_t calculatePoseInFrenet(const data::Pose2D &poseInWorld,
-                                  const data::PassingPoint *passingPoint,
-                                  const std::size_t &passingPointSize,
-                                  data::Pose2D &poseInFrenet);
+std::tuple<std::size_t, float> calculatePoseInFrenet(const data::Pose2D &poseInWorld,
+                                                     const data::PassingPoint *passingPoint,
+                                                     const std::size_t &passingPointSize,
+                                                     data::Pose2D &poseInFrenet);
 
 
 }    // namespace motion_planning

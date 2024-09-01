@@ -48,6 +48,7 @@ proto::MotionPlanningDebugTopic convert(const intent::MotionPlanningDebugTopic &
     out.set_trajectorypointidx(in.trajectoryPointIdx);
 
     *out.mutable_poseinfrenet() = convert(in.poseInFrenet);
+    out.set_distancetotrajectory(in.distanceToTrajectory);
 
     return out;
 }

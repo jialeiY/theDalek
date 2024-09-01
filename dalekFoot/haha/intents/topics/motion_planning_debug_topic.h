@@ -26,6 +26,7 @@ struct MotionPlanningDebugTopic {
     std::int64_t trajectoryPointIdx {-1};
 
     data::Pose2D poseInFrenet {};
+    float distanceToTrajectory {0.0F};
 };
 
 }    // namespace intent
