@@ -42,7 +42,7 @@
 - [X] 42. clean the code in debugWriter
 - [X] 43. update trajectory, add more field (orientation)
 - [X] 44. TrajectoryIntent, make internal trajectory cache, and copy result in the end
-- [ ] 45. Change routeSegment to route point
+- [X] 45. Change routeSegment to route point
 - [ ] 46. SystemDebugTopic to output the duration of calculation
 - [X] 47. Correct the curvature profile array
-- [ ] 48. Bug: the length of profiles are not match
+- [X] 48. Bug: the length of profiles are not match

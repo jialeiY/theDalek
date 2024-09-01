@@ -5,6 +5,7 @@
 #include <limits>
 #include <tuple>
 #include "data/defs/pose2d.h"
+#include "intents/motion_planning_intent/components/frenet.h"
 #include "intents/motion_planning_intent/components/profile.h"
 #include "intents/topics/topics.h"
 #include "utils/algo/pid.h"
@@ -61,55 +62,6 @@ ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const Rout
     return {};
 }
 
-float calculateDistanceFromPointToSegment(const data::Position2D &point,
-                                          const data::Position2D &segmentStart,
-                                          const data::Position2D &segmentEnd,
-                                          const bool isStartClosed,
-                                          const bool isEndClosed) {
-    // Is start equals to end
-    if (utils::math::equals(segmentStart, segmentEnd)) {
-        return point.distance(segmentStart);
-    }
-
-    // is on the start point?
-    if (utils::math::equals(point.x, segmentStart.x) &&
-        utils::math::equals(point.y, segmentStart.y)) {
-        return 0.0F;
-    }
-
-    // is on the end point?
-    if ((utils::math::equals(point.x, segmentEnd.x)) &&
-        (utils::math::equals(point.y, segmentEnd.y))) {
-        return 0.0F;
-    }
-
-    // Point out side of start
-    if (isStartClosed) {
-        if ((point - segmentStart).dot(segmentEnd - segmentStart) < 0.0F) {
-            return point.distance(segmentStart);
-        }
-    }
-
-    // Point out side of end
-    if (isEndClosed) {
-        if ((point - segmentEnd).dot(segmentStart - segmentEnd) < 0.0F) {
-            return point.distance(segmentEnd);
-        }
-    }
-
-    // // the representation of line is Ax + By + C = 0;
-    // // d = |Ax + Ｂy + C| / sqrt(A^2 + B^2)
-    // const float A = (segmentEnd.y - segmentStart.y);
-    // const float B = (segmentStart.x - segmentEnd.x);
-    // const float C =
-    //   (segmentEnd.x * segmentStart.y) - (segmentStart.x * segmentEnd.y);
-    // const float dist2line = std::fabs((A * point.x) + (B * point.y) + C) /
-    //                         std::sqrt((A * A) + (B * B));
-    const float dist2line =
-      ((segmentEnd - segmentStart).cross(point - segmentStart)) / segmentStart.distance(segmentEnd);
-    return dist2line;
-}
-
 
 }    // namespace detail
 
@@ -117,12 +69,15 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
 MotionPlanningIntent::MotionPlanningIntent() :
     lateralPid_ {},
     curvatureProfile_ {},
-    motionProfile_ {} {
+    motionProfile_ {},
+    poseInFrenet_ {} {
     motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
         motionPlanningDebugTopic.waypoints[i].timepoint = 0U;
     }
+    motionPlanningDebugTopic.trajectoryPointIdx = -1;
+    motionPlanningDebugTopic.poseInFrenet       = data::Pose2D {};
 }
 MotionPlanningIntent::~MotionPlanningIntent() {}
 
@@ -140,28 +95,39 @@ void MotionPlanningIntent::tick() {
     constexpr float kMaximumAcceleration = 0.2F;    // m/s
     constexpr float kMaximumVelocity     = 1.0F;    // m/s
 
-    // 0. Setup the input data
-    // Odometry
-    const data::Pose2D &odometry = odometryTopic.pose;
-    // Reference path
-    const RouteTopic &route = routeTopic;
 
     // Calculate curvature profile
     curvatureProfile_.reset();
     motion_planning::calculateCurvatureProfile(
       trajectoryTopic.passingPoint, trajectoryTopic.passingPointSize, curvatureProfile_);
 
+    // Calculate the motion profile for longitudinal
+
     motionProfile_.reset();
     motion_planning::calculateMotionProfile(
       curvatureProfile_, kMaximumAcceleration, kMaximumVelocity, motionProfile_);
 
+    // Calculate the position in frenet
+    // TODO: check the length of trajectory
+    std::size_t idx = motion_planning::calculatePoseInFrenet(odometryTopic.pose,
+                                                             trajectoryTopic.passingPoint,
+                                                             trajectoryTopic.passingPointSize,
+                                                             poseInFrenet_);
 
-    // Output
+
+    // Output to debug
     for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
         motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
         motionPlanningDebugTopic.longitudinalMotionProfile[i]    = motionProfile_[i];
     }
+    motionPlanningDebugTopic.trajectoryPointIdx = idx;
+    motionPlanningDebugTopic.poseInFrenet       = poseInFrenet_;
 
+    // 0. Setup the input data
+    // Odometry
+    const data::Pose2D &odometry = odometryTopic.pose;
+    // Reference path
+    const RouteTopic &route = routeTopic;
 
     // 1. key reference path where odometry is on it
     detail::ReferencePose refPose = detail::calculatePositionInFrenet(odometry, route);

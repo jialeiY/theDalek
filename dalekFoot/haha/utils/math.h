@@ -65,6 +65,17 @@ inline data::Vector2D interpolate(data::Vector2D from, data::Vector2D to, float 
                            interpolate<float>(from.y, to.y, percent)};
 }
 
+inline float clampAngle(float in) {
+    in = std::fmod(in, 2.0F * PI);
+    if (in > PI) {
+        in -= 2.0F * PI;
+    }
+    if (in < -PI) {
+        in += 2.0F * PI;
+    }
+    return in;
+}
+
 
 }    // namespace math
 }    // namespace utils

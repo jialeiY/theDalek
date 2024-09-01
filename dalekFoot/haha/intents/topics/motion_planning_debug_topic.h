@@ -4,6 +4,7 @@
 #include <array>
 #include <cstdint>
 #include <tuple>
+#include "data/defs/pose2d.h"
 #include "data/defs/waypoint.h"
 #include "intents/topics/common.h"
 
@@ -21,6 +22,10 @@ struct MotionPlanningDebugTopic {
 
     std::array<std::tuple<float, float>, kTrajectoryPassingPointCapacity>
       longitudinalMotionProfile {};
+
+    std::int64_t trajectoryPointIdx {-1};
+
+    data::Pose2D poseInFrenet {};
 };
 
 }    // namespace intent

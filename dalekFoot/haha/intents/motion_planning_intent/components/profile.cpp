@@ -28,13 +28,7 @@ void calculateCurvatureProfile(const data::PassingPoint *passingPoint,
     for (std::size_t i {2U}; i < passingPointSize; ++i) {
         const data::PolarVector2D &segment {passingPoint[i].segment};
         const float diffOrientation = segment.orientation - lastOrientation;
-        float curvature             = std::fmod(diffOrientation, 2.0F * utils::math::PI);
-        if (curvature > utils::math::PI) {
-            curvature -= 2.0F * utils::math::PI;
-        }
-        if (curvature < -utils::math::PI) {
-            curvature += 2.0F * utils::math::PI;
-        }
+        const float curvature       = utils::math::clampAngle(diffOrientation);
         curvatureProfile.push_back(std::make_tuple(totalLength, curvature));
 
         totalLength += segment.value;
@@ -64,7 +58,7 @@ void calculateMotionProfile(const CurvatureProfile &curvatureProfile,
     motionProfile.push_back(std::make_tuple(lastVelocity, maximumAcceleration));
     float lastLength = std::get<0>(curvatureProfile.back());
 
-    for (std::int32_t i {curvatureProfile.size() - 2U}; i > 0; --i) {
+    for (std::int32_t i {curvatureProfile.size() - 2U}; i >= 0; --i) {
         const auto &curvaturePoint {curvatureProfile[i]};
         const float currentLength {std::get<0U>(curvaturePoint)};
         const float curvature {std::get<1U>(curvaturePoint)};
@@ -87,10 +81,7 @@ void calculateMotionProfile(const CurvatureProfile &curvatureProfile,
         lastLength   = currentLength;
         motionProfile.push_back(std::make_tuple(lastVelocity, pointMaxAcceleration));
     }
-    // motionProfile.push_back(std::make_tuple(0.0F, 0.0F));
     motionProfile.reverse();
-
-    std::printf("size of motion profile: %d\r\n", motionProfile.size());
 }
 
 }    // namespace motion_planning

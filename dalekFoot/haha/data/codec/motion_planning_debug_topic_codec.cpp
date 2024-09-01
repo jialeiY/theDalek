@@ -1,6 +1,7 @@
 #include "data/codec/motion_planning_debug_topic_codec.h"
 #include <algorithm>
 #include <cstdint>
+#include "data/codec/pose2d_codec.h"
 #include "data/codec/waypoint_codec.h"
 #include "gen/data/proto/motion_planning_debug_topic.pb.h"
 #include "gen/data/proto/waypoint.pb.h"
@@ -43,6 +44,11 @@ proto::MotionPlanningDebugTopic convert(const intent::MotionPlanningDebugTopic &
         longitudinalMotionProfile->set_maximumvelocity(std::get<0U>(mcp));
         longitudinalMotionProfile->set_maximumacceleration(std::get<1U>(mcp));
     }
+
+    out.set_trajectorypointidx(in.trajectoryPointIdx);
+
+    *out.mutable_poseinfrenet() = convert(in.poseInFrenet);
+
     return out;
 }
 
