@@ -91,12 +91,9 @@ void MotionPlanningIntent::setup() {
     lateralPid_.reset();
 }
 
-
+constexpr float kMaximumAcceleration = 0.2F;    // m/s
+constexpr float kMaximumVelocity     = 1.0F;    // m/s
 void MotionPlanningIntent::tick() {
-    constexpr float kMaximumAcceleration = 0.2F;    // m/s
-    constexpr float kMaximumVelocity     = 1.0F;    // m/s
-
-
     // Calculate curvature profile
     curvatureProfile_.reset();
     motion_planning::calculateCurvatureProfile(
@@ -119,12 +116,22 @@ void MotionPlanningIntent::tick() {
 
 
     // Find out longitudinal and Lateral speed
-    data::PolarVector2D egoVelocity   = egoStateTopic.velocity;
-    egoVelocity.orientation           = egoVelocity.orientation - poseInFrenet_.orientation;
-    data::Vector2D resolutionVelocity = utils::math::to<data::Vector2D>(egoVelocity);
+    data::PolarVector2D egoVelocity = egoStateTopic.velocity;
+    egoVelocity.orientation         = egoVelocity.orientation - poseInFrenet_.orientation;
+    data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
 
+    data::PolarVector2D egoAcceleration = egoStateTopic.acceleration;
+    egoAcceleration.orientation         = egoAcceleration.orientation - poseInFrenet_.orientation;
+    data::Vector2D resolvedAcceleration = utils::math::to<data::Vector2D>(egoAcceleration);
     // Plan longitudinal
-    planLongitudinal(resolutionVelocity.x);
+    planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
+
+
+    // Output to topic
+    for (std::size_t i {0U}; i < kPlanningSize; ++i) {
+        data::Waypoint &wp {(motionPlanningTopic.waypoints)[i]};
+        wp.velocity.x = std::get<1U>(longitudinalPlanning_[i]);
+    }
 
 
     // Output to debug
@@ -159,11 +166,53 @@ void MotionPlanningIntent::tick() {
     // planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
 }
 
-void MotionPlanningIntent::planLongitudinal(const float initSpeed) {
-    float currentSpeed = initSpeed;
-    float currentS     = poseInFrenet_.position.x;
-    for (std::size_t i {0U}; i < kPlanningSize; ++i) {
-        longitudinalPlanning_[i] = std::make_tuple(currentS, currentSpeed);
+void MotionPlanningIntent::planLongitudinal(const float intiS,
+                                            const float initSpeed,
+                                            const float initAcceleration,
+                                            const std::size_t initIdx) {
+    float currentS            = intiS;
+    float currentSpeed        = initSpeed;
+    float currentAcceleration = initAcceleration;
+    std::size_t idx           = initIdx;
+    longitudinalPlanning_[0U] = std::make_tuple(currentS, currentSpeed, currentAcceleration);
+
+
+    for (std::size_t i {1U}; i < kPlanningSize; ++i) {
+        // update state
+        currentS += currentSpeed * 0.01F;
+        if (currentS < 0) {
+            idx = 0U;
+        } else {
+            float totalLength = 0.0F;
+            for (idx = 0U; idx <= trajectoryTopic.passingPointSize; ++idx) {
+                const data::PassingPoint &passingPoint {trajectoryTopic.passingPoint[idx]};
+                totalLength += passingPoint.segment.value;
+                if (totalLength > currentS) {
+                    break;
+                }
+            }
+            idx -= 1U;
+        }
+
+        // get the profile on the current segment
+        float maximumSegmentVelocity {0.0F};
+        float maximumSegmentAcceleration {0.0F};
+        std::tie(maximumSegmentVelocity, maximumSegmentAcceleration) = motionProfile_[idx];
+
+        // Calculate the velocity
+        // Calculate the maximum speed that constrained by motor
+        float expectedSpeed = currentSpeed + (kMaximumAcceleration * 0.01F);
+        if (expectedSpeed > maximumSegmentVelocity) {
+            expectedSpeed = maximumSegmentVelocity;
+        }
+        float expectedAcceleration = (expectedSpeed - currentSpeed) / 0.01F;
+        if (expectedAcceleration > maximumSegmentAcceleration) {
+            expectedAcceleration = maximumSegmentAcceleration;
+        }
+
+        // Deduce velocity
+        expectedSpeed            = currentSpeed + (expectedAcceleration * 0.01F);
+        longitudinalPlanning_[i] = std::make_tuple(currentS, expectedSpeed, expectedAcceleration);
     }
 }
 

@@ -42,10 +42,13 @@ class MotionPlanningIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    void planLongitudinal(const float initSpeed);
+    void planLongitudinal(const float intiS,
+                          const float initSpeed,
+                          const float initAcceleration,
+                          const std::size_t initIdx);
 
 
-    void planEgoMotion(const data::Pose2D &inintOdometry,
+    void planEgoMotion(const data::Pose2D &initOdometry,
                        const data::PolarVector2D &initVelocity,
                        const data::PolarVector2D &initAcceleration);
 
@@ -57,9 +60,9 @@ class MotionPlanningIntent : public IntentBase {
 
 
     /**
-     * tuple : < s - velocity >
+     * tuple : < s - velocity - acceleration >
      */
-    using LongitudinalWaypoint = std::tuple<float, float>;
+    using LongitudinalWaypoint = std::tuple<float, float, float>;
     std::array<LongitudinalWaypoint, kPlanningSize> longitudinalPlanning_;
 };
 

@@ -18,6 +18,9 @@ float calculateDistanceFromPointToSegment(const data::Position2D &point,
                                           const bool isEndClosed);
 }    // namespace detail
 
+
+// TODO: need to optimized
+// @return <index of trajectory, closest distance to the passing point>
 std::tuple<std::size_t, float> calculatePoseInFrenet(const data::Pose2D &poseInWorld,
                                                      const data::PassingPoint *passingPoint,
                                                      const std::size_t &passingPointSize,
