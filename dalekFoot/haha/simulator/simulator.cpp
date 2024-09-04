@@ -9,7 +9,7 @@ namespace sim {
 
 Simulator::Simulator() {}
 Simulator::~Simulator() {}
-void Simulator::tick() { vehicleResponse_.wheelStatus[0].speed += 0.1F; }
+void Simulator::tick() {}
 
 void Simulator::updateVehicleRequest(const intent::VehicleRequestTopic &vehicleRequest) {
     for (std::size_t i {0U}; i < 4U; ++i) {

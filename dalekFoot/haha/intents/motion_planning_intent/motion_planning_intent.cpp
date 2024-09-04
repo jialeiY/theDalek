@@ -91,7 +91,7 @@ void MotionPlanningIntent::setup() {
     lateralPid_.reset();
 }
 
-constexpr float kMaximumAcceleration = 0.2F;    // m/s
+constexpr float kMaximumAcceleration = 0.5F;    // m/s
 constexpr float kMaximumVelocity     = 1.0F;    // m/s
 void MotionPlanningIntent::tick() {
     // Calculate curvature profile
@@ -191,7 +191,7 @@ void MotionPlanningIntent::planLongitudinal(const float intiS,
                     break;
                 }
             }
-            idx -= 1U;
+            idx--;
         }
 
         // get the profile on the current segment
@@ -213,6 +213,7 @@ void MotionPlanningIntent::planLongitudinal(const float intiS,
         // Deduce velocity
         expectedSpeed            = currentSpeed + (expectedAcceleration * 0.01F);
         longitudinalPlanning_[i] = std::make_tuple(currentS, expectedSpeed, expectedAcceleration);
+        currentSpeed             = expectedSpeed;
     }
 }
 
