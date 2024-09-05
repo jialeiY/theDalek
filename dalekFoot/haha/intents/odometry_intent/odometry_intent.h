@@ -16,7 +16,8 @@ class OdometryIntent : public IntentBase {
 
   private:
     bool isInitialized_ {false};
-    uint64_t encoder_[4];
+    // uint64_t encoder_[4];
+    float wheelOdometry_[4];
 
     std::random_device randomDev_;
     std::mt19937 randomGen_;

@@ -24,6 +24,7 @@ PROTO_FILES += data/proto/vector2d.proto
 PROTO_FILES += data/proto/vehicle_request_topic.proto
 PROTO_FILES += data/proto/waypoint.proto
 PROTO_FILES += data/proto/wheel_control_planning.proto
+PROTO_FILES += data/proto/vehicle_response_topic.proto
 
 CPP_SOURCES += data/codec/behavior_topic_codec.cpp
 CPP_SOURCES += data/codec/ego_state_topic_codec.cpp
@@ -39,6 +40,7 @@ CPP_SOURCES += data/codec/route_topic_codec.cpp
 CPP_SOURCES += data/codec/trajectory_topic_codec.cpp
 CPP_SOURCES += data/codec/vector2d_codec.cpp
 CPP_SOURCES += data/codec/vehicle_request_topic_codec.cpp
+CPP_SOURCES += data/codec/vehicle_response_topic_codec.cpp
 CPP_SOURCES += data/codec/waypoint_codec.cpp
 CPP_SOURCES += data/codec/wheel_control_planning_codec.cpp
 CPP_SOURCES += data/defs/vector2d.cpp

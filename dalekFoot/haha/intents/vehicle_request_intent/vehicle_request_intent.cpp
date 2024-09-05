@@ -25,7 +25,8 @@ void VehicleRequestIntent::tick() {
     const data::PolarVector2D fakeVelocity = {0.0F, 0.0F};
     const float rotation                   = 0.0F;
 
-    const data::Vector2D velocityVec = utils::math::to<data::Vector2D>(fakeVelocity);
+    data::Vector2D velocityVec = utils::math::to<data::Vector2D>(fakeVelocity);
+    velocityVec.x              = motionPlanningTopic.waypoints[0U].velocity.x;
 
 
     vehicleRequestTopic.wheelControlPlanning[0U].speed[0U] =

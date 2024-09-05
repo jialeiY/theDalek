@@ -9,6 +9,7 @@ namespace data {
 struct WheelStatus {
     uint64_t encoder {0U};
     float speed {0.0F};
+    float odometry {0.0F};
 };
 
 struct VehicleResponse {

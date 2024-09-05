@@ -14,7 +14,9 @@ OdometryIntent::OdometryIntent() :
     isInitialized_ {false},
     randomDev_ {},
     randomGen_ {randomDev_()},
-    randomDistribution_ {0.0F, 0.02F} {}
+    randomDistribution_ {0.0F, 0.02F} {
+    for (std::size_t i {0U}; i < 4U; ++i) { wheelOdometry_[i] = 0.0F; }
+}
 
 OdometryIntent::~OdometryIntent() {}
 
@@ -44,22 +46,24 @@ void OdometryIntent::tick() {
     constexpr float kAxelLateral {0.20F};
 
     if (isInitialized_) {
-        int64_t encoderDiff[4];
+        float odometryDiff[4];
         float dist[4];
         for (std::size_t i {0U}; i < 4U; ++i) {
-            encoderDiff[i] = vehicleResponseTopic.response.wheelStatus[i].encoder - encoder_[i];
+            odometryDiff[i] =
+              vehicleResponseTopic.response.wheelStatus[i].odometry - wheelOdometry_[i];
             // TODO: make it a parameter
-            dist[i]     = (static_cast<float>(encoderDiff[i]) / 4096.0) * (utils::math::PI * 0.06);
-            encoder_[i] = vehicleResponseTopic.response.wheelStatus[i].encoder;
+            // dist[i]           = (odometryDiff[i] / 4096.0F) * (utils::math::PI * 0.06);
+            dist[i]           = odometryDiff[i];
+            wheelOdometry_[i] = vehicleResponseTopic.response.wheelStatus[i].encoder;
         }
         float diffx = dist[0] + dist[1] + dist[2] + dist[3];
         float diffy = dist[0] - dist[1] + dist[2] - dist[3];
         float diffr = dist[0] + dist[1] - dist[2] - dist[3];
-        std::printf("encoder: %ld %ld %ld %ld\r\n",
-                    encoderDiff[0],
-                    encoderDiff[1],
-                    encoderDiff[2],
-                    encoderDiff[3]);
+        std::printf("encoder: %f %f %f %f\r\n",
+                    wheelOdometry_[0],
+                    wheelOdometry_[1],
+                    wheelOdometry_[2],
+                    wheelOdometry_[3]);
 
         float angularDiff =
           diffr * (2.0 * utils::math::PI /
@@ -81,7 +85,8 @@ void OdometryIntent::tick() {
 
     } else {
         for (std::size_t i {0U}; i < 4U; ++i) {
-            encoder_[i] = vehicleResponseTopic.response.wheelStatus[i].encoder;
+            wheelOdometry_[i] = vehicleResponseTopic.response.wheelStatus[i].odometry;
+            // encoder_[i] = vehicleResponseTopic.response.wheelStatus[i].encoder;
         }
         isInitialized_ = true;
     }

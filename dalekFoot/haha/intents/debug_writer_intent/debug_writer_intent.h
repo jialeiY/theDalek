@@ -14,6 +14,7 @@
 #include "data/codec/route_topic_codec.h"
 #include "data/codec/trajectory_topic_codec.h"
 #include "data/codec/vehicle_request_topic_codec.h"
+#include "data/codec/vehicle_response_topic_codec.h"
 #include "intents/debug_writer_intent/mcap_helper.h"
 #include "utils/time.h"
 

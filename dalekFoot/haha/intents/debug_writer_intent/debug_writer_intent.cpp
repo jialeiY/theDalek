@@ -28,6 +28,8 @@ namespace {}    // namespace
 
 DebugWriterIntent::DebugWriterIntent() {
     mcapTopicConverterList_.push_back(
+      new McapTopicConverter(&vehicleResponseTopic, "/vehicle/response"));
+    mcapTopicConverterList_.push_back(
       new McapTopicConverter<cooboc::intent::EgoStateTopic>(&egoStateTopic, "/ego_state"));
     mcapTopicConverterList_.push_back(new McapTopicConverter(&odometryTopic, "/odometry"));
     mcapTopicConverterList_.push_back(new McapTopicConverter(&behaviorTopic, "/planning/behavior"));

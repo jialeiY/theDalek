@@ -13,6 +13,7 @@ class Simulator {
   public:
     Simulator();
     virtual ~Simulator();
+    void setup();
     void tick();
     void updateVehicleRequest(const intent::VehicleRequestTopic &vehicleRequest);
     data::VehicleResponse getVehicleResponse();

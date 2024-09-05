@@ -174,10 +174,10 @@ void MotionPlanningIntent::planLongitudinal(const float intiS,
     float currentSpeed        = initSpeed;
     float currentAcceleration = initAcceleration;
     std::size_t idx           = initIdx;
-    longitudinalPlanning_[0U] = std::make_tuple(currentS, currentSpeed, currentAcceleration);
+    // longitudinalPlanning_[0U] = std::make_tuple(currentS, currentSpeed, currentAcceleration);
 
 
-    for (std::size_t i {1U}; i < kPlanningSize; ++i) {
+    for (std::size_t i {0U}; i < kPlanningSize; ++i) {
         // update state
         currentS += currentSpeed * 0.01F;
         if (currentS < 0) {
@@ -213,7 +213,9 @@ void MotionPlanningIntent::planLongitudinal(const float intiS,
         // Deduce velocity
         expectedSpeed            = currentSpeed + (expectedAcceleration * 0.01F);
         longitudinalPlanning_[i] = std::make_tuple(currentS, expectedSpeed, expectedAcceleration);
-        currentSpeed             = expectedSpeed;
+
+
+        currentSpeed = expectedSpeed;
     }
 }
 
