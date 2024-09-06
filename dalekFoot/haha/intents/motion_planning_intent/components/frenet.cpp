@@ -93,7 +93,7 @@ std::tuple<std::size_t, float> calculatePoseInFrenet(const data::Pose2D &poseInW
     if (!utils::math::equals(headPoint, endPoint)) {
         const data::Position2D veca = endPoint - headPoint;
         const data::Position2D vecb = poseInWorld.position - headPoint;
-        s += veca.dot(vecb) / veca.abs();
+        s += (veca.dot(vecb) / veca.abs());
     } else {
         // TODO
     }
@@ -110,7 +110,7 @@ std::tuple<std::size_t, float> calculatePoseInFrenet(const data::Pose2D &poseInW
     const data::PolarVector2D &segPolarVec {passingPoint[closestSegmentId + 1U].segment};
 
     const float orientation =
-      utils::math::clampAngle(poseInFrenet.orientation - segPolarVec.orientation);
+      utils::math::clampAngle(poseInWorld.orientation - segPolarVec.orientation);
 
 
     poseInFrenet.position    = {s, y};

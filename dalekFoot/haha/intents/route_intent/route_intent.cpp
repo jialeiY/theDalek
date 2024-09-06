@@ -21,34 +21,46 @@ void RouteIntent::setup() {
 }
 
 void RouteIntent::tick() {
-    routeTopic.hasValue         = true;
-    routeTopic.routeId          = uniqueRouteId_;
-    routeTopic.routeSegmentSize = 5U;
+    routeTopic.hasValue = true;
+    routeTopic.routeId  = uniqueRouteId_;
 
-    routeTopic.startPoint = data::Position2D {0.0F, 0.0F};
+    // routeTopic.routeSegmentSize = 5U;
+    // routeTopic.startPoint = data::Position2D {0.0F, 0.0F};
+    // {
+    //     data::RouteSegment &segment {routeTopic.routeSegment[0U]};
+    //     segment.endPoint              = data::Position2D {0.3F, 0.0F};
+    //     segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
+    // }
+    // {
+    //     data::RouteSegment &segment {routeTopic.routeSegment[1U]};
+    //     segment.endPoint              = data::Position2D {0.7F, 0.3F};
+    //     segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
+    // }
+    // {
+    //     data::RouteSegment &segment {routeTopic.routeSegment[2U]};
+    //     segment.endPoint              = data::Position2D {2.0, 0.1F};
+    //     segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_NEXT;
+    // }
+    // {
+    //     data::RouteSegment &segment {routeTopic.routeSegment[3U]};
+    //     segment.endPoint              = data::Position2D {2.0, -1.1F};
+    //     segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_CURRENT;
+    // }
+    // {
+    //     data::RouteSegment &segment {routeTopic.routeSegment[4U]};
+    //     segment.endPoint              = data::Position2D {3.0, -0.1F};
+    //     segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
+    // }
+    routeTopic.routeSegmentSize = 2U;
+    routeTopic.startPoint       = data::Position2D {0.0F, 0.0F};
     {
         data::RouteSegment &segment {routeTopic.routeSegment[0U]};
-        segment.endPoint              = data::Position2D {0.3F, 0.0F};
+        segment.endPoint              = data::Position2D {1.0F, 0.0F};
         segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
     }
     {
         data::RouteSegment &segment {routeTopic.routeSegment[1U]};
-        segment.endPoint              = data::Position2D {0.7F, 0.3F};
-        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
-    }
-    {
-        data::RouteSegment &segment {routeTopic.routeSegment[2U]};
-        segment.endPoint              = data::Position2D {2.0, 0.1F};
-        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_NEXT;
-    }
-    {
-        data::RouteSegment &segment {routeTopic.routeSegment[3U]};
-        segment.endPoint              = data::Position2D {2.0, -1.1F};
-        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_CURRENT;
-    }
-    {
-        data::RouteSegment &segment {routeTopic.routeSegment[4U]};
-        segment.endPoint              = data::Position2D {3.0, -0.1F};
+        segment.endPoint              = data::Position2D {1.0F, 10.0F};
         segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
     }
 }
