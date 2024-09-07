@@ -23,6 +23,7 @@ struct MotionPlanningDebugTopic {
     std::array<std::tuple<float, float>, kTrajectoryPassingPointCapacity>
       longitudinalMotionProfile {};
 
+
     std::int64_t trajectoryPointIdx {-1};
 
     data::Pose2D poseInFrenet {};

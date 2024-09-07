@@ -1,4 +1,5 @@
 #include "intents/intent_manager.h"
+#include <cstdint>
 #include <cstdio>
 #include "data/defs/vehicle_response.h"
 #include "intents/behavior_intent/behavior_intent.h"
@@ -17,7 +18,7 @@
 namespace cooboc {
 namespace intent {
 
-IntentManager::IntentManager() {
+IntentManager::IntentManager() : tickCount_ {0U}, lastTickEndTime_ {0U}, lastTickDuration_ {0U} {
     // Decode vehicle status from gaga response, generate ego_motion
     intents_.push_back(new EgoStateIntent());
     // Localization
@@ -41,6 +42,13 @@ IntentManager::~IntentManager() {
 }
 void IntentManager::setup() {
     for (IntentBase *intentPtr : intents_) { intentPtr->setup(); }
+    tickCount_                        = 0U;
+    lastTickEndTime_                  = 0U;
+    lastTickDuration_                 = 0U;
+    systemDebugTopic.lastTickEndTime  = 0U;
+    systemDebugTopic.lastTickDuration = 0U;
+    systemDebugTopic.tickStartTime    = 0U;
+    systemDebugTopic.tickCount        = 0U;
 }
 
 void IntentManager::updateVehicleResponse(data::VehicleResponse vehicleResponse) {
@@ -49,11 +57,19 @@ void IntentManager::updateVehicleResponse(data::VehicleResponse vehicleResponse)
 }
 
 void IntentManager::tick() {
-    systemDebugTopic.cycleStartTime = utils::time::nanoseconds();
-    systemDebugTopic.cycleEndTime   = 0U;
+    std::uint64_t tickStartTime = utils::time::nanoseconds();
+    tickCount_++;
+
+    systemDebugTopic.lastTickEndTime  = lastTickEndTime_;
+    systemDebugTopic.lastTickDuration = lastTickDuration_;
+    systemDebugTopic.tickStartTime    = tickStartTime;
+    systemDebugTopic.tickCount        = tickCount_;
 
     std::printf("\r\n=======\r\n");
     for (IntentBase *intentPtr : intents_) { intentPtr->tick(); }
+
+    lastTickEndTime_  = utils::time::nanoseconds();
+    lastTickDuration_ = lastTickEndTime_ - tickStartTime;
 }
 
 

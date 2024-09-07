@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package cooboc.proto;
+
+message SystemDebugTopic {
+    optional uint64 lastTickEndTime  = 1 [default = 0];
+    optional uint64 lastTickDuration = 2 [default = 0];
+
+    optional uint64 tickStartTime = 3 [default = 0];
+    optional uint64 tickCount     = 4 [default = 0];
+}

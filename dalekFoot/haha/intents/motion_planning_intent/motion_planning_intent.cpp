@@ -11,66 +11,19 @@
 #include "utils/algo/pid.h"
 #include "utils/math.h"
 
+
 namespace cooboc {
+
+constexpr float kPlanningIntervalSeconds {0.01F};    // TODO: put parameter to parameter file
+
 namespace intent {
-
-// namespace detail {
-// ReferencePose calculatePositionInFrenet(const data::Pose2D &odometry, const RouteTopic &route) {
-//     // // TODO, assume route always has data now
-
-//     // // Find the segment
-//     // std::size_t closestSegmentId {0U};
-//     // float closestDistance {std::numeric_limits<float>::max()};
-
-//     // const std::size_t segmentNumber = route.polylineLength - 1U;
-//     // for (std::size_t i {0U}; i < segmentNumber; ++i) {
-//     //     bool firstNeedOpen = i != 0U;    // only first one open
-//     //     float dist         = std::fabs(calculateDistanceFromPointToSegment(
-//     //       odometry.position, route.polyline[i], route.polyline[i + 1U], firstNeedOpen, true));
-//     //     if (dist < closestDistance) {
-//     //         closestSegmentId = i;
-//     //         closestDistance  = dist;
-//     //     }
-//     // }
-
-
-//     // float s = 0.0F;
-//     // // Calculate all s before current segment
-//     // for (std::size_t i {0U}; (i + 1U) < closestSegmentId; ++i) {
-//     //     s += route.polyline[i].distance(route.polyline[i + 1U]);
-//     // }
-
-//     // // Calculate s on current segment
-//     // if (!utils::math::equals(route.polyline[closestSegmentId],
-//     //                          route.polyline[closestSegmentId + 1U])) {
-//     //     const data::Position2D veca =
-//     //       route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId];
-//     //     const data::Position2D vecb = odometry.position - route.polyline[closestSegmentId];
-//     //     s += veca.dot(vecb) / veca.abs();
-//     // }
-
-//     // const float y {calculateDistanceFromPointToSegment(odometry.position,
-//     //                                                    route.polyline[closestSegmentId],
-//     //                                                    route.polyline[closestSegmentId + 1U],
-//     //                                                    false,
-//     //                                                    false)};
-
-//     // data::Vector2D refSegVec {
-//     //   (route.polyline[closestSegmentId + 1U] - route.polyline[closestSegmentId])};
-//     // data::PolarVector2D refSegPolarVec = utils::math::to<data::PolarVector2D>(refSegVec);
-//     // return {s, y, refSegPolarVec.orientation};
-//     return {};
-// }
-
-
-// }    // namespace detail
-
 
 MotionPlanningIntent::MotionPlanningIntent() :
     lateralPid_ {},
     curvatureProfile_ {},
     motionProfile_ {},
-    poseInFrenet_ {} {
+    poseInFrenet_ {},
+    longitudinalPlanning_ {} {
     motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
@@ -117,22 +70,23 @@ void MotionPlanningIntent::tick() {
 
     // Find out longitudinal and Lateral speed
     data::PolarVector2D egoVelocity = egoStateTopic.velocity;
-    egoVelocity.orientation         = egoVelocity.orientation - poseInFrenet_.orientation;
+    egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
     data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
 
-    data::PolarVector2D egoAcceleration = egoStateTopic.acceleration;
-    egoAcceleration.orientation         = egoAcceleration.orientation - poseInFrenet_.orientation;
-    data::Vector2D resolvedAcceleration = utils::math::to<data::Vector2D>(egoAcceleration);
-    // Plan longitudinal
-    planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
+    // data::PolarVector2D egoAcceleration = egoStateTopic.acceleration;
+    // egoAcceleration.orientation         = egoAcceleration.orientation -
+    // poseInFrenet_.orientation; data::Vector2D resolvedAcceleration =
+    // utils::math::to<data::Vector2D>(egoAcceleration); Plan longitudinal
 
+    // planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
+    planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
 
     // Output to topic
     for (std::size_t i {0U}; i < kPlanningSize; ++i) {
         data::Waypoint &wp {(motionPlanningTopic.waypoints)[i]};
-        wp.velocity.x = std::get<1U>(longitudinalPlanning_[i]);
+        wp.velocity.x = longitudinalPlanning_[i].motionVelocity.x;
+        wp.velocity.y = longitudinalPlanning_[i].motionVelocity.y;
     }
-
 
     // Output to debug
     for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
@@ -142,140 +96,82 @@ void MotionPlanningIntent::tick() {
     motionPlanningDebugTopic.trajectoryPointIdx   = idx;
     motionPlanningDebugTopic.poseInFrenet         = poseInFrenet_;
     motionPlanningDebugTopic.distanceToTrajectory = dist;
-
-
-    // // 0. Setup the input data
-    // // Odometry
-    // const data::Pose2D &odometry = odometryTopic.pose;
-    // // Reference path
-    // const RouteTopic &route = routeTopic;
-
-    // // 1. key reference path where odometry is on it
-    // detail::ReferencePose refPose = detail::calculatePositionInFrenet(odometry, route);
-
-    // data::Pose2D initOdometryInFrenet {{refPose.s, refPose.y},
-    //                                    odometryTopic.pose.orientation - refPose.orientation};
-    // data::PolarVector2D initVelocityInFrenet {
-    //   egoStateTopic.velocity.orientation + odometry.orientation - refPose.orientation,
-    //   egoStateTopic.velocity.value};
-    // data::PolarVector2D initAccelerationInFrenet {
-    //   egoStateTopic.acceleration.orientation + odometry.orientation - refPose.orientation,
-    //   egoStateTopic.acceleration.value};
-
-
-    // planEgoMotion(initOdometryInFrenet, initVelocityInFrenet, initAccelerationInFrenet);
 }
 
-void MotionPlanningIntent::planLongitudinal(const float intiS,
-                                            const float initSpeed,
-                                            const float initAcceleration,
-                                            const std::size_t initIdx) {
-    float currentS            = intiS;
-    float currentSpeed        = initSpeed;
-    float currentAcceleration = initAcceleration;
-    std::size_t idx           = initIdx;
-    // longitudinalPlanning_[0U] = std::make_tuple(currentS, currentSpeed, currentAcceleration);
 
+void MotionPlanningIntent::planLongitudinal(const float initS, const float initSpeed) {
+    std::size_t idx         = 0U;
+    float segmentS          = initS;
+    float longitudinalSpeed = initSpeed;
 
-    for (std::size_t i {0U}; i < kPlanningSize; ++i) {
-        // update state
-        currentS += currentSpeed * 0.01F;
-        if (currentS < 0) {
-            idx = 0U;
-        } else {
-            float totalLength = 0.0F;
-            for (idx = 0U; idx <= trajectoryTopic.passingPointSize; ++idx) {
-                const data::PassingPoint &passingPoint {trajectoryTopic.passingPoint[idx]};
-                totalLength += passingPoint.segment.value;
-                if (totalLength > currentS) {
-                    break;
-                }
-            }
-            idx--;
-        }
+    normalizeS(idx, segmentS);
+    data::Position2D position = mapSToPosition(idx, segmentS);
 
-        // get the profile on the current segment
-        float maximumSegmentVelocity {0.0F};
+    for (std::size_t i {0}; i < kPlanningSize; ++i) {
+        // 1. Deduce speed
+        float maximumSegmentSpeed {0.0F};
         float maximumSegmentAcceleration {0.0F};
-        std::tie(maximumSegmentVelocity, maximumSegmentAcceleration) = motionProfile_[idx];
+        std::tie(maximumSegmentSpeed, maximumSegmentAcceleration) = motionProfile_[idx];
+        const float maximumAllowedSpeedDiff =
+          (maximumSegmentAcceleration * kPlanningIntervalSeconds);
+        const float maxAllowedSpeed = longitudinalSpeed + maximumAllowedSpeedDiff;
+        const float minAllowedSpeed = longitudinalSpeed - maximumAllowedSpeedDiff;
 
-        // Calculate the velocity
-        // Calculate the maximum speed that constrained by motor
-        float expectedSpeed = currentSpeed + (kMaximumAcceleration * 0.01F);
-        if (expectedSpeed > maximumSegmentVelocity) {
-            expectedSpeed = maximumSegmentVelocity;
-        }
-        float expectedAcceleration = (expectedSpeed - currentSpeed) / 0.01F;
-        if (expectedAcceleration > maximumSegmentAcceleration) {
-            expectedAcceleration = maximumSegmentAcceleration;
-        }
-
-        // Deduce velocity
-        expectedSpeed            = currentSpeed + (expectedAcceleration * 0.01F);
-        longitudinalPlanning_[i] = std::make_tuple(currentS, expectedSpeed, expectedAcceleration);
+        longitudinalSpeed =
+          std::max(std::min(maximumSegmentSpeed, maxAllowedSpeed), minAllowedSpeed);
 
 
-        currentSpeed = expectedSpeed;
+        segmentS += longitudinalSpeed * kPlanningIntervalSeconds;
+        normalizeS(idx, segmentS);
+        const data::Position2D nextPosition = mapSToPosition(idx, segmentS);
+        const data::Vector2D motionDistance = nextPosition - position;
+        const data::Vector2D motionVelocity = motionDistance / kPlanningIntervalSeconds;
+
+        // Output
+        LongitudinalPlanningPoint &lpp = longitudinalPlanning_[i];
+        lpp.trajectoryIdx              = idx;
+        lpp.segmentS                   = segmentS;
+        lpp.speed                      = longitudinalSpeed;
+        lpp.waypoint                   = nextPosition;
+
+        lpp.motionVelocity = motionVelocity;
+
+
+        // Update status
+        position = nextPosition;
     }
 }
 
-void MotionPlanningIntent::planEgoMotion(const data::Pose2D &initOdometry,
-                                         const data::PolarVector2D &initVelocity,
-                                         const data::PolarVector2D &initAcceleration) {
-    // Generate trajectory of waypoints
-    motionPlanningDebugTopic.numberOfWaypoints = MotionPlanningDebugTopic::kWaypointNumber;
+void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {
+    if (s < 0.0F) {
+        trajectoryIdx = 0U;
+    }
 
-    // lateral first
-    data::Vector2D splitVelocity     = utils::math::to<data::Vector2D>(initVelocity);
-    data::Vector2D splitAcceleration = utils::math::to<data::Vector2D>(initAcceleration);
-
-    data::Pose2D egoPose {initOdometry};
-
-    // Way point [0] is the init state that can not changed. Based on the init state, this module
-    // send the control signal to control the states following that.
-    // The velocity and acceleration is the control signal for changing this state. That means the
-    // velocity and acceleration is the motion state that the vehicle must to reach in the next
-    // cycle.
-    // And the Planner plans the waypoint 5 times of the vehicle that. It means haha generates the
-    // cycles number is 10ms(gaga cycle), 5second planning = 500 waypoints.
-
-    // Initialize the velocity and acceleration
-    motionPlanningDebugTopic.numberOfWaypoints = MotionPlanningDebugTopic::kWaypointNumber;
-
-    float lastVy = splitVelocity.y;
-    float lastAy = splitAcceleration.y;
-
-    for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
-        data::Waypoint &waypoint {motionPlanningDebugTopic.waypoints[i]};
-        waypoint.timepoint = odometryTopic.timestamp + (100U * 1000U * i);    // 10 ms
-
-        // 1. Write out current Status
-        waypoint.pose = egoPose;
-
-        // 2. Calculate the maneuver state
-        // Update lateral position based on velocity
-        float egoy {egoPose.position.y};
-        // Calculate the control value
-        float error {0 - egoPose.position.y};
-        lateralPid_.updateError(error);
-        float expectV {lateralPid_.getOutput()};
-        float expectA {(expectV - lastVy) * 100.0F};    // 10ms
-
-        // 3. Constrains the maneuver not too ridiculous
-        float actualA {utils::math::clamp(expectA, -0.3F, 0.3F)};
-        float actualV {lastVy + (actualA * 0.01F)};    // 10ms
-
-        // 3. Write out maneuver state
-        waypoint.velocityY     = actualV;
-        waypoint.accelerationY = actualA;
-        lastVy                 = actualV;
-
-        // 4. Update ego for next waypoint
-        egoy += actualV * 0.01F;    // 10ms
-        egoPose.position.y = egoy;
+    while ((trajectoryIdx + 2U) < trajectoryTopic.passingPointSize) {
+        const float &currentSegmentLength {
+          trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value};
+        if (currentSegmentLength < s) {
+            s -= currentSegmentLength;
+            trajectoryIdx++;
+        } else {
+            break;
+        }
     }
 }
 
+data::Position2D MotionPlanningIntent::mapSToPosition(std::size_t &trajectoryIdx, const float s) {
+    if ((trajectoryIdx + 1U) < trajectoryTopic.passingPointSize) {
+        const data::Position2D &startPoint {trajectoryTopic.passingPoint[trajectoryIdx].position};
+        const data::Position2D &endPoint {
+          trajectoryTopic.passingPoint[trajectoryIdx + 1U].position};
+        const float length     = trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value;
+        const float percentage = s / length;
+        return utils::math::interpolate(startPoint, endPoint, percentage);
+    } else {
+        // TODO: error here
+        return {0.0F, 0.0F};
+    }
+}
 
 }    // namespace intent
 }    // namespace cooboc

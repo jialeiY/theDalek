@@ -42,28 +42,27 @@ class MotionPlanningIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    void planLongitudinal(const float intiS,
-                          const float initSpeed,
-                          const float initAcceleration,
-                          const std::size_t initIdx);
-
-
-    void planEgoMotion(const data::Pose2D &initOdometry,
-                       const data::PolarVector2D &initVelocity,
-                       const data::PolarVector2D &initAcceleration);
-
-
     algo::PID<float> lateralPid_ {};
     motion_planning::CurvatureProfile curvatureProfile_;
     motion_planning::MotionProfile motionProfile_;
     data::Pose2D poseInFrenet_ {};
 
+    void planLongitudinal(const float initS, const float initSpeed);
+    void normalizeS(std::size_t &trajectoryIdx, float &s);
+    data::Position2D mapSToPosition(std::size_t &trajectoryIdx, const float s);
 
-    /**
-     * tuple : < s - velocity - acceleration >
-     */
-    using LongitudinalWaypoint = std::tuple<float, float, float>;
-    std::array<LongitudinalWaypoint, kPlanningSize> longitudinalPlanning_;
+    struct LongitudinalPlanningPoint {
+        std::size_t trajectoryIdx {0U};
+        float segmentS {0.0F};
+        float speed {0.0F};
+        data::Position2D waypoint {};
+
+        // debug
+        data::Vector2D motionVelocity {};
+    };
+
+
+    std::array<LongitudinalPlanningPoint, kPlanningSize> longitudinalPlanning_ {};
 };
 
 }    // namespace intent

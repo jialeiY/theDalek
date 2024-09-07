@@ -15,6 +15,8 @@ struct Vector2D {
     inline Vector2D operator-(const Vector2D &b) const { return {x - b.x, y - b.y}; }
     Vector2D operator+(const PolarVector2D &b) const;
     Vector2D operator-(const PolarVector2D &b) const;
+    inline Vector2D operator*(const float a) const { return {x * a, y * a}; }
+    inline Vector2D operator/(const float a) const { return {x / a, y / a}; }
 
     inline float dot(const Vector2D &b) const { return (x * b.x) + (y * b.y); }
     inline float cross(const Vector2D &b) const { return (x * b.y) - (y * b.x); }
