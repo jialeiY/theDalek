@@ -11,7 +11,11 @@
 #include "utils/algo/pid.h"
 #include "utils/math.h"
 
+
 namespace cooboc {
+
+constexpr float kPlanningIntervalSeconds {0.01F};    // TODO: put parameter to parameter file
+
 namespace intent {
 
 MotionPlanningIntent::MotionPlanningIntent() :
@@ -74,14 +78,13 @@ void MotionPlanningIntent::tick() {
     // Plan longitudinal
 
     // planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
-
+    planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
 
     // Output to topic
     for (std::size_t i {0U}; i < kPlanningSize; ++i) {
         data::Waypoint &wp {(motionPlanningTopic.waypoints)[i]};
         wp.velocity.x = std::get<1U>(longitudinalPlanning_[i]);
     }
-
 
     // Output to debug
     for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
@@ -93,6 +96,45 @@ void MotionPlanningIntent::tick() {
     motionPlanningDebugTopic.distanceToTrajectory = dist;
 }
 
+
+void MotionPlanningIntent::planLongitudinal(const float initS, const float initSpeed) {
+    float segmentS  = initS;
+    std::size_t idx = 0U;
+    normalizeS(idx, segmentS);
+    data::Position2D position = mapSToPosition(idx, segmentS);
+    segmentS += initSpeed * 0.01F;
+}
+
+void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {
+    if (s < 0.0F) {
+        trajectoryIdx = 0U;
+    }
+
+    while ((trajectoryIdx + 2U) < trajectoryTopic.passingPointSize) {
+        const float &currentSegmentLength {
+          trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value};
+        if (currentSegmentLength > s) {
+            s -= currentSegmentLength;
+            trajectoryIdx++;
+        } else {
+            break;
+        }
+    }
+}
+
+data::Position2D MotionPlanningIntent::mapSToPosition(std::size_t &trajectoryIdx, const float s) {
+    if ((trajectoryIdx + 1U) < trajectoryTopic.passingPointSize) {
+        const data::Position2D &startPoint {trajectoryTopic.passingPoint[trajectoryIdx].position};
+        const data::Position2D &endPoint {
+          trajectoryTopic.passingPoint[trajectoryIdx + 1U].position};
+        const float length     = trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value;
+        const float percentage = s / length;
+        return utils::math::interpolate(startPoint, endPoint, percentage);
+    } else {
+        // TODO: error here
+        return {0.0F, 0.0F};
+    }
+}
 
 }    // namespace intent
 }    // namespace cooboc

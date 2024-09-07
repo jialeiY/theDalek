@@ -42,13 +42,14 @@ class MotionPlanningIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    void normalizeS(float &s, std::size_t &idx);
-    data::Position2D plotSOnSegment(float s, std::size_t idx);
-
     algo::PID<float> lateralPid_ {};
     motion_planning::CurvatureProfile curvatureProfile_;
     motion_planning::MotionProfile motionProfile_;
     data::Pose2D poseInFrenet_ {};
+
+    void planLongitudinal(const float initS, const float initVelocity);
+    void normalizeS(std::size_t &trajectoryIdx, float &s);
+    data::Position2D mapSToPosition(std::size_t &trajectoryIdx, const float s);
 
 
     /**
