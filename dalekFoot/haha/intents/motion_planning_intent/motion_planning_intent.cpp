@@ -22,7 +22,8 @@ MotionPlanningIntent::MotionPlanningIntent() :
     lateralPid_ {},
     curvatureProfile_ {},
     motionProfile_ {},
-    poseInFrenet_ {} {
+    poseInFrenet_ {},
+    longitudinalPlanning_ {} {
     motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
@@ -83,7 +84,7 @@ void MotionPlanningIntent::tick() {
     // Output to topic
     for (std::size_t i {0U}; i < kPlanningSize; ++i) {
         data::Waypoint &wp {(motionPlanningTopic.waypoints)[i]};
-        wp.velocity.x = std::get<1U>(longitudinalPlanning_[i]);
+        wp.velocity.x = longitudinalPlanning_[i].speed;
     }
 
     // Output to debug
@@ -98,11 +99,38 @@ void MotionPlanningIntent::tick() {
 
 
 void MotionPlanningIntent::planLongitudinal(const float initS, const float initSpeed) {
-    float segmentS  = initS;
-    std::size_t idx = 0U;
+    std::size_t idx         = 0U;
+    float segmentS          = initS;
+    float longitudinalSpeed = initSpeed;
+
     normalizeS(idx, segmentS);
     data::Position2D position = mapSToPosition(idx, segmentS);
-    segmentS += initSpeed * 0.01F;
+
+    for (std::size_t i {0}; i < kPlanningSize; ++i) {
+        // 1. Deduce speed
+        float maximumSegmentSpeed {0.0F};
+        float maximumSegmentAcceleration {0.0F};
+        std::tie(maximumSegmentSpeed, maximumSegmentAcceleration) = motionProfile_[idx];
+        const float maximumAllowedSpeedDiff =
+          (maximumSegmentAcceleration * kPlanningIntervalSeconds);
+        const float maxAllowedSpeed = longitudinalSpeed + maximumAllowedSpeedDiff;
+        const float minAllowedSpeed = longitudinalSpeed - maximumAllowedSpeedDiff;
+
+        longitudinalSpeed =
+          std::max(std::min(maximumSegmentSpeed, maxAllowedSpeed), minAllowedSpeed);
+
+
+        segmentS += longitudinalSpeed * kPlanningIntervalSeconds;
+        normalizeS(idx, segmentS);
+        data::Position2D position = mapSToPosition(idx, segmentS);
+
+        // Output
+        LongitudinalPlanningPoint &lpp = longitudinalPlanning_[i];
+        lpp.trajectoryIdx              = idx;
+        lpp.segmentS                   = segmentS;
+        lpp.speed                      = longitudinalSpeed;
+        lpp.waypoint                   = position;
+    }
 }
 
 void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {

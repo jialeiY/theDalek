@@ -47,16 +47,19 @@ class MotionPlanningIntent : public IntentBase {
     motion_planning::MotionProfile motionProfile_;
     data::Pose2D poseInFrenet_ {};
 
-    void planLongitudinal(const float initS, const float initVelocity);
+    void planLongitudinal(const float initS, const float initSpeed);
     void normalizeS(std::size_t &trajectoryIdx, float &s);
     data::Position2D mapSToPosition(std::size_t &trajectoryIdx, const float s);
 
+    struct LongitudinalPlanningPoint {
+        std::size_t trajectoryIdx {0U};
+        float segmentS {0.0F};
+        float speed {0.0F};
+        data::Position2D waypoint {};
+    };
 
-    /**
-     * tuple : < s - velocity - acceleration >
-     */
-    using LongitudinalWaypoint = std::tuple<float, float, float>;
-    std::array<LongitudinalWaypoint, kPlanningSize> longitudinalPlanning_;
+
+    std::array<LongitudinalPlanningPoint, kPlanningSize> longitudinalPlanning_ {};
 };
 
 }    // namespace intent
