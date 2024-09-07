@@ -42,16 +42,8 @@ class MotionPlanningIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    void planLongitudinal(const float intiS,
-                          const float initSpeed,
-                          const float initAcceleration,
-                          const std::size_t initIdx);
-
-
-    void planEgoMotion(const data::Pose2D &initOdometry,
-                       const data::PolarVector2D &initVelocity,
-                       const data::PolarVector2D &initAcceleration);
-
+    void normalizeS(float &s, std::size_t &idx);
+    data::Position2D plotSOnSegment(float s, std::size_t idx);
 
     algo::PID<float> lateralPid_ {};
     motion_planning::CurvatureProfile curvatureProfile_;
