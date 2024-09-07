@@ -12,6 +12,7 @@
 #include "data/codec/motion_planning_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
+#include "data/codec/system_debug_codec.h"
 #include "data/codec/trajectory_topic_codec.h"
 #include "data/codec/vehicle_request_topic_codec.h"
 #include "data/codec/vehicle_response_topic_codec.h"

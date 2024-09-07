@@ -56,6 +56,9 @@ class MotionPlanningIntent : public IntentBase {
         float segmentS {0.0F};
         float speed {0.0F};
         data::Position2D waypoint {};
+
+        // debug
+        data::Vector2D motionVelocity {};
     };
 
 

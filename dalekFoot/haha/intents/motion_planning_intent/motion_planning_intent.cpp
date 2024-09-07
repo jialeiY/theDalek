@@ -70,13 +70,13 @@ void MotionPlanningIntent::tick() {
 
     // Find out longitudinal and Lateral speed
     data::PolarVector2D egoVelocity = egoStateTopic.velocity;
-    egoVelocity.orientation         = egoVelocity.orientation - poseInFrenet_.orientation;
+    egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
     data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
 
-    data::PolarVector2D egoAcceleration = egoStateTopic.acceleration;
-    egoAcceleration.orientation         = egoAcceleration.orientation - poseInFrenet_.orientation;
-    data::Vector2D resolvedAcceleration = utils::math::to<data::Vector2D>(egoAcceleration);
-    // Plan longitudinal
+    // data::PolarVector2D egoAcceleration = egoStateTopic.acceleration;
+    // egoAcceleration.orientation         = egoAcceleration.orientation -
+    // poseInFrenet_.orientation; data::Vector2D resolvedAcceleration =
+    // utils::math::to<data::Vector2D>(egoAcceleration); Plan longitudinal
 
     // planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
     planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
@@ -84,7 +84,8 @@ void MotionPlanningIntent::tick() {
     // Output to topic
     for (std::size_t i {0U}; i < kPlanningSize; ++i) {
         data::Waypoint &wp {(motionPlanningTopic.waypoints)[i]};
-        wp.velocity.x = longitudinalPlanning_[i].speed;
+        wp.velocity.x = longitudinalPlanning_[i].motionVelocity.x;
+        wp.velocity.y = longitudinalPlanning_[i].motionVelocity.y;
     }
 
     // Output to debug
@@ -122,14 +123,22 @@ void MotionPlanningIntent::planLongitudinal(const float initS, const float initS
 
         segmentS += longitudinalSpeed * kPlanningIntervalSeconds;
         normalizeS(idx, segmentS);
-        data::Position2D position = mapSToPosition(idx, segmentS);
+        const data::Position2D nextPosition = mapSToPosition(idx, segmentS);
+        const data::Vector2D motionDistance = nextPosition - position;
+        const data::Vector2D motionVelocity = motionDistance / kPlanningIntervalSeconds;
 
         // Output
         LongitudinalPlanningPoint &lpp = longitudinalPlanning_[i];
         lpp.trajectoryIdx              = idx;
         lpp.segmentS                   = segmentS;
         lpp.speed                      = longitudinalSpeed;
-        lpp.waypoint                   = position;
+        lpp.waypoint                   = nextPosition;
+
+        lpp.motionVelocity = motionVelocity;
+
+
+        // Update status
+        position = nextPosition;
     }
 }
 
@@ -141,7 +150,7 @@ void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {
     while ((trajectoryIdx + 2U) < trajectoryTopic.passingPointSize) {
         const float &currentSegmentLength {
           trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value};
-        if (currentSegmentLength > s) {
+        if (currentSegmentLength < s) {
             s -= currentSegmentLength;
             trajectoryIdx++;
         } else {
