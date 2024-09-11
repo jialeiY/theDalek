@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <csignal>
 #include <iostream>
+#include "comm/data/gh_protocol.h"
 #include "data/defs/vehicle_response.h"
 #include "intents/intent_manager.h"
 #include "intents/topics/vehicle_request_topic.h"
@@ -14,6 +15,8 @@ volatile std::sig_atomic_t gSignalStatus = 0;    // nosignal
 void signalHandler(int signum) { gSignalStatus = signum; }
 
 int main(int argc, char *argv[], char **envs) {
+    std::printf("size of gh_protocol: %ld\r\n", sizeof(cooboc::comm::GHProtocol));
+    while (true) {}
     cooboc::intent::IntentManager intentManager;
     cooboc::sim::Simulator simulator;
     intentManager.setup();
