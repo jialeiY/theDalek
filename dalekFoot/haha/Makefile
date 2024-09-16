@@ -69,7 +69,7 @@ CPP_SOURCES += utils/time.cpp
 INCLUDES += -I./
 INCLUDES += -I./gen
 INCLUDES += -I./third_party
-
+INCLUDES += -I./../gaha_common
 PREFIX := 
 CC := $(PREFIX)gcc
 CXX := $(PREFIX)g++

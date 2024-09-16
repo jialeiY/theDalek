@@ -1,33 +1,34 @@
 #ifndef _CH341_LIB_H
 #define _CH341_LIB_H
 
+#include <cstdint>
 
 typedef enum _EEPROM_TYPE {
-	ID_24C01,
-	ID_24C02,
-	ID_24C04,
-	ID_24C08,
-	ID_24C16,
-	ID_24C32,
-	ID_24C64,
-	ID_24C128,
-	ID_24C256,
-	ID_24C512,
-	ID_24C1024,
-	ID_24C2048,
-	ID_24C4096
+    ID_24C01,
+    ID_24C02,
+    ID_24C04,
+    ID_24C08,
+    ID_24C16,
+    ID_24C32,
+    ID_24C64,
+    ID_24C128,
+    ID_24C256,
+    ID_24C512,
+    ID_24C1024,
+    ID_24C2048,
+    ID_24C4096
 } EEPROM_TYPE;
 
 typedef enum _CHIP_TYPE {
-	CHIP_CH341 = 0,
-	CHIP_CH347T = 1,
-	CHIP_CH347F = 2,
+    CHIP_CH341  = 0,
+    CHIP_CH347T = 1,
+    CHIP_CH347F = 2,
 } CHIP_TYPE;
 
 typedef enum {
-	TYPE_TTY = 0,
-	TYPE_HID,
-	TYPE_VCP,
+    TYPE_TTY = 0,
+    TYPE_HID,
+    TYPE_VCP,
 } FUNCTYPE;
 
 #ifdef __cplusplus
@@ -277,8 +278,13 @@ extern bool CH34xWriteData(int fd, void *iWriteBuffer, uint32_t *iWriteLength);
  *
  * The function return true if successful, false if fail.
  */
-extern bool CH34xWriteRead(int fd, uint32_t iWriteLength, void *iWriteBuffer, uint32_t iReadStep, uint32_t iReadTimes,
-			   uint32_t *oReadLength, void *oReadBuffer);
+extern bool CH34xWriteRead(int fd,
+                           uint32_t iWriteLength,
+                           void *iWriteBuffer,
+                           uint32_t iReadStep,
+                           uint32_t iReadTimes,
+                           uint32_t *oReadLength,
+                           void *oReadBuffer);
 
 /**
  * CH34xGetInput - get io status of CH341
@@ -344,7 +350,8 @@ extern bool CH34xSet_D5_D0(int fd, uint8_t iSetDirOut, uint8_t iSetDataOut);
  *
  * The function return true if successful, false if fail.
  */
-extern bool CH34xStreamI2C(int fd, uint32_t iWriteLength, void *iWriteBuffer, uint32_t iReadLength, void *oReadBuffer);
+extern bool CH34xStreamI2C(
+  int fd, uint32_t iWriteLength, void *iWriteBuffer, uint32_t iReadLength, void *oReadBuffer);
 
 /**
  * CH34xReadEEPROM - read data from eeprom
@@ -356,7 +363,8 @@ extern bool CH34xStreamI2C(int fd, uint32_t iWriteLength, void *iWriteBuffer, ui
  *
  * The function return true if successful, false if fail.
  */
-extern bool CH34xReadEEPROM(int fd, EEPROM_TYPE iEepromID, uint32_t iAddr, uint32_t iLength, uint8_t *oBuffer);
+extern bool CH34xReadEEPROM(
+  int fd, EEPROM_TYPE iEepromID, uint32_t iAddr, uint32_t iLength, uint8_t *oBuffer);
 
 /**
  * CH34xWriteEEPROM - write data to eeprom
@@ -368,7 +376,8 @@ extern bool CH34xReadEEPROM(int fd, EEPROM_TYPE iEepromID, uint32_t iAddr, uint3
  *
  * The function return true if successful, false if fail.
  */
-extern bool CH34xWriteEEPROM(int fd, EEPROM_TYPE iEepromID, uint32_t iAddr, uint32_t iLength, uint8_t *iBuffer);
+extern bool CH34xWriteEEPROM(
+  int fd, EEPROM_TYPE iEepromID, uint32_t iAddr, uint32_t iLength, uint8_t *iBuffer);
 
 /**
  * CH34xStreamSPIx - write/read spi in stream mode
@@ -380,7 +389,8 @@ extern bool CH34xWriteEEPROM(int fd, EEPROM_TYPE iEepromID, uint32_t iAddr, uint
  *
  * The function return true if successful, false if fail.
  */
-extern bool CH34xStreamSPIx(int fd, uint32_t iChipSelect, uint32_t iLength, void *ioBuffer, void *ioBuffer2);
+extern bool CH34xStreamSPIx(
+  int fd, uint32_t iChipSelect, uint32_t iLength, void *ioBuffer, void *ioBuffer2);
 
 /**
  * CH34xStreamSPI4 - write/read spi in 4-line stream mode

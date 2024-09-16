@@ -2,7 +2,10 @@
 CC := gcc
 CXX := g++
 LINK := g++
-CXXFLAGS := -c -I./lib/
+
+INCLUDES += -I./lib/ -I./../../gaha_common
+
+CXXFLAGS := -c $(INCLUDES)
 DBGFLAGS := -g
 CCOBJFLAGS := $(CXXFLAGS) -c
 #LNKFLAGS := ./lib/ch341_lib.o
@@ -27,16 +30,16 @@ OBJ_DEBUG := $(addprefix $(DBG_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC
 default: makedir all
 
 $(TARGET): $(OBJ)
-	$(LINK) $(OBJ) $(LNKFLAGS) -o $@
+	$(LINK) $(OBJ) $(LNKFLAGS) $(DBGFLAGS) -o $@
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	$(CC) $(CCOBJFLAGS) -o $@ $<
+	$(CC) $(CCOBJFLAGS) $(DBGFLAGS) -o $@ $<
 
 $(DBG_PATH)/%.o: $(SRC_PATH)/%.c
 	$(CC) $(CCOBJFLAGS) $(DBGFLAGS) -o $@ $<
 
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
-	$(CXX) $(CXXFLAGS) -o $@ $<
+	$(CXX) $(CXXFLAGS) $(DBGFLAGS) -o $@ $<
 
 $(DBG_PATH)/%.o: $(SRC_PATH)/%.cpp
 	$(CXX) $(CCOBJFLAGS) $(DBGFLAGS) -o $@ $<
@@ -64,7 +67,7 @@ makedir:
 .PHONY: clean
 clean:
 	@echo CLEAN $(CLEAN_LIST)
-	@rm -f $(CLEAN_LIST)
+	@rm -rf build
 
 .PHONY: test
 test:

@@ -48,25 +48,25 @@ void TargetManeuverIntent::tick() {
     //     }
     // }
 
-    {
-        // square wave
+    // {
+    //     // square wave
 
 
-        for (std::size_t i {0U}; i < 4U; ++i) {
-            std::uint32_t time = utils::time::now().milliseconds();
-            time += i * 250;
-            time %= 1000;
-            float target = 0.0F;
-            if (time < 500) {
-                target = 0.1F;
-            } else {
-                target = 0.3F;
-            }
-            data::targetManeuverTopic.speed[i] = target;
-        }
-        data::targetManeuverTopic.speed[1U] = 0.2;
-        data::targetManeuverTopic.speed[2U] = 0.3;
-    }
+    //     for (std::size_t i {0U}; i < 4U; ++i) {
+    //         std::uint32_t time = utils::time::now().milliseconds();
+    //         time += i * 250;
+    //         time %= 1000;
+    //         float target = 0.0F;
+    //         if (time < 500) {
+    //             target = 0.1F;
+    //         } else {
+    //             target = 0.3F;
+    //         }
+    //         data::targetManeuverTopic.speed[i] = target;
+    //     }
+    //     data::targetManeuverTopic.speed[1U] = 0.2;
+    //     data::targetManeuverTopic.speed[2U] = 0.3;
+    // }
 }
 
 }    // namespace intents

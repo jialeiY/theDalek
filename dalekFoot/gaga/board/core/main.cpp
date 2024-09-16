@@ -105,10 +105,10 @@ extern cooboc::hal::Gaga gaga;
 int main(void) {
     /* USER CODE BEGIN 1 */
     /**
-     * Timer1 used for PWM Genreation
-     * Timer2 used for PWM Genreation
-     * Timer3 used for PWM Genreation
-     * Timer4 used for PWM Genreation
+     * Timer1 used for PWM Generation
+     * Timer2 used for PWM Generation
+     * Timer3 used for PWM Generation
+     * Timer4 used for PWM Generation
      * Timer5 used for I2C Communication
      * Timer9 used for Cycle Controlling
      */

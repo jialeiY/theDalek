@@ -1,4 +1,5 @@
 #include "hal/spi.h"
+#include <data/gh_protocol.h>
 #include <cstdint>
 #include <cstring>
 #include "hal/board_def.h"
@@ -11,8 +12,8 @@ struct SpiComm {
     std::int8_t motorPower[4];
 } __attribute__((packed));
 
-static std::uint8_t txBuffer[sizeof(SpiComm)];
-static std::uint8_t rxBuffer[sizeof(SpiComm)];
+static std::uint8_t txBuffer[HG_PACKET_SIZE];
+static std::uint8_t rxBuffer[HG_PACKET_SIZE];
 
 
 }    // namespace hal
@@ -56,7 +57,7 @@ void GagaSpi::__onDataReceived() {
 
     // TODO
 
-    // generate intermediam data
+    // generate intermediate data
     SpiProtocol spi;
     for (std::size_t i {0U}; i < 4U; ++i) {
         spi.motorPower[i] = spiComm.motorPower[i];

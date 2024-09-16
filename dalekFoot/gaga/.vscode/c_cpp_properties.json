@@ -25,7 +25,8 @@
                 "${workspaceFolder}/board/Drivers/STM32F4xx_HAL_Driver/Inc",
                 "${workspaceFolder}/board/core",
                 "${workspaceFolder}/board/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
-                "${workspaceFolder}/board/Drivers/CMSIS/Include"
+                "${workspaceFolder}/board/Drivers/CMSIS/Include",
+                "${workspaceFolder}/../gaha_common"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

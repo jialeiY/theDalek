@@ -1,13 +1,7 @@
 {
     "env": {
-        "myIncludePath": [
-            "${workspaceFolder}/include",
-            "${workspaceFolder}/src"
-        ],
-        "myDefines": [
-            "MCAP_COMPRESSION_NO_LZ4",
-            "MCAP_COMPRESSION_NO_ZSTD"
-        ]
+        "myIncludePath": [],
+        "myDefines": []
     },
     "configurations": [
         {
@@ -15,15 +9,10 @@
             "compilerArgs": [],
             //"intelliSenseMode": "linux-gcc-x86",
             "includePath": [
-                "${workspaceFolder}",
-                "${workspaceFolder}/gen",
-                "${workspaceFolder}/third_party",
-                "${workspaceFolder}/../gaha_common"
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/../../gaha_common"
             ],
-            "defines": [
-                "MCAP_COMPRESSION_NO_LZ4",
-                "MCAP_COMPRESSION_NO_ZSTD"
-            ],
+            "defines": [],
             "cStandard": "gnu11",
             "cppStandard": "gnu++17",
             "configurationProvider": "ms-vscode.cmake-tools",

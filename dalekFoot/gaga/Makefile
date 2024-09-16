@@ -59,7 +59,7 @@ INCLUDES += -I./board/Drivers/STM32F4xx_HAL_Driver/Inc
 INCLUDES += -I./board/core
 INCLUDES += -I./board/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 INCLUDES += -I./board/Drivers/CMSIS/Include
-
+INCLUDES += -I./../gaha_common
 
 
 

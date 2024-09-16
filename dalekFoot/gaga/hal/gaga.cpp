@@ -1,9 +1,9 @@
 #include "gaga.h"
+#include <data/gh_protocol.h>
 #include <cmath>
 #include <cstdint>
 #include <limits>
 #include "hal/board_def.h"
-// #include "hal/driver/i2c.h"
 #include "hal/encoder.h"
 #include "hal/motor.h"
 #include "hal/serial.h"
@@ -12,6 +12,7 @@
 #include "stm32f4xx_hal.h"
 #include "third_party/printf/printf.h"
 #include "utils/math.h"
+// #include "hal/driver/i2c.h"
 
 
 namespace cooboc {
@@ -27,6 +28,8 @@ void Gaga::setup() {
         HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
     }
     // End of Debug
+
+    static_assert(sizeof(cooboc::comm::HGPacket) == HG_PACKET_SIZE);
 
     // Init motors
     gagaMotors[0U].setup(
@@ -98,7 +101,7 @@ void Gaga::tick() {
 //     {
 //         // Generate dynamic target speed
 //         // cycle = 4000 milli seconds
-//         // amplifer = 10 -> 40
+//         // amplifier = 10 -> 40
 //         constexpr int cycle {500};
 //         const float timeShift = static_cast<float>(HAL_GetTick() % cycle) *
 //                                 2.0F * 3.1415926 / static_cast<float>(cycle);
