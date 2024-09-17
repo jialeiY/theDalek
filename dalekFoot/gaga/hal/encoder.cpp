@@ -55,7 +55,7 @@ Encoder::EncoderReadings Encoder::getReadings() {
 ///// Following code is FOR Test, need to be refactor //////////////
 
 
-void Encoder::i2cfrequencyTest() {
+void Encoder::i2cFrequencyTest() {
     for (std::uint32_t pre {7U}; pre < 100U; ++pre) {
         for (std::uint32_t period {20U}; period < 200U; period += 5U) {
             configTimer5(pre, period);

@@ -20,12 +20,12 @@ void DebugDataIntent::tick() {
     // data::Duration d = now - zero;
 
 
-    hal::gagaSerial.println("%.3F,%.3F,%.3F,%.3F,%.3F\r\n",
-                            data::targetManeuverTopic.speed[0],
-                            data::wheelOdometryTopic.wheelSpeed[0].speed,
-                            data::wheelOdometryTopic.wheelSpeed[1].speed,
-                            data::wheelOdometryTopic.wheelSpeed[2].speed,
-                            data::wheelOdometryTopic.wheelSpeed[3].speed);
+    // hal::gagaSerial.println("%.3F,%.3F,%.3F,%.3F,%.3F\r\n",
+    //                         data::targetManeuverTopic.speed[0],
+    //                         data::wheelOdometryTopic.wheelSpeed[0].speed,
+    //                         data::wheelOdometryTopic.wheelSpeed[1].speed,
+    //                         data::wheelOdometryTopic.wheelSpeed[2].speed,
+    //                         data::wheelOdometryTopic.wheelSpeed[3].speed);
 
     // hal::gagaSerial.println("%d", (zero - now).value());
 }

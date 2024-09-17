@@ -8,10 +8,6 @@
 namespace cooboc {
 namespace hal {
 
-struct SpiComm {
-    std::int8_t motorPower[4];
-} __attribute__((packed));
-
 static std::uint8_t txBuffer[HG_PACKET_SIZE];
 static std::uint8_t rxBuffer[HG_PACKET_SIZE];
 
@@ -36,40 +32,29 @@ namespace cooboc {
 namespace hal {
 
 GagaSpi::GagaSpi() :
-    dataReceivedCallback_ {[](const SpiProtocol &) {
+    dataReceivedCallback_ {[](const comm::HGPacket &) {
     }} {};
 
 void GagaSpi::setup(const OnDataReceivedCallback callback) {
     dataReceivedCallback_ = callback;
-    std::memset(txBuffer, 0, sizeof(SpiComm));
-    std::memset(rxBuffer, 0, sizeof(SpiComm));
+    std::memset(txBuffer, 0, HG_PACKET_SIZE);
+    std::memset(rxBuffer, 0, HG_PACKET_SIZE);
+    std::memset(&spiBuffer_, 0, HG_PACKET_SIZE);
 }
 
 void GagaSpi::begin() {
-    HAL_SPI_TransmitReceive_DMA(&hspi2, txBuffer, rxBuffer, sizeof(SpiComm));
+    HAL_SPI_TransmitReceive_DMA(&hspi2, txBuffer, rxBuffer, HG_PACKET_SIZE);
 }
 
 void GagaSpi::__onDataReceived() {
-    SpiComm spiComm;
-    std::memcpy((void *)&spiComm, rxBuffer, sizeof(SpiComm));
+    // Copy data to local memory immediately
+    std::memcpy((void *)&spiBuffer_, rxBuffer, HG_PACKET_SIZE);
 
-    // Check
-
-    // TODO
-
-    // generate intermediate data
-    SpiProtocol spi;
-    for (std::size_t i {0U}; i < 4U; ++i) {
-        spi.motorPower[i] = spiComm.motorPower[i];
-    }
-
-    dataReceivedCallback_(spi);
+    dataReceivedCallback_(spiBuffer_);
 
 
-    HAL_SPI_TransmitReceive_DMA(&hspi2,
-                                cooboc::hal::txBuffer,
-                                cooboc::hal::rxBuffer,
-                                sizeof(cooboc::hal::SpiComm));
+    HAL_SPI_TransmitReceive_DMA(
+      &hspi2, cooboc::hal::txBuffer, cooboc::hal::rxBuffer, HG_PACKET_SIZE);
 }
 
 GagaSpi gagaSpi;

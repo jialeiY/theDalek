@@ -1,18 +1,16 @@
 #ifndef __HAL_SPI_H__
 #define __HAL_SPI_H__
 
+#include <data/gh_protocol.h>
 #include <cstdint>
 #include <functional>
 
 namespace cooboc {
 namespace hal {
 
-struct SpiProtocol {
-    std::int8_t motorPower[4];
-};
 
 class GagaSpi {
-    using OnDataReceivedCallback = std::function<void(const SpiProtocol &)>;
+    using OnDataReceivedCallback = std::function<void(const comm::HGPacket &)>;
 
   public:
     GagaSpi();
@@ -21,9 +19,11 @@ class GagaSpi {
     void begin();
 
     inline void __onDataReceived();
+    inline const comm::HGPacket &getSpiPacketRef() { return spiBuffer_; }
 
   private:
     OnDataReceivedCallback dataReceivedCallback_;
+    comm::HGPacket spiBuffer_;
 };
 
 extern GagaSpi gagaSpi;

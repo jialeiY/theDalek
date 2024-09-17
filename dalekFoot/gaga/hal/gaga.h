@@ -1,9 +1,9 @@
 #ifndef __HAL_GAGA_H__
 #define __HAL_GAGA_H__
 
+#include <data/gh_protocol.h>
 #include "spi.h"
 #include "stm32f4xx_hal.h"
-
 
 namespace cooboc {
 namespace hal {
@@ -23,7 +23,7 @@ class Gaga {
         std::uint16_t encoder {0U};
         std::int32_t speed {0};
     };
-    void onSpiDataReceived(const SpiProtocol &spi);
+    inline void onSpiDataReceived(const comm::HGPacket &spi);
 
     // void speedControlTest();
     // void calibrationMotorSpeed();
@@ -31,6 +31,7 @@ class Gaga {
     // inline void encoderConfReadTest();
     // inline void encoderReadTest();
     std::int16_t testSpeed_ {0};
+    bool hasNewSpiPacket_ {false};
 };
 
 }    // namespace hal

@@ -16,11 +16,22 @@ namespace intents {
 IntentManager::IntentManager() {}
 void IntentManager::setup() {
     // Instance all intents
+    // Trigger starting read I2C
     intents_[0U] = new EncoderReadingTriggerIntent();
+
+    // Turn the control signal from SPI to encoder requirements?
     intents_[1U] = new TargetManeuverIntent();
+
+    // Calculate odometry according WSS. It's the input for PID
     intents_[2U] = new WheelOdometryIntent();
+
+    // Calculate the output using PID, and write power output to motor
     intents_[3U] = new PowerControllingIntent();
+
+    // Read data from I2C
     intents_[4U] = new EncoderReadingIntent();
+
+    // Output debug string
     intents_[5U] = new DebugDataIntent();
 
     for (IntentBase *intentP : intents_) { intentP->setup(); }

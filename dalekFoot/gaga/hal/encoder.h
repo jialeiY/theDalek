@@ -24,7 +24,7 @@ class Encoder {
     EncoderReadings getReadings();
 
   private:
-    void i2cfrequencyTest();
+    void i2cFrequencyTest();
     // Move this function to I2C?
     void configTimer5(const std::uint32_t pre, const std::uint32_t period);
     void statisticizeI2cReading(const std::uint32_t pre,
