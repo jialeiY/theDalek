@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include "common/data_defs/vehicle_request_topic.h"
 #include "hal/board_def.h"
 #include "hal/encoder.h"
 #include "hal/motor.h"
@@ -88,10 +89,13 @@ void Gaga::begin() {
 void Gaga::__IT_onTimeout() { tick(); }
 
 void Gaga::tick() {
+    static uint64_t spiRequestId {0U};
     // Critical Area
     {
         __disable_irq();
         if (hasNewSpiPacket_) {
+            // Make new request
+            data::vehicleRequestTopic.requestId = ++spiRequestId;
             for (std::size_t i {0U}; i < 4U; ++i) {
                 const comm::HGPacket &spiPacket {gagaSpi.getSpiPacketRef()};
                 data::vehicleRequestTopic.wheel[i] =

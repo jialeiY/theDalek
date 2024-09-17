@@ -27,7 +27,7 @@ extern EncoderReadingTriggerTopic encoderReadingTriggerTopic;
  * Output:  EncoderReadingIntent
  * Input:   DebugDataIntent
  *          -- Next Cycle --
- *          WheelodometryIntent
+ *          WheelOdometryIntent
  *
  */
 extern data::EncoderReadingTopic encoderReadingTopic;

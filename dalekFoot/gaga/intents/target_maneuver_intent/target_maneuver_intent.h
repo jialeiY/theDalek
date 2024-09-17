@@ -13,6 +13,10 @@ class TargetManeuverIntent : public IntentBase {
     TargetManeuverIntent() = default;
     virtual void setup() override;
     virtual void tick() override;
+
+  private:
+    std::uint64_t lastVehicleRequestId_ {0U};
+    std::uint32_t requestExecutionTickCount_ {0U};
 };
 }    // namespace intents
 }    // namespace cooboc

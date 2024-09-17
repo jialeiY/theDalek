@@ -54,5 +54,6 @@
     },
     "search.exclude": {
         "build/**": true
-    }
+    },
+    "editor.tabSize": 4
 }

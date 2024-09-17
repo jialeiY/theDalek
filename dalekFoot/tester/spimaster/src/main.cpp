@@ -43,10 +43,16 @@ class Ch341 {
     void test() {
         cooboc::comm::HGPacket spi;
 
-        spi.wheelsPlanning[40][3] = 0;
-        // spi.motorPower[0]         = 10;
+        // spi.wheelsPlanning[40][3] = 0;
+        //  spi.motorPower[0]         = 10;
         int s;
         std::cin >> s;
+        for (std::size_t i {0U}; i < 4U; ++i) {
+            for (std::size_t j {0U}; j < 10U; ++j) {
+                //
+                spi.wheelsPlanning[i][j] = s;
+            }
+        }
         // spi.motorPower[0] = s;
 
         // std::uint8_t buffer[sizeof(int)];

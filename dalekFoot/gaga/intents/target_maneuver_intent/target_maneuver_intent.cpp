@@ -9,11 +9,55 @@ namespace cooboc {
 namespace intents {
 
 void TargetManeuverIntent::setup() {
+    // Initialize members
+    lastVehicleRequestId_      = 0U;
+    requestExecutionTickCount_ = 0U;
+
+    // Initialize topic
+    data::targetManeuverTopic.source    = data::ManeuverRequestSource::FAILSAFE;
+    data::targetManeuverTopic.requestId = 0U;
     for (std::size_t i {0U}; i < 4U; ++i) {
         data::targetManeuverTopic.speed[i] = 0.0F;
     }
 }
 void TargetManeuverIntent::tick() {
+    if (data::vehicleRequestTopic.requestId != lastVehicleRequestId_) {
+        // Generate maneuver based on new vehicle request
+        lastVehicleRequestId_      = data::vehicleRequestTopic.requestId;
+        requestExecutionTickCount_ = 0U;
+
+        // Output
+        data::targetManeuverTopic.source =
+          data::ManeuverRequestSource::NEW_VEHICLE_REQUEST;
+        data::targetManeuverTopic.requestId = lastVehicleRequestId_;
+        for (std::size_t i {0U}; i < 4U; ++i) {
+            data::targetManeuverTopic.speed[i] =
+              data::vehicleRequestTopic.wheel[i];
+        }
+
+
+    } else {
+        // TODO: handle the same request, interpolate the velocity
+        requestExecutionTickCount_++;
+
+
+        // Output
+
+        data::targetManeuverTopic.requestId = lastVehicleRequestId_;
+        if (requestExecutionTickCount_ > 100) {
+            data::targetManeuverTopic.source =
+              data::ManeuverRequestSource::FAILSAFE;
+            for (std::size_t i {0U}; i < 4U; ++i) {
+                data::targetManeuverTopic.speed[i] = 0.0F;
+            }
+        } else {
+            data::targetManeuverTopic.source =
+              data::ManeuverRequestSource::OLD_VEHICLE_REQUEST;
+        }
+    }
+    data::targetManeuverTopic.requestId = lastVehicleRequestId_;
+
+
     // {
     //     // square wave
     //     std::uint32_t time = utils::time::now().milliseconds();
