@@ -10,7 +10,6 @@ enum class ManeuverRequestSource : std::uint8_t {
     NEW_VEHICLE_REQUEST,
     OLD_VEHICLE_REQUEST,
     FAILSAFE
-
 };
 
 

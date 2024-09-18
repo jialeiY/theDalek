@@ -13,6 +13,8 @@ class TargetManeuverIntent : public IntentBase {
     TargetManeuverIntent() = default;
     virtual void setup() override;
     virtual void tick() override;
+    void work();
+    void mockSquareWaveOutput();
 
   private:
     std::uint64_t lastVehicleRequestId_ {0U};

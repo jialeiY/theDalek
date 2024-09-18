@@ -96,10 +96,12 @@ void Gaga::tick() {
         if (hasNewSpiPacket_) {
             // Make new request
             data::vehicleRequestTopic.requestId = ++spiRequestId;
+            const comm::HGPacket &spiPacket {gagaSpi.getSpiPacketRef()};
             for (std::size_t i {0U}; i < 4U; ++i) {
-                const comm::HGPacket &spiPacket {gagaSpi.getSpiPacketRef()};
-                data::vehicleRequestTopic.wheel[i] =
-                  spiPacket.wheelsPlanning[i][0];
+                for (std::size_t j {0U}; j < 10U; ++j) {
+                    data::vehicleRequestTopic.wheel[i][j] =
+                      spiPacket.wheelsPlanning[i][j];
+                }
             }
             hasNewSpiPacket_ = false;
         }

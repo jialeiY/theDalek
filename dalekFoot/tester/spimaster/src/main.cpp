@@ -9,7 +9,7 @@
 
 extern "C" {
 
-constexpr char devicePath[] {"/dev/ch34x_pis3"};
+constexpr char devicePath[] {"/dev/ch34x_pis0"};
 
 namespace cooboc {
 

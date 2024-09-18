@@ -56,10 +56,13 @@ data::WheelSpeed WheelOdometryIntent::calculateSingleWheelSpeed(
             diff += 4096;
         }
 
-        const float degree = 2.0F * utils::math::PI / 4096.0F * diff;
-        const data::Distance dist {parameters::kWheelDiameter / 2.0F * degree};
-        float speed   = dist / duration;
-        ret.speed     = isReversed ? -speed : speed;
+        // Calculate the odometry
+        // const float degree = 2.0F * utils::math::PI / 4096.0F * diff;
+        // const data::Distance dist {parameters::kWheelDiameter / 2.0F *
+        // degree}; float speed   = dist / duration;
+
+
+        ret.speed     = isReversed ? -diff : diff;
         ret.qualifier = data::Qualifier::GOOD;
     }
     return ret;

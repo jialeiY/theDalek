@@ -16,19 +16,31 @@ class PID {
     }
     void setTarget(float target) { target_ = target; }
     void tick(float current) {
-        // const float nominalValue = (28.27F * target_) * 652 + 110.65;
-        // const float kp                  = 40.0f;
-        // const float ki                  = 0.1F;
-        // const float kp    = 30.0F / 652;
-        // const float ki    = 3.50F / 652;
-        const float nominalValue = target_ * 1240.0F + 110.65;
-        const float kp           = 1290.0F;
-        const float ki           = 150.0F;
-        const float kd           = 1500.0F;
-        const float error        = target_ - current;
+        // Parameter for controlling based on encoder value
+        // const float feedForward = (28.27F * target_) * 652 + 110.65;
+        // const float kp          = 40.0f;
+        // const float ki          = 0.1F;
+        // const float kp          = 30.0F / 652;
+        // const float ki          = 3.50F / 652;
+
+
+        const float feedForward = (30.27F * target_) + 110.65;
+        const float kp          = 60.0F;
+        const float ki          = 0.1F;
+        const float kd          = 30.0F;
+
+
+        // Parameter for controlling based on real odometry
+        // const float feedForward = target_ * 1240.0F + 110.65;
+        // const float kp           = 1290.0F;
+        // const float ki           = 150.0F;
+        // const float kd           = 1500.0F;
+
+
+        const float error = target_ - current;
         integralError_ += error;
 
-        output_ = nominalValue + (kp * error) + (ki * integralError_) +
+        output_ = feedForward + (kp * error) + (ki * integralError_) +
                   (kd * (error - previousError_));
         previousError_ = error;
     }

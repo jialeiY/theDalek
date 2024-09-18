@@ -7,7 +7,7 @@ namespace cooboc {
 namespace data {
 struct VehicleRequestTopic {
     std::uint64_t requestId {0U};
-    float wheel[4];
+    float wheel[4][10];
 };
 }    // namespace data
 }    // namespace cooboc

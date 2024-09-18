@@ -21,59 +21,9 @@ void TargetManeuverIntent::setup() {
     }
 }
 void TargetManeuverIntent::tick() {
-    if (data::vehicleRequestTopic.requestId != lastVehicleRequestId_) {
-        // Generate maneuver based on new vehicle request
-        lastVehicleRequestId_      = data::vehicleRequestTopic.requestId;
-        requestExecutionTickCount_ = 0U;
+    work();
 
-        // Output
-        data::targetManeuverTopic.source =
-          data::ManeuverRequestSource::NEW_VEHICLE_REQUEST;
-        data::targetManeuverTopic.requestId = lastVehicleRequestId_;
-        for (std::size_t i {0U}; i < 4U; ++i) {
-            data::targetManeuverTopic.speed[i] =
-              data::vehicleRequestTopic.wheel[i];
-        }
-
-
-    } else {
-        // TODO: handle the same request, interpolate the velocity
-        requestExecutionTickCount_++;
-
-
-        // Output
-
-        data::targetManeuverTopic.requestId = lastVehicleRequestId_;
-        if (requestExecutionTickCount_ > 100) {
-            data::targetManeuverTopic.source =
-              data::ManeuverRequestSource::FAILSAFE;
-            for (std::size_t i {0U}; i < 4U; ++i) {
-                data::targetManeuverTopic.speed[i] = 0.0F;
-            }
-        } else {
-            data::targetManeuverTopic.source =
-              data::ManeuverRequestSource::OLD_VEHICLE_REQUEST;
-        }
-    }
-    data::targetManeuverTopic.requestId = lastVehicleRequestId_;
-
-
-    // {
-    //     // square wave
-    //     std::uint32_t time = utils::time::now().milliseconds();
-    //     time %= 1000;
-    //     float target = 0.0F;
-    //     if (time < 500) {
-    //         target = 0.1F;
-    //     } else {
-    //         target = 0.3F;
-    //     }
-
-
-    //     for (std::size_t i {0U}; i < 4U; ++i) {
-    //         data::targetManeuverTopic.speed[i] = target;
-    //     }
-    // }
+    // mockSquareWaveOutput();
 
     // {
     //     // cycle = 500 milli seconds
@@ -111,6 +61,69 @@ void TargetManeuverIntent::tick() {
     //     data::targetManeuverTopic.speed[1U] = 0.2;
     //     data::targetManeuverTopic.speed[2U] = 0.3;
     // }
+}
+
+void TargetManeuverIntent::work() {
+    data::ManeuverRequestSource source {data::ManeuverRequestSource::FAILSAFE};
+
+    if (data::vehicleRequestTopic.requestId != lastVehicleRequestId_) {
+        // Generate maneuver based on new vehicle request
+        source = data::ManeuverRequestSource::NEW_VEHICLE_REQUEST;
+        lastVehicleRequestId_      = data::vehicleRequestTopic.requestId;
+        requestExecutionTickCount_ = 0U;
+
+    } else {
+        requestExecutionTickCount_++;
+        if (requestExecutionTickCount_ > 100U) {
+            source = data::ManeuverRequestSource::FAILSAFE;
+        } else {
+            source = data::ManeuverRequestSource::OLD_VEHICLE_REQUEST;
+        }
+    }
+
+    float outputSpeed[4U];
+    switch (source) {
+        case (data::ManeuverRequestSource::NEW_VEHICLE_REQUEST):
+        case (data::ManeuverRequestSource::OLD_VEHICLE_REQUEST): {
+            std::size_t offset = requestExecutionTickCount_ / 10U;
+            for (std::size_t i {0U}; i < 4U; ++i) {
+                outputSpeed[i] = data::vehicleRequestTopic.wheel[i][offset];
+            }
+            break;
+        }
+        case (data::ManeuverRequestSource::FAILSAFE): {
+            for (std::size_t i {0U}; i < 4U; ++i) { outputSpeed[i] = 0.0F; }
+            break;
+        }
+        default: {
+            // TODO: FATAL error here
+            break;
+        }
+    }
+
+    // Output
+    data::targetManeuverTopic.source    = source;
+    data::targetManeuverTopic.requestId = lastVehicleRequestId_;
+    for (std::size_t i {0U}; i < 4U; ++i) {
+        data::targetManeuverTopic.speed[i] = outputSpeed[i];
+    }
+}
+
+void TargetManeuverIntent::mockSquareWaveOutput() {
+    // square wave
+    std::uint32_t time = utils::time::now().milliseconds();
+    time %= 1000;
+    float target = 0.0F;
+    if (time < 500) {
+        target = 10.0F;
+    } else {
+        target = 30.0F;
+    }
+
+
+    // for (std::size_t i {0U}; i < 4U; ++i) {
+    // data::targetManeuverTopic.speed[i] = target; }
+    data::targetManeuverTopic.speed[3U] = target;
 }
 
 }    // namespace intents

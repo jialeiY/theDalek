@@ -28,6 +28,10 @@ void DebugDataIntent::tick() {
     //                         data::wheelOdometryTopic.wheelSpeed[3].speed);
 
     // hal::gagaSerial.println("%d", (zero - now).value());
+
+    const float &targetSpeed = data::targetManeuverTopic.speed[3U];
+    const float &actualSpeed = data::wheelOdometryTopic.wheelSpeed[3U].speed;
+    hal::gagaSerial.println("%.3F,%.3F", targetSpeed, actualSpeed);
 }
 }    // namespace intents
 }    // namespace cooboc
