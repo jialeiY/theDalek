@@ -5,7 +5,7 @@ LINK := g++
 
 INCLUDES += -I./lib/ -I./../../gaha_common
 
-CXXFLAGS := -c $(INCLUDES)
+CXXFLAGS := -std=gnu++17 -c $(INCLUDES)
 DBGFLAGS := -g
 CCOBJFLAGS := $(CXXFLAGS) -c
 #LNKFLAGS := ./lib/ch341_lib.o

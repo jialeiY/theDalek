@@ -25,8 +25,8 @@ class PID {
 
 
         const float feedForward = (30.27F * target_) + 110.65;
-        const float kp          = 60.0F;
-        const float ki          = 0.1F;
+        const float kp          = 30.0F;
+        const float ki          = 0.2F;
         const float kd          = 30.0F;
 
 

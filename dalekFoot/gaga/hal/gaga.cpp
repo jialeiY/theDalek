@@ -88,19 +88,36 @@ void Gaga::begin() {
 
 void Gaga::__IT_onTimeout() { tick(); }
 
+bool validate(const comm::HGPacket &spiPacket) {
+        for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            if (spiPacket.wheelsPlanning[i][j] < -100) {
+                return false;
+            }
+            if (spiPacket.wheelsPlanning[i][j] > 100) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void Gaga::tick() {
     static uint64_t spiRequestId {0U};
     // Critical Area
     {
         __disable_irq();
         if (hasNewSpiPacket_) {
-            // Make new request
-            data::vehicleRequestTopic.requestId = ++spiRequestId;
             const comm::HGPacket &spiPacket {gagaSpi.getSpiPacketRef()};
-            for (std::size_t i {0U}; i < 4U; ++i) {
-                for (std::size_t j {0U}; j < 10U; ++j) {
-                    data::vehicleRequestTopic.wheel[i][j] =
-                      spiPacket.wheelsPlanning[i][j];
+
+            if (validate(spiPacket)) {
+                // Make new request
+                data::vehicleRequestTopic.requestId = ++spiRequestId;
+                for (std::size_t i {0U}; i < 4U; ++i) {
+                    for (std::size_t j {0U}; j < 10U; ++j) {
+                        data::vehicleRequestTopic.wheel[i][j] =
+                          spiPacket.wheelsPlanning[i][j];
+                    }
                 }
             }
             hasNewSpiPacket_ = false;
