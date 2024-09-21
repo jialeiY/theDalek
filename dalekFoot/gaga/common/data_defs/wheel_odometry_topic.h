@@ -3,25 +3,15 @@
 
 #include <cstdint>
 #include "common/data_defs/qualifier.h"
+#include "common/data_defs/wheel_odometry.h"
 
 namespace cooboc {
 namespace data {
 
-struct WheelSpeed {
-    Qualifier qualifier;
-    float speed;    // m / s
-};
-
 struct WheelOdometryTopic {
     // TODO: timestamp
     Qualifier qualifier;
-
-    // // TODO: not implemented yet
-    // float x;    // m
-    // float y;    // m
-    // float r;    // m
-
-    WheelSpeed wheelSpeed[4];
+    WheelOdometry wheelOdometry[4];
 };
 
 

@@ -32,9 +32,13 @@ void Gaga::setup() {
     // End of Debug
 
     // Manually check the packet length and the Macro value
-    static_assert(sizeof(cooboc::comm::HGPacket) == 164UL);
     static_assert(sizeof(cooboc::comm::HGPacket) == HG_PACKET_SIZE);
+    static_assert(sizeof(cooboc::comm::GHPacket) == GH_PACKET_SIZE);
+
     static_assert((HG_PACKET_SIZE - 4U) % 4U == 0);    // For CRC calculating
+    static_assert((GH_PACKET_SIZE - 4U) % 4U == 0);    // For CRC calculating
+
+    static_assert(HG_PROTOCOL_SIZE == std::max(HG_PACKET_SIZE, GH_PACKET_SIZE));
 
 
     hasNewSpiPacket_ = false;
@@ -117,13 +121,22 @@ bool validate(const comm::HGPacket &spiPacket) {
 }
 
 void Gaga::tick() {
+    // Set the LED OFF
+    LED1_OFF;
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
+
     static uint64_t spiRequestId {0U};
-    // Critical Area
-    {
+    const comm::GHPacket *txPacket =
+      reinterpret_cast<comm::GHPacket *>(data::vehicleResponseTopic.ghPacketBuffer);
+
+
+    {    // Critical Area
         __disable_irq();
         if (hasNewSpiPacket_) {
-            // Copy to main thread immediately
+            // Switch main memory and thread memory immediately
             const comm::HGPacket spiPacket {gagaSpi.getSpiPacketRef()};
+
+            gagaSpi.setSpiPacket(*txPacket);
             __enable_irq();
             if (validate(spiPacket)) {
                 // Make new request
@@ -141,6 +154,9 @@ void Gaga::tick() {
     }    // End of Critical Area
 
     intents::intentManager.tick();
+    // Set the LED ON
+    LED1_ON;
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
 }
 
 

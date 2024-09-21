@@ -10,27 +10,23 @@
 
 namespace cooboc {
 namespace intents {
-void WheelOdometryIntent::setup() {
-    data::wheelOdometryTopic.qualifier = data::Qualifier::BAD;
-}
+void WheelOdometryIntent::setup() { data::wheelOdometryTopic.qualifier = data::Qualifier::BAD; }
 
 void WheelOdometryIntent::tick() {
-    data::EncoderReadingTopic &currentEncoderReading = {
-      data::encoderReadingTopic};
+    data::EncoderReadingTopic &currentEncoderReading = {data::encoderReadingTopic};
     if ((currentEncoderReading.qualifier == data::Qualifier::GOOD) &&
         (lastEncoderReading_.qualifier == data::Qualifier::GOOD)) {
         data::wheelOdometryTopic.qualifier = data::Qualifier::GOOD;
-        data::Duration duration =
-          currentEncoderReading.timestamp - lastEncoderReading_.timestamp;
+        data::Duration duration = currentEncoderReading.timestamp - lastEncoderReading_.timestamp;
 
         for (std::size_t i {0U}; i < 4U; ++i) {
             const data::EncoderReading &currentEncoderReading =
               data::encoderReadingTopic.encoder[i];
-            data::wheelOdometryTopic.wheelSpeed[i] =
-              calculateSingleWheelSpeed(currentEncoderReading,
-                                        lastEncoderReading_.encoder[i],
-                                        duration,
-                                        !parameters::kEncoderDirection[i]);
+            data::wheelOdometryTopic.wheelOdometry[i] =
+              calculateSingleWheelOdometry(currentEncoderReading,
+                                           lastEncoderReading_.encoder[i],
+                                           duration,
+                                           !parameters::kEncoderDirection[i]);
         }
     } else {
         data::wheelOdometryTopic.qualifier = data::Qualifier::BAD;
@@ -39,16 +35,15 @@ void WheelOdometryIntent::tick() {
     lastEncoderReading_ = currentEncoderReading;
 }
 
-data::WheelSpeed WheelOdometryIntent::calculateSingleWheelSpeed(
+data::WheelOdometry WheelOdometryIntent::calculateSingleWheelOdometry(
   const data::EncoderReading currentEncoderReading,
   const data::EncoderReading lastEncoderReading,
   const data::Duration &duration,
   const bool isReversed) {
-    data::WheelSpeed ret {data::Qualifier::BAD, 0.0F};
+    data::WheelOdometry ret {data::Qualifier::BAD, 0};
     if ((currentEncoderReading.qualifier == data::Qualifier::GOOD) &&
         (lastEncoderReading.qualifier == data::Qualifier::GOOD)) {
-        std::int32_t diff =
-          currentEncoderReading.value - lastEncoderReading.value;
+        std::int32_t diff = currentEncoderReading.value - lastEncoderReading.value;
         if (diff > 2048) {
             diff -= 4096;
         }
@@ -62,7 +57,7 @@ data::WheelSpeed WheelOdometryIntent::calculateSingleWheelSpeed(
         // degree}; float speed   = dist / duration;
 
 
-        ret.speed     = isReversed ? -diff : diff;
+        ret.odometry  = isReversed ? -diff : diff;
         ret.qualifier = data::Qualifier::GOOD;
     }
     return ret;

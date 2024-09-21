@@ -8,7 +8,9 @@
 #include "intents/encoder_reading_trigger_intent/encoder_reading_trigger_intent.h"
 #include "intents/power_controlling_intent/power_controlling_intent.h"
 #include "intents/target_maneuver_intent/target_maneuver_intent.h"
+#include "intents/vehicle_response_intent/vehicle_response_intent.h"
 #include "intents/wheel_odometry_intent/wheel_odometry_intent.h"
+
 
 namespace cooboc {
 namespace intents {
@@ -28,11 +30,14 @@ void IntentManager::setup() {
     // Calculate the output using PID, and write power output to motor
     intents_[3U] = new PowerControllingIntent();
 
+    // Generate spi Gaga to haha
+    intents_[4U] = new VehicleResponseIntent();
+
     // Read data from I2C
-    intents_[4U] = new EncoderReadingIntent();
+    intents_[5U] = new EncoderReadingIntent();
 
     // Output debug string
-    intents_[5U] = new DebugDataIntent();
+    intents_[6U] = new DebugDataIntent();
 
     for (IntentBase *intentP : intents_) { intentP->setup(); }
 
@@ -51,15 +56,10 @@ void IntentManager::setup() {
 }
 
 void IntentManager::tick() {
-    // Set the LED OFF
-    LED1_OFF;
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
 
     for (IntentBase *intentP : intents_) { intentP->tick(); }
 
-    // Set the LED ON
-    LED1_ON;
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
+
 }
 
 

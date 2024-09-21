@@ -15,7 +15,9 @@ volatile std::sig_atomic_t gSignalStatus = 0;    // nosignal
 void signalHandler(int signum) { gSignalStatus = signum; }
 
 int main(int argc, char *argv[], char **envs) {
-    static_assert(sizeof(cooboc::comm::HGPacket) == 160UL);
+    // TODO
+    static_assert(sizeof(cooboc::comm::HGPacket) < HG_PACKET_SIZE);
+    static_assert(sizeof(cooboc::comm::GHPacket) < HG_PACKET_SIZE);
 
 
     std::printf("size of gh_protocol: %ld\r\n", sizeof(cooboc::comm::HGPacket));

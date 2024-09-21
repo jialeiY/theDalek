@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <iostream>
 
 
@@ -51,6 +52,10 @@ class Ch341 {
         if (CH34xStreamSPI4(fd_, 0x80, HG_PACKET_SIZE, &spi)) {
             // std::printf("value: %d %x%x%x%x.\r\n", cnt_, buffer[0], buffer[1], buffer[2],
             // buffer[3]);
+
+            cooboc::comm::GHPacket recv;
+            std::memcpy(&recv, &spi, GH_PACKET_SIZE);
+            std::printf("%d\r\n", recv.odometry[0]);
         } else {
             std::perror("RW error\r\n");
         }
@@ -162,8 +167,6 @@ int main() {
             }
             now = std::chrono::steady_clock::now();
         }
-
-
         begin = now;
     }
 

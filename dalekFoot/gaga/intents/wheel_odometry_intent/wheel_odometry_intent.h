@@ -19,7 +19,7 @@ class WheelOdometryIntent : public IntentBase {
   private:
     data::EncoderReadingTopic lastEncoderReading_;
 
-    data::WheelSpeed calculateSingleWheelSpeed(
+    data::WheelOdometry calculateSingleWheelOdometry(
       const data::EncoderReading currentEncoderReading,
       const data::EncoderReading lastEncoderReading,
       const data::Duration &duration,

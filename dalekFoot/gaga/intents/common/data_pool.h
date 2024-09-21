@@ -5,7 +5,9 @@
 #include "common/data_defs/encoder_reading_trigger_topic.h"
 #include "common/data_defs/target_maneuver_topic.h"
 #include "common/data_defs/vehicle_request_topic.h"
+#include "common/data_defs/vehicle_response_topic.h"
 #include "common/data_defs/wheel_odometry_topic.h"
+
 
 namespace cooboc {
 namespace data {
@@ -45,6 +47,12 @@ extern data::WheelOdometryTopic wheelOdometryTopic;
  * Input:   PowerControllingIntent
  */
 extern data::TargetManeuverTopic targetManeuverTopic;
+
+/**
+ * Output: VehicleResponseIntent
+ * Input: --
+ */
+extern data::VehicleResponseTopic vehicleResponseTopic;
 
 }    // namespace data
 }    // namespace cooboc

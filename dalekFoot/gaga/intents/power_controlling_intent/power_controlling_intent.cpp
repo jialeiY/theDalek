@@ -40,8 +40,8 @@ class PID {
         const float error = target_ - current;
         integralError_ += error;
 
-        output_ = feedForward + (kp * error) + (ki * integralError_) +
-                  (kd * (error - previousError_));
+        output_ =
+          feedForward + (kp * error) + (ki * integralError_) + (kd * (error - previousError_));
         previousError_ = error;
     }
     float getOutput() { return output_; }
@@ -64,7 +64,8 @@ void PowerControllingIntent::setup() {
 void PowerControllingIntent::tick() {
     for (int i = 0; i < 4; ++i) {
         pids[i].setTarget(data::targetManeuverTopic.speed[i]);
-        pids[i].tick(data::wheelOdometryTopic.wheelSpeed[i].speed);
+        // TODO: convert odometry to speed
+        pids[i].tick(static_cast<float>(data::wheelOdometryTopic.wheelOdometry[i].odometry));
         float output        = pids[i].getOutput();
         output              = parameters::kMotorDirection[i] ? output : -output;
         float clampedOutput = utils::math::clamp(output, -2048.0F, 2048.0F);

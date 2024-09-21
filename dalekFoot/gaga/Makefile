@@ -47,6 +47,7 @@ CPP_SOURCES += intents/encoder_reading_intent/encoder_reading_intent.cpp
 CPP_SOURCES += intents/encoder_reading_trigger_intent/encoder_reading_trigger_intent.cpp
 CPP_SOURCES += intents/power_controlling_intent/power_controlling_intent.cpp
 CPP_SOURCES += intents/target_maneuver_intent/target_maneuver_intent.cpp
+CPP_SOURCES += intents/vehicle_response_intent/vehicle_response_intent.cpp
 CPP_SOURCES += intents/wheel_odometry_intent/wheel_odometry_intent.cpp
 CPP_SOURCES += utils/math.cpp
 CPP_SOURCES += utils/time.cpp

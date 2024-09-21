@@ -19,11 +19,13 @@ class GagaSpi {
     void begin();
 
     inline void __onDataReceived();
-    inline const comm::HGPacket &getSpiPacketRef() { return spiBuffer_; }
+    inline const comm::HGPacket &getSpiPacketRef() { return localRxBuffer_; }
+    inline void setSpiPacket(const comm::GHPacket &packet) { localTxBuffer_ = packet; }
 
   private:
     OnDataReceivedCallback dataReceivedCallback_;
-    comm::HGPacket spiBuffer_;
+    comm::HGPacket localRxBuffer_;
+    comm::GHPacket localTxBuffer_;
 };
 
 extern GagaSpi gagaSpi;
