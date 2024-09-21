@@ -29,9 +29,10 @@ void DebugDataIntent::tick() {
 
     // hal::gagaSerial.println("%d", (zero - now).value());
 
-    const float &targetSpeed = data::targetManeuverTopic.speed[3U];
-    const float &actualSpeed = data::wheelOdometryTopic.wheelSpeed[3U].speed;
-    hal::gagaSerial.println("%.3F,%.3F", targetSpeed, actualSpeed);
+    const std::uint32_t &tickCounter = data::targetManeuverTopic.tickCount;
+    const float &targetSpeed         = data::targetManeuverTopic.speed[3U];
+    const float &actualSpeed         = data::wheelOdometryTopic.wheelSpeed[3U].speed;
+    hal::gagaSerial.println("%d, %.3F,%.3F", tickCounter, targetSpeed, actualSpeed);
 }
 }    // namespace intents
 }    // namespace cooboc

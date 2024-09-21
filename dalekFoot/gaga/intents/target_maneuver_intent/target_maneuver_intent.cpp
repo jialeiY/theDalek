@@ -16,9 +16,7 @@ void TargetManeuverIntent::setup() {
     // Initialize topic
     data::targetManeuverTopic.source    = data::ManeuverRequestSource::FAILSAFE;
     data::targetManeuverTopic.requestId = 0U;
-    for (std::size_t i {0U}; i < 4U; ++i) {
-        data::targetManeuverTopic.speed[i] = 0.0F;
-    }
+    for (std::size_t i {0U}; i < 4U; ++i) { data::targetManeuverTopic.speed[i] = 0.0F; }
 }
 void TargetManeuverIntent::tick() {
     work();
@@ -68,7 +66,7 @@ void TargetManeuverIntent::work() {
 
     if (data::vehicleRequestTopic.requestId != lastVehicleRequestId_) {
         // Generate maneuver based on new vehicle request
-        source = data::ManeuverRequestSource::NEW_VEHICLE_REQUEST;
+        source                     = data::ManeuverRequestSource::NEW_VEHICLE_REQUEST;
         lastVehicleRequestId_      = data::vehicleRequestTopic.requestId;
         requestExecutionTickCount_ = 0U;
 
@@ -104,9 +102,8 @@ void TargetManeuverIntent::work() {
     // Output
     data::targetManeuverTopic.source    = source;
     data::targetManeuverTopic.requestId = lastVehicleRequestId_;
-    for (std::size_t i {0U}; i < 4U; ++i) {
-        data::targetManeuverTopic.speed[i] = outputSpeed[i];
-    }
+    data::targetManeuverTopic.tickCount = requestExecutionTickCount_;
+    for (std::size_t i {0U}; i < 4U; ++i) { data::targetManeuverTopic.speed[i] = outputSpeed[i]; }
 }
 
 void TargetManeuverIntent::mockSquareWaveOutput() {

@@ -9,9 +9,8 @@
 #include <cstdlib>
 #include <iostream>
 
-extern "C" {
 
-constexpr char devicePath[] {"/dev/ch34x_pis0"};
+constexpr char devicePath[] {"/dev/ch34x_pis1"};
 
 namespace cooboc {
 
@@ -103,6 +102,27 @@ class Ch341 {
 
 }    // namespace cooboc
 
+std::uint32_t calculateCrc(const uint32_t *payload, const size_t size) {
+    constexpr uint32_t kInitCrc {0x777086AA};
+    constexpr uint32_t kPoly {0x2783DA2B};
+
+    uint32_t crc = kInitCrc;
+    for (std::size_t i {0U}; i < size; ++i) {
+        if ((crc & 0x80000000) != 0) {
+            crc <<= 1;
+            crc ^= kPoly;
+        } else {
+            crc <<= 1;
+        }
+        crc ^= payload[i];
+    }
+    return crc;
+}
+
+std::uint32_t calculateCrc(const cooboc::comm::HGPacket &spiPacket) {
+    return calculateCrc((const uint32_t *)(&spiPacket), ((HG_PACKET_SIZE - 4U) / 4));
+}
+
 int main() {
     cooboc::Ch341 ch341(devicePath);
 
@@ -116,8 +136,8 @@ int main() {
     cooboc::comm::HGPacket spi;
     std::uint64_t count {0U};
 
+    auto begin = std::chrono::steady_clock::now();
     while (true) {
-        auto begin = std::chrono::steady_clock::now();
         count += 10;    // 10ms once
         count %= 3000;
         for (std::size_t offset {0U}; offset < 10U; offset++) {
@@ -127,18 +147,25 @@ int main() {
             for (std::size_t i {0U}; i < 4U; ++i) { spi.wheelsPlanning[i][offset] = value; }
         }
 
+
+        // std::cout << "o" << std::flush;
+        std::uint32_t expectedCrc = calculateCrc(spi);
+        spi.crc                   = expectedCrc;
+        auto now                  = std::chrono::steady_clock::now();
         while (true) {
-            auto now = std::chrono::steady_clock::now();
             std::uint64_t duration =
               std::chrono::duration_cast<std::chrono::microseconds>(now - begin).count();
             if (duration > 10000) {
+                // send out immediately
+                ch341.sendPacket(spi);
                 break;
             }
+            now = std::chrono::steady_clock::now();
         }
-        // std::cout << "o" << std::flush;
-        ch341.sendPacket(spi);
+
+
+        begin = now;
     }
 
     return 0;
-}
 }

@@ -31,26 +31,24 @@ void Gaga::setup() {
     }
     // End of Debug
 
+    // Manually check the packet length and the Macro value
+    static_assert(sizeof(cooboc::comm::HGPacket) == 164UL);
     static_assert(sizeof(cooboc::comm::HGPacket) == HG_PACKET_SIZE);
+    static_assert((HG_PACKET_SIZE - 4U) % 4U == 0);    // For CRC calculating
+
+
     hasNewSpiPacket_ = false;
 
     // Init motors
-    gagaMotors[0U].setup(
-      GPIOD, GPIO_PIN_0, GPIOD, GPIO_PIN_1, &htim4, TIM_CHANNEL_1);
-    gagaMotors[1U].setup(
-      GPIOD, GPIO_PIN_2, GPIOD, GPIO_PIN_3, &htim4, TIM_CHANNEL_2);
-    gagaMotors[2U].setup(
-      GPIOD, GPIO_PIN_4, GPIOD, GPIO_PIN_5, &htim4, TIM_CHANNEL_3);
-    gagaMotors[3U].setup(
-      GPIOD, GPIO_PIN_6, GPIOD, GPIO_PIN_7, &htim4, TIM_CHANNEL_4);
-    gagaMotors[4U].setup(
-      GPIOD, GPIO_PIN_8, GPIOD, GPIO_PIN_9, &htim3, TIM_CHANNEL_3);
-    gagaMotors[5U].setup(
-      GPIOD, GPIO_PIN_10, GPIOD, GPIO_PIN_11, &htim2, TIM_CHANNEL_1);
+    gagaMotors[0U].setup(GPIOD, GPIO_PIN_0, GPIOD, GPIO_PIN_1, &htim4, TIM_CHANNEL_1);
+    gagaMotors[1U].setup(GPIOD, GPIO_PIN_2, GPIOD, GPIO_PIN_3, &htim4, TIM_CHANNEL_2);
+    gagaMotors[2U].setup(GPIOD, GPIO_PIN_4, GPIOD, GPIO_PIN_5, &htim4, TIM_CHANNEL_3);
+    gagaMotors[3U].setup(GPIOD, GPIO_PIN_6, GPIOD, GPIO_PIN_7, &htim4, TIM_CHANNEL_4);
+    gagaMotors[4U].setup(GPIOD, GPIO_PIN_8, GPIOD, GPIO_PIN_9, &htim3, TIM_CHANNEL_3);
+    gagaMotors[5U].setup(GPIOD, GPIO_PIN_10, GPIOD, GPIO_PIN_11, &htim2, TIM_CHANNEL_1);
 
     gagaSerial.setup();
-    gagaSpi.setup(
-      [this](const comm::HGPacket &spi) { onSpiDataReceived(spi); });
+    gagaSpi.setup([this](const comm::HGPacket &spi) { onSpiDataReceived(spi); });
     gagaEncoder.setup();
 
 
@@ -88,18 +86,34 @@ void Gaga::begin() {
 
 void Gaga::__IT_onTimeout() { tick(); }
 
-bool validate(const comm::HGPacket &spiPacket) {
-        for (int i = 0; i < 4; ++i) {
-        for (int j = 0; j < 10; ++j) {
-            if (spiPacket.wheelsPlanning[i][j] < -100) {
-                return false;
-            }
-            if (spiPacket.wheelsPlanning[i][j] > 100) {
-                return false;
-            }
+
+std::uint32_t calculateCrc(const uint32_t *payload, const size_t size) {
+    constexpr uint32_t kInitCrc {0x777086AA};
+    constexpr uint32_t kPoly {0x2783DA2B};
+
+    uint32_t crc = kInitCrc;
+    for (std::size_t i {0U}; i < size; ++i) {
+        if ((crc & 0x80000000) != 0) {
+            crc <<= 1;
+            crc ^= kPoly;
+        } else {
+            crc <<= 1;
         }
+        crc ^= payload[i];
     }
-    return true;
+    return crc;
+}
+
+std::uint32_t calculateCrc(const comm::HGPacket &spiPacket) {
+    return calculateCrc((const uint32_t *)(&spiPacket), ((HG_PACKET_SIZE - 4U) / 4));
+}
+
+bool validate(const comm::HGPacket &spiPacket) {
+    const std::uint32_t &actualCrc {spiPacket.crc};
+    const std::uint32_t expectedCrc = calculateCrc(spiPacket);
+
+    gagaSerial.println("crc %x %x", actualCrc, expectedCrc);
+    return actualCrc == expectedCrc;
 }
 
 void Gaga::tick() {
@@ -108,21 +122,22 @@ void Gaga::tick() {
     {
         __disable_irq();
         if (hasNewSpiPacket_) {
-            const comm::HGPacket &spiPacket {gagaSpi.getSpiPacketRef()};
-
+            // Copy to main thread immediately
+            const comm::HGPacket spiPacket {gagaSpi.getSpiPacketRef()};
+            __enable_irq();
             if (validate(spiPacket)) {
                 // Make new request
                 data::vehicleRequestTopic.requestId = ++spiRequestId;
                 for (std::size_t i {0U}; i < 4U; ++i) {
                     for (std::size_t j {0U}; j < 10U; ++j) {
-                        data::vehicleRequestTopic.wheel[i][j] =
-                          spiPacket.wheelsPlanning[i][j];
+                        data::vehicleRequestTopic.wheel[i][j] = spiPacket.wheelsPlanning[i][j];
                     }
                 }
             }
             hasNewSpiPacket_ = false;
+        } else {
+            __enable_irq();
         }
-        __enable_irq();
     }    // End of Critical Area
 
     intents::intentManager.tick();

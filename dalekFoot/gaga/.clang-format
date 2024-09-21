@@ -57,5 +57,5 @@ SpacesInSquareBrackets: 'false'
 Standard: Cpp11
 TabWidth: '4'
 UseTab: Never
-ColumnLimit: 80
+ColumnLimit: 100
 ...

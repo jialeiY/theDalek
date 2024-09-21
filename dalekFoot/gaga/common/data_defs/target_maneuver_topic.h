@@ -15,7 +15,8 @@ enum class ManeuverRequestSource : std::uint8_t {
 
 struct TargetManeuverTopic {
     ManeuverRequestSource source {ManeuverRequestSource::FAILSAFE};
-    uint64_t requestId {0U};
+    std::uint64_t requestId {0U};
+    std::uint32_t tickCount {0U};
     float speed[4U] {0.0F};    // m/s
 };
 }    // namespace data
