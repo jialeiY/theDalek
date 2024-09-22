@@ -91,30 +91,9 @@ void Gaga::begin() {
 void Gaga::__IT_onTimeout() { tick(); }
 
 
-std::uint32_t calculateCrc(const uint32_t *payload, const size_t size) {
-    constexpr uint32_t kInitCrc {0x777086AA};
-    constexpr uint32_t kPoly {0x2783DA2B};
-
-    uint32_t crc = kInitCrc;
-    for (std::size_t i {0U}; i < size; ++i) {
-        if ((crc & 0x80000000) != 0) {
-            crc <<= 1;
-            crc ^= kPoly;
-        } else {
-            crc <<= 1;
-        }
-        crc ^= payload[i];
-    }
-    return crc;
-}
-
-std::uint32_t calculateCrc(const comm::HGPacket &spiPacket) {
-    return calculateCrc((const uint32_t *)(&spiPacket), ((HG_PACKET_SIZE - 4U) / 4));
-}
-
 bool validate(const comm::HGPacket &spiPacket) {
     const std::uint32_t &actualCrc {spiPacket.crc};
-    const std::uint32_t expectedCrc = calculateCrc(spiPacket);
+    const std::uint32_t expectedCrc = utils::math::calculateCrc(spiPacket);
 
     gagaSerial.println("crc %x %x", actualCrc, expectedCrc);
     return actualCrc == expectedCrc;

@@ -5,14 +5,14 @@
 
 #define HG_PROTOCOL_SIZE 164UL
 #define HG_PACKET_SIZE   164UL
-#define GH_PACKET_SIZE   20UL
+#define GH_PACKET_SIZE   24UL
 
 namespace cooboc {
 namespace comm {
 
-
 struct GHPacket {
     std::int32_t odometry[4U] {};
+    std::uint32_t tickCount {0U};
     std::uint32_t crc {0};
 } __attribute__((packed));
 

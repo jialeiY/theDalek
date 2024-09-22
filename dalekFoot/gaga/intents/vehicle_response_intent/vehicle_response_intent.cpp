@@ -1,7 +1,9 @@
 #include "intents/vehicle_response_intent/vehicle_response_intent.h"
 #include <cstdint>
+#include <cstring>
 #include "data/gh_protocol.h"
 #include "intents/common/data_pool.h"
+#include "utils/math.h"
 
 namespace cooboc {
 namespace intents {
@@ -28,12 +30,18 @@ void VehicleResponseIntent::tick() {
     }
 
     // Generate Output
-    comm::GHPacket *packetPtr =
-      reinterpret_cast<comm::GHPacket *>(data::vehicleResponseTopic.ghPacketBuffer);
-    static int b {0};
+    comm::GHPacket txPacket {};
+    txPacket.tickCount = data::vehicleResponseTopic.tickCount;
+
     for (std::size_t i {0U}; i < 4U; ++i) {
-        (packetPtr->odometry)[i] = data::vehicleResponseTopic.wheelOdometry[i].odometry;
+        txPacket.odometry[i] = data::vehicleResponseTopic.wheelOdometry[i].odometry;
     }
+    std::uint32_t crc = utils::math::calculateCrc(txPacket);
+    txPacket.crc      = crc;
+
+    std::memcpy(reinterpret_cast<comm::GHPacket *>(data::vehicleResponseTopic.ghPacketBuffer),
+                &txPacket,
+                GH_PACKET_SIZE);
 }
 
 void VehicleResponseIntent::clearVehicleResponseTopic() {
@@ -42,6 +50,7 @@ void VehicleResponseIntent::clearVehicleResponseTopic() {
         data::vehicleResponseTopic.wheelOdometry[i].qualifier = data::Qualifier::GOOD;
         data::vehicleResponseTopic.wheelOdometry[i].odometry  = 0;
     }
+    std::memset(data::vehicleResponseTopic.ghPacketBuffer, 0, GH_PACKET_SIZE);
 }
 }    // namespace intents
 }    // namespace cooboc
