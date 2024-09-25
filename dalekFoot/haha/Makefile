@@ -1,4 +1,5 @@
-TARGET := haha
+TARGET_SIL := haha-sil.elf
+TARGET_HIL := haha-hil.elf
 BUILD_DIR := build
 GEN_DIR := gen
 CPP_SOURCES := 
@@ -66,6 +67,8 @@ CPP_SOURCES += simulator/simulator.cpp
 CPP_SOURCES += utils/algo/pid.cpp
 CPP_SOURCES += utils/time.cpp
 
+
+
 INCLUDES += -I./
 INCLUDES += -I./gen
 INCLUDES += -I./third_party
@@ -98,12 +101,17 @@ SOURCES += $(ASMM_SOURCES)
 SOURCES += $(PROTO_SOURCES)
 OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
+OBJECTS_SIL := $(BUILD_DIR)/vehicle_sil.o
+OBJECTS_HIL := $(BUILD_DIR)/vehicle_hil.o
+
 DEFINES := -DMCAP_COMPRESSION_NO_LZ4 -DMCAP_COMPRESSION_NO_ZSTD
 DBG := -g -O0
 OPT := -Os
 
 BUILD_OPT := $(DBG)
 # BUILD_OPT := $(OPT)
+
+all: $(BUILD_DIR)/$(TARGET_HIL) $(BUILD_DIR)/$(TARGET_SIL) 
 
 $(GEN_DIR)/%.pb.cc: %.proto Makefile
 	mkdir -p $(dir $@)
@@ -128,10 +136,16 @@ $(BUILD_DIR)/%.o: %.s Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
 	$(AS) "$<" -c -o "$@"
 
-$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
+$(BUILD_DIR)/$(TARGET_HIL): $(OBJECTS) $(OBJECTS_HIL) $(BUILD_DIR) Makefile
 	mkdir -p runtime
 	mkdir -p $(dir $@)
-	$(LINK) $(BUILD_OPT) $(OBJECTS) -lprotobuf -o "$@"
+	$(LINK) $(BUILD_OPT) $(OBJECTS) $(OBJECTS_HIL) -lprotobuf -o "$@"
+	$(SZ) $@
+
+$(BUILD_DIR)/$(TARGET_SIL): $(OBJECTS) $(OBJECTS_SIL) $(BUILD_DIR) Makefile
+	mkdir -p runtime
+	mkdir -p $(dir $@)
+	$(LINK) $(BUILD_OPT) $(OBJECTS) $(OBJECTS_SIL) -lprotobuf -o "$@"
 	$(SZ) $@
 
 $(BUILD_DIR):
@@ -139,15 +153,15 @@ $(BUILD_DIR):
 
 .PRECIOUS: $(GEN_DIR)/%.pb.cc $(GEN_DIR)/%.pb.h
 
-.PHONY: clean 
+.PHONY: clean all
 clean:
 	-rm -fR $(BUILD_DIR)
 	-rm -rf $(GEN_DIR)
 
 .PHONY: run r
-run: $(BUILD_DIR)/$(TARGET).elf
+run: $(BUILD_DIR)/$(TARGET_SIL)
 	mkdir -p runtime
-	./$(BUILD_DIR)/$(TARGET).elf
+	./$(BUILD_DIR)/$(TARGET_SIL)
 
 r: run
 
