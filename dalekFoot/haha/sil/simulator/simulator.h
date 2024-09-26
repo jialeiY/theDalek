@@ -1,12 +1,12 @@
-#ifndef __SIMULATOR_SIMULATOR_H__
-#define __SIMULATOR_SIMULATOR_H__
+#ifndef __SIL_SIMULATOR_SIMULATOR_H__
+#define __SIL_SIMULATOR_SIMULATOR_H__
 
 #include "data/defs/vehicle_response.h"
 #include "intents/topics/vehicle_request_topic.h"
 
 
 namespace cooboc {
-namespace sim {
+namespace sil {
 
 // This is an Ideal model that can run any command
 class Simulator {
@@ -22,7 +22,7 @@ class Simulator {
     data::VehicleResponse vehicleResponse_ {};
 };
 
-}    // namespace sim
+}    // namespace sil
 }    // namespace cooboc
 
 #endif

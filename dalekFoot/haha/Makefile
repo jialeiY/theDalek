@@ -28,8 +28,6 @@ PROTO_FILES += data/proto/system_debug_topic.proto
 PROTO_FILES += data/proto/wheel_control_planning.proto
 PROTO_FILES += data/proto/vehicle_response_topic.proto
 
-
-CPP_SOURCES += data/codec/system_debug_codec.cpp
 CPP_SOURCES += data/codec/behavior_topic_codec.cpp
 CPP_SOURCES += data/codec/ego_state_topic_codec.cpp
 CPP_SOURCES += data/codec/motion_planning_debug_topic_codec.cpp
@@ -41,6 +39,7 @@ CPP_SOURCES += data/codec/pose2d_codec.cpp
 CPP_SOURCES += data/codec/route_curvature_distribution_codec.cpp
 CPP_SOURCES += data/codec/route_segment_codec.cpp
 CPP_SOURCES += data/codec/route_topic_codec.cpp
+CPP_SOURCES += data/codec/system_debug_codec.cpp
 CPP_SOURCES += data/codec/trajectory_topic_codec.cpp
 CPP_SOURCES += data/codec/vector2d_codec.cpp
 CPP_SOURCES += data/codec/vehicle_request_topic_codec.cpp
@@ -63,8 +62,8 @@ CPP_SOURCES += intents/trajectory_intent/trajectory/trajectory.cpp
 CPP_SOURCES += intents/trajectory_intent/trajectory_intent.cpp
 CPP_SOURCES += intents/vehicle_request_intent/vehicle_request_intent.cpp
 CPP_SOURCES += main.cpp
-CPP_SOURCES += simulator/simulator.cpp
 CPP_SOURCES += utils/algo/pid.cpp
+CPP_SOURCES += utils/math.cpp
 CPP_SOURCES += utils/time.cpp
 
 
@@ -101,7 +100,8 @@ SOURCES += $(ASMM_SOURCES)
 SOURCES += $(PROTO_SOURCES)
 OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SOURCES))))
 
-OBJECTS_SIL := $(BUILD_DIR)/vehicle_sil.o
+SIL_CPP_SOURCES += sil/simulator/simulator.cpp
+OBJECTS_SIL := $(BUILD_DIR)/sil/simulator/simulator.o $(BUILD_DIR)/sil/vehicle_sil.o
 OBJECTS_HIL := $(BUILD_DIR)/vehicle_hil.o
 
 DEFINES := -DMCAP_COMPRESSION_NO_LZ4 -DMCAP_COMPRESSION_NO_ZSTD
@@ -111,7 +111,8 @@ OPT := -Os
 BUILD_OPT := $(DBG)
 # BUILD_OPT := $(OPT)
 
-all: $(BUILD_DIR)/$(TARGET_HIL) $(BUILD_DIR)/$(TARGET_SIL) 
+#all: $(BUILD_DIR)/$(TARGET_HIL) $(BUILD_DIR)/$(TARGET_SIL)
+all: $(BUILD_DIR)/$(TARGET_SIL)
 
 $(GEN_DIR)/%.pb.cc: %.proto Makefile
 	mkdir -p $(dir $@)

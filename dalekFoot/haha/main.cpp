@@ -39,6 +39,9 @@ int main(int argc, char *argv[], char **envs) {
 
         intentManager.tick();
 
+        // cooboc::comm::HGPacket
+
+        // WIP
         const cooboc::intent::VehicleRequestTopic &vrt {intentManager.getVehicleRequest()};
         vehicle.setRequest(vrt);
         vehicle.tick();

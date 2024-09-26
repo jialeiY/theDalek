@@ -105,6 +105,7 @@
 		"files.exclude": {
 			"build/**": true
 		},
-		"workbench.editor.wrapTabs": true
+        "workbench.editor.wrapTabs": true,
+        "makefile.configureOnOpen": true
 	}
 }

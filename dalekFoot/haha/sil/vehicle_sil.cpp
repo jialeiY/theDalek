@@ -1,12 +1,12 @@
+#include "sil/vehicle_sil.h"
 #include <cstdio>
 #include "simulator/simulator.h"
-#include "vehicle.h"
 
 namespace cooboc {
 namespace vehicle {
 
 namespace {
-cooboc::sim::Simulator simulator_;
+cooboc::sil::Simulator simulator_;
 cooboc::intent::VehicleRequestTopic vehicleRequestTopic_ {};
 cooboc::data::VehicleResponse vehicleResponse_ {};
 }    // namespace

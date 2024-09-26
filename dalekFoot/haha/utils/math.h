@@ -6,6 +6,7 @@
 #include "data/defs/polar_vector2d.h"
 #include "data/defs/position2d.h"
 #include "data/defs/vector2d.h"
+#include "data/gh_protocol.h"
 
 namespace cooboc {
 namespace utils {
@@ -74,6 +75,16 @@ inline float clampAngle(float in) {
         in += 2.0F * PI;
     }
     return in;
+}
+
+std::uint32_t calculateCrc(const uint32_t* payload, const size_t size);
+
+inline std::uint32_t calculateCrc(const comm::HGPacket& spiPacket) {
+    return calculateCrc((const uint32_t*)(&spiPacket), ((HG_PACKET_SIZE - 4U) / 4));
+}
+
+inline std::uint32_t calculateCrc(const comm::GHPacket& spiPacket) {
+    return calculateCrc((const uint32_t*)(&spiPacket), ((GH_PACKET_SIZE - 4U) / 4));
 }
 
 

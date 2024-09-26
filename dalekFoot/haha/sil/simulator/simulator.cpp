@@ -1,11 +1,11 @@
-#include "simulator/simulator.h"
+#include "sil/simulator/simulator.h"
 #include <cstdint>
 #include "data/defs/vehicle_response.h"
 #include "intents/topics/vehicle_request_topic.h"
 #include "utils/math.h"
 
 namespace cooboc {
-namespace sim {
+namespace sil {
 
 Simulator::Simulator() {}
 Simulator::~Simulator() {}
@@ -38,6 +38,6 @@ data::VehicleResponse Simulator::getVehicleResponse() {
     return vehicleResponse_;
 }
 
-}    // namespace sim
+}    // namespace sil
 
 }    // namespace cooboc
