@@ -2,16 +2,8 @@ syntax = "proto2";
 
 package cooboc.proto;
 
-message WheelStatus {
-    optional uint64 encoder  = 1 [default = 0];
-    optional float  speed    = 2 [default = 0.0];
-    optional float  odometry = 3 [default = 0.0];
-}
-
-message VehicleResponse {
-    repeated WheelStatus wheelStatus = 1;
-}
-
 message VehicleResponseTopic {
-    optional VehicleResponse response = 1;
+    optional bool  isValid       = 1 [default = false];
+    repeated float wheelOdometry = 2;
+    repeated float wheelSpeed    = 3;
 }

@@ -11,7 +11,8 @@ namespace cooboc {
 namespace comm {
 
 struct GHPacket {
-    std::int32_t odometry[4U] {};
+    std::int32_t wheelOdometry[4U] {};
+    float wheelSpeed[4U]{};
     std::uint32_t tickCount {0U};
     std::uint32_t crc {0};
 } __attribute__((packed));

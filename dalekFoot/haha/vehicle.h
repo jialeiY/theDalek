@@ -1,8 +1,7 @@
 #ifndef __VEHICLE_H__
 #define __VEHICLE_H__
 
-#include "data/defs/vehicle_response.h"
-#include "intents/topics/vehicle_request_topic.h"
+#include "data/gh_protocol.h"
 
 namespace cooboc {
 namespace vehicle {
@@ -11,9 +10,9 @@ namespace vehicle {
 class Vehicle {
   public:
     void setup();
-    void setRequest(const cooboc::intent::VehicleRequestTopic &vehicleRequestTopic);
+    void setRequest(const comm::HGPacket &hgPacket);
     void tick();
-    cooboc::data::VehicleResponse getResponse();
+    cooboc::comm::GHPacket getResponse();
 };
 
 }    // namespace vehicle

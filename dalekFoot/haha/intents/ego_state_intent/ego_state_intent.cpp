@@ -16,15 +16,11 @@ void EgoStateIntent::setup() {
 }
 
 void EgoStateIntent::tick() {
-    float vx = (vehicleResponseTopic.response.wheelStatus[0].speed +
-                vehicleResponseTopic.response.wheelStatus[1].speed +
-                vehicleResponseTopic.response.wheelStatus[2].speed +
-                vehicleResponseTopic.response.wheelStatus[3].speed) /
+    float vx = (vehicleResponseTopic.wheelSpeed[0U] + vehicleResponseTopic.wheelSpeed[1U] +
+                vehicleResponseTopic.wheelSpeed[2U] + vehicleResponseTopic.wheelSpeed[3U]) /
                4.0F;
-    float vy = (vehicleResponseTopic.response.wheelStatus[0].speed -
-                vehicleResponseTopic.response.wheelStatus[1].speed +
-                vehicleResponseTopic.response.wheelStatus[2].speed -
-                vehicleResponseTopic.response.wheelStatus[3].speed) /
+    float vy = (vehicleResponseTopic.wheelSpeed[0U] - vehicleResponseTopic.wheelSpeed[1U] +
+                vehicleResponseTopic.wheelSpeed[2U] - vehicleResponseTopic.wheelSpeed[3U]) /
                4.0F;
 
     data::Vector2D velocity {vx, vy};

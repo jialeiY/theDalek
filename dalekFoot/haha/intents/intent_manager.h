@@ -5,9 +5,11 @@
 #include <cstdint>
 #include <vector>
 #include "data/defs/vehicle_response.h"
+#include "data/gh_protocol.h"
 #include "intents/topics/topics.h"
 #include "intents/topics/vehicle_request_topic.h"
 #include "utils/time.h"
+
 
 namespace cooboc {
 namespace intent {
@@ -19,8 +21,10 @@ class IntentManager {
     virtual ~IntentManager();
     void setup();
 
-    void updateVehicleResponse(data::VehicleResponse vehicleResponse);
-    inline const VehicleRequestTopic &getVehicleRequest() { return vehicleRequestTopic; }
+    comm::HGPacket getGhPacket() const;
+
+    void updateVehicleResponse(const comm::GHPacket &vehicleResponse);
+    // inline const VehicleRequestTopic &getVehicleRequest() { return vehicleRequestTopic; }
     void tick();
 
 

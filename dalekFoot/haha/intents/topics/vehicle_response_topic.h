@@ -7,7 +7,9 @@ namespace cooboc {
 namespace intent {
 
 struct VehicleResponseTopic {
-    data::VehicleResponse response;
+    bool isValid {false};
+    std::int32_t wheelOdometry[4U];
+    float wheelSpeed[4U];
 };
 
 }    // namespace intent

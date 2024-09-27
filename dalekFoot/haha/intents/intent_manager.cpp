@@ -13,6 +13,7 @@
 #include "intents/topics/vehicle_request_topic.h"
 #include "intents/trajectory_intent/trajectory_intent.h"
 #include "intents/vehicle_request_intent/vehicle_request_intent.h"
+#include "utils/math.h"
 #include "utils/time.h"
 
 namespace cooboc {
@@ -51,9 +52,21 @@ void IntentManager::setup() {
     systemDebugTopic.tickCount        = 0U;
 }
 
-void IntentManager::updateVehicleResponse(data::VehicleResponse vehicleResponse) {
-    // TODO: setup the vehicle topic
-    vehicleResponseTopic.response = vehicleResponse;
+void IntentManager::updateVehicleResponse(const comm::GHPacket &vehicleResponse) {
+    // // TODO: setup the vehicle topic
+    // vehicleResponseTopic.response = vehicleResponse;
+
+    std::uint32_t expectedCrc = utils::math::calculateCrc(vehicleResponse);
+    if (vehicleResponse.crc == expectedCrc) {
+        vehicleResponseTopic.isValid = true;
+        for (std::size_t i {0U}; i < 4U; ++i) {
+            intent::vehicleResponseTopic.wheelOdometry[i] = vehicleResponse.wheelOdometry[i];
+            intent::vehicleResponseTopic.wheelSpeed[i]    = vehicleResponse.wheelSpeed[i];
+        }
+    } else {
+        // Invalidate vehicle response topic
+        vehicleResponseTopic.isValid = false;
+    }
 }
 
 void IntentManager::tick() {
@@ -72,6 +85,11 @@ void IntentManager::tick() {
     lastTickDuration_ = lastTickEndTime_ - tickStartTime;
 }
 
+
+comm::HGPacket IntentManager::getGhPacket() const {
+    comm::HGPacket packet = *reinterpret_cast<comm::HGPacket *>(vehicleRequestTopic.hgPacketBuffer);
+    return packet;
+}
 
 }    // namespace intent
 }    // namespace cooboc

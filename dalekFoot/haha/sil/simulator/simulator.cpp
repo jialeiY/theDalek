@@ -11,32 +11,35 @@ Simulator::Simulator() {}
 Simulator::~Simulator() {}
 void Simulator::setup() {
     for (std::size_t i {0U}; i < 4U; ++i) {
-        vehicleResponse_.wheelStatus[i].speed    = 0.0F;
-        vehicleResponse_.wheelStatus[i].odometry = 0.0F;
+        vehicleWheelSpeed_[i]    = 0.0F;
+        vehicleWheelOdometry_[i] = 0.0F;
     }
 }
-void Simulator::tick() {}
-
-void Simulator::updateVehicleRequest(const intent::VehicleRequestTopic &vehicleRequest) {
+void Simulator::tick() {
     for (std::size_t i {0U}; i < 4U; ++i) {
         // Update each wheel speed
-        const float speed = vehicleRequest.wheelControlPlanning[i].speed[0U];
-        const float dist  = speed * 0.01F;
+        vehicleWheelSpeed_[i] = vehicleRequestPacket_.wheelsPlanning[i][0U];
+        const float dist      = vehicleWheelSpeed_[i] * 0.01F;
         // const int64_t encoderDiff = (odometry * 4096) / (utils::math::PI * 0.06);
-
-        vehicleResponse_.wheelStatus[i].speed = speed;
-        vehicleResponse_.wheelStatus[i].odometry += dist;
-        // vehicleResponse_.wheelStatus[i].encoder += encoderDiff;
+        vehicleWheelOdometry_[i] += dist;
     }
-    //
+
+    // Write packet
+    for (std::size_t i {0U}; i < 4U; ++i) {
+        vehicleResponsePacket_.wheelOdometry[i] = vehicleWheelOdometry_[i];
+        vehicleResponsePacket_.wheelSpeed[i]    = vehicleWheelSpeed_[i];
+    }
+    vehicleResponsePacket_.tickCount = 5U;
+
+    std::uint32_t crc          = utils::math::calculateCrc(vehicleResponsePacket_);
+    vehicleResponsePacket_.crc = crc;
 }
 
 
-data::VehicleResponse Simulator::getVehicleResponse() {
-    //
-
-    return vehicleResponse_;
+void Simulator::updateVehicleRequest(const comm::HGPacket &vehicleRequest) {
+    vehicleRequestPacket_ = vehicleRequest;
 }
+
 
 }    // namespace sil
 

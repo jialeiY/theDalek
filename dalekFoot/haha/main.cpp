@@ -39,13 +39,13 @@ int main(int argc, char *argv[], char **envs) {
 
         intentManager.tick();
 
-        // cooboc::comm::HGPacket
 
-        // WIP
-        const cooboc::intent::VehicleRequestTopic &vrt {intentManager.getVehicleRequest()};
-        vehicle.setRequest(vrt);
+        const cooboc::comm::HGPacket txPacket {intentManager.getGhPacket()};
+        vehicle.setRequest(txPacket);
+
         vehicle.tick();
-        const cooboc::data::VehicleResponse vr {vehicle.getResponse()};
+        cooboc::comm::GHPacket rxPacket {vehicle.getResponse()};
+        intentManager.updateVehicleResponse(rxPacket);
 
         // SIL
         // simulator.updateVehicleRequest(vrt);
@@ -57,8 +57,6 @@ int main(int argc, char *argv[], char **envs) {
         // const cooboc::intent::VehicleRequestTopic &vrt {intentManager.getVehicleRequest()};
         // spi.sendPacket(vrt);
         // const cooboc::data::VehicleResponse vr {spi.getVehicleResponse()};
-
-        intentManager.updateVehicleResponse(vr);
     }
 
 

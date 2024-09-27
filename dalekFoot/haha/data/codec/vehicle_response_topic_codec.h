@@ -8,10 +8,8 @@
 
 namespace cooboc {
 namespace data {
-    proto::WheelStatus convert(const data::WheelStatus & in);
-
-proto::VehicleResponse convert(const data::VehicleResponse &in);
-
+// proto::WheelStatus convert(const data::WheelStatus &in);
+// proto::VehicleResponse convert(const data::VehicleResponse &in);
 
 proto::VehicleResponseTopic convert(const intent::VehicleResponseTopic &in);
 

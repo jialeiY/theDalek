@@ -1,9 +1,7 @@
 #ifndef __SIL_SIMULATOR_SIMULATOR_H__
 #define __SIL_SIMULATOR_SIMULATOR_H__
 
-#include "data/defs/vehicle_response.h"
-#include "intents/topics/vehicle_request_topic.h"
-
+#include "data/gh_protocol.h"
 
 namespace cooboc {
 namespace sil {
@@ -15,11 +13,16 @@ class Simulator {
     virtual ~Simulator();
     void setup();
     void tick();
-    void updateVehicleRequest(const intent::VehicleRequestTopic &vehicleRequest);
-    data::VehicleResponse getVehicleResponse();
+    void updateVehicleRequest(const comm::HGPacket &vehicleRequest);
+    inline comm::GHPacket getVehicleResponse() const { return vehicleResponsePacket_; }
 
   private:
-    data::VehicleResponse vehicleResponse_ {};
+    comm::HGPacket vehicleRequestPacket_ {};
+    comm::GHPacket vehicleResponsePacket_ {};
+
+
+    float vehicleWheelSpeed_[4U] {};
+    float vehicleWheelOdometry_[4U] {};
 };
 
 }    // namespace sil

@@ -49,12 +49,11 @@ void OdometryIntent::tick() {
         float odometryDiff[4];
         float dist[4];
         for (std::size_t i {0U}; i < 4U; ++i) {
-            odometryDiff[i] =
-              vehicleResponseTopic.response.wheelStatus[i].odometry - wheelOdometry_[i];
+            odometryDiff[i] = vehicleResponseTopic.wheelOdometry[i] - wheelOdometry_[i];
             // TODO: make it a parameter
             // dist[i]           = (odometryDiff[i] / 4096.0F) * (utils::math::PI * 0.06);
             dist[i]           = odometryDiff[i];
-            wheelOdometry_[i] = vehicleResponseTopic.response.wheelStatus[i].odometry;
+            wheelOdometry_[i] = vehicleResponseTopic.wheelOdometry[i];
         }
         float diffx = dist[0] + dist[1] + dist[2] + dist[3];
         float diffy = dist[0] - dist[1] + dist[2] - dist[3];
@@ -85,7 +84,7 @@ void OdometryIntent::tick() {
 
     } else {
         for (std::size_t i {0U}; i < 4U; ++i) {
-            wheelOdometry_[i] = vehicleResponseTopic.response.wheelStatus[i].odometry;
+            wheelOdometry_[i] = vehicleResponseTopic.wheelOdometry[i];
             // encoder_[i] = vehicleResponseTopic.response.wheelStatus[i].encoder;
         }
         isInitialized_ = true;
