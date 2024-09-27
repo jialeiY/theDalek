@@ -16,6 +16,11 @@ void EgoStateIntent::setup() {
 }
 
 void EgoStateIntent::tick() {
+    if (!vehicleResponseTopic.isValid) {
+        // TODO update ego state using history information
+        return;
+    }
+
     const float encoderVx =
       (vehicleResponseTopic.encoderSpeed[0U] + vehicleResponseTopic.encoderSpeed[1U] +
        vehicleResponseTopic.encoderSpeed[2U] + vehicleResponseTopic.encoderSpeed[3U]) /

@@ -29,6 +29,11 @@ void OdometryIntent::setup() {
 
 
 void OdometryIntent::tick() {
+    if (!vehicleResponseTopic.isValid) {
+        // TODO: update odometry using history information
+        return;
+    }
+    // TODO: update odometry use history information
     // odometryTopic.timestamp        = utils::time::nanoseconds();
     // odometryTopic.pose.position.x  = randomDistribution_(randomGen_);
     // odometryTopic.pose.position.y  = randomDistribution_(randomGen_);
