@@ -8,7 +8,7 @@ namespace cooboc {
 namespace data {
 proto::WheelControlPlanning convert(const intent::WheelControlPlanning &in) {
     proto::WheelControlPlanning out;
-    for (std::size_t i {0U}; i < 10U; ++i) { out.add_speed(in.speed[i]); }
+    for (std::size_t i {0U}; i < 10U; ++i) { out.add_encoderspeed(in.encoderSpeed[i]); }
     return out;
 }
 }    // namespace data

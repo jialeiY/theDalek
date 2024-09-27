@@ -16,7 +16,7 @@ void VehicleRequestIntent::setup() {
 
     for (std::size_t i {0U}; i < 4U; ++i) {
         for (std::size_t j {0U}; j < 10U; ++j) {
-            vehicleRequestTopic.wheelControlPlanning[i].speed[j] = 0.0F;
+            vehicleRequestTopic.wheelControlPlanning[i].encoderSpeed[j] = 0.0F;
         }
     }
     std::memset(vehicleRequestTopic.hgPacketBuffer, 0, HG_PACKET_SIZE);
@@ -31,21 +31,27 @@ void VehicleRequestIntent::tick() {
     const float rotation                   = 0.0F;
 
     comm::HGPacket packet {};
+    constexpr float kMetricToEncoder = 4096.0F / (utils::math::PI * 0.06F);
     for (std::size_t i {0U}; i < kControlSize; ++i) {
         const data::Vector2D &velocityVec = motionPlanningTopic.waypoints[i].velocity;
-        vehicleRequestTopic.wheelControlPlanning[0U].speed[i] =
-          velocityVec.x + velocityVec.y + rotation;
-        vehicleRequestTopic.wheelControlPlanning[1U].speed[i] =
-          velocityVec.x - velocityVec.y + rotation;
-        vehicleRequestTopic.wheelControlPlanning[2U].speed[i] =
-          velocityVec.x + velocityVec.y - rotation;
-        vehicleRequestTopic.wheelControlPlanning[3U].speed[i] =
-          velocityVec.x - velocityVec.y - rotation;
+        vehicleRequestTopic.wheelControlPlanning[0U].encoderSpeed[i] =
+          (velocityVec.x + velocityVec.y + rotation) * kMetricToEncoder;
+        vehicleRequestTopic.wheelControlPlanning[1U].encoderSpeed[i] =
+          (velocityVec.x - velocityVec.y + rotation) * kMetricToEncoder;
+        vehicleRequestTopic.wheelControlPlanning[2U].encoderSpeed[i] =
+          (velocityVec.x + velocityVec.y - rotation) * kMetricToEncoder;
+        vehicleRequestTopic.wheelControlPlanning[3U].encoderSpeed[i] =
+          (velocityVec.x - velocityVec.y - rotation) * kMetricToEncoder;
 
-        packet.wheelsPlanning[0U][i] = vehicleRequestTopic.wheelControlPlanning[0U].speed[i];
-        packet.wheelsPlanning[1U][i] = vehicleRequestTopic.wheelControlPlanning[1U].speed[i];
-        packet.wheelsPlanning[2U][i] = vehicleRequestTopic.wheelControlPlanning[2U].speed[i];
-        packet.wheelsPlanning[3U][i] = vehicleRequestTopic.wheelControlPlanning[3U].speed[i];
+
+        packet.wheelEncoderPlanning[0U][i] =
+          vehicleRequestTopic.wheelControlPlanning[0U].encoderSpeed[i];
+        packet.wheelEncoderPlanning[1U][i] =
+          vehicleRequestTopic.wheelControlPlanning[1U].encoderSpeed[i];
+        packet.wheelEncoderPlanning[2U][i] =
+          vehicleRequestTopic.wheelControlPlanning[2U].encoderSpeed[i];
+        packet.wheelEncoderPlanning[3U][i] =
+          vehicleRequestTopic.wheelControlPlanning[3U].encoderSpeed[i];
     }
 
     std::uint32_t crc = utils::math::calculateCrc(packet);

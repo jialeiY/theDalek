@@ -15,7 +15,7 @@ OdometryIntent::OdometryIntent() :
     randomDev_ {},
     randomGen_ {randomDev_()},
     randomDistribution_ {0.0F, 0.02F} {
-    for (std::size_t i {0U}; i < 4U; ++i) { wheelOdometry_[i] = 0.0F; }
+    for (std::size_t i {0U}; i < 4U; ++i) { encoderOdometry_[i] = 0; }
 }
 
 OdometryIntent::~OdometryIntent() {}
@@ -46,46 +46,37 @@ void OdometryIntent::tick() {
     constexpr float kAxelLateral {0.20F};
 
     if (isInitialized_) {
-        float odometryDiff[4];
-        float dist[4];
+        std::int64_t encoderDiff[4];
         for (std::size_t i {0U}; i < 4U; ++i) {
-            odometryDiff[i] = vehicleResponseTopic.wheelOdometry[i] - wheelOdometry_[i];
-            // TODO: make it a parameter
-            // dist[i]           = (odometryDiff[i] / 4096.0F) * (utils::math::PI * 0.06);
-            dist[i]           = odometryDiff[i];
-            wheelOdometry_[i] = vehicleResponseTopic.wheelOdometry[i];
+            encoderDiff[i] = vehicleResponseTopic.encoderOdometry[i] - encoderOdometry_[i];
+
+            // Update status
+            encoderOdometry_[i] = vehicleResponseTopic.encoderOdometry[i];
         }
-        float diffx = dist[0] + dist[1] + dist[2] + dist[3];
-        float diffy = dist[0] - dist[1] + dist[2] - dist[3];
-        float diffr = dist[0] + dist[1] - dist[2] - dist[3];
-        std::printf("encoder: %f %f %f %f\r\n",
-                    wheelOdometry_[0],
-                    wheelOdometry_[1],
-                    wheelOdometry_[2],
-                    wheelOdometry_[3]);
-
-        float angularDiff =
-          diffr * (2.0 * utils::math::PI /
+        constexpr float kEncoderToMetric = utils::math::PI * 0.06F / 4096.0F;
+        const float diffX =
+          static_cast<float>(encoderDiff[0] + encoderDiff[1] + encoderDiff[2] + encoderDiff[3]) *
+          kEncoderToMetric;
+        const float diffY =
+          static_cast<float>(encoderDiff[0] - encoderDiff[1] + encoderDiff[2] - encoderDiff[3]) *
+          kEncoderToMetric;
+        const float diffR =
+          static_cast<float>(encoderDiff[0] + encoderDiff[1] - encoderDiff[2] - encoderDiff[3]) *
+          kEncoderToMetric;
+        const float angularDiff =
+          diffR * (2.0 * utils::math::PI /
                    std::sqrt(kAxelLongitudinal * kAxelLongitudinal + kAxelLateral * kAxelLateral));
-
-        const data::Vector2D posDiffVec {diffx, diffy};
+        const data::Vector2D posDiffVec {diffX, diffY};
         data::PolarVector2D posDiffPolar {utils::math::to<data::PolarVector2D>(posDiffVec)};
 
-        // rotate first
+        // Rotate the vehicle
         posDiffPolar.orientation += odometryTopic.pose.orientation;
-
+        // Translate the vehicle
         odometryTopic.pose.position = odometryTopic.pose.position + posDiffPolar;
         odometryTopic.pose.orientation += angularDiff;
-
-
-        // odometryTopic.pose.position.x += diffx;
-        // odometryTopic.pose.position.y += diffy;
-
-
     } else {
         for (std::size_t i {0U}; i < 4U; ++i) {
-            wheelOdometry_[i] = vehicleResponseTopic.wheelOdometry[i];
-            // encoder_[i] = vehicleResponseTopic.response.wheelStatus[i].encoder;
+            encoderOdometry_[i] = vehicleResponseTopic.encoderOdometry[i];
         }
         isInitialized_ = true;
     }

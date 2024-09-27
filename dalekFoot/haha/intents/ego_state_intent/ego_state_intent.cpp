@@ -16,14 +16,17 @@ void EgoStateIntent::setup() {
 }
 
 void EgoStateIntent::tick() {
-    float vx = (vehicleResponseTopic.wheelSpeed[0U] + vehicleResponseTopic.wheelSpeed[1U] +
-                vehicleResponseTopic.wheelSpeed[2U] + vehicleResponseTopic.wheelSpeed[3U]) /
-               4.0F;
-    float vy = (vehicleResponseTopic.wheelSpeed[0U] - vehicleResponseTopic.wheelSpeed[1U] +
-                vehicleResponseTopic.wheelSpeed[2U] - vehicleResponseTopic.wheelSpeed[3U]) /
-               4.0F;
+    const float encoderVx =
+      (vehicleResponseTopic.encoderSpeed[0U] + vehicleResponseTopic.encoderSpeed[1U] +
+       vehicleResponseTopic.encoderSpeed[2U] + vehicleResponseTopic.encoderSpeed[3U]) /
+      4.0F;
+    const float encoderVy =
+      (vehicleResponseTopic.encoderSpeed[0U] - vehicleResponseTopic.encoderSpeed[1U] +
+       vehicleResponseTopic.encoderSpeed[2U] - vehicleResponseTopic.encoderSpeed[3U]) /
+      4.0F;
 
-    data::Vector2D velocity {vx, vy};
+    const data::Vector2D encoderVelocity {encoderVx, encoderVy};
+    const data::Vector2D velocity = encoderVelocity * (utils::math::PI * 0.06F / 4096.0F);
 
     egoStateTopic.velocity = utils::math::to<data::PolarVector2D>(velocity);
 

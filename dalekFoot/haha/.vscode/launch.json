@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "GDB_HAHA",
+            "name": "GDB_HAHA_SIL",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/haha.elf",
+            "program": "${workspaceFolder}/build/haha-sil.elf",
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "launchCompleteCommand": "exec-run",

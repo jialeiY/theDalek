@@ -8,8 +8,8 @@ namespace intent {
 
 struct VehicleResponseTopic {
     bool isValid {false};
-    std::int32_t wheelOdometry[4U];
-    float wheelSpeed[4U];
+    std::int32_t encoderOdometry[4U];
+    float encoderSpeed[4U];
 };
 
 }    // namespace intent

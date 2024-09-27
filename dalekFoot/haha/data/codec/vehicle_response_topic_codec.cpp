@@ -10,8 +10,8 @@ proto::VehicleResponseTopic convert(const intent::VehicleResponseTopic &in) {
     proto::VehicleResponseTopic out;
     out.set_isvalid(in.isValid);
     for (std::size_t i {0U}; i < 4U; ++i) {
-        out.add_wheelodometry(in.wheelOdometry[i]);
-        out.add_wheelspeed(in.wheelSpeed[i]);
+        out.add_encoderodometry(in.encoderOdometry[i]);
+        out.add_encoderspeed(in.encoderSpeed[i]);
     }
     return out;
 }

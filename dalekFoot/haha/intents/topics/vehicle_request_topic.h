@@ -12,7 +12,7 @@ namespace intent {
 constexpr std::size_t kControlSize {10U};
 
 struct WheelControlPlanning {
-    float speed[kControlSize];
+    float encoderSpeed[kControlSize];
 };
 
 struct VehicleRequestTopic {

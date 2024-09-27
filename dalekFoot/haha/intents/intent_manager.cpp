@@ -60,8 +60,8 @@ void IntentManager::updateVehicleResponse(const comm::GHPacket &vehicleResponse)
     if (vehicleResponse.crc == expectedCrc) {
         vehicleResponseTopic.isValid = true;
         for (std::size_t i {0U}; i < 4U; ++i) {
-            intent::vehicleResponseTopic.wheelOdometry[i] = vehicleResponse.wheelOdometry[i];
-            intent::vehicleResponseTopic.wheelSpeed[i]    = vehicleResponse.wheelSpeed[i];
+            intent::vehicleResponseTopic.encoderOdometry[i] = vehicleResponse.encoderOdometry[i];
+            intent::vehicleResponseTopic.encoderSpeed[i]    = vehicleResponse.encoderSpeed[i];
         }
     } else {
         // Invalidate vehicle response topic

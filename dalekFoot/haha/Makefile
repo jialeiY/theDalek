@@ -118,7 +118,7 @@ $(GEN_DIR)/%.pb.cc: %.proto Makefile
 	mkdir -p $(dir $@)
 	protoc --cpp_out=$(GEN_DIR)/ $<
 
-$(BUILD_DIR)/%.pb.o: %.cc | $(BUILD_DIR)
+$(BUILD_DIR)/%.pb.o: %.cc | $(BUILD_DIR) PROTO_FILES
 	$(CC) "$<" $(CFLAGS) $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -o "$@"
 
 $(BUILD_DIR)/%.o: %.c Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
