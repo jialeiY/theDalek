@@ -46,16 +46,24 @@ void calculateMotionProfile(const CurvatureProfile &curvatureProfile,
 
     motionProfile.reset();
     if (curvatureProfile.size() < 3U) {
+        // TODO: bad code, bad logic, fixme
         for (std::size_t i {0}; i < curvatureProfile.size(); ++i) {
             motionProfile.push_back(std::make_tuple(maximumVelocity, maximumAcceleration));
         }
         return;
     }
 
-    float lastVelocity = maximumVelocity;
 
     // Put the result in reversed order
+
+    // Keep going when reach the end of the trajectory
+    // float lastVelocity = maximumVelocity;
+    // Stop when reach the end of the trajectory
+    float lastVelocity = 0.0F;
+
+
     motionProfile.push_back(std::make_tuple(lastVelocity, maximumAcceleration));
+
     float lastLength = std::get<0>(curvatureProfile.back());
 
     for (std::int32_t i {curvatureProfile.size() - 2U}; i >= 0; --i) {

@@ -44,7 +44,7 @@ void MotionPlanningIntent::setup() {
     lateralPid_.reset();
 }
 
-constexpr float kMaximumAcceleration = 0.5F;    // m/s
+constexpr float kMaximumAcceleration = 0.3F;    // m/s
 constexpr float kMaximumVelocity     = 1.0F;    // m/s
 void MotionPlanningIntent::tick() {
     // Calculate curvature profile
@@ -105,7 +105,10 @@ void MotionPlanningIntent::planLongitudinal(const float initS, const float initS
     float longitudinalSpeed = initSpeed;
 
     normalizeS(idx, segmentS);
-    data::Position2D position = mapSToPosition(idx, segmentS);
+    data::Position2D position {};
+    bool isReachEnd {false};
+    std::tie(position, isReachEnd) = mapSToPosition(idx, segmentS);
+
 
     for (std::size_t i {0}; i < kPlanningSize; ++i) {
         // 1. Deduce speed
@@ -123,7 +126,16 @@ void MotionPlanningIntent::planLongitudinal(const float initS, const float initS
 
         segmentS += longitudinalSpeed * kPlanningIntervalSeconds;
         normalizeS(idx, segmentS);
-        const data::Position2D nextPosition = mapSToPosition(idx, segmentS);
+        data::Position2D nextPosition {};
+        bool isReachEnd {false};
+        std::tie(nextPosition, isReachEnd) = mapSToPosition(idx, segmentS);
+
+
+        if (isReachEnd) {
+            // stop the vehicle
+            nextPosition = position;
+        }
+
         const data::Vector2D motionDistance = nextPosition - position;
         const data::Vector2D motionVelocity = motionDistance / kPlanningIntervalSeconds;
 
@@ -159,17 +171,18 @@ void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {
     }
 }
 
-data::Position2D MotionPlanningIntent::mapSToPosition(std::size_t &trajectoryIdx, const float s) {
+std::tuple<data::Position2D, bool> MotionPlanningIntent::mapSToPosition(std::size_t &trajectoryIdx,
+                                                                        const float s) {
     if ((trajectoryIdx + 1U) < trajectoryTopic.passingPointSize) {
         const data::Position2D &startPoint {trajectoryTopic.passingPoint[trajectoryIdx].position};
         const data::Position2D &endPoint {
           trajectoryTopic.passingPoint[trajectoryIdx + 1U].position};
         const float length     = trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value;
         const float percentage = s / length;
-        return utils::math::interpolate(startPoint, endPoint, percentage);
+        return {utils::math::interpolate(startPoint, endPoint, percentage), percentage >= 1.0F};
     } else {
         // TODO: error here
-        return {0.0F, 0.0F};
+        return {{0.0F, 0.0F}, false};
     }
 }
 

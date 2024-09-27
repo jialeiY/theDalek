@@ -82,6 +82,7 @@ std::tuple<std::size_t, float> calculatePoseInFrenet(const data::Pose2D &poseInW
         lastPoint = passingPoint[i].position;
     }
 
+
     // calculate S
     float s = 0.0F;
     // Calculate all s before current segment

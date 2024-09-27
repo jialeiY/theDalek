@@ -49,7 +49,7 @@ class MotionPlanningIntent : public IntentBase {
 
     void planLongitudinal(const float initS, const float initSpeed);
     void normalizeS(std::size_t &trajectoryIdx, float &s);
-    data::Position2D mapSToPosition(std::size_t &trajectoryIdx, const float s);
+    std::tuple<data::Position2D, bool> mapSToPosition(std::size_t &trajectoryIdx, const float s);
 
     struct LongitudinalPlanningPoint {
         std::size_t trajectoryIdx {0U};
