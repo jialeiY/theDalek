@@ -45,7 +45,7 @@ void MotionPlanningIntent::setup() {
 }
 
 constexpr float kMaximumAcceleration = 0.3F;    // m/s
-constexpr float kMaximumVelocity     = 1.0F;    // m/s
+constexpr float kMaximumVelocity     = 0.3F;    // m/s
 void MotionPlanningIntent::tick() {
     // Calculate curvature profile
     curvatureProfile_.reset();

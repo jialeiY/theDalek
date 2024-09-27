@@ -51,7 +51,7 @@ void RouteIntent::tick() {
     //     segment.endPoint              = data::Position2D {3.0, -0.1F};
     //     segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
     // }
-    routeTopic.routeSegmentSize = 2U;
+    routeTopic.routeSegmentSize = 5U;
     routeTopic.startPoint       = data::Position2D {0.0F, 0.0F};
     {
         data::RouteSegment &segment {routeTopic.routeSegment[0U]};
@@ -60,7 +60,22 @@ void RouteIntent::tick() {
     }
     {
         data::RouteSegment &segment {routeTopic.routeSegment[1U]};
-        segment.endPoint              = data::Position2D {1.0F, 10.0F};
+        segment.endPoint              = data::Position2D {1.0F, 1.0F};
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
+    }
+    {
+        data::RouteSegment &segment {routeTopic.routeSegment[2U]};
+        segment.endPoint              = data::Position2D {0.0F, 1.0F};
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_NEXT;
+    }
+    {
+        data::RouteSegment &segment {routeTopic.routeSegment[3U]};
+        segment.endPoint              = data::Position2D {0.0F, 0.5F};
+        segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
+    }
+    {
+        data::RouteSegment &segment {routeTopic.routeSegment[4U]};
+        segment.endPoint              = data::Position2D {0.0F, 0.0F};
         segment.curvatureDistribution = data::CurvatureDistribution::CONSIDER_BOTH;
     }
 }
