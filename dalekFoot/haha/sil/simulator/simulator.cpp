@@ -16,19 +16,20 @@ void Simulator::setup() {
     }
 }
 void Simulator::tick() {
+    std::int32_t beginOdometry[4U] {0, 0, 0, 0};
     for (std::size_t i {0U}; i < 4U; ++i) {
         // Update each wheel speed
+        beginOdometry[i]      = vehicleWheelOdometry_[i];
         vehicleWheelSpeed_[i] = vehicleRequestPacket_.wheelEncoderPlanning[i][0U];
-        const float dist      = vehicleWheelSpeed_[i] * 0.01F;
-
-        vehicleWheelOdometry_[i] += dist;
+        vehicleWheelOdometry_[i] += vehicleWheelSpeed_[i] * 0.01F;
     }
 
     // Write packet
     for (std::size_t i {0U}; i < 4U; ++i) {
         vehicleResponsePacket_.encoderOdometry[i] =
           static_cast<std::int32_t>(vehicleWheelOdometry_[i]);
-        vehicleResponsePacket_.encoderSpeed[i] = vehicleWheelSpeed_[i];
+        vehicleResponsePacket_.intervalOdometry[i] =
+          static_cast<std::int32_t>(vehicleWheelOdometry_[i]) - beginOdometry[i];
     }
     vehicleResponsePacket_.tickCount = 5U;
 

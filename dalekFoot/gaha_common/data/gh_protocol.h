@@ -24,9 +24,9 @@ struct HGPacket {
 // Gaga -> Haha Sensor Response
 
 struct GHPacket {
-    std::int32_t encoderOdometry[4U] {}; // the absolute odometry of encoder, so that if one packet is missing, whole odometry could be deduced.
-    float encoderSpeed[4U]{}; // The speed of encoder
     std::uint32_t tickCount {0U};
+    std::int32_t encoderOdometry[4U] {}; // the absolute odometry of encoder, so that if one packet is missing, whole odometry could be deduced.
+    std::int32_t intervalOdometry[4U] {}; // the odometry of encoder between two communication
 
     std::uint32_t crc {0};
 } __attribute__((packed));

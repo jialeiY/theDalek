@@ -3,7 +3,8 @@ syntax = "proto2";
 package cooboc.proto;
 
 message VehicleResponseTopic {
-    optional bool  isValid         = 1 [default = false];
-    repeated int32 encoderOdometry = 2;
-    repeated float encoderSpeed    = 3;
+    optional bool   isValid          = 1 [default = false];
+    optional uint32 tickCount        = 2 [default = 0];
+    repeated int32  encoderOdometry  = 3;
+    repeated int32  intervalOdometry = 4;
 }

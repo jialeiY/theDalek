@@ -6,6 +6,10 @@
 
 namespace cooboc {
 namespace intent {
+
+constexpr float kAxelLongitudinal {0.25F};
+constexpr float kAxelLateral {0.20F};
+
 EgoStateIntent::EgoStateIntent() {}
 EgoStateIntent::~EgoStateIntent() {}
 void EgoStateIntent::setup() {
@@ -22,18 +26,28 @@ void EgoStateIntent::tick() {
     }
 
     const float encoderVx =
-      (vehicleResponseTopic.encoderSpeed[0U] + vehicleResponseTopic.encoderSpeed[1U] +
-       vehicleResponseTopic.encoderSpeed[2U] + vehicleResponseTopic.encoderSpeed[3U]) /
+      (vehicleResponseTopic.intervalOdometry[0U] + vehicleResponseTopic.intervalOdometry[1U] +
+       vehicleResponseTopic.intervalOdometry[2U] + vehicleResponseTopic.intervalOdometry[3U]) /
       4.0F;
     const float encoderVy =
-      (vehicleResponseTopic.encoderSpeed[0U] - vehicleResponseTopic.encoderSpeed[1U] +
-       vehicleResponseTopic.encoderSpeed[2U] - vehicleResponseTopic.encoderSpeed[3U]) /
+      (vehicleResponseTopic.intervalOdometry[0U] - vehicleResponseTopic.intervalOdometry[1U] +
+       vehicleResponseTopic.intervalOdometry[2U] - vehicleResponseTopic.intervalOdometry[3U]) /
+      4.0F;
+    const float encoderVr =
+      (vehicleResponseTopic.intervalOdometry[0U] + vehicleResponseTopic.intervalOdometry[1U] -
+       vehicleResponseTopic.intervalOdometry[2U] - vehicleResponseTopic.intervalOdometry[3U]) /
       4.0F;
 
     const data::Vector2D encoderVelocity {encoderVx, encoderVy};
     const data::Vector2D velocity = encoderVelocity * (utils::math::PI * 0.06F / 4096.0F);
+    const float angularVelocity =
+      encoderVr *
+      (2.0 * utils::math::PI /
+       std::sqrt(kAxelLongitudinal * kAxelLongitudinal + kAxelLateral * kAxelLateral)) *
+      (utils::math::PI * 0.06F / 4096.0F);
 
-    egoStateTopic.velocity = utils::math::to<data::PolarVector2D>(velocity);
+    egoStateTopic.velocity        = utils::math::to<data::PolarVector2D>(velocity);
+    egoStateTopic.angularVelocity = angularVelocity;
 
     // egoStateTopic.velocity.orientation = randomDistribution_(randomGen_) * 3.9F;
     // egoStateTopic.velocity.value       = randomDistribution_(randomGen_) * 3.0 + 0.5;

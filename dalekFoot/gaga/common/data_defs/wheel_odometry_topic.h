@@ -12,7 +12,6 @@ struct WheelOdometryTopic {
     // TODO: timestamp
     Qualifier qualifier {Qualifier::BAD};
     WheelOdometry wheelOdometry[4U] {};
-    std::int32_t accumulatedOdometry[4U] {};
 };
 
 

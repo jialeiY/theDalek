@@ -46,7 +46,7 @@ void OdometryIntent::tick() {
     // odometryTopic.pose.orientation = utils::math::lerp(
     //   static_cast<float>(fromm), 0.0F, 5000.0F, 0.0F, 2 * utils::math::PI);
 
-
+    // TODO: make this variable to parameter
     constexpr float kAxelLongitudinal {0.25F};
     constexpr float kAxelLateral {0.20F};
 
@@ -61,10 +61,10 @@ void OdometryIntent::tick() {
         constexpr float kEncoderToMetric = utils::math::PI * 0.06F / 4096.0F;
         const float diffX =
           static_cast<float>(encoderDiff[0] + encoderDiff[1] + encoderDiff[2] + encoderDiff[3]) *
-          kEncoderToMetric;
+          kEncoderToMetric / 4.0F;
         const float diffY =
           static_cast<float>(encoderDiff[0] - encoderDiff[1] + encoderDiff[2] - encoderDiff[3]) *
-          kEncoderToMetric;
+          kEncoderToMetric / 4.0F;
         const float diffR =
           static_cast<float>(encoderDiff[0] + encoderDiff[1] - encoderDiff[2] - encoderDiff[3]) *
           kEncoderToMetric;

@@ -61,11 +61,11 @@ void IntentManager::updateVehicleResponse(const comm::GHPacket &vehicleResponse)
         vehicleResponseTopic.isValid = true;
         for (std::size_t i {0U}; i < 4U; ++i) {
             intent::vehicleResponseTopic.encoderOdometry[i] = vehicleResponse.encoderOdometry[i];
-            intent::vehicleResponseTopic.encoderSpeed[i]    = vehicleResponse.encoderSpeed[i];
         }
     } else {
         // Invalidate vehicle response topic
-        vehicleResponseTopic.isValid = false;
+        vehicleResponseTopic.isValid   = false;
+        vehicleResponseTopic.tickCount = vehicleResponse.tickCount;
     }
 }
 
