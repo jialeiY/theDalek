@@ -4,6 +4,7 @@
 
 #include "data/defs/motion_state.h"
 #include "data/defs/pose2d.h"
+#include "data/defs/vehicle_state.h"
 
 
 namespace cooboc {
@@ -13,12 +14,19 @@ class ShadowVehicle {
   public:
     ShadowVehicle()          = default;
     virtual ~ShadowVehicle() = default;
-    inline void setPose(const data::Pose2D &pose) { pose_ = pose; }
+
+    inline void setValid(bool valid) { isValid_ = valid; }
+    inline bool isValid() const { return isValid_; }
+    inline void setPose(const data::Pose2D &pose) { vehicleState_.pose = pose; }
+    inline void setMotionState(const data::MotionState &motionState) {
+        vehicleState_.motionState = motionState;
+    }
+
+    inline data::VehicleState getVehicleState() const { return vehicleState_; }
 
   private:
-    bool isValid {false};
-    data::Pose2D pose_ {};
-    data::MotionState state_ {};
+    bool isValid_ {false};
+    data::VehicleState vehicleState_ {};
 };
 
 }    // namespace motion_planning

@@ -19,11 +19,15 @@ constexpr float kPlanningIntervalSeconds {0.01F};    // TODO: put parameter to p
 namespace intent {
 
 MotionPlanningIntent::MotionPlanningIntent() :
+    shadowVehicle_ {},
     lateralPid_ {},
     curvatureProfile_ {},
     motionProfile_ {},
     poseInFrenet_ {},
     longitudinalPlanning_ {} {
+    // Invalidate shadow vehicle
+    shadowVehicle_.setValid(false);
+
     motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
         motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
@@ -66,20 +70,28 @@ void MotionPlanningIntent::plan() {
     std::size_t idx;
     float dist;
 
-
-    std::tie(idx, dist) = motion_planning::calculatePoseInFrenet(odometryTopic.pose,
-                                                                 trajectoryTopic.passingPoint,
-                                                                 trajectoryTopic.passingPointSize,
-                                                                 poseInFrenet_);
-
-
+    const data::VehicleState egoState = getInitVehicleState();
+    std::tie(idx, dist)               = motion_planning::calculatePoseInFrenet(
+      egoState.pose, trajectoryTopic.passingPoint, trajectoryTopic.passingPointSize, poseInFrenet_);
     // Find out longitudinal and Lateral speed
-    data::PolarVector2D egoVelocity = egoMotionStateTopic.velocity;
-    egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
-    data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
+    // data::PolarVector2D egoVelocity = egoMotionStateTopic.velocity;
+    // egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
+    // data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
+
+    data::PolarVector2D egoVelocityInWorld = egoState.motionState.velocity;
+    egoVelocityInWorld.orientation = egoVelocityInWorld.orientation + poseInFrenet_.orientation;
+    const data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocityInWorld);
 
     // planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
     planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
+
+    // Update Shadow
+    data::Pose2D nextPose = {longitudinalPlanning_[0U].waypoint, 0.0F};
+    data::MotionState motionState {};
+    motionState.velocity =
+      utils::math::to<data::PolarVector2D>(longitudinalPlanning_[0].motionVelocity);
+    shadowVehicle_.setPose(nextPose);
+    shadowVehicle_.setMotionState(motionState);
 
     // Output to topic
     for (std::size_t i {0U}; i < kPlanningSize; ++i) {
@@ -98,10 +110,26 @@ void MotionPlanningIntent::plan() {
     motionPlanningDebugTopic.distanceToTrajectory = dist;
 }
 
-MotionPlanningIntent::InitVehicleState MotionPlanningIntent::getInitVehicleState() {
+data::VehicleState MotionPlanningIntent::getInitVehicleState() {
     // choose from shadow or from odometry
+    if (isEgoStateDifferenceTooBig()) {
+        synchronizeEgoWithShadow();
+    }
+    return shadowVehicle_.getVehicleState();
 }
 
+bool MotionPlanningIntent::isEgoStateDifferenceTooBig() {
+    return !shadowVehicle_.isValid();    // || egoAndShadowDiffLarge
+}
+
+void MotionPlanningIntent::synchronizeEgoWithShadow() {
+    const data::Pose2D &pose {odometryTopic.pose};
+    const data::MotionState &motionState {egoMotionStateTopic};
+
+    shadowVehicle_.setPose(pose);
+    shadowVehicle_.setMotionState(motionState);
+    shadowVehicle_.setValid(true);
+}
 
 void MotionPlanningIntent::planLongitudinal(const float initS, const float initSpeed) {
     std::size_t idx         = 0U;

@@ -7,6 +7,7 @@
 #include "data/defs/motion_state.h"
 #include "data/defs/pose2d.h"
 #include "data/defs/static_vector.h"
+#include "data/defs/vehicle_state.h"
 #include "intents/intent_base.h"
 #include "intents/motion_planning_intent/components/profile.h"
 #include "intents/motion_planning_intent/components/shadow_vehicle.h"
@@ -55,10 +56,6 @@ class MotionPlanningIntent : public IntentBase {
         data::Vector2D motionVelocity {};
     };
 
-    struct InitVehicleState {
-        data::Pose2D pose;          // localization
-        data::MotionState state;    // motion state
-    };
 
     motion_planning::ShadowVehicle shadowVehicle_ {};
     algo::PID<float> lateralPid_ {};
@@ -66,7 +63,10 @@ class MotionPlanningIntent : public IntentBase {
     motion_planning::MotionProfile motionProfile_;
     data::Pose2D poseInFrenet_ {};
 
-    InitVehicleState getInitVehicleState();
+    data::VehicleState getInitVehicleState();
+    void synchronizeEgoWithShadow();
+    bool isEgoStateDifferenceTooBig();
+
     void plan();
     void planLongitudinal(const float initS, const float initSpeed);
     void normalizeS(std::size_t &trajectoryIdx, float &s);
