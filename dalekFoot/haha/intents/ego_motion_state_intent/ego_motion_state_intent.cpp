@@ -1,4 +1,4 @@
-#include "intents/ego_state_intent/ego_state_intent.h"
+#include "intents/ego_motion_state_intent/ego_motion_state_intent.h"
 #include "data/defs/polar_vector2d.h"
 #include "data/defs/vector2d.h"
 #include "intents/topics/topics.h"
@@ -10,16 +10,16 @@ namespace intent {
 constexpr float kAxelLongitudinal {0.25F};
 constexpr float kAxelLateral {0.20F};
 
-EgoStateIntent::EgoStateIntent() {}
-EgoStateIntent::~EgoStateIntent() {}
-void EgoStateIntent::setup() {
-    egoStateTopic.velocity            = {0.0F, 0.0F};
-    egoStateTopic.acceleration        = {0.0F, 0.0F};
-    egoStateTopic.angularVelocity     = 0.0F;
-    egoStateTopic.angularAcceleration = 0.0F;
+EgoMotionStateIntent::EgoMotionStateIntent() {}
+EgoMotionStateIntent::~EgoMotionStateIntent() {}
+void EgoMotionStateIntent::setup() {
+    egoMotionStateTopic.velocity            = {0.0F, 0.0F};
+    egoMotionStateTopic.acceleration        = {0.0F, 0.0F};
+    egoMotionStateTopic.angularVelocity     = 0.0F;
+    egoMotionStateTopic.angularAcceleration = 0.0F;
 }
 
-void EgoStateIntent::tick() {
+void EgoMotionStateIntent::tick() {
     if (!vehicleResponseTopic.isValid) {
         // TODO update ego state using history information
         return;
@@ -46,14 +46,14 @@ void EgoStateIntent::tick() {
        std::sqrt(kAxelLongitudinal * kAxelLongitudinal + kAxelLateral * kAxelLateral)) *
       (utils::math::PI * 0.06F / 4096.0F);
 
-    egoStateTopic.velocity        = utils::math::to<data::PolarVector2D>(velocity);
-    egoStateTopic.angularVelocity = angularVelocity;
+    egoMotionStateTopic.velocity        = utils::math::to<data::PolarVector2D>(velocity);
+    egoMotionStateTopic.angularVelocity = angularVelocity;
 
-    // egoStateTopic.velocity.orientation = randomDistribution_(randomGen_) * 3.9F;
-    // egoStateTopic.velocity.value       = randomDistribution_(randomGen_) * 3.0 + 0.5;
+    // egoMotionStateTopic.velocity.orientation = randomDistribution_(randomGen_) * 3.9F;
+    // egoMotionStateTopic.velocity.value       = randomDistribution_(randomGen_) * 3.0 + 0.5;
 
-    // egoStateTopic.acceleration.orientation = randomDistribution_(randomGen_) * 39.4F;
-    // egoStateTopic.acceleration.value       = randomDistribution_(randomGen_) * 4.7;
+    // egoMotionStateTopic.acceleration.orientation = randomDistribution_(randomGen_) * 39.4F;
+    // egoMotionStateTopic.acceleration.value       = randomDistribution_(randomGen_) * 4.7;
 }
 
 

@@ -46,7 +46,10 @@ void MotionPlanningIntent::setup() {
 
 constexpr float kMaximumAcceleration = 0.3F;    // m/s
 constexpr float kMaximumVelocity     = 0.3F;    // m/s
-void MotionPlanningIntent::tick() {
+void MotionPlanningIntent::tick() { plan(); }
+
+
+void MotionPlanningIntent::plan() {
     // Calculate curvature profile
     curvatureProfile_.reset();
     motion_planning::calculateCurvatureProfile(
@@ -62,6 +65,8 @@ void MotionPlanningIntent::tick() {
     // TODO: check the length of trajectory
     std::size_t idx;
     float dist;
+
+
     std::tie(idx, dist) = motion_planning::calculatePoseInFrenet(odometryTopic.pose,
                                                                  trajectoryTopic.passingPoint,
                                                                  trajectoryTopic.passingPointSize,
@@ -69,14 +74,9 @@ void MotionPlanningIntent::tick() {
 
 
     // Find out longitudinal and Lateral speed
-    data::PolarVector2D egoVelocity = egoStateTopic.velocity;
+    data::PolarVector2D egoVelocity = egoMotionStateTopic.velocity;
     egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
     data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
-
-    // data::PolarVector2D egoAcceleration = egoStateTopic.acceleration;
-    // egoAcceleration.orientation         = egoAcceleration.orientation -
-    // poseInFrenet_.orientation; data::Vector2D resolvedAcceleration =
-    // utils::math::to<data::Vector2D>(egoAcceleration); Plan longitudinal
 
     // planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
     planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
@@ -96,6 +96,10 @@ void MotionPlanningIntent::tick() {
     motionPlanningDebugTopic.trajectoryPointIdx   = idx;
     motionPlanningDebugTopic.poseInFrenet         = poseInFrenet_;
     motionPlanningDebugTopic.distanceToTrajectory = dist;
+}
+
+MotionPlanningIntent::InitVehicleState MotionPlanningIntent::getInitVehicleState() {
+    // choose from shadow or from odometry
 }
 
 

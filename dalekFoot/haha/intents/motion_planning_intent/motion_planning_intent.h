@@ -1,12 +1,15 @@
 #ifndef __INTENTS_MOTION_PLANNING_INTENT_MOTION_PLANNING_INTENT_H__
 #define __INTENTS_MOTION_PLANNING_INTENT_MOTION_PLANNING_INTENT_H__
 
+
 #include <array>
 #include <tuple>
+#include "data/defs/motion_state.h"
 #include "data/defs/pose2d.h"
 #include "data/defs/static_vector.h"
 #include "intents/intent_base.h"
 #include "intents/motion_planning_intent/components/profile.h"
+#include "intents/motion_planning_intent/components/shadow_vehicle.h"
 #include "intents/topics/common.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/trajectory_topic.h"
@@ -42,15 +45,6 @@ class MotionPlanningIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    algo::PID<float> lateralPid_ {};
-    motion_planning::CurvatureProfile curvatureProfile_;
-    motion_planning::MotionProfile motionProfile_;
-    data::Pose2D poseInFrenet_ {};
-
-    void planLongitudinal(const float initS, const float initSpeed);
-    void normalizeS(std::size_t &trajectoryIdx, float &s);
-    std::tuple<data::Position2D, bool> mapSToPosition(std::size_t &trajectoryIdx, const float s);
-
     struct LongitudinalPlanningPoint {
         std::size_t trajectoryIdx {0U};
         float segmentS {0.0F};
@@ -60,6 +54,23 @@ class MotionPlanningIntent : public IntentBase {
         // debug
         data::Vector2D motionVelocity {};
     };
+
+    struct InitVehicleState {
+        data::Pose2D pose;          // localization
+        data::MotionState state;    // motion state
+    };
+
+    motion_planning::ShadowVehicle shadowVehicle_ {};
+    algo::PID<float> lateralPid_ {};
+    motion_planning::CurvatureProfile curvatureProfile_;
+    motion_planning::MotionProfile motionProfile_;
+    data::Pose2D poseInFrenet_ {};
+
+    InitVehicleState getInitVehicleState();
+    void plan();
+    void planLongitudinal(const float initS, const float initSpeed);
+    void normalizeS(std::size_t &trajectoryIdx, float &s);
+    std::tuple<data::Position2D, bool> mapSToPosition(std::size_t &trajectoryIdx, const float s);
 
 
     std::array<LongitudinalPlanningPoint, kPlanningSize> longitudinalPlanning_ {};

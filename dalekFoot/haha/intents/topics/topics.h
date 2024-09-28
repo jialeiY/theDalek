@@ -2,7 +2,7 @@
 #define __INTENTS_TOPICS_TOPICS_H__
 
 #include "intents/topics/behavior_topic.h"
-#include "intents/topics/ego_state_topic.h"
+#include "intents/topics/ego_motion_state_topic.h"
 #include "intents/topics/motion_planning_debug_topic.h"
 #include "intents/topics/motion_planning_topic.h"
 #include "intents/topics/odometry_topic.h"
@@ -17,7 +17,7 @@ namespace intent {
 
 extern SystemDebugTopic systemDebugTopic;
 extern OdometryTopic odometryTopic;
-extern EgoStateTopic egoStateTopic;
+extern EgoMotionStateTopic egoMotionStateTopic;
 extern RouteTopic routeTopic;
 extern BehaviorTopic behaviorTopic;
 extern MotionPlanningTopic motionPlanningTopic;

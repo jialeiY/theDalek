@@ -1,6 +1,6 @@
 #include "intents/topics/topics.h"
 #include "intents/topics/behavior_topic.h"
-#include "intents/topics/ego_state_topic.h"
+#include "intents/topics/ego_motion_state_topic.h"
 #include "intents/topics/motion_planning_debug_topic.h"
 #include "intents/topics/motion_planning_topic.h"
 #include "intents/topics/odometry_topic.h"
@@ -16,7 +16,7 @@ namespace intent {
 
 SystemDebugTopic systemDebugTopic {};
 OdometryTopic odometryTopic {};
-EgoStateTopic egoStateTopic {};
+EgoMotionStateTopic egoMotionStateTopic {};
 RouteTopic routeTopic {};
 BehaviorTopic behaviorTopic {};
 MotionPlanningTopic motionPlanningTopic {};

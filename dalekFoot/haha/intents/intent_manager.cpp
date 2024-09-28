@@ -4,7 +4,7 @@
 #include "data/defs/vehicle_response.h"
 #include "intents/behavior_intent/behavior_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
-#include "intents/ego_state_intent/ego_state_intent.h"
+#include "intents/ego_motion_state_intent/ego_motion_state_intent.h"
 #include "intents/intent_base.h"
 #include "intents/motion_planning_intent/motion_planning_intent.h"
 #include "intents/odometry_intent/odometry_intent.h"
@@ -21,7 +21,7 @@ namespace intent {
 
 IntentManager::IntentManager() : tickCount_ {0U}, lastTickEndTime_ {0U}, lastTickDuration_ {0U} {
     // Decode vehicle status from gaga response, generate ego_motion
-    intents_.push_back(new EgoStateIntent());
+    intents_.push_back(new EgoMotionStateIntent());
     // Localization
     intents_.push_back(new OdometryIntent());
     // The specific task that ego need to do based on the result of localization

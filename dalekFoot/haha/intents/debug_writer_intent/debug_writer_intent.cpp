@@ -2,14 +2,14 @@
 #include "intents/debug_writer_intent/debug_writer_intent.h"
 #include <cstdint>
 #include "data/codec/behavior_topic_codec.h"
-#include "data/codec/ego_state_topic_codec.h"
+#include "data/codec/ego_motion_state_topic_codec.h"
 #include "data/codec/motion_planning_debug_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
 #include "data/codec/trajectory_topic_codec.h"
 #include "data/codec/vehicle_request_topic_codec.h"
 #include "gen/data/proto/behavior_topic.pb.h"
-#include "gen/data/proto/ego_state_topic.pb.h"
+#include "gen/data/proto/ego_motion_state_topic.pb.h"
 #include "gen/data/proto/motion_planning_debug_topic.pb.h"
 #include "gen/data/proto/motion_planning_topic.pb.h"
 #include "gen/data/proto/odometry_topic.pb.h"
@@ -29,8 +29,8 @@ namespace {}    // namespace
 DebugWriterIntent::DebugWriterIntent() {
     mcapTopicConverterList_.push_back(
       new McapTopicConverter(&vehicleResponseTopic, "/vehicle/response"));
-    mcapTopicConverterList_.push_back(
-      new McapTopicConverter<cooboc::intent::EgoStateTopic>(&egoStateTopic, "/ego_state"));
+    mcapTopicConverterList_.push_back(new McapTopicConverter<cooboc::intent::EgoMotionStateTopic>(
+      &egoMotionStateTopic, "/ego_motion_state"));
     mcapTopicConverterList_.push_back(new McapTopicConverter(&odometryTopic, "/odometry"));
     mcapTopicConverterList_.push_back(new McapTopicConverter(&behaviorTopic, "/planning/behavior"));
     mcapTopicConverterList_.push_back(new McapTopicConverter(&routeTopic, "/planning/route"));
