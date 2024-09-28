@@ -10,8 +10,9 @@ namespace data {
 
 struct WheelOdometryTopic {
     // TODO: timestamp
-    Qualifier qualifier;
-    WheelOdometry wheelOdometry[4];
+    Qualifier qualifier {Qualifier::BAD};
+    WheelOdometry wheelOdometry[4U] {};
+    std::int32_t accumulatedOdometry[4U] {};
 };
 
 

@@ -10,6 +10,16 @@
 namespace cooboc {
 namespace comm {
 
+// Haha -> Gaga  Control Request
+
+struct HGPacket {
+    static constexpr std::size_t kPlanningSize {10U};
+
+    float wheelEncoderPlanning[4U][kPlanningSize];
+
+    std::uint32_t crc {0};
+} __attribute__((packed));
+
 
 // Gaga -> Haha Sensor Response
 
@@ -22,15 +32,6 @@ struct GHPacket {
 } __attribute__((packed));
 
 
-// Haha -> Gaga  Control Request
-
-struct HGPacket {
-    static constexpr std::size_t kPlanningSize {10U};
-
-    float wheelEncoderPlanning[4U][kPlanningSize];
-
-    std::uint32_t crc {0};
-} __attribute__((packed));
 
 
 }    // namespace comm

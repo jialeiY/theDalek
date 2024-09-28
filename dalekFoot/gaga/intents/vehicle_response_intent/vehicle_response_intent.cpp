@@ -23,6 +23,7 @@ void VehicleResponseIntent::tick() {
     }
 
     // Update output
+    // TODO: speed calculate
     data::vehicleResponseTopic.tickCount++;
     for (std::size_t i {0U}; i < 4U; ++i) {
         data::vehicleResponseTopic.wheelOdometry[i] =
@@ -34,7 +35,7 @@ void VehicleResponseIntent::tick() {
     txPacket.tickCount = data::vehicleResponseTopic.tickCount;
 
     for (std::size_t i {0U}; i < 4U; ++i) {
-        txPacket.odometry[i] = data::vehicleResponseTopic.wheelOdometry[i].odometry;
+        txPacket.encoderOdometry[i] = data::vehicleResponseTopic.wheelOdometry[i].odometry;
     }
     std::uint32_t crc = utils::math::calculateCrc(txPacket);
     txPacket.crc      = crc;

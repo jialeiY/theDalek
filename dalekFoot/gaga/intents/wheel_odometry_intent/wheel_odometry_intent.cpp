@@ -13,6 +13,8 @@ namespace intents {
 void WheelOdometryIntent::setup() { data::wheelOdometryTopic.qualifier = data::Qualifier::BAD; }
 
 void WheelOdometryIntent::tick() {
+    // TODO: refine the logic
+
     data::EncoderReadingTopic &currentEncoderReading = {data::encoderReadingTopic};
     if ((currentEncoderReading.qualifier == data::Qualifier::GOOD) &&
         (lastEncoderReading_.qualifier == data::Qualifier::GOOD)) {
@@ -27,12 +29,18 @@ void WheelOdometryIntent::tick() {
                                            lastEncoderReading_.encoder[i],
                                            duration,
                                            !parameters::kEncoderDirection[i]);
+            accumulatedOdometry_[i].insert(data::wheelOdometryTopic.wheelOdometry[i].odometry);
         }
     } else {
         data::wheelOdometryTopic.qualifier = data::Qualifier::BAD;
+        for (std::size_t i {0U}; i < 4U; ++i) { accumulatedOdometry_[i].insert(0); }
     }
 
     lastEncoderReading_ = currentEncoderReading;
+
+    for (std::size_t i {0U}; i < 4U; ++i) {
+        data::wheelOdometryTopic.accumulatedOdometry[i] = accumulatedOdometry_[i].getSum();
+    }
 }
 
 data::WheelOdometry WheelOdometryIntent::calculateSingleWheelOdometry(
@@ -50,12 +58,6 @@ data::WheelOdometry WheelOdometryIntent::calculateSingleWheelOdometry(
         if (diff < -2048) {
             diff += 4096;
         }
-
-        // Calculate the odometry
-        // const float degree = 2.0F * utils::math::PI / 4096.0F * diff;
-        // const data::Distance dist {parameters::kWheelDiameter / 2.0F *
-        // degree}; float speed   = dist / duration;
-
 
         ret.odometry  = isReversed ? -diff : diff;
         ret.qualifier = data::Qualifier::GOOD;

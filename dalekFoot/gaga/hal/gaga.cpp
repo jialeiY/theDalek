@@ -122,7 +122,7 @@ void Gaga::tick() {
                 data::vehicleRequestTopic.requestId = ++spiRequestId;
                 for (std::size_t i {0U}; i < 4U; ++i) {
                     for (std::size_t j {0U}; j < 10U; ++j) {
-                        data::vehicleRequestTopic.wheel[i][j] = spiPacket.wheelsPlanning[i][j];
+                        data::vehicleRequestTopic.wheel[i][j] = spiPacket.wheelEncoderPlanning[i][j];
                     }
                 }
             }

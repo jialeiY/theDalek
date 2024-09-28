@@ -2,6 +2,7 @@
 #define __INTENTS_WHEEL_ODOMETRY_INTENT_WHEEL_ODOMETRY_INTENT_H__
 
 #include <cstdint>
+#include "common/data_defs/circular_buffer.h"
 #include "common/data_defs/duration.h"
 #include "intents/common/data_pool.h"
 #include "intents/common/intent_base.h"
@@ -18,6 +19,7 @@ class WheelOdometryIntent : public IntentBase {
 
   private:
     data::EncoderReadingTopic lastEncoderReading_;
+    data::CircularBuffer<std::int32_t, 5U> accumulatedOdometry_[4U];
 
     data::WheelOdometry calculateSingleWheelOdometry(
       const data::EncoderReading currentEncoderReading,

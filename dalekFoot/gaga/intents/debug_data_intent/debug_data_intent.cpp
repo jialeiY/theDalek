@@ -33,7 +33,9 @@ void DebugDataIntent::tick() {
     const float &targetSpeed         = data::targetManeuverTopic.speed[3U];
     const float &actualOdometry      = data::wheelOdometryTopic.wheelOdometry[3U].odometry;
     const std::int32_t &sendOdo      = data::vehicleResponseTopic.wheelOdometry[3].odometry;
-    hal::gagaSerial.println("%d, %.3F,%.3F,%d", tickCounter, targetSpeed, actualOdometry, sendOdo);
+    const std::int32_t &accumulate   = data::wheelOdometryTopic.accumulatedOdometry[3U];
+    hal::gagaSerial.println(
+      "%d, %.3F,%.3F,%d", tickCounter, targetSpeed, actualOdometry, accumulate);
 }
 }    // namespace intents
 }    // namespace cooboc
