@@ -1,6 +1,5 @@
 #include "sil/simulator/simulator.h"
 #include <cstdint>
-#include "data/defs/vehicle_response.h"
 #include "intents/topics/vehicle_request_topic.h"
 #include "utils/math.h"
 

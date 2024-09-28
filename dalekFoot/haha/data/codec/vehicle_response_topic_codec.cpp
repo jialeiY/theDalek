@@ -1,5 +1,4 @@
 #include <cstdint>
-#include "data/defs/vehicle_response.h"
 #include "gen/data/proto/vehicle_response_topic.pb.h"
 #include "intents/topics/vehicle_response_topic.h"
 

@@ -1,7 +1,6 @@
 #include "intents/intent_manager.h"
 #include <cstdint>
 #include <cstdio>
-#include "data/defs/vehicle_response.h"
 #include "intents/behavior_intent/behavior_intent.h"
 #include "intents/debug_writer_intent/debug_writer_intent.h"
 #include "intents/ego_motion_state_intent/ego_motion_state_intent.h"

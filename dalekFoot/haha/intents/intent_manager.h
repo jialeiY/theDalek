@@ -4,7 +4,6 @@
 #include <intents/intent_base.h>
 #include <cstdint>
 #include <vector>
-#include "data/defs/vehicle_response.h"
 #include "data/gh_protocol.h"
 #include "intents/topics/topics.h"
 #include "intents/topics/vehicle_request_topic.h"

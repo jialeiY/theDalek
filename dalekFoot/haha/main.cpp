@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <csignal>
 #include <iostream>
-#include "data/defs/vehicle_response.h"
 #include "intents/intent_manager.h"
 #include "intents/topics/vehicle_request_topic.h"
 #include "vehicle.h"
