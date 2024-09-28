@@ -1,6 +1,6 @@
 {
-  "name": "ego_state",
-  "displayName": "ego_state",
+  "name": "ego_motion_state",
+  "displayName": "ego_motion_state",
   "description": "",
   "publisher": "cooboc",
   "homepage": "",

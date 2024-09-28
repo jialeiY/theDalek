@@ -4,7 +4,7 @@
             "path": "odometry"
         },
         {
-            "path": "ego_state"
+            "path": "ego_motion_state"
         },
         {
             "path": "behavior"

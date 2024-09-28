@@ -6,7 +6,7 @@ type PolarVector2D = {
     value: number;
 };
 
-type EgoStateTopic = {
+type EgoMotionStateTopic = {
     velocity: PolarVector2D;
     acceleration: PolarVector2D;
     angularVelocity: number;
@@ -17,9 +17,9 @@ const PI = 3.141592653589793238462643383279502884197;
 
 export function activate(extensionContext: ExtensionContext): void {
     extensionContext.registerMessageConverter({
-        fromSchemaName: "cooboc.proto.EgoStateTopic",
+        fromSchemaName: "cooboc.proto.EgoMotionStateTopic",
         toSchemaName: "foxglove.SceneUpdate",
-        converter: (inputMessage: EgoStateTopic) => {
+        converter: (inputMessage: EgoMotionStateTopic) => {
             let arrows:ArrowPrimitive[] = [];
             // velocity
             let va = (inputMessage.velocity.orientation / 2.0) % PI;
@@ -84,7 +84,7 @@ export function activate(extensionContext: ExtensionContext): void {
                 deletions: [],
                 entities: [
                     {
-                        id: "EGO_STATE",
+                        id: "EGO_MOTION_STATE",
                         timestamp: { sec: 0, nsec: 0 },
                         frame_id: "EGO",
                         lifetime: { sec: 10, nsec: 0 },
