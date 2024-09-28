@@ -11,6 +11,8 @@ struct Vector2D;
 struct PolarVector2D {
     Orientation orientation {0.0F};
     float value {0.0F};
+
+    inline PolarVector2D operator*(const float a) const { return {orientation, value * a}; }
 };
 
 }    // namespace data

@@ -70,15 +70,18 @@ void MotionPlanningIntent::plan() {
     std::size_t idx;
     float dist;
 
-    const data::VehicleState egoState = getInitVehicleState();
-    std::tie(idx, dist)               = motion_planning::calculatePoseInFrenet(
-      egoState.pose, trajectoryTopic.passingPoint, trajectoryTopic.passingPointSize, poseInFrenet_);
+    const data::VehicleState initState = getInitVehicleState();
+    std::printf("init pos(%f, %f)\r\n", initState.pose.position.x, initState.pose.position.y);
+    std::tie(idx, dist) = motion_planning::calculatePoseInFrenet(initState.pose,
+                                                                 trajectoryTopic.passingPoint,
+                                                                 trajectoryTopic.passingPointSize,
+                                                                 poseInFrenet_);
     // Find out longitudinal and Lateral speed
     // data::PolarVector2D egoVelocity = egoMotionStateTopic.velocity;
     // egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
     // data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
 
-    data::PolarVector2D egoVelocityInWorld = egoState.motionState.velocity;
+    data::PolarVector2D egoVelocityInWorld = initState.motionState.velocity;
     egoVelocityInWorld.orientation = egoVelocityInWorld.orientation + poseInFrenet_.orientation;
     const data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocityInWorld);
 
@@ -86,10 +89,14 @@ void MotionPlanningIntent::plan() {
     planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
 
     // Update Shadow
-    data::Pose2D nextPose = {longitudinalPlanning_[0U].waypoint, 0.0F};
+
     data::MotionState motionState {};
     motionState.velocity =
       utils::math::to<data::PolarVector2D>(longitudinalPlanning_[0].motionVelocity);
+
+    data::Pose2D nextPose = shadowVehicle_.getVehicleState().pose;
+    nextPose.position     = nextPose.position + motionState.velocity * 0.01F;
+    //{longitudinalPlanning_[1U].waypoint, 0.0F};
     shadowVehicle_.setPose(nextPose);
     shadowVehicle_.setMotionState(motionState);
 
