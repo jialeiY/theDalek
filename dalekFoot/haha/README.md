@@ -9,7 +9,7 @@
 - [X] 9. output from debug
 - [X] 10. the plugin to show he route
 - [/] 11. lateral planning of motion
-- [ ] 12. longitudinal planning of motion
+- [X] 12. longitudinal planning of motion
 - [X] 13. vector2D -> PolarVector2D
 - [X] 14. position2D -> Vector2D
 - [X] 15. remove data/codec/position2d_codec.cpp
@@ -23,12 +23,12 @@
 - [X] 23. Position not correct
 - [X] 24. the velocity not correct
 - [X] 25. coredump on abort
-- [ ] 26. curve route longitudinal planning
+- [X] 26. curve route longitudinal planning
 - [X] 27. refactor the intents
-- [ ] 28. the target of intent is BehaviorIntent -> RouteIntent -> Trajectory -> TFC
+- [X] 28. the target of intent is BehaviorIntent -> RouteIntent -> Trajectory -> TFC
 - [X] 29. Refine the BehaviorIntent [LOW priority] Rename
 - [X] 30. Refine RouteIntent [LOW priority]
-- [ ] 31. TrajectoryIntent to get the resolution of a Route
+- [X] 31. TrajectoryIntent to get the resolution of a Route
 - [ ] 32. Follow the Trajectory in real time
 - [X] 33. check current trajectory generation
 - [X] 34. generate all trajectory
@@ -43,9 +43,9 @@
 - [X] 43. update trajectory, add more field (orientation)
 - [X] 44. TrajectoryIntent, make internal trajectory cache, and copy result in the end
 - [X] 45. Change routeSegment to route point
-- [ ] 46. SystemDebugTopic to output the duration of calculation
+- [X] 46. SystemDebugTopic to output the duration of calculation
 - [X] 47. Correct the curvature profile array
 - [X] 48. Bug: the length of profiles are not match
 - [ ] 49. set start status to standstill
-- [ ] 50. planning longitudinal
+- [X] 50. planning longitudinal
 - [ ] 51. planning lateral
