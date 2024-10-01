@@ -5,8 +5,19 @@ package cooboc.proto;
 import "data/proto/vector2d.proto";
 import "data/proto/polar_vector2d.proto";
 
-message BehaviorTopic {
-    optional Vector2D      fromPosition   = 1;
-    optional Vector2D      targetPosition = 2;
+enum BehaviorTask {
+    STOP = 0;
+    MOVE = 1;
+}
+
+message BehaviorMoveRequest {
+    optional Vector2D      from           = 1;
+    optional Vector2D      to             = 2;
     optional PolarVector2D targetVelocity = 3;
+}
+
+message BehaviorTopic {
+    optional uint32              id          = 1 [default = 0];
+    optional BehaviorTask        task        = 2 [default = STOP];
+    optional BehaviorMoveRequest moveRequest = 3;
 }
