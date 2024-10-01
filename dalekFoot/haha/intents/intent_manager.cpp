@@ -7,10 +7,10 @@
 #include "intents/intent_base.h"
 #include "intents/motion_planning_intent/motion_planning_intent.h"
 #include "intents/odometry_intent/odometry_intent.h"
+#include "intents/reference_path_intent/reference_path_intent.h"
 #include "intents/route_intent/route_intent.h"
 #include "intents/topics/topics.h"
 #include "intents/topics/vehicle_request_topic.h"
-#include "intents/trajectory_intent/trajectory_intent.h"
 #include "intents/vehicle_request_intent/vehicle_request_intent.h"
 #include "utils/math.h"
 #include "utils/time.h"
@@ -27,9 +27,9 @@ IntentManager::IntentManager() : tickCount_ {0U}, lastTickEndTime_ {0U}, lastTic
     intents_.push_back(new BehaviorIntent());
     // The route that ego need to follow based on the task and localization
     intents_.push_back(new RouteIntent());
-    // TrajectoryIntent read the Routes from RouteIntent and out put the trajectory that vehicle can
-    // follow
-    intents_.push_back(new TrajectoryIntent());
+    // ReferencePathIntent read the Routes from RouteIntent and out put the trajectory that vehicle
+    // can follow
+    intents_.push_back(new ReferencePathIntent());
     // MotionPlanning plan the waypoints of maneuver state of ego based on all
     intents_.push_back(new MotionPlanningIntent());
     // VehicleRequestIntent generate communication packet to GAGA

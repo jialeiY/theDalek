@@ -1,4 +1,4 @@
-#include "intents/trajectory_intent/trajectory/trajectory.h"
+#include "intents/reference_path_intent/components/sampling.h"
 #include <optional>
 #include <string>
 #include <vector>
