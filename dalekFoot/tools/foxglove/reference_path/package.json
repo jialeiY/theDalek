@@ -1,6 +1,6 @@
 {
-  "name": "trajectory",
-  "displayName": "trajectory",
+  "name": "reference_path",
+  "displayName": "reference_path",
   "description": "",
   "publisher": "cooboc",
   "homepage": "",

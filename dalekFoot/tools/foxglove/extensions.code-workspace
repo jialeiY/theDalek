@@ -13,13 +13,20 @@
             "path": "route"
         },
         {
-            "path": "trajectory"
+            "path": "reference_path"
         }
     ],
     "settings": {
         "cSpell.words": [
             "cooboc",
             "Odometry"
-        ]
+        ],
+        "files.exclude": {
+            "**/dist/**": true
+        },
+        "search.exclude": {
+            "**/dist": true
+        },
+        "editor.formatOnSave": true
     }
 }

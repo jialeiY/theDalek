@@ -2,29 +2,32 @@ import { ExtensionContext } from '@foxglove/extension';
 import { LinePrimitive, LineType, SceneUpdate, SpherePrimitive } from '@foxglove/schemas';
 
 type Position2D = {
-    x: number; y: number;
+    x: number;
+    y: number;
 };
 
 type PassingPoint = {
     position: Position2D;
 };
 
-type TrajectoryTopic = {
-    hasValue: boolean; trajectoryId: number; passingPointSize: number;
+type ReferencePathTopic = {
+    hasValue: boolean;
+    referencePathId: number;
+    passingPointSize: number;
     passingPoint: PassingPoint[];
     routeId: number;
 };
 
 export function activate(extensionContext: ExtensionContext): void {
     extensionContext.registerMessageConverter({
-        fromSchemaName: 'cooboc.proto.TrajectoryTopic',
+        fromSchemaName: 'cooboc.proto.ReferencePathTopic',
         toSchemaName: 'foxglove.SceneUpdate',
-        converter: (inputMessage: TrajectoryTopic) => {
+        converter: (inputMessage: ReferencePathTopic) => {
             let spheres: SpherePrimitive[] = [];
             let lines: LinePrimitive[] = [];
             if ((inputMessage.hasValue) && (inputMessage.passingPointSize > 0)) {
 
-                // Construct the lines for trajectory
+                // Construct the lines for reference path
                 const polyline: LinePrimitive = {
                     type: LineType.LINE_STRIP,
                     pose: {
@@ -39,7 +42,7 @@ export function activate(extensionContext: ExtensionContext): void {
                     indices: []
                 };
 
-                // Put the trajectory into polyline
+                // Put the reference path into polyline
                 for (let i = 0; i < inputMessage.passingPointSize; ++i) {
                     polyline.points.push({
                         x: inputMessage.passingPoint[i]?.position.x || 0,
@@ -56,7 +59,7 @@ export function activate(extensionContext: ExtensionContext): void {
                 deletions: [],
                 entities: [
                     {
-                        id: 'trajectory',
+                        id: 'reference_path',
                         timestamp: { sec: 0, nsec: 0 },
                         frame_id: 'WORLD',
                         lifetime: { sec: 10, nsec: 10000 },
