@@ -11,7 +11,7 @@
 
 namespace cooboc {
 namespace intent {
-namespace trajectory {
+namespace reference_path {
 
 
 using PassingPointList     = data::StaticVector<data::Position2D, kTrajectoryPassingPointCapacity>;
@@ -90,7 +90,7 @@ void makeQuadraticBezierCurve(const data::Position2D &pa,
                               PassingPointList &passingPointList);
 
 }    // namespace detail
-}    // namespace trajectory
+}    // namespace reference_path
 }    // namespace intent
 }    // namespace cooboc
 

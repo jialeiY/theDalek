@@ -25,8 +25,8 @@ class ReferencePathIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    trajectory::PassingPointList passingPointList_ {};
-    trajectory::PassingPointsSegment passingPointsSegment_ {};
+    reference_path::PassingPointList passingPointList_ {};
+    reference_path::PassingPointsSegment passingPointsSegment_ {};
     TrajectoryId trajectoryId_ {0U};
 
     void outputTopic();

@@ -7,7 +7,7 @@
 
 namespace cooboc {
 namespace intent {
-namespace trajectory {
+namespace reference_path {
 
 
 void generatePassingPointListBasedOnRoute(const data::Position2D &startPoint_,
@@ -252,6 +252,6 @@ void makeQuadraticBezierCurve(const data::Position2D &pa,
 
 
 }    // namespace detail
-}    // namespace trajectory
+}    // namespace reference_path
 }    // namespace intent
 }    // namespace cooboc

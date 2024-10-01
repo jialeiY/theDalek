@@ -41,11 +41,11 @@ void ReferencePathIntent::tick() {
 
     // If route topic is valid and updated
     passingPointList_.reset();
-    trajectory::generatePassingPointListBasedOnRoute(routeTopic.startPoint,
-                                                     routeTopic.routeSegment,
-                                                     routeTopic.routeSegmentSize,
-                                                     passingPointList_);
-    trajectory::calculatePassingPointsSegment(passingPointList_, passingPointsSegment_);
+    reference_path::generatePassingPointListBasedOnRoute(routeTopic.startPoint,
+                                                         routeTopic.routeSegment,
+                                                         routeTopic.routeSegmentSize,
+                                                         passingPointList_);
+    reference_path::calculatePassingPointsSegment(passingPointList_, passingPointsSegment_);
     outputTopic();
 }
 
