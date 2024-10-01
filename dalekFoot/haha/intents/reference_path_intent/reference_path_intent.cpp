@@ -21,16 +21,16 @@ namespace intent {
 ReferencePathIntent::ReferencePathIntent() :
     passingPointList_ {},
     passingPointsSegment_ {},
-    trajectoryId_ {0U} {}
+    referencePathId_ {0U} {}
 ReferencePathIntent::~ReferencePathIntent() {}
 void ReferencePathIntent::setup() {
-    trajectoryTopic.hasValue         = false;
-    trajectoryTopic.passingPointSize = 0U;
-    for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
-        data::PassingPoint &passingPoint {trajectoryTopic.passingPoint[i]};
+    referencePathTopic.hasValue         = false;
+    referencePathTopic.passingPointSize = 0U;
+    for (std::size_t i {0U}; i < kReferencePathPassingPointCapacity; ++i) {
+        data::PassingPoint &passingPoint {referencePathTopic.passingPoint[i]};
         passingPoint.position = {0.0F, 0.0F};
     }
-    trajectoryTopic.routeId = 0U;
+    referencePathTopic.routeId = 0U;
 }
 
 
@@ -50,19 +50,19 @@ void ReferencePathIntent::tick() {
 }
 
 void ReferencePathIntent::outputTopic() {
-    trajectoryTopic.hasValue         = true;
-    trajectoryTopic.trajectoryId     = makeNewTrajectoryId();
-    trajectoryTopic.passingPointSize = passingPointList_.size();
+    referencePathTopic.hasValue         = true;
+    referencePathTopic.referencePathId  = makeNewReferencePathId();
+    referencePathTopic.passingPointSize = passingPointList_.size();
     for (std::size_t i {0U}; i < passingPointList_.size(); ++i) {
-        trajectoryTopic.passingPoint[i].position = passingPointList_[i];
-        trajectoryTopic.passingPoint[i].segment  = passingPointsSegment_[i];
+        referencePathTopic.passingPoint[i].position = passingPointList_[i];
+        referencePathTopic.passingPoint[i].segment  = passingPointsSegment_[i];
     }
-    trajectoryTopic.routeId = routeTopic.routeId;
+    referencePathTopic.routeId = routeTopic.routeId;
 }
 
-TrajectoryId ReferencePathIntent::makeNewTrajectoryId() {
-    trajectoryId_++;
-    return trajectoryId_;
+ReferencePathId ReferencePathIntent::makeNewReferencePathId() {
+    referencePathId_++;
+    return referencePathId_;
 }
 
 }    // namespace intent

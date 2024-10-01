@@ -5,16 +5,16 @@
 #include "data/codec/ego_motion_state_topic_codec.h"
 #include "data/codec/motion_planning_debug_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
+#include "data/codec/reference_path_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
-#include "data/codec/trajectory_topic_codec.h"
 #include "data/codec/vehicle_request_topic_codec.h"
 #include "gen/data/proto/behavior_topic.pb.h"
 #include "gen/data/proto/ego_motion_state_topic.pb.h"
 #include "gen/data/proto/motion_planning_debug_topic.pb.h"
 #include "gen/data/proto/motion_planning_topic.pb.h"
 #include "gen/data/proto/odometry_topic.pb.h"
+#include "gen/data/proto/reference_path_topic.pb.h"
 #include "gen/data/proto/route_topic.pb.h"
-#include "gen/data/proto/trajectory_topic.pb.h"
 #include "gen/data/proto/vehicle_request_topic.pb.h"
 #include "intents/topics/odometry_topic.h"
 #include "intents/topics/topics.h"
@@ -35,7 +35,7 @@ DebugWriterIntent::DebugWriterIntent() {
     mcapTopicConverterList_.push_back(new McapTopicConverter(&behaviorTopic, "/planning/behavior"));
     mcapTopicConverterList_.push_back(new McapTopicConverter(&routeTopic, "/planning/route"));
     mcapTopicConverterList_.push_back(
-      new McapTopicConverter(&trajectoryTopic, "/planning/trajectory"));
+      new McapTopicConverter(&referencePathTopic, "/planning/reference_path"));
     mcapTopicConverterList_.push_back(
       new McapTopicConverter(&motionPlanningTopic, "/planning/motion"));
     mcapTopicConverterList_.push_back(

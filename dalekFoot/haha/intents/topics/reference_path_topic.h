@@ -1,5 +1,5 @@
-#ifndef __INTENTS_TOPICS_TRAJECTORY_TOPIC_H__
-#define __INTENTS_TOPICS_TRAJECTORY_TOPIC_H__
+#ifndef __INTENTS_TOPICS_REFERENCE_PATH_TOPIC_H__
+#define __INTENTS_TOPICS_REFERENCE_PATH_TOPIC_H__
 
 
 #include <cstdint>
@@ -12,14 +12,14 @@ namespace cooboc {
 namespace intent {
 
 
-using TrajectoryId = std::uint64_t;
+using ReferencePathId = std::uint64_t;
 
-struct TrajectoryTopic {
-        bool hasValue {false};
-    TrajectoryId trajectoryId {0U};
+struct ReferencePathTopic {
+    bool hasValue {false};
+    ReferencePathId referencePathId {0U};
     std::size_t passingPointSize {0U};
 
-    data::PassingPoint passingPoint[kTrajectoryPassingPointCapacity];
+    data::PassingPoint passingPoint[kReferencePathPassingPointCapacity];
 
     data::RouteId routeId {0U};
 };

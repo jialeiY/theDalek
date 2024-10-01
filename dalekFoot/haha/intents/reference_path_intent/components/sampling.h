@@ -1,5 +1,5 @@
-#ifndef __INTENTS_TRAJECTORY_INTENT_TRAJECTORY_TRAJECTORY_H__
-#define __INTENTS_TRAJECTORY_INTENT_TRAJECTORY_TRAJECTORY_H__
+#ifndef __INTENTS_REFERENCE_PATH_INTENT_COMPONENTS_SAMPLING_H__
+#define __INTENTS_REFERENCE_PATH_INTENT_COMPONENTS_SAMPLING_H__
 
 #include <array>
 #include <optional>
@@ -7,15 +7,15 @@
 #include "data/defs/route_segment.h"
 #include "data/defs/static_vector.h"
 #include "intents/topics/common.h"
-#include "intents/topics/trajectory_topic.h"
+#include "intents/topics/reference_path_topic.h"
 
 namespace cooboc {
 namespace intent {
 namespace reference_path {
 
 
-using PassingPointList     = data::StaticVector<data::Position2D, kTrajectoryPassingPointCapacity>;
-using PassingPointsSegment = std::array<data::PolarVector2D, kTrajectoryPassingPointCapacity>;
+using PassingPointList = data::StaticVector<data::Position2D, kReferencePathPassingPointCapacity>;
+using PassingPointsSegment = std::array<data::PolarVector2D, kReferencePathPassingPointCapacity>;
 
 /**
  * Generate passing point list based on route information

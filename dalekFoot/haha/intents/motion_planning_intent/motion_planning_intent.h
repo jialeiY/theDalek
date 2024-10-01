@@ -12,8 +12,8 @@
 #include "intents/motion_planning_intent/components/profile.h"
 #include "intents/motion_planning_intent/components/shadow_vehicle.h"
 #include "intents/topics/common.h"
+#include "intents/topics/reference_path_topic.h"
 #include "intents/topics/route_topic.h"
-#include "intents/topics/trajectory_topic.h"
 #include "utils/algo/pid.h"
 
 namespace cooboc {

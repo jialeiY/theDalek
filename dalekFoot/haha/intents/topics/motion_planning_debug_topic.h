@@ -17,10 +17,10 @@ struct MotionPlanningDebugTopic {
     std::size_t numberOfWaypoints {0U};
     data::Waypoint waypoints[kWaypointNumber];
 
-    std::array<std::tuple<float, float>, kTrajectoryPassingPointCapacity>
+    std::array<std::tuple<float, float>, kReferencePathPassingPointCapacity>
       longitudinalCurvatureProfile {};
 
-    std::array<std::tuple<float, float>, kTrajectoryPassingPointCapacity>
+    std::array<std::tuple<float, float>, kReferencePathPassingPointCapacity>
       longitudinalMotionProfile {};
 
 

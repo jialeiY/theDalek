@@ -27,10 +27,10 @@ class ReferencePathIntent : public IntentBase {
   private:
     reference_path::PassingPointList passingPointList_ {};
     reference_path::PassingPointsSegment passingPointsSegment_ {};
-    TrajectoryId trajectoryId_ {0U};
+    ReferencePathId referencePathId_ {0U};
 
     void outputTopic();
-    TrajectoryId makeNewTrajectoryId();
+    ReferencePathId makeNewReferencePathId();
 };
 
 

@@ -11,9 +11,9 @@
 #include "data/codec/motion_planning_debug_topic_codec.h"
 #include "data/codec/motion_planning_topic_codec.h"
 #include "data/codec/odometry_topic_codec.h"
+#include "data/codec/reference_path_topic_codec.h"
 #include "data/codec/route_topic_codec.h"
 #include "data/codec/system_debug_codec.h"
-#include "data/codec/trajectory_topic_codec.h"
 #include "data/codec/vehicle_request_topic_codec.h"
 #include "data/codec/vehicle_response_topic_codec.h"
 #include "intents/debug_writer_intent/mcap_helper.h"
@@ -43,8 +43,12 @@ class IMcapTopicConverter {
     }
     virtual void setupSchema()  = 0;
     virtual void setupChannel() = 0;
-    mcap::Schema *getSchema(void) const { return schema_; }
-    mcap::Channel *getChannel(void) const { return channel_; }
+    mcap::Schema *getSchema(void) const {
+        return schema_;
+    }
+    mcap::Channel *getChannel(void) const {
+        return channel_;
+    }
     virtual mcap::Message convertMessage(mcap::McapWriter &writer) const = 0;
 
   protected:
@@ -87,7 +91,7 @@ class McapTopicConverter : public IMcapTopicConverter {
         message.data        = reinterpret_cast<const std::byte *>(payload.data());
         message.dataSize    = payload.size();
 
-        writer.write(message);
+        std::ignore = writer.write(message);
 
         return message;
     }

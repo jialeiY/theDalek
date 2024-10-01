@@ -50,14 +50,16 @@ void MotionPlanningIntent::setup() {
 
 constexpr float kMaximumAcceleration = 0.3F;    // m/s
 constexpr float kMaximumVelocity     = 0.3F;    // m/s
-void MotionPlanningIntent::tick() { plan(); }
+void MotionPlanningIntent::tick() {
+    plan();
+}
 
 
 void MotionPlanningIntent::plan() {
     // Calculate curvature profile
     curvatureProfile_.reset();
     motion_planning::calculateCurvatureProfile(
-      trajectoryTopic.passingPoint, trajectoryTopic.passingPointSize, curvatureProfile_);
+      referencePathTopic.passingPoint, referencePathTopic.passingPointSize, curvatureProfile_);
 
     // Calculate the motion profile for longitudinal
 
@@ -72,10 +74,11 @@ void MotionPlanningIntent::plan() {
 
     const data::VehicleState initState = getInitVehicleState();
     std::printf("init pos(%f, %f)\r\n", initState.pose.position.x, initState.pose.position.y);
-    std::tie(idx, dist) = motion_planning::calculatePoseInFrenet(initState.pose,
-                                                                 trajectoryTopic.passingPoint,
-                                                                 trajectoryTopic.passingPointSize,
-                                                                 poseInFrenet_);
+    std::tie(idx, dist) =
+      motion_planning::calculatePoseInFrenet(initState.pose,
+                                             referencePathTopic.passingPoint,
+                                             referencePathTopic.passingPointSize,
+                                             poseInFrenet_);
     // Find out longitudinal and Lateral speed
     // data::PolarVector2D egoVelocity = egoMotionStateTopic.velocity;
     // egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
@@ -108,7 +111,7 @@ void MotionPlanningIntent::plan() {
     }
 
     // Output to debug
-    for (std::size_t i {0U}; i < kTrajectoryPassingPointCapacity; ++i) {
+    for (std::size_t i {0U}; i < kReferencePathPassingPointCapacity; ++i) {
         motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
         motionPlanningDebugTopic.longitudinalMotionProfile[i]    = motionProfile_[i];
     }
@@ -198,9 +201,9 @@ void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {
         trajectoryIdx = 0U;
     }
 
-    while ((trajectoryIdx + 2U) < trajectoryTopic.passingPointSize) {
+    while ((trajectoryIdx + 2U) < referencePathTopic.passingPointSize) {
         const float &currentSegmentLength {
-          trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value};
+          referencePathTopic.passingPoint[trajectoryIdx + 1U].segment.value};
         if (currentSegmentLength < s) {
             s -= currentSegmentLength;
             trajectoryIdx++;
@@ -212,11 +215,12 @@ void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {
 
 std::tuple<data::Position2D, bool> MotionPlanningIntent::mapSToPosition(std::size_t &trajectoryIdx,
                                                                         const float s) {
-    if ((trajectoryIdx + 1U) < trajectoryTopic.passingPointSize) {
-        const data::Position2D &startPoint {trajectoryTopic.passingPoint[trajectoryIdx].position};
+    if ((trajectoryIdx + 1U) < referencePathTopic.passingPointSize) {
+        const data::Position2D &startPoint {
+          referencePathTopic.passingPoint[trajectoryIdx].position};
         const data::Position2D &endPoint {
-          trajectoryTopic.passingPoint[trajectoryIdx + 1U].position};
-        const float length     = trajectoryTopic.passingPoint[trajectoryIdx + 1U].segment.value;
+          referencePathTopic.passingPoint[trajectoryIdx + 1U].position};
+        const float length     = referencePathTopic.passingPoint[trajectoryIdx + 1U].segment.value;
         const float percentage = s / length;
         return {utils::math::interpolate(startPoint, endPoint, percentage), percentage >= 1.0F};
     } else {

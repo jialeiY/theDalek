@@ -6,9 +6,9 @@
 #include "intents/topics/motion_planning_debug_topic.h"
 #include "intents/topics/motion_planning_topic.h"
 #include "intents/topics/odometry_topic.h"
+#include "intents/topics/reference_path_topic.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/system_debug_topic.h"
-#include "intents/topics/trajectory_topic.h"
 #include "intents/topics/vehicle_request_topic.h"
 #include "intents/topics/vehicle_response_topic.h"
 
@@ -22,7 +22,7 @@ extern RouteTopic routeTopic;
 extern BehaviorTopic behaviorTopic;
 extern MotionPlanningTopic motionPlanningTopic;
 extern MotionPlanningDebugTopic motionPlanningDebugTopic;
-extern TrajectoryTopic trajectoryTopic;
+extern ReferencePathTopic referencePathTopic;
 extern VehicleResponseTopic vehicleResponseTopic;
 extern VehicleRequestTopic vehicleRequestTopic;
 
