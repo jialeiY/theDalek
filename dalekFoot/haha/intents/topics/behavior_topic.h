@@ -2,6 +2,7 @@
 #define __INTENTS_TOPICS_BEHAVIOR_TOPIC_H__
 
 #include <cstdint>
+#include "data/defs/behavior_id.h"
 #include "data/defs/polar_vector2d.h"
 #include "data/defs/position2d.h"
 
@@ -10,7 +11,6 @@ namespace intent {
 
 
 struct BehaviorTopic {
-    using BehaviorId = std::uint32_t;
     enum class BehaviorTask : std::int32_t {
         STOP = 0,
         MOVE = 1,
@@ -22,7 +22,7 @@ struct BehaviorTopic {
         data::PolarVector2D targetVelocity {};
     };
 
-    BehaviorId id {0U};
+    data::BehaviorId id {data::kInvalidBehaviorId};
     BehaviorTask task {BehaviorTask::STOP};
     BehaviorMoveRequest moveRequest {};
 };

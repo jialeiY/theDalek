@@ -12,10 +12,25 @@ type Vector2D = {
     orientation: number;
     value: number;
 }
-type BehaviorTopic = {
-    fromPosition: Position2D;
-    targetPosition: Position2D;
+
+type BehaviorId = number;
+
+enum BehaviorTask {
+    STOP = 0,
+    MOVE = 1,
+}
+
+type BehaviorMoveRequest = {
+
+    from: Position2D;
+    to: Position2D;
     targetVelocity: Vector2D;
+};
+
+type BehaviorTopic = {
+    id: BehaviorId;
+    task: BehaviorTask;
+    moveRequest: BehaviorMoveRequest;
 };
 
 export function activate(extensionContext: ExtensionContext): void {
@@ -36,8 +51,8 @@ export function activate(extensionContext: ExtensionContext): void {
 
             const targetArrow: ArrowPrimitive[] = [{
                 pose: {
-                    position: { x: inputMessage.targetPosition.x, y: inputMessage.targetPosition.y, z: 0.12 },
-                    orientation: { x: 0, y: magic, z:0, w: magic }
+                    position: { x: inputMessage.moveRequest.to.x, y: inputMessage.moveRequest.to.y, z: 0.12 },
+                    orientation: { x: 0, y: magic, z: 0, w: magic }
                 },
                 shaft_length: 0.05,
                 shaft_diameter: 0.02,
@@ -56,8 +71,8 @@ export function activate(extensionContext: ExtensionContext): void {
                 scale_invariant: false,
 
                 points: [
-                    { x: inputMessage.fromPosition.x, y: inputMessage.fromPosition.y, z: 0 },
-                    { x: inputMessage.targetPosition.x, y: inputMessage.targetPosition.y, z: 0 }
+                    { x: inputMessage.moveRequest.from.x, y: inputMessage.moveRequest.from.y, z: 0 },
+                    { x: inputMessage.moveRequest.to.x, y: inputMessage.moveRequest.to.y, z: 0 }
                 ],
                 // color 0 - 1
                 color: BEHAVIOR_COLOR,
