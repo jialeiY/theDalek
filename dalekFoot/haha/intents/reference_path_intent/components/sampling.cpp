@@ -115,7 +115,7 @@ std::optional<float> makePassingPoints(const data::Position2D &startPoint,
     }
 
     switch (curvatureDistribution) {
-        case (data::CurvatureDistribution::CONSIDER_CURRENT): {
+        case (data::CurvatureDistribution::FOLLOW_CURRENT): {
             const data::Vector2D currentVec = endPoint - startPoint;
             controlPoints.push_back(
               endPoint -
@@ -124,7 +124,7 @@ std::optional<float> makePassingPoints(const data::Position2D &startPoint,
             controlPoints.push_back(endPoint);
             break;
         }
-        case (data::CurvatureDistribution::CONSIDER_NEXT): {
+        case (data::CurvatureDistribution::FOLLOW_NEXT): {
             if (nextSegmentOrientationOpt.has_value()) {
                 controlPoints.push_back(endPoint -
                                         data::PolarVector2D {nextSegmentOrientationOpt.value(),
@@ -200,7 +200,7 @@ std::optional<float> makePassingPoints(const data::Position2D &startPoint,
         }
     }
 
-    if ((curvatureDistribution == data::CurvatureDistribution::CONSIDER_NEXT) &&
+    if ((curvatureDistribution == data::CurvatureDistribution::FOLLOW_NEXT) &&
         (nextSegmentOrientationOpt.has_value())) {
         lastOrientationOpt = nextSegmentOrientationOpt;
     }

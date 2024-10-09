@@ -2,6 +2,7 @@
 #define __INTENTS_ROUTE_INTENT_ROUTE_INTENT_H__
 
 #include "intents/intent_base.h"
+#include "intents/topics/behavior_topic.h"
 #include "intents/topics/route_topic.h"
 
 namespace cooboc {
@@ -14,7 +15,14 @@ class RouteIntent : public IntentBase {
     virtual void tick();
 
   private:
-    data::RouteId uniqueRouteId_ {0U};
+    intent::RouteTopic routeTopic_ {};
+
+
+    // bool needGenerateNewRoute();
+    void invalidateOutput();
+    void checkAndMakeRoute(const intent::BehaviorTopic& behaviorTopic);
+    void makeRoute(const intent::BehaviorTopic& behaviorTopic);
+    data::RouteId makeNewRouteId();
 };
 }    // namespace intent
 }    // namespace cooboc

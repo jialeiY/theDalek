@@ -6,6 +6,7 @@
 namespace cooboc {
 namespace data {
 using RouteId = std::uint64_t;
+constexpr data::RouteId kInvalidRouteId {0U};
 }    // namespace data
 }    // namespace cooboc
 

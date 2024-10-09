@@ -3,9 +3,9 @@ syntax = "proto2";
 package cooboc.proto;
 
 enum CurvatureDistribution {
-    CONSIDER_CURRENT = 0;
-    CONSIDER_NEXT    = 1;
-    CONSIDER_BOTH    = 2;
-    CONSTANT         = 3;
-    DONT_CARE        = 4;
+    FOLLOW_CURRENT = 0;
+    FOLLOW_NEXT    = 1;
+    CONSIDER_BOTH  = 2;
+    CONSTANT_NEXT  = 3;
+    DONT_CARE      = 4;
 }

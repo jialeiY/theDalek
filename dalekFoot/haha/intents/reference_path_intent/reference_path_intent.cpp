@@ -57,7 +57,7 @@ void ReferencePathIntent::outputTopic() {
         referencePathTopic.passingPoint[i].position = passingPointList_[i];
         referencePathTopic.passingPoint[i].segment  = passingPointsSegment_[i];
     }
-    referencePathTopic.routeId = routeTopic.routeId;
+    referencePathTopic.routeId = routeTopic.id;
 }
 
 ReferencePathId ReferencePathIntent::makeNewReferencePathId() {
