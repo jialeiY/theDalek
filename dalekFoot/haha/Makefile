@@ -39,6 +39,7 @@ CPP_SOURCES += data/codec/pose2d_codec.cpp
 CPP_SOURCES += data/codec/route_curvature_distribution_codec.cpp
 CPP_SOURCES += data/codec/route_segment_codec.cpp
 CPP_SOURCES += data/codec/route_topic_codec.cpp
+CPP_SOURCES += intents/common/frenet.cpp
 CPP_SOURCES += data/codec/system_debug_codec.cpp
 CPP_SOURCES += data/codec/reference_path_topic_codec.cpp
 CPP_SOURCES += data/codec/vector2d_codec.cpp

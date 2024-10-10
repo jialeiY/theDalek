@@ -20,10 +20,10 @@ BehaviorIntent::BehaviorIntent() :
 BehaviorIntent::~BehaviorIntent() {}
 
 void BehaviorIntent::setup() {
-    behaviorTopic.id   = data::kInvalidBehaviorId;
-    behaviorTopic.task = BehaviorTopic::BehaviorTask::STOP;
+    shared::behaviorTopic.id   = data::kInvalidBehaviorId;
+    shared::behaviorTopic.task = BehaviorTopic::BehaviorTask::STOP;
 
-    behaviorTopic.moveRequest = {
+    shared::behaviorTopic.moveRequest = {
       .from           = data::Position2D {0.0F, 0.0F},
       .to             = data::Position2D {0.0F, 0.0F},
       .targetVelocity = data::PolarVector2D {0.0F, 0.0F},
@@ -31,7 +31,7 @@ void BehaviorIntent::setup() {
 }
 
 void BehaviorIntent::tick() {
-    const data::Position2D &egoPosition {odometryTopic.pose.position};
+    const data::Position2D &egoPosition {shared::odometryTopic.pose.position};
 
     constexpr data::Position2D targetPosition {1.0F, 0.0F};
 
@@ -48,9 +48,7 @@ void BehaviorIntent::tick() {
         outputMotionBehavior();
     }
 
-    behaviorTopic = behaviorTopic_;
-    std::printf("behavior_ to x: %f\r\n", behaviorTopic_.moveRequest.to.x);
-    std::printf("behavior to x: %f\r\n", behaviorTopic.moveRequest.to.x);
+    shared::behaviorTopic = behaviorTopic_;
 
     // // cycle = 1S
     // std::uint64_t milli {utils::time::milliseconds()};
@@ -94,7 +92,7 @@ void BehaviorIntent::outputStopBehavior() {
 
     behaviorTopic_.id   = newBehaviorId;
     lastStopBehaviorId_ = newBehaviorId;
-    behaviorTopic.task  = BehaviorTopic::BehaviorTask::STOP;
+    behaviorTopic_.task = BehaviorTopic::BehaviorTask::STOP;
 }
 
 void BehaviorIntent::outputMotionBehavior() {

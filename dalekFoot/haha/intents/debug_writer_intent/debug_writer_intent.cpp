@@ -28,21 +28,24 @@ namespace {}    // namespace
 
 DebugWriterIntent::DebugWriterIntent() {
     mcapTopicConverterList_.push_back(
-      new McapTopicConverter(&vehicleResponseTopic, "/vehicle/response"));
+      new McapTopicConverter(&shared::vehicleResponseTopic, "/vehicle/response"));
     mcapTopicConverterList_.push_back(new McapTopicConverter<cooboc::intent::EgoMotionStateTopic>(
-      &egoMotionStateTopic, "/ego_motion_state"));
-    mcapTopicConverterList_.push_back(new McapTopicConverter(&odometryTopic, "/odometry"));
-    mcapTopicConverterList_.push_back(new McapTopicConverter(&behaviorTopic, "/planning/behavior"));
-    mcapTopicConverterList_.push_back(new McapTopicConverter(&routeTopic, "/planning/route"));
+      &shared::egoMotionStateTopic, "/ego_motion_state"));
+    mcapTopicConverterList_.push_back(new McapTopicConverter(&shared::odometryTopic, "/odometry"));
     mcapTopicConverterList_.push_back(
-      new McapTopicConverter(&referencePathTopic, "/planning/reference_path"));
+      new McapTopicConverter(&shared::behaviorTopic, "/planning/behavior"));
     mcapTopicConverterList_.push_back(
-      new McapTopicConverter(&motionPlanningTopic, "/planning/motion"));
+      new McapTopicConverter(&shared::routeTopic, "/planning/route"));
     mcapTopicConverterList_.push_back(
-      new McapTopicConverter(&motionPlanningDebugTopic, "/debug/motion_planning"));
+      new McapTopicConverter(&shared::referencePathTopic, "/planning/reference_path"));
     mcapTopicConverterList_.push_back(
-      new McapTopicConverter(&vehicleRequestTopic, "/vehicle/request"));
-    mcapTopicConverterList_.push_back(new McapTopicConverter(&systemDebugTopic, "/debug/system"));
+      new McapTopicConverter(&shared::motionPlanningTopic, "/planning/motion"));
+    mcapTopicConverterList_.push_back(
+      new McapTopicConverter(&shared::motionPlanningDebugTopic, "/debug/motion_planning"));
+    mcapTopicConverterList_.push_back(
+      new McapTopicConverter(&shared::vehicleRequestTopic, "/vehicle/request"));
+    mcapTopicConverterList_.push_back(
+      new McapTopicConverter(&shared::systemDebugTopic, "/debug/system"));
 }
 
 

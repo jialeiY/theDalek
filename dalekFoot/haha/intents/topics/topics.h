@@ -14,6 +14,7 @@
 
 namespace cooboc {
 namespace intent {
+namespace shared {
 
 extern SystemDebugTopic systemDebugTopic;
 extern OdometryTopic odometryTopic;
@@ -26,7 +27,7 @@ extern ReferencePathTopic referencePathTopic;
 extern VehicleResponseTopic vehicleResponseTopic;
 extern VehicleRequestTopic vehicleRequestTopic;
 
-
+}    // namespace shared
 }    // namespace intent
 }    // namespace cooboc
 

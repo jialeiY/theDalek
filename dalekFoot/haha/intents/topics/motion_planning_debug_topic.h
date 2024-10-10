@@ -7,6 +7,7 @@
 #include "data/defs/pose2d.h"
 #include "data/defs/waypoint.h"
 #include "intents/topics/common.h"
+#include "intents/topics/reference_path_topic.h"
 
 namespace cooboc {
 namespace intent {
@@ -17,10 +18,10 @@ struct MotionPlanningDebugTopic {
     std::size_t numberOfWaypoints {0U};
     data::Waypoint waypoints[kWaypointNumber];
 
-    std::array<std::tuple<float, float>, kReferencePathPassingPointCapacity>
+    std::array<std::tuple<float, float>, intent::ReferencePathTopic::kReferencePathPointsCapacity>
       longitudinalCurvatureProfile {};
 
-    std::array<std::tuple<float, float>, kReferencePathPassingPointCapacity>
+    std::array<std::tuple<float, float>, intent::ReferencePathTopic::kReferencePathPointsCapacity>
       longitudinalMotionProfile {};
 
 

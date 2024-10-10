@@ -20,19 +20,19 @@ void RouteIntent::setup() {
     }
 
     // copy cache to output
-    routeTopic = routeTopic_;
+    shared::routeTopic = routeTopic_;
 }
 
 void RouteIntent::tick() {
     // make a fake route
-    if (behaviorTopic.id == data::kInvalidBehaviorId) {
+    if (shared::behaviorTopic.id == data::kInvalidBehaviorId) {
         invalidateOutput();
         std::printf("no route\r\n");
     } else {
         std::printf("make fake route\r\n");
-        checkAndMakeRoute(behaviorTopic);
+        checkAndMakeRoute(shared::behaviorTopic);
     }
-    routeTopic = routeTopic_;
+    shared::routeTopic = routeTopic_;
 
 
     // routeTopic.hasValue = true;

@@ -1,11 +1,11 @@
 #ifndef __INTENTS_REFERENCE_PATH_INTENT_REFERENCE_PATH_INTENT_H__
 #define __INTENTS_REFERENCE_PATH_INTENT_REFERENCE_PATH_INTENT_H__
 
-
 #include <array>
 #include <optional>
 #include <vector>
 #include "data/defs/passing_point.h"
+#include "data/defs/reference_path_id.h"
 #include "data/defs/static_vector.h"
 #include "intents/intent_base.h"
 #include "intents/reference_path_intent/components/sampling.h"
@@ -25,12 +25,17 @@ class ReferencePathIntent : public IntentBase {
     virtual void tick() override;
 
   private:
-    reference_path::PassingPointList passingPointList_ {};
-    reference_path::PassingPointsSegment passingPointsSegment_ {};
-    ReferencePathId referencePathId_ {0U};
+    intent::ReferencePathTopic referencePathTopic_ {};
 
-    void outputTopic();
-    ReferencePathId makeNewReferencePathId();
+    void invalidateOutput();
+    void makeReferencePath(const OdometryTopic &odometryTopic, const RouteTopic &routeTopic);
+
+    // reference_path::PassingPointList passingPointList_ {};
+    // reference_path::PassingPointsSegment passingPointsSegment_ {};
+
+
+    // void outputTopic();
+    // data::ReferencePathId makeNewReferencePathId();
 };
 
 

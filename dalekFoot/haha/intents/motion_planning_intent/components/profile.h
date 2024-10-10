@@ -6,6 +6,7 @@
 #include "data/defs/passing_point.h"
 #include "data/defs/static_vector.h"
 #include "intents/topics/common.h"
+#include "intents/topics/reference_path_topic.h"
 
 namespace cooboc {
 namespace intent {
@@ -14,11 +15,11 @@ namespace motion_planning {
 
 // tuple = <the length on the trajectory, curvature changing between previous and next segment>
 using CurvatureProfile =
-  data::StaticVector<std::tuple<float, float>, kReferencePathPassingPointCapacity>;
+  data::StaticVector<std::tuple<float, float>, ReferencePathTopic::kReferencePathPointsCapacity>;
 
 // tuple = <the maximum velocity, the maximum acceleration>
 using MotionProfile =
-  data::StaticVector<std::tuple<float, float>, kReferencePathPassingPointCapacity>;
+  data::StaticVector<std::tuple<float, float>, ReferencePathTopic::kReferencePathPointsCapacity>;
 
 /**
  * Calculate the curvature changing on each passing point on the trajectory. The changing rate on

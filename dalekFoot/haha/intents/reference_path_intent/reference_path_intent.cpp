@@ -7,7 +7,10 @@
 #include <vector>
 #include "data/defs/passing_point.h"
 #include "data/defs/polar_vector2d.h"
+#include "data/defs/pose2d.h"
+#include "data/defs/reference_path_id.h"
 #include "data/defs/static_vector.h"
+#include "intents/common/frenet.h"
 #include "intents/reference_path_intent/components/sampling.h"
 #include "intents/topics/common.h"
 #include "intents/topics/route_topic.h"
@@ -18,24 +21,23 @@ namespace cooboc {
 namespace intent {
 
 
-ReferencePathIntent::ReferencePathIntent() :
-    passingPointList_ {},
-    passingPointsSegment_ {},
-    referencePathId_ {0U} {}
+ReferencePathIntent::ReferencePathIntent() : referencePathTopic_ {} {}
 ReferencePathIntent::~ReferencePathIntent() {}
 void ReferencePathIntent::setup() {
-    referencePathTopic.hasValue         = false;
-    referencePathTopic.passingPointSize = 0U;
-    for (std::size_t i {0U}; i < kReferencePathPassingPointCapacity; ++i) {
-        data::PassingPoint &passingPoint {referencePathTopic.passingPoint[i]};
-        passingPoint.position = {0.0F, 0.0F};
-    }
-    referencePathTopic.routeId = 0U;
+    invalidateOutput();
+    shared::referencePathTopic = referencePathTopic_;
 }
 
 
 // ReferencePathIntent reads the RouteTopic and output a runnable trajectory
 void ReferencePathIntent::tick() {
+    if (shared::routeTopic.id == data::kInvalidRouteId) {
+        invalidateOutput();
+    } else {
+        makeReferencePath(shared::odometryTopic, shared::routeTopic);
+    }
+
+
     // Validate the route topic
     // bool isValid = Validate(routeTopic);
 
@@ -49,21 +51,49 @@ void ReferencePathIntent::tick() {
     // outputTopic();
 }
 
-void ReferencePathIntent::outputTopic() {
-    referencePathTopic.hasValue         = true;
-    referencePathTopic.referencePathId  = makeNewReferencePathId();
-    referencePathTopic.passingPointSize = passingPointList_.size();
-    for (std::size_t i {0U}; i < passingPointList_.size(); ++i) {
-        referencePathTopic.passingPoint[i].position = passingPointList_[i];
-        referencePathTopic.passingPoint[i].segment  = passingPointsSegment_[i];
+void ReferencePathIntent::invalidateOutput() {
+    referencePathTopic_.id           = data::kInvalidReferencePathId;
+    referencePathTopic_.routeId      = data::kInvalidRouteId;
+    referencePathTopic_.pointsNumber = 0U;
+    for (std::size_t i {0U}; i < ReferencePathTopic::kReferencePathPointsCapacity; ++i) {
+        referencePathTopic_.points[i] = {0.0F, 0.0F};
     }
-    referencePathTopic.routeId = routeTopic.id;
+
+    shared::referencePathTopic = referencePathTopic_;
 }
 
-ReferencePathId ReferencePathIntent::makeNewReferencePathId() {
-    referencePathId_++;
-    return referencePathId_;
+void ReferencePathIntent::makeReferencePath(const OdometryTopic &odometryTopic,
+                                            const RouteTopic &routeTopic) {
+    bool isRouteTopicValid {routeTopic.id != data::kInvalidRouteId};
+    bool isRoutePolylineValid {routeTopic.pointsNumber > 1U};
+
+    const data::Pose2D &egoPose {odometryTopic.pose};
+
+    if (isRouteTopicValid && isRoutePolylineValid) {
+        // Find out which route segment the ego is on
+        frenet::locateSegmentInPolyline(
+          egoPose.position, routeTopic.points, routeTopic.pointsNumber);
+    } else {
+        invalidateOutput();
+    }
 }
+
+
+// void ReferencePathIntent::outputTopic() {
+//     referencePathTopic.hasValue         = true;
+//     referencePathTopic.referencePathId  = makeNewReferencePathId();
+//     referencePathTopic.passingPointSize = passingPointList_.size();
+//     for (std::size_t i {0U}; i < passingPointList_.size(); ++i) {
+//         referencePathTopic.passingPoint[i].position = passingPointList_[i];
+//         referencePathTopic.passingPoint[i].segment  = passingPointsSegment_[i];
+//     }
+//     referencePathTopic.routeId = routeTopic.id;
+// }
+
+// ReferencePathId ReferencePathIntent::makeNewReferencePathId() {
+//     referencePathId_++;
+//     return referencePathId_;
+// }
 
 }    // namespace intent
 }    // namespace cooboc

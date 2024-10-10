@@ -21,15 +21,15 @@ OdometryIntent::OdometryIntent() :
 OdometryIntent::~OdometryIntent() {}
 
 void OdometryIntent::setup() {
-    odometryTopic.timestamp        = 0U;
-    odometryTopic.pose.position.x  = 0.0F;
-    odometryTopic.pose.position.y  = 0.0F;
-    odometryTopic.pose.orientation = 0.0F;
+    shared::odometryTopic.timestamp        = 0U;
+    shared::odometryTopic.pose.position.x  = 0.0F;
+    shared::odometryTopic.pose.position.y  = 0.0F;
+    shared::odometryTopic.pose.orientation = 0.0F;
 }
 
 
 void OdometryIntent::tick() {
-    if (!vehicleResponseTopic.isValid) {
+    if (!shared::vehicleResponseTopic.isValid) {
         // TODO: update odometry using history information
         return;
     }
@@ -53,10 +53,10 @@ void OdometryIntent::tick() {
     if (isInitialized_) {
         std::int64_t encoderDiff[4];
         for (std::size_t i {0U}; i < 4U; ++i) {
-            encoderDiff[i] = vehicleResponseTopic.encoderOdometry[i] - encoderOdometry_[i];
+            encoderDiff[i] = shared::vehicleResponseTopic.encoderOdometry[i] - encoderOdometry_[i];
 
             // Update status
-            encoderOdometry_[i] = vehicleResponseTopic.encoderOdometry[i];
+            encoderOdometry_[i] = shared::vehicleResponseTopic.encoderOdometry[i];
         }
         constexpr float kEncoderToMetric = utils::math::PI * 0.06F / 4096.0F;
         const float diffX =
@@ -75,13 +75,13 @@ void OdometryIntent::tick() {
         data::PolarVector2D posDiffPolar {utils::math::to<data::PolarVector2D>(posDiffVec)};
 
         // Rotate the vehicle
-        posDiffPolar.orientation += odometryTopic.pose.orientation;
+        posDiffPolar.orientation += shared::odometryTopic.pose.orientation;
         // Translate the vehicle
-        odometryTopic.pose.position = odometryTopic.pose.position + posDiffPolar;
-        odometryTopic.pose.orientation += angularDiff;
+        shared::odometryTopic.pose.position = shared::odometryTopic.pose.position + posDiffPolar;
+        shared::odometryTopic.pose.orientation += angularDiff;
     } else {
         for (std::size_t i {0U}; i < 4U; ++i) {
-            encoderOdometry_[i] = vehicleResponseTopic.encoderOdometry[i];
+            encoderOdometry_[i] = shared::vehicleResponseTopic.encoderOdometry[i];
         }
         isInitialized_ = true;
     }

@@ -14,8 +14,10 @@ namespace intent {
 namespace reference_path {
 
 
-using PassingPointList = data::StaticVector<data::Position2D, kReferencePathPassingPointCapacity>;
-using PassingPointsSegment = std::array<data::PolarVector2D, kReferencePathPassingPointCapacity>;
+using PassingPointList =
+  data::StaticVector<data::Position2D, ReferencePathTopic::kReferencePathPointsCapacity>;
+using PassingPointsSegment =
+  std::array<data::PolarVector2D, ReferencePathTopic::kReferencePathPointsCapacity>;
 
 /**
  * Generate passing point list based on route information

@@ -28,14 +28,14 @@ MotionPlanningIntent::MotionPlanningIntent() :
     // Invalidate shadow vehicle
     shadowVehicle_.setValid(false);
 
-    motionPlanningDebugTopic.numberOfWaypoints = 0U;
+    shared::motionPlanningDebugTopic.numberOfWaypoints = 0U;
     for (std::size_t i {0U}; i < MotionPlanningDebugTopic::kWaypointNumber; ++i) {
-        motionPlanningDebugTopic.waypoints[i].pose      = {data::Position2D {0.0F, 0.0F}, 0.0F};
-        motionPlanningDebugTopic.waypoints[i].timepoint = 0U;
+        shared::motionPlanningDebugTopic.waypoints[i].pose = {data::Position2D {0.0F, 0.0F}, 0.0F};
+        shared::motionPlanningDebugTopic.waypoints[i].timepoint = 0U;
     }
-    motionPlanningDebugTopic.trajectoryPointIdx   = -1;
-    motionPlanningDebugTopic.poseInFrenet         = data::Pose2D {};
-    motionPlanningDebugTopic.distanceToTrajectory = 0.0F;
+    shared::motionPlanningDebugTopic.trajectoryPointIdx   = -1;
+    shared::motionPlanningDebugTopic.poseInFrenet         = data::Pose2D {};
+    shared::motionPlanningDebugTopic.distanceToTrajectory = 0.0F;
 }
 MotionPlanningIntent::~MotionPlanningIntent() {}
 
@@ -56,68 +56,68 @@ void MotionPlanningIntent::tick() {
 
 
 void MotionPlanningIntent::plan() {
-    // Calculate curvature profile
-    curvatureProfile_.reset();
-    motion_planning::calculateCurvatureProfile(
-      referencePathTopic.passingPoint, referencePathTopic.passingPointSize, curvatureProfile_);
+    // // Calculate curvature profile
+    // curvatureProfile_.reset();
+    // motion_planning::calculateCurvatureProfile(
+    //   referencePathTopic.passingPoint, referencePathTopic.passingPointSize, curvatureProfile_);
 
-    // Calculate the motion profile for longitudinal
+    // // Calculate the motion profile for longitudinal
 
-    motionProfile_.reset();
-    motion_planning::calculateMotionProfile(
-      curvatureProfile_, kMaximumAcceleration, kMaximumVelocity, motionProfile_);
+    // motionProfile_.reset();
+    // motion_planning::calculateMotionProfile(
+    //   curvatureProfile_, kMaximumAcceleration, kMaximumVelocity, motionProfile_);
 
-    // Calculate the position in frenet
-    // TODO: check the length of trajectory
-    std::size_t idx;
-    float dist;
+    // // Calculate the position in frenet
+    // // TODO: check the length of trajectory
+    // std::size_t idx;
+    // float dist;
 
-    const data::VehicleState initState = getInitVehicleState();
-    std::printf("init pos(%f, %f)\r\n", initState.pose.position.x, initState.pose.position.y);
-    std::tie(idx, dist) =
-      motion_planning::calculatePoseInFrenet(initState.pose,
-                                             referencePathTopic.passingPoint,
-                                             referencePathTopic.passingPointSize,
-                                             poseInFrenet_);
-    // Find out longitudinal and Lateral speed
-    // data::PolarVector2D egoVelocity = egoMotionStateTopic.velocity;
-    // egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
-    // data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
+    // const data::VehicleState initState = getInitVehicleState();
+    // std::printf("init pos(%f, %f)\r\n", initState.pose.position.x, initState.pose.position.y);
+    // std::tie(idx, dist) =
+    //   motion_planning::calculatePoseInFrenet(initState.pose,
+    //                                          referencePathTopic.passingPoint,
+    //                                          referencePathTopic.passingPointSize,
+    //                                          poseInFrenet_);
+    // // Find out longitudinal and Lateral speed
+    // // data::PolarVector2D egoVelocity = egoMotionStateTopic.velocity;
+    // // egoVelocity.orientation         = egoVelocity.orientation + poseInFrenet_.orientation;
+    // // data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocity);
 
-    data::PolarVector2D egoVelocityInWorld = initState.motionState.velocity;
-    egoVelocityInWorld.orientation = egoVelocityInWorld.orientation + poseInFrenet_.orientation;
-    const data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocityInWorld);
+    // data::PolarVector2D egoVelocityInWorld = initState.motionState.velocity;
+    // egoVelocityInWorld.orientation = egoVelocityInWorld.orientation + poseInFrenet_.orientation;
+    // const data::Vector2D resolvedVelocity = utils::math::to<data::Vector2D>(egoVelocityInWorld);
 
-    // planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x, idx);
-    planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
+    // // planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x, resolvedAcceleration.x,
+    // idx); planLongitudinal(poseInFrenet_.position.x, resolvedVelocity.x);
 
-    // Update Shadow
+    // // Update Shadow
 
-    data::MotionState motionState {};
-    motionState.velocity =
-      utils::math::to<data::PolarVector2D>(longitudinalPlanning_[0].motionVelocity);
+    // data::MotionState motionState {};
+    // motionState.velocity =
+    //   utils::math::to<data::PolarVector2D>(longitudinalPlanning_[0].motionVelocity);
 
-    data::Pose2D nextPose = shadowVehicle_.getVehicleState().pose;
-    nextPose.position     = nextPose.position + motionState.velocity * 0.01F;
-    //{longitudinalPlanning_[1U].waypoint, 0.0F};
-    shadowVehicle_.setPose(nextPose);
-    shadowVehicle_.setMotionState(motionState);
+    // data::Pose2D nextPose = shadowVehicle_.getVehicleState().pose;
+    // nextPose.position     = nextPose.position + motionState.velocity * 0.01F;
+    // //{longitudinalPlanning_[1U].waypoint, 0.0F};
+    // shadowVehicle_.setPose(nextPose);
+    // shadowVehicle_.setMotionState(motionState);
 
-    // Output to topic
-    for (std::size_t i {0U}; i < kPlanningSize; ++i) {
-        data::Waypoint &wp {(motionPlanningTopic.waypoints)[i]};
-        wp.velocity.x = longitudinalPlanning_[i].motionVelocity.x;
-        wp.velocity.y = longitudinalPlanning_[i].motionVelocity.y;
-    }
+    // // Output to topic
+    // for (std::size_t i {0U}; i < kPlanningSize; ++i) {
+    //     data::Waypoint &wp {(motionPlanningTopic.waypoints)[i]};
+    //     wp.velocity.x = longitudinalPlanning_[i].motionVelocity.x;
+    //     wp.velocity.y = longitudinalPlanning_[i].motionVelocity.y;
+    // }
 
-    // Output to debug
-    for (std::size_t i {0U}; i < kReferencePathPassingPointCapacity; ++i) {
-        motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
-        motionPlanningDebugTopic.longitudinalMotionProfile[i]    = motionProfile_[i];
-    }
-    motionPlanningDebugTopic.trajectoryPointIdx   = idx;
-    motionPlanningDebugTopic.poseInFrenet         = poseInFrenet_;
-    motionPlanningDebugTopic.distanceToTrajectory = dist;
+    // // Output to debug
+    // for (std::size_t i {0U}; i < kReferencePathPassingPointCapacity; ++i) {
+    //     motionPlanningDebugTopic.longitudinalCurvatureProfile[i] = curvatureProfile_[i];
+    //     motionPlanningDebugTopic.longitudinalMotionProfile[i]    = motionProfile_[i];
+    // }
+    // motionPlanningDebugTopic.trajectoryPointIdx   = idx;
+    // motionPlanningDebugTopic.poseInFrenet         = poseInFrenet_;
+    // motionPlanningDebugTopic.distanceToTrajectory = dist;
 }
 
 data::VehicleState MotionPlanningIntent::getInitVehicleState() {
@@ -133,8 +133,8 @@ bool MotionPlanningIntent::isEgoStateDifferenceTooBig() {
 }
 
 void MotionPlanningIntent::synchronizeEgoWithShadow() {
-    const data::Pose2D &pose {odometryTopic.pose};
-    const data::MotionState &motionState {egoMotionStateTopic};
+    const data::Pose2D &pose {shared::odometryTopic.pose};
+    const data::MotionState &motionState {shared::egoMotionStateTopic};
 
     shadowVehicle_.setPose(pose);
     shadowVehicle_.setMotionState(motionState);
@@ -197,36 +197,36 @@ void MotionPlanningIntent::planLongitudinal(const float initS, const float initS
 }
 
 void MotionPlanningIntent::normalizeS(std::size_t &trajectoryIdx, float &s) {
-    if (s < 0.0F) {
-        trajectoryIdx = 0U;
-    }
+    // if (s < 0.0F) {
+    //     trajectoryIdx = 0U;
+    // }
 
-    while ((trajectoryIdx + 2U) < referencePathTopic.passingPointSize) {
-        const float &currentSegmentLength {
-          referencePathTopic.passingPoint[trajectoryIdx + 1U].segment.value};
-        if (currentSegmentLength < s) {
-            s -= currentSegmentLength;
-            trajectoryIdx++;
-        } else {
-            break;
-        }
-    }
+    // while ((trajectoryIdx + 2U) < referencePathTopic.passingPointSize) {
+    //     const float &currentSegmentLength {
+    //       referencePathTopic.passingPoint[trajectoryIdx + 1U].segment.value};
+    //     if (currentSegmentLength < s) {
+    //         s -= currentSegmentLength;
+    //         trajectoryIdx++;
+    //     } else {
+    //         break;
+    //     }
+    // }
 }
 
 std::tuple<data::Position2D, bool> MotionPlanningIntent::mapSToPosition(std::size_t &trajectoryIdx,
                                                                         const float s) {
-    if ((trajectoryIdx + 1U) < referencePathTopic.passingPointSize) {
-        const data::Position2D &startPoint {
-          referencePathTopic.passingPoint[trajectoryIdx].position};
-        const data::Position2D &endPoint {
-          referencePathTopic.passingPoint[trajectoryIdx + 1U].position};
-        const float length     = referencePathTopic.passingPoint[trajectoryIdx + 1U].segment.value;
-        const float percentage = s / length;
-        return {utils::math::interpolate(startPoint, endPoint, percentage), percentage >= 1.0F};
-    } else {
-        // TODO: error here
-        return {{0.0F, 0.0F}, false};
-    }
+    // if ((trajectoryIdx + 1U) < referencePathTopic.passingPointSize) {
+    //     const data::Position2D &startPoint {
+    //       referencePathTopic.passingPoint[trajectoryIdx].position};
+    //     const data::Position2D &endPoint {
+    //       referencePathTopic.passingPoint[trajectoryIdx + 1U].position};
+    //     const float length     = referencePathTopic.passingPoint[trajectoryIdx +
+    //     1U].segment.value; const float percentage = s / length; return
+    //     {utils::math::interpolate(startPoint, endPoint, percentage), percentage >= 1.0F};
+    // } else {
+    //     // TODO: error here
+    return {{0.0F, 0.0F}, false};
+    // }
 }
 
 }    // namespace intent

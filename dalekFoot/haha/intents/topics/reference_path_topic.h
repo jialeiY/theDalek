@@ -5,6 +5,7 @@
 #include <cstdint>
 #include "data/defs/passing_point.h"
 #include "data/defs/position2d.h"
+#include "data/defs/reference_path_id.h"
 #include "data/defs/route_id.h"
 #include "intents/topics/common.h"
 
@@ -12,16 +13,17 @@ namespace cooboc {
 namespace intent {
 
 
-using ReferencePathId = std::uint64_t;
-
 struct ReferencePathTopic {
-    bool hasValue {false};
-    ReferencePathId referencePathId {0U};
-    std::size_t passingPointSize {0U};
+    static constexpr std::size_t kReferencePathPointsCapacity {1000U};
 
-    data::PassingPoint passingPoint[kReferencePathPassingPointCapacity];
+    data::ReferencePathId id {data::kInvalidReferencePathId};
+    data::RouteId routeId {data::kInvalidRouteId};
 
-    data::RouteId routeId {0U};
+    std::size_t pointsNumber {0U};
+    data::Position2D points[kReferencePathPointsCapacity];
+
+    // std::size_t passingPointSize {0U};
+    // data::PassingPoint passingPoint[kReferencePathPassingPointCapacity];
 };
 
 }    // namespace intent

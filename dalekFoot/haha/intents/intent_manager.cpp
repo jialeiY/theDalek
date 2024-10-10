@@ -42,13 +42,13 @@ IntentManager::~IntentManager() {
 }
 void IntentManager::setup() {
     for (IntentBase *intentPtr : intents_) { intentPtr->setup(); }
-    tickCount_                        = 0U;
-    lastTickEndTime_                  = 0U;
-    lastTickDuration_                 = 0U;
-    systemDebugTopic.lastTickEndTime  = 0U;
-    systemDebugTopic.lastTickDuration = 0U;
-    systemDebugTopic.tickStartTime    = 0U;
-    systemDebugTopic.tickCount        = 0U;
+    tickCount_                                = 0U;
+    lastTickEndTime_                          = 0U;
+    lastTickDuration_                         = 0U;
+    shared::systemDebugTopic.lastTickEndTime  = 0U;
+    shared::systemDebugTopic.lastTickDuration = 0U;
+    shared::systemDebugTopic.tickStartTime    = 0U;
+    shared::systemDebugTopic.tickCount        = 0U;
 }
 
 void IntentManager::updateVehicleResponse(const comm::GHPacket &vehicleResponse) {
@@ -57,14 +57,15 @@ void IntentManager::updateVehicleResponse(const comm::GHPacket &vehicleResponse)
 
     std::uint32_t expectedCrc = utils::math::calculateCrc(vehicleResponse);
     if (vehicleResponse.crc == expectedCrc) {
-        vehicleResponseTopic.isValid = true;
+        shared::vehicleResponseTopic.isValid = true;
         for (std::size_t i {0U}; i < 4U; ++i) {
-            intent::vehicleResponseTopic.encoderOdometry[i] = vehicleResponse.encoderOdometry[i];
+            intent::shared::vehicleResponseTopic.encoderOdometry[i] =
+              vehicleResponse.encoderOdometry[i];
         }
     } else {
         // Invalidate vehicle response topic
-        vehicleResponseTopic.isValid   = false;
-        vehicleResponseTopic.tickCount = vehicleResponse.tickCount;
+        shared::vehicleResponseTopic.isValid   = false;
+        shared::vehicleResponseTopic.tickCount = vehicleResponse.tickCount;
     }
 }
 
@@ -72,10 +73,10 @@ void IntentManager::tick() {
     std::uint64_t tickStartTime = utils::time::nanoseconds();
     tickCount_++;
 
-    systemDebugTopic.lastTickEndTime  = lastTickEndTime_;
-    systemDebugTopic.lastTickDuration = lastTickDuration_;
-    systemDebugTopic.tickStartTime    = tickStartTime;
-    systemDebugTopic.tickCount        = tickCount_;
+    shared::systemDebugTopic.lastTickEndTime  = lastTickEndTime_;
+    shared::systemDebugTopic.lastTickDuration = lastTickDuration_;
+    shared::systemDebugTopic.tickStartTime    = tickStartTime;
+    shared::systemDebugTopic.tickCount        = tickCount_;
 
     std::printf("\r\n=======\r\n");
     for (IntentBase *intentPtr : intents_) { intentPtr->tick(); }
@@ -86,7 +87,8 @@ void IntentManager::tick() {
 
 
 comm::HGPacket IntentManager::getGhPacket() const {
-    comm::HGPacket packet = *reinterpret_cast<comm::HGPacket *>(vehicleRequestTopic.hgPacketBuffer);
+    comm::HGPacket packet =
+      *reinterpret_cast<comm::HGPacket *>(shared::vehicleRequestTopic.hgPacketBuffer);
     return packet;
 }
 
