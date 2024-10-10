@@ -27,7 +27,7 @@ class ReferencePathIntent : public IntentBase {
   private:
     intent::ReferencePathTopic referencePathTopic_ {};
 
-    void invalidateOutput();
+    void resetCache();
     void makeReferencePath(const OdometryTopic &odometryTopic, const RouteTopic &routeTopic);
 
     // reference_path::PassingPointList passingPointList_ {};

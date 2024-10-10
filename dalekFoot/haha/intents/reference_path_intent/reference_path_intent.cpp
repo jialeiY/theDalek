@@ -24,7 +24,7 @@ namespace intent {
 ReferencePathIntent::ReferencePathIntent() : referencePathTopic_ {} {}
 ReferencePathIntent::~ReferencePathIntent() {}
 void ReferencePathIntent::setup() {
-    invalidateOutput();
+    resetCache();
     shared::referencePathTopic = referencePathTopic_;
 }
 
@@ -32,11 +32,11 @@ void ReferencePathIntent::setup() {
 // ReferencePathIntent reads the RouteTopic and output a runnable trajectory
 void ReferencePathIntent::tick() {
     if (shared::routeTopic.id == data::kInvalidRouteId) {
-        invalidateOutput();
+        resetCache();
     } else {
         makeReferencePath(shared::odometryTopic, shared::routeTopic);
     }
-
+    shared::referencePathTopic = referencePathTopic_;
 
     // Validate the route topic
     // bool isValid = Validate(routeTopic);
@@ -51,15 +51,13 @@ void ReferencePathIntent::tick() {
     // outputTopic();
 }
 
-void ReferencePathIntent::invalidateOutput() {
+void ReferencePathIntent::resetCache() {
     referencePathTopic_.id           = data::kInvalidReferencePathId;
     referencePathTopic_.routeId      = data::kInvalidRouteId;
     referencePathTopic_.pointsNumber = 0U;
     for (std::size_t i {0U}; i < ReferencePathTopic::kReferencePathPointsCapacity; ++i) {
         referencePathTopic_.points[i] = {0.0F, 0.0F};
     }
-
-    shared::referencePathTopic = referencePathTopic_;
 }
 
 void ReferencePathIntent::makeReferencePath(const OdometryTopic &odometryTopic,
@@ -74,7 +72,7 @@ void ReferencePathIntent::makeReferencePath(const OdometryTopic &odometryTopic,
         frenet::locateSegmentInPolyline(
           egoPose.position, routeTopic.points, routeTopic.pointsNumber);
     } else {
-        invalidateOutput();
+        resetCache();
     }
 }
 
