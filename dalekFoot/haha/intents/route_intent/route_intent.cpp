@@ -1,5 +1,6 @@
 #include "intents/route_intent/route_intent.h"
 #include <cstdint>
+#include <cstdio>
 #include "intents/topics/topics.h"
 
 namespace cooboc {
@@ -26,7 +27,9 @@ void RouteIntent::tick() {
     // make a fake route
     if (behaviorTopic.id == data::kInvalidBehaviorId) {
         invalidateOutput();
+        std::printf("no route\r\n");
     } else {
+        std::printf("make fake route\r\n");
         checkAndMakeRoute(behaviorTopic);
     }
     routeTopic = routeTopic_;
@@ -109,10 +112,13 @@ void RouteIntent::invalidateOutput(void) {
 }
 
 void RouteIntent::checkAndMakeRoute(const intent::BehaviorTopic& behaviorTopic) {
-    const bool isLastRouteOutputValid {routeTopic_.id != data::kInvalidRouteId};
     const bool isBehaviorValid {behaviorTopic.id != data::kInvalidBehaviorId};
+    const bool isLastRouteOutputValid {routeTopic_.id != data::kInvalidRouteId};
     const bool isLastRouteOutputDifferent {routeTopic_.behaviorId != behaviorTopic.id};
-    if (isLastRouteOutputValid && isBehaviorValid && isLastRouteOutputDifferent) {
+
+    if (isBehaviorValid &&
+        ((!isLastRouteOutputValid) || (isLastRouteOutputValid && isLastRouteOutputDifferent))) {
+        std::printf("make fake route !!!\r\n");
         makeRoute(behaviorTopic);
     }
 }

@@ -40,13 +40,13 @@ void ReferencePathIntent::tick() {
     // bool isValid = Validate(routeTopic);
 
     // If route topic is valid and updated
-    passingPointList_.reset();
-    reference_path::generatePassingPointListBasedOnRoute(routeTopic.startPoint,
-                                                         routeTopic.routeSegment,
-                                                         routeTopic.routeSegmentSize,
-                                                         passingPointList_);
-    reference_path::calculatePassingPointsSegment(passingPointList_, passingPointsSegment_);
-    outputTopic();
+    // passingPointList_.reset();
+    // reference_path::generatePassingPointListBasedOnRoute(routeTopic.startPoint,
+    //                                                      routeTopic.routeSegment,
+    //                                                      routeTopic.routeSegmentSize,
+    //                                                      passingPointList_);
+    // reference_path::calculatePassingPointsSegment(passingPointList_, passingPointsSegment_);
+    // outputTopic();
 }
 
 void ReferencePathIntent::outputTopic() {

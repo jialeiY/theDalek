@@ -7,25 +7,26 @@ type Position2D = {
 };
 
 enum CurvatureDistribution {
-    CONSIDER_CURRENT = 0,
-    CONSIDER_NEXT = 1,
+    FOLLOW_CURRENT = 0,
+    FOLLOW_NEXT = 1,
     CONSIDER_BOTH = 2,
-    CONSTANT = 3,    // the circle
+    CONSTANT_NEXT = 3,    // the circle
     DONT_CARE = 4,
 };
 
-type RouteSegment = {
-    endPoint: Position2D;
-    curvatureDistribution: CurvatureDistribution;
-};
+
+
+const kPolylineCapacity: number = 100;
+const kInvalidRouteId: number = 0;
 
 type RouteTopic = {
-    hasValue: boolean;
-    routeId: number;
-    routeSegmentSize: number;
-    startPoint: Position2D;
-    routeSegment: RouteSegment[];
+    id: number;
+    behaviorId: number;
+    pointsNumber: number;
+    points: Position2D[];
+    connectivityProperties: CurvatureDistribution[];
 };
+
 
 
 
@@ -33,37 +34,15 @@ export function activate(extensionContext: ExtensionContext): void {
     extensionContext.registerMessageConverter({
         fromSchemaName: "cooboc.proto.RouteTopic",
         toSchemaName: "foxglove.SceneUpdate",
-        converter: (inputMessage: RouteTopic) => {
-            //console.log(inputMessage);
+        converter: (routeTopic: RouteTopic) => {
             let spheres: SpherePrimitive[] = [];
             let lines: LinePrimitive[] = [];
-            if ((inputMessage.hasValue) && (inputMessage.routeSegmentSize > 0)) {
-                // spheres.push({
-                //     pose: {
-                //         position: {
-                //             x: inputMessage.polyline[0]?.x || 0,
-                //             y: inputMessage.polyline[0]?.y || 0,
-                //             z: 0
-                //         },
-                //         orientation: { x: 0, y: 0, z: 0, w: 1 }
-                //     },
-                //     size: { x: 0.030, y: 0.030, z: 0.030 },
-                //     color: { r: 1.0, g: 1.0, b: 1.0, a: 0.7 }
-                // });
-                // spheres.push({
-                //     pose: {
-                //         position: {
-                //             x: inputMessage.polyline[inputMessage.polylineLength - 1]?.x || 0,
-                //             y: inputMessage.polyline[inputMessage.polylineLength - 1]?.y || 0,
-                //             z: 0
-                //         },
-                //         orientation: { x: 0, y: 0, z: 0, w: 1 }
-                //     },
-                //     size: { x: 0.030, y: 0.030, z: 0.030 },
-                //     color: { r: 1.0, g: 1.0, b: 1.0, a: 0.7 }
-                // });
 
-                // Construct the lines for route segments
+            const isTopicValid: boolean = routeTopic.id != kInvalidRouteId;
+            const hasRouteInTopic: boolean = routeTopic.pointsNumber > 0;
+
+            if (isTopicValid && hasRouteInTopic) {
+                // Draw route on 3D
                 const polyline: LinePrimitive = {
                     type: LineType.LINE_STRIP,
                     pose: {
@@ -78,23 +57,16 @@ export function activate(extensionContext: ExtensionContext): void {
                     indices: []
                 };
 
-                // Put the start point
-                polyline.points.push({
-                    x: inputMessage.startPoint.x,
-                    y: inputMessage.startPoint.y,
-                    z: 0
-                });
-
-                // Put the route segments into polyline
-                for (let i = 0; i < inputMessage.routeSegmentSize; ++i) {
+                const validatedPointsNumber: number = Math.min(kPolylineCapacity, routeTopic.pointsNumber);
+                for (let i = 0; i < validatedPointsNumber; ++i) {
                     polyline.points.push({
-                        x: inputMessage.routeSegment[i]?.endPoint.x || 0,
-                        y: inputMessage.routeSegment[i]?.endPoint.y || 0,
+                        x: routeTopic.points[i]?.x as number,
+                        y: routeTopic.points[i]?.y as number,
                         z: 0
                     });
                 }
-
                 lines.push(polyline);
+
             }
 
 
