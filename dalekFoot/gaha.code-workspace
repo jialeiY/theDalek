@@ -107,6 +107,13 @@
 			"build/**": true
 		},
         "workbench.editor.wrapTabs": true,
-        "makefile.configureOnOpen": true
+        "makefile.configureOnOpen": true,
+        "makefile.launchConfigurations": [
+            {
+                "cwd": "/mnt/d/heqichen/theDalek/dalekFoot/haha/build",
+                "binaryPath": "/mnt/d/heqichen/theDalek/dalekFoot/haha/build/haha-sil.elf",
+                "binaryArgs": []
+            }
+        ]
 	}
 }
