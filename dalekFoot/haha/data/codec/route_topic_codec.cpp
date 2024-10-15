@@ -11,20 +11,20 @@ namespace cooboc {
 namespace data {
 
 proto::RouteTopic convert(const intent::RouteTopic &in) {
-    proto::RouteTopic out;
+    // proto::RouteTopic out;
 
-    out.set_id(in.id);
-    out.set_behaviorid(in.behaviorId);
-    out.set_pointsnumber(in.pointsNumber);
-    for (std::size_t i {0U}; i < intent::RouteTopic::kPolylineCapacity; ++i) {
-        proto::Position2D *position = out.add_points();
-        *position                   = convert(in.points[i]);
-    }
-    for (std::size_t i {0U}; i < (intent::RouteTopic::kPolylineCapacity - 2U); ++i) {
-        out.add_connectivityproperties(convert(in.connectivityProperties[i]));
-    }
+    // out.set_id(in.id);
+    // out.set_behaviorid(in.behaviorId);
+    // out.set_pointsnumber(in.pointsNumber);
+    // for (std::size_t i {0U}; i < intent::RouteTopic::kPolylineCapacity; ++i) {
+    //     proto::Position2D *position = out.add_points();
+    //     *position                   = convert(in.points[i]);
+    // }
+    // for (std::size_t i {0U}; i < (intent::RouteTopic::kPolylineCapacity - 2U); ++i) {
+    //     out.add_connectivityproperties(convert(in.connectivityProperties[i]));
+    // }
 
-    return out;
+    // return out;
 }
 
 }    // namespace data

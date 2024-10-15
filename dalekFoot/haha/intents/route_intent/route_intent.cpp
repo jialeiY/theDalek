@@ -9,13 +9,11 @@ RouteIntent::RouteIntent() : routeTopic_ {} {}
 RouteIntent::~RouteIntent() {}
 
 void RouteIntent::setup() {
-    routeTopic_.id           = data::kInvalidRouteId;
-    routeTopic_.behaviorId   = data::kInvalidBehaviorId;
-    routeTopic_.pointsNumber = 0U;
-
+    routeTopic_.id         = data::kInvalidRouteId;
+    routeTopic_.behaviorId = data::kInvalidBehaviorId;
+    routeTopic_.polyline.reset();
 
     for (std::size_t i {0U}; i < RouteTopic::kPolylineCapacity; ++i) {
-        routeTopic_.points[i]                 = data::Position2D {0.0F, 0.0F};
         routeTopic_.connectivityProperties[i] = data::CurvatureDistribution::DONT_CARE;
     }
 
@@ -105,10 +103,9 @@ void RouteIntent::tick() {
 // }
 
 void RouteIntent::invalidateOutput(void) {
-    routeTopic_.id = data::kInvalidRouteId;
-
-    routeTopic_.behaviorId   = data::kInvalidBehaviorId;
-    routeTopic_.pointsNumber = 0U;
+    routeTopic_.id         = data::kInvalidRouteId;
+    routeTopic_.behaviorId = data::kInvalidBehaviorId;
+    routeTopic_.polyline.reset();
 }
 
 void RouteIntent::checkAndMakeRoute(const intent::BehaviorTopic& behaviorTopic) {
@@ -131,9 +128,10 @@ void RouteIntent::makeRoute(const intent::BehaviorTopic& behaviorTopic) {
 
     constexpr std::size_t kPointsNumber {10U};
     static_assert(kPointsNumber > 2U);
-    routeTopic_.pointsNumber = kPointsNumber;
+
+
     for (std::size_t i {0U}; i < kPointsNumber; ++i) {
-        routeTopic_.points[i] = pos;
+        routeTopic_.polyline.insert(pos);
         if ((i % 2U) == 0U) {
             pos = pos + data::Vector2D {0.5F, 0.0F};
         } else {

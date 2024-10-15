@@ -6,6 +6,7 @@
 #include "data/defs/position2d.h"
 #include "data/defs/route_id.h"
 #include "data/defs/route_segment.h"
+#include "data/defs/static_polyline.h"
 
 namespace cooboc {
 namespace intent {
@@ -13,12 +14,13 @@ namespace intent {
 
 struct RouteTopic {
     static constexpr std::size_t kPolylineCapacity {100U};
+    using Polyline = data::StaticPolyline<kPolylineCapacity>;
 
     data::RouteId id {data::kInvalidRouteId};
 
     data::BehaviorId behaviorId {data::kInvalidBehaviorId};
-    std::size_t pointsNumber {0U};
-    data::Position2D points[kPolylineCapacity];
+
+    Polyline polyline;
     data::CurvatureDistribution connectivityProperties[kPolylineCapacity - 2U];
 };
 }    // namespace intent
