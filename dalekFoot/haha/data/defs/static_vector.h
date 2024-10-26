@@ -10,14 +10,16 @@ template<typename T, std::size_t N>
 class StaticVector {
   public:
     explicit StaticVector() {
-        dataPtr_ = new T[N];
+        dataPtr_ = new T[N] {};
         size_    = 0U;
     }
     explicit StaticVector(T* dataPtr) : dataPtr_ {dataPtr}, size_ {0U} {}
     explicit StaticVector(const StaticVector&)   = delete;
     StaticVector& operator=(const StaticVector&) = delete;
 
-    std::size_t size() const { return size_; }
+    std::size_t size() const {
+        return size_;
+    }
     explicit StaticVector(StaticVector<T, N>&& b) {
         dataPtr_ = b.dataPtr_;
         size_    = b.size_;
@@ -37,13 +39,31 @@ class StaticVector {
         }
     }
 
-    void push_back(T&& data) { emplace_back(std::move(data)); }
-    const T& back() { return dataPtr_[size_ - 1U]; }
-    const T& back() const { return dataPtr_[size_ - 1U]; }
-    const T& operator[](const std::size_t i) { return dataPtr_[i]; }
-    const T& operator[](const std::size_t i) const { return dataPtr_[i]; }
+    void push_back(T&& data) {
+        emplace_back(std::move(data));
+    }
+    const T& back() {
+        return dataPtr_[size_ - 1U];
+    }
+    const T& back() const {
+        return dataPtr_[size_ - 1U];
+    }
+    const T& operator[](const std::size_t i) {
+        return dataPtr_[i];
+    }
+    const T& operator[](const std::size_t i) const {
+        return dataPtr_[i];
+    }
+    const T& at(const std::size_t i) {
+        return dataPtr_[i];
+    }
+    const T& at(const std::size_t i) const {
+        return dataPtr_[i];
+    }
 
-    void reset() { size_ = 0U; }
+    void reset() {
+        size_ = 0U;
+    }
     void reverse() {
         if (size_ > 0U) {
             std::size_t first = 0U;

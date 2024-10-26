@@ -11,7 +11,9 @@ volatile std::sig_atomic_t gSignalStatus = 0;    // nosignal
 }
 
 
-void signalHandler(int signum) { gSignalStatus = signum; }
+void signalHandler(int signum) {
+    gSignalStatus = signum;
+}
 
 int main(int argc, char *argv[], char **envs) {
     // TODO

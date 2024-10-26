@@ -131,7 +131,7 @@ void RouteIntent::makeRoute(const intent::BehaviorTopic& behaviorTopic) {
 
 
     for (std::size_t i {0U}; i < kPointsNumber; ++i) {
-        routeTopic_.polyline.insert(pos);
+        routeTopic_.polyline.push_back(pos);
         if ((i % 2U) == 0U) {
             pos = pos + data::Vector2D {0.5F, 0.0F};
         } else {

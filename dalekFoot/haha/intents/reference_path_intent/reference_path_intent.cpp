@@ -62,17 +62,17 @@ void ReferencePathIntent::resetCache() {
 
 void ReferencePathIntent::makeReferencePath(const OdometryTopic &odometryTopic,
                                             const RouteTopic &routeTopic) {
-    bool isRouteTopicValid {routeTopic.id != data::kInvalidRouteId};
-    bool isRoutePolylineValid {routeTopic.polyline.size() > 1U};
+    // bool isRouteTopicValid {routeTopic.id != data::kInvalidRouteId};
+    // bool isRoutePolylineValid {routeTopic.polyline.size > 1U};
 
-    const data::Pose2D &egoPose {odometryTopic.pose};
+    // const data::Pose2D &egoPose {odometryTopic.pose};
 
-    if (isRouteTopicValid && isRoutePolylineValid) {
-        // Find out which route segment the ego is on
-        frenet::locateSegmentInPolyline(egoPose.position, routeTopic.polyline);
-    } else {
-        resetCache();
-    }
+    // if (isRouteTopicValid && isRoutePolylineValid) {
+    //     // Find out which route segment the ego is on
+    //     frenet::locateSegmentInPolyline(egoPose.position, routeTopic.polyline);
+    // } else {
+    //     resetCache();
+    // }
 }
 
 

@@ -11,6 +11,12 @@ namespace cooboc {
 namespace data {
 
 proto::RouteTopic convert(const intent::RouteTopic &in) {
+    proto::RouteTopic out;
+    out.set_id(in.id);
+    out.set_behaviorid(in.behaviorId);
+
+    return out;
+
     // proto::RouteTopic out;
 
     // out.set_id(in.id);

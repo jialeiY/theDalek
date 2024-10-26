@@ -38,10 +38,14 @@ IntentManager::IntentManager() : tickCount_ {0U}, lastTickEndTime_ {0U}, lastTic
     intents_.push_back(new DebugWriterIntent());
 }
 IntentManager::~IntentManager() {
-    for (IntentBase *intentPtr : intents_) { delete (intentPtr); }
+    for (IntentBase *intentPtr : intents_) {
+        delete (intentPtr);
+    }
 }
 void IntentManager::setup() {
-    for (IntentBase *intentPtr : intents_) { intentPtr->setup(); }
+    for (IntentBase *intentPtr : intents_) {
+        intentPtr->setup();
+    }
     tickCount_                                = 0U;
     lastTickEndTime_                          = 0U;
     lastTickDuration_                         = 0U;
@@ -79,7 +83,9 @@ void IntentManager::tick() {
     shared::systemDebugTopic.tickCount        = tickCount_;
 
     std::printf("\r\n=======\r\n");
-    for (IntentBase *intentPtr : intents_) { intentPtr->tick(); }
+    for (IntentBase *intentPtr : intents_) {
+        intentPtr->tick();
+    }
 
     lastTickEndTime_  = utils::time::nanoseconds();
     lastTickDuration_ = lastTickEndTime_ - tickStartTime;

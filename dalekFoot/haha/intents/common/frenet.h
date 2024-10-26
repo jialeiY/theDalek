@@ -4,9 +4,12 @@
 #include <cstdint>
 #include "data/defs/position2d.h"
 #include "data/defs/static_polyline.h"
+#include "data/defs/static_vector.h"
 #include "utils/math.h"
 
+
 namespace cooboc {
+
 namespace intent {
 namespace frenet {
 
@@ -24,9 +27,12 @@ struct LongitudinalPositionInFrenet {
     float lateralDistance {0.0F};
 };
 
+
 template<std::size_t N>
-LongitudinalPositionInFrenet locateSegmentInPolyline(const data::Position2D& poi,
-                                                     const data::StaticPolyline<N>& polyline) {
+LongitudinalPositionInFrenet locateSegmentInPolyline(
+  // const data::Position2D& poi, const data::StaticVector<data::PolarVector2D, N>& polyline) {
+  const data::Position2D& poi,
+  const cooboc::data::StaticPolyline<N>& polyline) {
     // Find the segment..
 
     // There are three possible that poi could located in
@@ -44,8 +50,8 @@ LongitudinalPositionInFrenet locateSegmentInPolyline(const data::Position2D& poi
     // Find the segment which poi located on
     const std::size_t segmentSize {polyline.size() - 1U};
     for (std::size_t i {0U}; i < segmentSize; ++i) {
-        const data::Position2D& startPoint {polyline.pointAt(i)};
-        const data::Position2D& endPoint {polyline.pointAt(i + 1U)};
+        const data::Position2D& startPoint {polyline.at(i)};
+        const data::Position2D& endPoint {polyline.at(i + 1U)};
 
         // check if on the start point
         if (utils::math::equals(poi.x, startPoint.x) && utils::math::equals(poi.y, startPoint.y)) {
