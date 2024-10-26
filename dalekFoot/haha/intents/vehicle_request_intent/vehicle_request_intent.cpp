@@ -27,10 +27,10 @@ void VehicleRequestIntent::tick() {
     // const data::PolarVector2D fakeVelocity = {utils::math::PI / 16.0F, 0.3F};
     // const float rotation             = 0.01F;
 
-    const data::PolarVector2D fakeVelocity = {0.0F, 0.0F};
-    const float rotation                   = 0.0F;
+    // const data::PolarVector2D fakeVelocity = {0.0F, 0.0F};
+    const float rotation = 0.0F;
 
-    comm::HGPacket packet {};
+    alignas(4) comm::HGPacket packet {};
     constexpr float kMetricToEncoder = 4096.0F / (utils::math::PI * 0.06F);
     for (std::size_t i {0U}; i < kControlSize; ++i) {
         const data::Vector2D &velocityVec = shared::motionPlanningTopic.waypoints[i].velocity;

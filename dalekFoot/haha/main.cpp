@@ -46,8 +46,11 @@ int main(int argc, char *argv[], char **envs) {
         vehicle.setRequest(txPacket);
 
         vehicle.tick();
-        cooboc::comm::GHPacket rxPacket {vehicle.getResponse()};
-        intentManager.updateVehicleResponse(rxPacket);
+        const cooboc::comm::GHPacket &alignedRxPacket {vehicle.getResponse()};
+        printf("%p\n", &alignedRxPacket);
+
+
+        intentManager.updateVehicleResponse(alignedRxPacket);
 
         // SIL
         // simulator.updateVehicleRequest(vrt);

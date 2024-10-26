@@ -84,7 +84,18 @@ inline std::uint32_t calculateCrc(const comm::HGPacket& spiPacket) {
 }
 
 inline std::uint32_t calculateCrc(const comm::GHPacket& spiPacket) {
-    return calculateCrc((const uint32_t*)(&spiPacket), ((GH_PACKET_SIZE - 4U) / 4));
+    if (reinterpret_cast<std::uintptr_t>(&spiPacket) % 4 == 0) {
+        // aligned
+        const void* alignedPtr = (const void*)(&spiPacket);
+        return calculateCrc(reinterpret_cast<const std::uint32_t*>(alignedPtr),
+                            ((GH_PACKET_SIZE - 4U) / 4));
+    } else {
+        // not aligned
+        const cooboc::comm::GHPacket alignedPacket __attribute__((aligned(4))) = spiPacket;
+        const void* alignedPtr = (const void*)(&alignedPacket);
+        return calculateCrc(reinterpret_cast<const std::uint32_t*>(alignedPtr),
+                            ((GH_PACKET_SIZE - 4U) / 4));
+    }
 }
 
 

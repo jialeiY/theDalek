@@ -14,11 +14,13 @@ class Simulator {
     void setup();
     void tick();
     void updateVehicleRequest(const comm::HGPacket &vehicleRequest);
-    inline comm::GHPacket getVehicleResponse() const { return vehicleResponsePacket_; }
+    inline const comm::GHPacket &getVehicleResponse() const {
+        return vehicleResponsePacket_;
+    }
 
   private:
-    comm::HGPacket vehicleRequestPacket_ {};
-    comm::GHPacket vehicleResponsePacket_ {};
+    alignas(4) comm::HGPacket vehicleRequestPacket_ {};
+    alignas(4) comm::GHPacket vehicleResponsePacket_ {};
 
 
     float vehicleWheelSpeed_[4U] {};

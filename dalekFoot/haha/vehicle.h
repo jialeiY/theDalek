@@ -12,7 +12,7 @@ class Vehicle {
     void setup();
     void setRequest(const comm::HGPacket &hgPacket);
     void tick();
-    cooboc::comm::GHPacket getResponse();
+    const cooboc::comm::GHPacket &getResponse() const;
 };
 
 }    // namespace vehicle

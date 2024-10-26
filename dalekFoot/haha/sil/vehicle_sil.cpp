@@ -12,14 +12,18 @@ cooboc::sil::Simulator simulator_;
 
 }    // namespace
 
-void Vehicle::setup() { simulator_.setup(); }
+void Vehicle::setup() {
+    simulator_.setup();
+}
 
 void Vehicle::setRequest(const comm::HGPacket &hgPacket) {
     std::printf("sil tick\r\n");
     simulator_.updateVehicleRequest(hgPacket);
     simulator_.tick();
 }
-cooboc::comm::GHPacket Vehicle::getResponse() { return simulator_.getVehicleResponse(); }
+const cooboc::comm::GHPacket &Vehicle::getResponse() const {
+    return simulator_.getVehicleResponse();
+}
 
 
 void Vehicle::tick() {}

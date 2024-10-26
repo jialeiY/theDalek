@@ -12,24 +12,23 @@ namespace comm {
 
 // Haha -> Gaga  Control Request
 
-struct HGPacket {
+struct  HGPacket {
     static constexpr std::size_t kPlanningSize {10U};
-
     float wheelEncoderPlanning[4U][kPlanningSize];
-
     std::uint32_t crc {0};
-} __attribute__((packed));
+};
+
 
 
 // Gaga -> Haha Sensor Response
 
-struct GHPacket {
+struct __attribute__((packed)) GHPacket {
     std::uint32_t tickCount {0U};
     std::int32_t encoderOdometry[4U] {}; // the absolute odometry of encoder, so that if one packet is missing, whole odometry could be deduced.
     std::int32_t intervalOdometry[4U] {}; // the odometry of encoder between two communication
 
     std::uint32_t crc {0};
-} __attribute__((packed));
+} ;
 
 
 

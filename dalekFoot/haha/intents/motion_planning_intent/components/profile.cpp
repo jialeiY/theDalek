@@ -66,7 +66,7 @@ void calculateMotionProfile(const CurvatureProfile &curvatureProfile,
 
     float lastLength = std::get<0>(curvatureProfile.back());
 
-    for (std::int32_t i {curvatureProfile.size() - 2U}; i >= 0; --i) {
+    for (std::int32_t i {static_cast<std::int32_t>(curvatureProfile.size() - 2U)}; i >= 0; --i) {
         const auto &curvaturePoint {curvatureProfile[i]};
         const float currentLength {std::get<0U>(curvaturePoint)};
         const float curvature {std::get<1U>(curvaturePoint)};

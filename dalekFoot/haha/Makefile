@@ -86,7 +86,7 @@ HEX := $(CP) -O ihex
 BIN := $(CP) -O binary -S
 
 CFLAGS += -std=gnu11
-CXXFLAGS += -std=gnu++17 -Wunused-variable -Wall
+CXXFLAGS += -std=gnu++17 -Wunused-variable -Wall -Werror
 
 #######################################
 # build the application

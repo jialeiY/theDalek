@@ -14,6 +14,7 @@ void Simulator::setup() {
         vehicleWheelOdometry_[i] = 0.0F;
     }
 }
+
 void Simulator::tick() {
     std::int32_t beginOdometry[4U] {0, 0, 0, 0};
     for (std::size_t i {0U}; i < 4U; ++i) {
