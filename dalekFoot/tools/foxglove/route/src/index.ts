@@ -14,16 +14,19 @@ enum CurvatureDistribution {
     DONT_CARE = 4,
 };
 
-
-
 const kPolylineCapacity: number = 100;
 const kInvalidRouteId: number = 0;
+
+type StaticPolylinePod = {
+    capacity: number;
+    size: number;
+    points: Position2D[];
+};
 
 type RouteTopic = {
     id: number;
     behaviorId: number;
-    pointsNumber: number;
-    points: Position2D[];
+    polyline: StaticPolylinePod;
     connectivityProperties: CurvatureDistribution[];
 };
 
@@ -39,7 +42,7 @@ export function activate(extensionContext: ExtensionContext): void {
             let lines: LinePrimitive[] = [];
 
             const isTopicValid: boolean = routeTopic.id != kInvalidRouteId;
-            const hasRouteInTopic: boolean = routeTopic.pointsNumber > 0;
+            const hasRouteInTopic: boolean = routeTopic.polyline.size > 0;
 
             if (isTopicValid && hasRouteInTopic) {
                 // Draw route on 3D
@@ -57,11 +60,11 @@ export function activate(extensionContext: ExtensionContext): void {
                     indices: []
                 };
 
-                const validatedPointsNumber: number = Math.min(kPolylineCapacity, routeTopic.pointsNumber);
+                const validatedPointsNumber: number = Math.min(kPolylineCapacity, routeTopic.polyline.size);
                 for (let i = 0; i < validatedPointsNumber; ++i) {
                     polyline.points.push({
-                        x: routeTopic.points[i]?.x as number,
-                        y: routeTopic.points[i]?.y as number,
+                        x: routeTopic.polyline.points[i]?.x as number,
+                        y: routeTopic.polyline.points[i]?.y as number,
                         z: 0
                     });
                 }
