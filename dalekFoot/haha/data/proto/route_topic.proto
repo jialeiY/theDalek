@@ -1,14 +1,13 @@
 syntax = "proto2";
 
-import "data/proto/vector2d.proto";
 import "data/proto/route_curvature_distribution.proto";
+import "data/proto/static_polyline_pod.proto";
 
 package cooboc.proto;
 
 message RouteTopic {
     optional uint64                id                     = 1 [default = 0];
     optional uint64                behaviorId             = 2 [default = 0];
-    optional uint32                pointsNumber           = 3 [default = 0];
-    repeated Vector2D              points                 = 4;
+    optional StaticPolylinePod     polyline               = 3;
     repeated CurvatureDistribution connectivityProperties = 5;
 }

@@ -5,7 +5,6 @@
 #include "data/proto/position2d.h"
 #include "gen/data/proto/route_segment.pb.h"
 
-
 namespace cooboc {
 namespace data {
 proto::RouteSegment convert(const data::RouteSegment &in) {

@@ -21,6 +21,7 @@ PROTO_FILES += data/proto/reference_path_topic.proto
 PROTO_FILES += data/proto/route_curvature_distribution.proto
 PROTO_FILES += data/proto/route_segment.proto
 PROTO_FILES += data/proto/route_topic.proto
+PROTO_FILES += data/proto/static_polyline_pod.proto
 PROTO_FILES += data/proto/system_debug_topic.proto
 PROTO_FILES += data/proto/vector2d.proto
 PROTO_FILES += data/proto/vehicle_request_topic.proto

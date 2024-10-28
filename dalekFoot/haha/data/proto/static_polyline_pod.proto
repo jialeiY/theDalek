@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+import "data/proto/vector2d.proto";
+
+package cooboc.proto;
+
+message StaticPolylinePod {
+    optional uint32   capacity = 1 [default = 0];
+    optional uint32   size     = 2 [default = 0];
+    repeated Vector2D points   = 3;
+}
