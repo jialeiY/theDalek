@@ -3,7 +3,7 @@
 
 #include <cstdint>
 #include "data/defs/position2d.h"
-#include "data/defs/static_polyline.h"
+#include "data/defs/static_polyline_pod.h"
 #include "data/defs/static_vector.h"
 #include "utils/math.h"
 
@@ -21,7 +21,7 @@ bool isPointOverSegment(const data::Position2D& poi,
 
 }    // namespace detail
 
-struct LongitudinalPositionInFrenet {
+struct PositionInFrenetPolyline {
     std::size_t polylineIdx {0U};
     float longitudinalOffset {0.0F};
     float lateralDistance {0.0F};
@@ -29,10 +29,8 @@ struct LongitudinalPositionInFrenet {
 
 
 template<std::size_t N>
-LongitudinalPositionInFrenet locateSegmentInPolyline(
-  // const data::Position2D& poi, const data::StaticVector<data::PolarVector2D, N>& polyline) {
-  const data::Position2D& poi,
-  const cooboc::data::StaticPolyline<N>& polyline) {
+PositionInFrenetPolyline locateSegmentInPolyline(const data::Position2D& poi,
+                                                 const data::StaticPolylinePod<N>& polyline) {
     // Find the segment..
 
     // There are three possible that poi could located in
@@ -41,14 +39,14 @@ LongitudinalPositionInFrenet locateSegmentInPolyline(
     // 3. after the polyline
 
 
-    LongitudinalPositionInFrenet result {0U, 0.0F, 0.0F};
+    PositionInFrenetPolyline result {0U, 0.0F, 0.0F};
 
-    if (polyline.size()) {
+    if (polyline.length()) {
         return result;
     }
 
     // Find the segment which poi located on
-    const std::size_t segmentSize {polyline.size() - 1U};
+    const std::size_t segmentSize {polyline.length() - 1U};
     for (std::size_t i {0U}; i < segmentSize; ++i) {
         const data::Position2D& startPoint {polyline.at(i)};
         const data::Position2D& endPoint {polyline.at(i + 1U)};

@@ -31,24 +31,14 @@ void ReferencePathIntent::setup() {
 
 // ReferencePathIntent reads the RouteTopic and output a runnable trajectory
 void ReferencePathIntent::tick() {
-    if (shared::routeTopic.id == data::kInvalidRouteId) {
-        resetCache();
-    } else {
+    if (needMakeNewReferencePath(shared::routeTopic)) {
         makeReferencePath(shared::odometryTopic, shared::routeTopic);
+    } else {
+        resetCache();
     }
+
+
     shared::referencePathTopic = referencePathTopic_;
-
-    // Validate the route topic
-    // bool isValid = Validate(routeTopic);
-
-    // If route topic is valid and updated
-    // passingPointList_.reset();
-    // reference_path::generatePassingPointListBasedOnRoute(routeTopic.startPoint,
-    //                                                      routeTopic.routeSegment,
-    //                                                      routeTopic.routeSegmentSize,
-    //                                                      passingPointList_);
-    // reference_path::calculatePassingPointsSegment(passingPointList_, passingPointsSegment_);
-    // outputTopic();
 }
 
 void ReferencePathIntent::resetCache() {
@@ -60,8 +50,23 @@ void ReferencePathIntent::resetCache() {
     }
 }
 
+bool ReferencePathIntent::needMakeNewReferencePath(const RouteTopic &routeTopic) {
+    // When to make new reference path
+    /**
+     * 1. routeTopic has a valid id
+     * 2. id of cache is not match to the id in topic
+     */
+
+    const bool isRouteValid {routeTopic.id != data::kInvalidRouteId};
+    const bool isRouteIdNotMatch {routeTopic.id != referencePathTopic_.id};
+
+    return (isRouteValid && isRouteIdNotMatch);
+}
+
 void ReferencePathIntent::makeReferencePath(const OdometryTopic &odometryTopic,
                                             const RouteTopic &routeTopic) {
+    frenet::locateSegmentInPolyline(odometryTopic.pose.position, routeTopic.polyline);
+
     // bool isRouteTopicValid {routeTopic.id != data::kInvalidRouteId};
     // bool isRoutePolylineValid {routeTopic.polyline.size > 1U};
 

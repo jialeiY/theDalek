@@ -1,5 +1,6 @@
 TARGET_SIL := haha-sil.elf
 TARGET_HIL := haha-hil.elf
+TARGET_TEST := haha-test.elf
 BUILD_DIR := build
 GEN_DIR := gen
 CPP_SOURCES := 
@@ -64,11 +65,10 @@ CPP_SOURCES += intents/reference_path_intent/reference_path_intent.cpp
 CPP_SOURCES += intents/route_intent/route_intent.cpp
 CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += intents/vehicle_request_intent/vehicle_request_intent.cpp
-CPP_SOURCES += main.cpp
+# CPP_SOURCES += main.cpp
 CPP_SOURCES += utils/algo/pid.cpp
 CPP_SOURCES += utils/math.cpp
 CPP_SOURCES += utils/time.cpp
-
 
 
 INCLUDES += -I./
@@ -102,10 +102,16 @@ SOURCES += $(ASM_SOURCES)
 SOURCES += $(ASMM_SOURCES)
 SOURCES += $(PROTO_SOURCES)
 OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(SOURCES))))
+MAIN_OBJECT := $(BUILD_DIR)/main.o
 
 SIL_CPP_SOURCES += sil/simulator/simulator.cpp
 OBJECTS_SIL := $(BUILD_DIR)/sil/simulator/simulator.o $(BUILD_DIR)/sil/vehicle_sil.o
 OBJECTS_HIL := $(BUILD_DIR)/vehicle_hil.o
+
+TEST_CPP_SOURCES += test/main.cpp
+TEST_CPP_SOURCES += test/intents/common/frenet_test.cpp
+TEST_OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(TEST_CPP_SOURCES))))
+
 
 DEFINES := -DMCAP_COMPRESSION_NO_LZ4 -DMCAP_COMPRESSION_NO_ZSTD
 DBG := -g -O0
@@ -116,6 +122,8 @@ BUILD_OPT := $(DBG)
 
 #all: $(BUILD_DIR)/$(TARGET_HIL) $(BUILD_DIR)/$(TARGET_SIL)
 all: $(BUILD_DIR)/$(TARGET_SIL)
+test: $(BUILD_DIR)/$(TARGET_TEST)
+
 
 $(GEN_DIR)/%.pb.cc: %.proto Makefile
 	mkdir -p $(dir $@)
@@ -140,17 +148,20 @@ $(BUILD_DIR)/%.o: %.s Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
 	$(AS) "$<" -c -o "$@"
 
-$(BUILD_DIR)/$(TARGET_HIL): $(OBJECTS) $(OBJECTS_HIL) $(BUILD_DIR) Makefile
+$(BUILD_DIR)/$(TARGET_HIL): $(MAIN_OBJECT) $(OBJECTS) $(OBJECTS_HIL) $(BUILD_DIR) Makefile
 	mkdir -p runtime
 	mkdir -p $(dir $@)
-	$(LINK) $(BUILD_OPT) $(OBJECTS) $(OBJECTS_HIL) -lprotobuf -o "$@"
+	$(LINK) $(BUILD_OPT) $(MAIN_OBJECT) $(OBJECTS) $(OBJECTS_HIL) -lprotobuf -o "$@"
 	$(SZ) $@
 
-$(BUILD_DIR)/$(TARGET_SIL): $(OBJECTS) $(OBJECTS_SIL) $(BUILD_DIR) Makefile
+$(BUILD_DIR)/$(TARGET_SIL):$(MAIN_OBJECT)   $(OBJECTS) $(OBJECTS_SIL) $(BUILD_DIR) Makefile
 	mkdir -p runtime
 	mkdir -p $(dir $@)
-	$(LINK) $(BUILD_OPT) $(OBJECTS) $(OBJECTS_SIL) -lprotobuf -o "$@"
+	$(LINK) $(BUILD_OPT) $(MAIN_OBJECT)  $(OBJECTS) $(OBJECTS_SIL) -lprotobuf -o "$@"
 	$(SZ) $@
+
+$(BUILD_DIR)/$(TARGET_TEST): $(TEST_OBJECTS) | $(OBJECTS) $(BUILD_DIR) Makefile
+	$(LINK) $(BUILD_OPT) $(OBJECTS) $(TEST_OBJECTS) $(OBJECTS_SIL) -lprotobuf -o "$@"
 
 $(BUILD_DIR):
 	mkdir $@

@@ -11,6 +11,14 @@ struct StaticVectorPod {
     T data[N] {};
     std::size_t size {0U};
 
+    static constexpr std::size_t capacity() {
+        return N;
+    }
+
+    std::size_t length() const {
+        return size;
+    }
+
     void emplace_back(T&& value) {
         if (size < N) {
             data[size] = value;
@@ -28,6 +36,7 @@ struct StaticVectorPod {
     void push_back(T&& value) {
         emplace_back(std::move(value));
     }
+
     const T& back() {
         return data[size - 1U];
     }
