@@ -36,7 +36,12 @@ struct StaticVectorPod {
     void push_back(T&& value) {
         emplace_back(std::move(value));
     }
-
+    const T& front() {
+        return data[0U];
+    }
+    const T& front() const {
+        return data[0U];
+    }
     const T& back() {
         return data[size - 1U];
     }

@@ -17,6 +17,20 @@
                 "targetArchitecture": "x64",
                 "miDebuggerPath": "/usr/bin/gdb"
             }
+        },
+        {
+            "name": "GDB_HAHA_TEST",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/haha-test.elf",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "launchCompleteCommand": "exec-run",
+            "linux": {
+                "MIMode": "gdb",
+                "targetArchitecture": "x64",
+                "miDebuggerPath": "/usr/bin/gdb"
+            }
         }
     ]
 }

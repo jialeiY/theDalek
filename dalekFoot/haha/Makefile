@@ -180,5 +180,8 @@ run: $(BUILD_DIR)/$(TARGET_SIL)
 
 r: run
 
+runtest: $(BUILD_DIR)/$(TARGET_TEST)
+	./$(BUILD_DIR)/$(TARGET_TEST)
 
+.PHONY: runtest
 

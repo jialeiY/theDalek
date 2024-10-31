@@ -53,9 +53,9 @@ struct Vector2D {
     }
 
     inline float distance(const data::Vector2D &b) const {
-        const float diffx = x - b.x;
-        const float diffy = y - b.y;
-        return std::sqrt((diffx * diffx) + (diffy * diffy));
+        const float diffX = x - b.x;
+        const float diffY = y - b.y;
+        return std::sqrt((diffX * diffX) + (diffY * diffY));
     }
 };
 
