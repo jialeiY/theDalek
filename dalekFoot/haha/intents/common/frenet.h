@@ -34,6 +34,18 @@ PositionInFrenetPolyline locateSegmentInPolyline(const data::Position2D& poi,
                                                  const data::StaticPolylinePod<N>& polyline) {
     // Find the segment..
 
+    /** Main idea to find the segment where the poi locate on
+     * 1. Check whether poi exactly on the vertex to avoid divide0 exception
+     * 2. find the closest distance from poi to segment, if poi is on the cover of segment
+     * 3. find the closest distance from poi to vertex.
+     * 4. if the closest distance is poi to end vertex, then the index is endvertex, the reference
+     * segment is extention of last segment
+     * 5. If closest distance is poi to segment, then frenet coordinate based on this segment.
+     * 6. If closest distance is from poi to vertex, the the reference segment is the segment start
+     * with this vertex.
+     */
+
+
     // There are three possible that poi could located in
     // 1. on the polyline
     // 2. before the polyline
@@ -46,9 +58,9 @@ PositionInFrenetPolyline locateSegmentInPolyline(const data::Position2D& poi,
         return result;
     }
 
-    const std::size_t segmentSize {polyline.length() - 1U};
+
     // Check if poi on vertex
-    for (std::size_t i {0U}; i < segmentSize; ++i) {
+    for (std::size_t i {0U}; i < polyline.length(); ++i) {
         if (utils::math::equals(poi, polyline.at(i))) {
             result.polylineIdx        = i;
             result.longitudinalOffset = 0.0F;
@@ -56,23 +68,23 @@ PositionInFrenetPolyline locateSegmentInPolyline(const data::Position2D& poi,
             return result;
         }
     }
-    // Check the last point
-    if (utils::math::equals(poi, polyline.back())) {
-        const data::Position2D& startPoint {polyline.at(polyline.length() - 2U)};
-        const data::Position2D& endPoint {polyline.at(polyline.length() - 1U)};
-        result.polylineIdx        = segmentSize;
-        result.longitudinalOffset = startPoint.distance(endPoint);
-        result.lateralDistance    = 0.0F;
-        return result;
-    }
+
+    // // Check if poi on the last point
+    // if (utils::math::equals(poi, polyline.back())) {
+    //     const data::Position2D& startPoint {polyline.at(polyline.length() - 2U)};
+    //     const data::Position2D& endPoint {polyline.at(polyline.length() - 1U)};
+    //     result.polylineIdx        = segmentSize;
+    //     result.longitudinalOffset = startPoint.distance(endPoint);
+    //     result.lateralDistance    = 0.0F;
+    //     return result;
+    // }
 
 
     // Find the segment which poi located on
+    const std::size_t segmentSize {polyline.length() - 1U};
     std::int32_t closestSegmentIdx {-1};
     float closestSegmentLongitudinal {0.0F};
     float closestSegmentLateral {0.0F};
-
-
     for (std::size_t i {0U}; i < segmentSize; ++i) {
         const data::Position2D& startPoint {polyline.at(i)};
         const data::Position2D& endPoint {polyline.at(i + 1U)};
@@ -105,18 +117,19 @@ PositionInFrenetPolyline locateSegmentInPolyline(const data::Position2D& poi,
     }
 
     // Check the vertex of polyline
-
     std::uint32_t closestVertexIdx {0U};
     float closestVertexDist {poi.distance(polyline[0U])};
     // Find the closest vertex
     for (std::size_t i {1U}; i < polyline.length(); ++i) {
         const float dist2Vertex = poi.distance(polyline[i]);
         if (dist2Vertex < closestVertexDist) {
-            closestVertexIdx = i;
+            closestVertexIdx  = i;
+            closestVertexDist = dist2Vertex;
         }
     }
 
     if ((closestSegmentIdx < 0) || (closestVertexDist < closestSegmentLateral)) {
+        // closest distance on vertex
         if (closestVertexIdx == (polyline.length() - 1U)) {    // end point, need special handle
             const data::Position2D& startPoint {polyline[closestVertexIdx - 1U]};
             const data::Position2D& endPoint {polyline[closestVertexIdx]};
@@ -140,43 +153,15 @@ PositionInFrenetPolyline locateSegmentInPolyline(const data::Position2D& poi,
             closestSegmentLongitudinal = vecR.dot(vecP) / distR;
             closestSegmentLateral      = vecR.cross(vecP) / distR;
         }
+    } else {
+        // do nothing, distance already calculated
     }
 
-    // // Check the end points of polyline
-    // const float dist2Start = poi.distance(polyline.front());
-    // const float dist2End   = poi.distance(polyline.back());
-    // if (dist2Start < dist2End) {
-    //     if ((closestSegmentIdx < 0) || (dist2Start < closestSegmentLateral)) {
-    //         // Put Start
-    //         const data::Vector2D vecR {polyline[1U] - polyline[0U]};
-    //         const float distR = polyline[1U].distance(polyline[0U]);
-    //         const data::Vector2D vecP {poi - polyline[0U]};
-
-    //         closestSegmentIdx          = 0U;
-    //         closestSegmentLongitudinal = vecR.dot(vecP) / distR;
-    //         closestSegmentLateral      = vecR.cross(vecP) / distR;
-    //     }
-    // } else {
-    //     if ((closestSegmentIdx < 0) || (dist2End < closestSegmentLateral)) {
-    //         // Put End
-    //         const data::Vector2D vecR {polyline[polyline.length() - 1U] -
-    //                                    polyline[polyline.length() - 2U]};
-    //         const float distR =
-    //           polyline[polyline.length() - 1U].distance(polyline[polyline.length() - 2U]);
-    //         const data::Vector2D vecP {poi - polyline[0U]};
-
-    //         closestSegmentIdx          = 0U;
-    //         closestSegmentLongitudinal = vecR.dot(vecP) / distR;
-    //         closestSegmentLateral      = vecR.cross(vecP) / distR;
-    //     }
-    // }
-
-
-    // For debug
+    // closest distance on segment
     result.polylineIdx        = closestSegmentIdx;
     result.longitudinalOffset = closestSegmentLongitudinal;
     result.lateralDistance    = closestSegmentLateral;
-    // End of debug
+
     return result;
 }
 

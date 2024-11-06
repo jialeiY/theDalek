@@ -108,3 +108,38 @@ UTEST(FrenetTest, PoiEndOfPolyline_Below) {
     EXPECT_NEAR_MSG(1.0F, actualResult.longitudinalOffset, 1e-3F, "longitudinal");
     EXPECT_NEAR_MSG(1.0F, actualResult.lateralDistance, 1e-3F, "lateral");
 }
+
+UTEST(FrenetTest, PoiInMiddleOfTwoSegment) {
+    const cooboc::data::Position2D poi {0.0F, 2.0F};
+
+    cooboc::data::StaticPolylinePod<100U> polyline;
+    polyline.push_back({-1.0F, 0.0F});
+    polyline.push_back({0.0F, 1.0F});
+    polyline.push_back({1.0F, 0.0F});
+
+
+    const cooboc::intent::frenet::PositionInFrenetPolyline actualResult =
+      cooboc::intent::frenet::locateSegmentInPolyline(poi, polyline);
+
+    EXPECT_EQ_MSG(1U, actualResult.polylineIdx, "index");
+    EXPECT_NEAR_MSG(-0.707107F, actualResult.longitudinalOffset, 1e-3F, "longitudinal");
+    EXPECT_NEAR_MSG(0.707107F, actualResult.lateralDistance, 1e-3F, "lateral");
+}
+
+
+UTEST(FrenetTest, PoiBeyondEndOfPolyline) {
+    const cooboc::data::Position2D poi {2.0F, 0.0F};
+
+    cooboc::data::StaticPolylinePod<100U> polyline;
+    polyline.push_back({-1.0F, 0.0F});
+    polyline.push_back({0.0F, 0.0F});
+    polyline.push_back({1.0F, 0.0F});
+
+
+    const cooboc::intent::frenet::PositionInFrenetPolyline actualResult =
+      cooboc::intent::frenet::locateSegmentInPolyline(poi, polyline);
+
+    EXPECT_EQ_MSG(2U, actualResult.polylineIdx, "index");
+    EXPECT_NEAR_MSG(1.0F, actualResult.longitudinalOffset, 1e-3F, "longitudinal");
+    EXPECT_NEAR_MSG(0.0F, actualResult.lateralDistance, 1e-3F, "lateral");
+}

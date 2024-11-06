@@ -25,6 +25,9 @@
             "program": "${workspaceFolder}/build/haha-test.elf",
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
+            "args": [
+                "--filter=FrenetTest.PoiBeyondEndOfPolyline"
+            ],
             "launchCompleteCommand": "exec-run",
             "linux": {
                 "MIMode": "gdb",
