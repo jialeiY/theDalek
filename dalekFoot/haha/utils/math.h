@@ -66,6 +66,15 @@ inline data::Vector2D interpolate(data::Vector2D from, data::Vector2D to, float 
                            interpolate<float>(from.y, to.y, percent)};
 }
 
+inline data::Vector2D normalize(const data::Vector2D& in) {
+    if (equals(in, {0.0F, 0.0F})) {
+        return {0.0F, 0.0F};
+    } else {
+        const float length = in.abs();
+        return {in.x / length, in.y / length};
+    }
+}
+
 inline float clampAngle(float in) {
     in = std::fmod(in, 2.0F * PI);
     if (in > PI) {

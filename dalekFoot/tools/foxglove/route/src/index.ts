@@ -7,8 +7,8 @@ type Position2D = {
 };
 
 enum CurvatureDistribution {
-    FOLLOW_CURRENT = 0,
-    FOLLOW_NEXT = 1,
+    CONSIDER_PREVIOUS = 0,
+    CONSIDER_NEXT = 1,
     CONSIDER_BOTH = 2,
     CONSTANT_NEXT = 3,    // the circle
     DONT_CARE = 4,

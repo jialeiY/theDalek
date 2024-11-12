@@ -72,9 +72,12 @@ void RouteIntent::makeRoute(const intent::BehaviorTopic& behaviorTopic) {
     }
     for (std::size_t i {0U}; i < (kPointsNumber - 2U); ++i) {
         constexpr uint8_t totalCurvatureDistribution {5U};
-        routeTopic_.connectivityProperties[i] =
+        routeTopic_.connectivityProperties[i + 1U] =
           static_cast<data::CurvatureDistribution>(i % totalCurvatureDistribution);
     }
+    routeTopic_.connectivityProperties[0U] = data::CurvatureDistribution::CONSIDER_NEXT;
+    routeTopic_.connectivityProperties[kPointsNumber - 1U] =
+      data::CurvatureDistribution::CONSIDER_PREVIOUS;
 }
 
 data::RouteId RouteIntent::makeNewRouteId() {

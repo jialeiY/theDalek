@@ -14,6 +14,8 @@ namespace intent {
 
 struct RouteTopic {
     static constexpr std::size_t kPolylineCapacity {100U};
+    static constexpr std::size_t kMaxPolylineSegmentNumber {kPolylineCapacity - 1U};
+
     using Polyline = data::StaticPolylinePod<kPolylineCapacity>;
 
     data::RouteId id {data::kInvalidRouteId};
@@ -21,7 +23,7 @@ struct RouteTopic {
     data::BehaviorId behaviorId {data::kInvalidBehaviorId};
 
     Polyline polyline {};
-    data::CurvatureDistribution connectivityProperties[kPolylineCapacity - 2U];
+    data::CurvatureDistribution connectivityProperties[kPolylineCapacity];
 };
 }    // namespace intent
 }    // namespace cooboc

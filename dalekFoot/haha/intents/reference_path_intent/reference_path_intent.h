@@ -4,11 +4,13 @@
 #include <array>
 #include <optional>
 #include <vector>
+#include "data/defs/orientation.h"
 #include "data/defs/passing_point.h"
 #include "data/defs/reference_path_id.h"
 #include "data/defs/static_vector.h"
 #include "intents/intent_base.h"
 #include "intents/reference_path_intent/components/sampling.h"
+#include "intents/reference_path_intent/components/vertex_property.h"
 #include "intents/topics/topics.h"
 
 namespace cooboc {
@@ -28,8 +30,11 @@ class ReferencePathIntent : public IntentBase {
     intent::ReferencePathTopic referencePathTopic_ {};
 
     void resetCache();
+
     void makeReferencePath(const OdometryTopic &odometryTopic, const RouteTopic &routeTopic);
-    bool needMakeNewReferencePath(const RouteTopic &routeTopic);
+
+    reference_path::RouteProfile routeProfile_;
+
 
     // reference_path::PassingPointList passingPointList_ {};
     // reference_path::PassingPointsSegment passingPointsSegment_ {};

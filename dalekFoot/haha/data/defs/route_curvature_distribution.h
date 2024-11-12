@@ -10,11 +10,15 @@ namespace cooboc {
 namespace data {
 
 enum class CurvatureDistribution : std::uint8_t {
-    FOLLOW_CURRENT = 0,
-    FOLLOW_NEXT    = 1,
-    CONSIDER_BOTH  = 2,
-    CONSTANT_NEXT  = 3,    // the circle
-    DONT_CARE      = 4,
+    // Only consider the segment before this segment note valid for first vertex
+    CONSIDER_PREVIOUS = 0,
+    // Only consider the segment after this vertex, not valid for end vertex
+    CONSIDER_NEXT = 1,
+    // Not valid for first vertex
+    CONSIDER_BOTH = 2,
+    // the circle, constant at next segment
+    CONSTANT_NEXT = 3,
+    DONT_CARE     = 4,
 };
 
 }    // namespace data

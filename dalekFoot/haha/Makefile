@@ -63,6 +63,7 @@ CPP_SOURCES += intents/odometry_intent/odometry_intent.cpp
 CPP_SOURCES += intents/reference_path_intent/components/sampling.cpp
 CPP_SOURCES += intents/reference_path_intent/reference_path_intent.cpp
 CPP_SOURCES += intents/route_intent/route_intent.cpp
+CPP_SOURCES += intents/reference_path_intent/components/vertex_property.cpp
 CPP_SOURCES += intents/topics/topics.cpp
 CPP_SOURCES += intents/vehicle_request_intent/vehicle_request_intent.cpp
 # CPP_SOURCES += main.cpp

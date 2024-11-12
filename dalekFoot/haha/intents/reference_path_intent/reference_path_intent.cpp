@@ -12,6 +12,7 @@
 #include "data/defs/static_vector.h"
 #include "intents/common/frenet.h"
 #include "intents/reference_path_intent/components/sampling.h"
+#include "intents/reference_path_intent/components/vertex_property.h"
 #include "intents/topics/common.h"
 #include "intents/topics/route_topic.h"
 #include "intents/topics/topics.h"
@@ -28,19 +29,6 @@ void ReferencePathIntent::setup() {
     shared::referencePathTopic = referencePathTopic_;
 }
 
-
-// ReferencePathIntent reads the RouteTopic and output a runnable trajectory
-void ReferencePathIntent::tick() {
-    if (needMakeNewReferencePath(shared::routeTopic)) {
-        makeReferencePath(shared::odometryTopic, shared::routeTopic);
-    } else {
-        resetCache();
-    }
-
-
-    shared::referencePathTopic = referencePathTopic_;
-}
-
 void ReferencePathIntent::resetCache() {
     referencePathTopic_.id           = data::kInvalidReferencePathId;
     referencePathTopic_.routeId      = data::kInvalidRouteId;
@@ -48,20 +36,29 @@ void ReferencePathIntent::resetCache() {
     for (std::size_t i {0U}; i < ReferencePathTopic::kReferencePathPointsCapacity; ++i) {
         referencePathTopic_.points[i] = {0.0F, 0.0F};
     }
+
+    // Reset the route profile
+    for (std::size_t i {0U}; i < intent::RouteTopic::kPolylineCapacity; ++i) {
+        routeProfile_[i].clear();
+    }
 }
 
-bool ReferencePathIntent::needMakeNewReferencePath(const RouteTopic &routeTopic) {
-    // When to make new reference path
-    /**
-     * 1. routeTopic has a valid id
-     * 2. id of cache is not match to the id in topic
-     */
-
-    const bool isRouteValid {routeTopic.id != data::kInvalidRouteId};
-    const bool isRouteIdNotMatch {routeTopic.id != referencePathTopic_.id};
-
-    return (isRouteValid && isRouteIdNotMatch);
+// ReferencePathIntent reads the RouteTopic and output a runnable trajectory
+void ReferencePathIntent::tick() {
+    if (shared::routeTopic.id == data::kInvalidRouteId) {
+        if (shared::routeTopic.id != referencePathTopic_.id) {
+            // TODO: need update route profile
+            reference_path::updateRouteProfile(shared::routeTopic, routeProfile_);
+        } else {
+            // do nothing, keep using cache
+        }
+        // TODO: update reference path
+    } else {
+        resetCache();
+    }
+    shared::referencePathTopic = referencePathTopic_;
 }
+
 
 void ReferencePathIntent::makeReferencePath(const OdometryTopic &odometryTopic,
                                             const RouteTopic &routeTopic) {
