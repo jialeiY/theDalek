@@ -87,8 +87,8 @@ LINK := $(CXX)
 HEX := $(CP) -O ihex
 BIN := $(CP) -O binary -S
 
-CFLAGS += -std=gnu11
-CXXFLAGS += -std=gnu++17 -Wunused-variable -Wall -Werror
+CFLAGS += -std=gnu11 --coverage
+CXXFLAGS += -std=gnu++17 -Wunused-variable -Wall -Werror --coverage
 
 #######################################
 # build the application
@@ -139,7 +139,7 @@ $(BUILD_DIR)/%.o: %.c Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 
 $(BUILD_DIR)/%.o: %.cpp Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
-	$(CXX) "$<" $(CXXFLAGS) $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -o "$@"
+	$(CXX) "$<"   $(CXXFLAGS) $(DEFINES) -c $(INCLUDES) $(BUILD_OPT) -o "$@"
 
 $(BUILD_DIR)/%.o: %.cc Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 	mkdir -p $(dir $@)
@@ -152,17 +152,17 @@ $(BUILD_DIR)/%.o: %.s Makefile $(PROTO_SOURCES) | $(BUILD_DIR)
 $(BUILD_DIR)/$(TARGET_HIL): $(MAIN_OBJECT) $(OBJECTS) $(OBJECTS_HIL) $(BUILD_DIR) Makefile
 	mkdir -p runtime
 	mkdir -p $(dir $@)
-	$(LINK) $(BUILD_OPT) $(MAIN_OBJECT) $(OBJECTS) $(OBJECTS_HIL) -lprotobuf -o "$@"
+	$(LINK) $(BUILD_OPT) $(MAIN_OBJECT) $(OBJECTS) $(OBJECTS_HIL) -lprotobuf --coverage -o "$@"
 	$(SZ) $@
 
 $(BUILD_DIR)/$(TARGET_SIL):$(MAIN_OBJECT)   $(OBJECTS) $(OBJECTS_SIL) $(BUILD_DIR) Makefile
 	mkdir -p runtime
 	mkdir -p $(dir $@)
-	$(LINK) $(BUILD_OPT) $(MAIN_OBJECT)  $(OBJECTS) $(OBJECTS_SIL) -lprotobuf -o "$@"
+	$(LINK) $(BUILD_OPT) $(MAIN_OBJECT)  $(OBJECTS) $(OBJECTS_SIL) -lprotobuf --coverage -o "$@"
 	$(SZ) $@
 
 $(BUILD_DIR)/$(TARGET_TEST): $(TEST_OBJECTS) | $(OBJECTS) $(BUILD_DIR) Makefile
-	$(LINK) $(BUILD_OPT) $(OBJECTS) $(TEST_OBJECTS) $(OBJECTS_SIL) -lprotobuf -o "$@"
+	$(LINK) $(BUILD_OPT) $(OBJECTS) $(TEST_OBJECTS) $(OBJECTS_SIL) -lprotobuf --coverage -o "$@"
 
 $(BUILD_DIR):
 	mkdir $@
@@ -184,5 +184,13 @@ r: run
 runtest: $(BUILD_DIR)/$(TARGET_TEST)
 	./$(BUILD_DIR)/$(TARGET_TEST)
 
-.PHONY: runtest
+coverage: $(BUILD_DIR)/$(TARGET_TEST)
+	./$(BUILD_DIR)/$(TARGET_TEST)
+	lcov --directory ./$(BUILD_DIR)/ --ignore-errors mismatch --capture --output-file ./$(BUILD_DIR)/$(TARGET_TEST).info
+	lcov --remove $(BUILD_DIR)/$(TARGET_TEST).info '/usr/include/*' 'test/*' 'third_party/*' -o $(BUILD_DIR)/$(TARGET_TEST)_filtered.info
+	genhtml -o $(BUILD_DIR)/html_report $(BUILD_DIR)/$(TARGET_TEST)_filtered.info
+	
+
+
+.PHONY: runtest coverage
 
