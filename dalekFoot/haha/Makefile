@@ -111,6 +111,7 @@ OBJECTS_HIL := $(BUILD_DIR)/vehicle_hil.o
 
 TEST_CPP_SOURCES += test/main.cpp
 TEST_CPP_SOURCES += test/intents/common/frenet_test.cpp
+TEST_CPP_SOURCES += test/intents/reference_path_intent/components/vertex_property_test.cpp
 TEST_OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(TEST_CPP_SOURCES))))
 
 
@@ -161,7 +162,7 @@ $(BUILD_DIR)/$(TARGET_SIL):$(MAIN_OBJECT)   $(OBJECTS) $(OBJECTS_SIL) $(BUILD_DI
 	$(LINK) $(BUILD_OPT) $(MAIN_OBJECT)  $(OBJECTS) $(OBJECTS_SIL) -lprotobuf --coverage -o "$@"
 	$(SZ) $@
 
-$(BUILD_DIR)/$(TARGET_TEST): $(TEST_OBJECTS) | $(OBJECTS) $(BUILD_DIR) Makefile
+$(BUILD_DIR)/$(TARGET_TEST): $(TEST_OBJECTS)  $(OBJECTS) $(BUILD_DIR) Makefile
 	$(LINK) $(BUILD_OPT) $(OBJECTS) $(TEST_OBJECTS) $(OBJECTS_SIL) -lprotobuf --coverage -o "$@"
 
 $(BUILD_DIR):

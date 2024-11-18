@@ -11,23 +11,7 @@ namespace intent {
 namespace reference_path {
 
 namespace detail {
-
-
-// void calculateFirstSegmentProperty(const data::Position2D &startPoint,
-//                                    const data::Position2D &endPoint,
-//                                    const std::size_t &length,
-//                                    const data::CurvatureDistribution &startProperty,
-//                                    const data::CurvatureDistribution &endProperty,
-//                                    std::vector<data::Position2D> &controlPoints) {}
-
-
 constexpr float kBezierSmoothRatio {0.3F};
-
-void addFirstSegmentControlPoint(const data::Position2D &startPoint,
-                                 const data::Vector2D &segment,
-                                 const data::CurvatureDistribution &startProperty,
-                                 const data::CurvatureDistribution &endProperty,
-                                 std::vector<data::Position2D> &controlPoints) {}
 }    // namespace detail
 
 
@@ -194,102 +178,7 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
         }
     }
     lastControlPoints.push_back(lastVertex);
-    routeProfile[RouteTopic::kMaxPolylineSegmentNumber] = lastControlPoints;
-
-
-    // detail::calculateFirstSegmentProperty(
-    //   routeTopic.polyline[0U], routeTopic.polyline[1U], routeTopic.polyline.length());
-
-
-    // constexpr float kBezierSmoothRatio {0.3F};
-
-
-    // const data::CurvatureDistribution &firstVertexProperty =
-    // routeTopic.connectivityProperties[0U];
-
-
-    // std::vector<data::Position2D> controlPoints;
-    // controlPoints.reserve(4U);
-
-    // // first point
-
-
-    // const data::Position2D startPoint {routeTopic.polyline[0U]};
-    // controlPoints.push_back(startPoint);
-    // const data::Vector2D firstSegment {routeTopic.polyline[1U] - routeTopic.polyline[0U]};
-    // const float firstSegmentLength {firstSegment.abs()};
-
-
-    // // TODO: check whether length is 0
-
-
-    // switch (firstVertexProperty) {
-    //     case (data::CurvatureDistribution::CONSIDER_PREVIOUS): {
-    //         std::fprintf(stderr, "Invalid curvature property at route first vertex, ignore
-    //         it\r\n"); break;
-    //     }
-    //     case (data::CurvatureDistribution::CONSIDER_NEXT): {
-    //         controlPoints.push_back({startPoint.x + (kBezierSmoothRatio * firstSegmentLength),
-    //                                  startPoint.y + (kBezierSmoothRatio * firstSegmentLength)});
-
-    //         break;
-    //     }
-    //     case (data::CurvatureDistribution::CONSIDER_BOTH): {
-    //         std::fprintf(stderr, "Invalid curvature property at route first vertex, ignore
-    //         it\r\n"); break;
-    //     }
-    //     case (data::CurvatureDistribution::CONSTANT_NEXT): {
-    //         std::fprintf(stderr, "Invalid curvature property at route first vertex, ignore
-    //         it\r\n"); break;
-    //     }
-    //     case (data::CurvatureDistribution::DONT_CARE): {
-    //         break;
-    //     }
-    //     default: {
-    //         std::fprintf(stderr, "program should not go here\r\n");
-    //         break;
-    //     }
-    // }
-
-    // for (std::size_t i {1U}; i < (routeTopic.polyline.length() - 1U); ++i) {
-    //     const data::Position2D vertex {routeTopic.polyline[i]};
-    //     const data::CurvatureDistribution &vertexProperty {routeTopic.connectivityProperties[i]};
-    //     const data::Vector2D previousSegment {routeTopic.polyline[i] - routeTopic.polyline[i -
-    //     1U]}; const data::Vector2D nextSegment {routeTopic.polyline[i + 1U] -
-    //     routeTopic.polyline[i]}; const float nextSegmentLength {nextSegment.abs()};
-
-    //     switch (vertexProperty) {
-    //         case (data::CurvatureDistribution::CONSIDER_PREVIOUS): {
-    //             controlPoints.push_back({vertex})
-
-    //               break;
-    //         }
-    //         case (data::CurvatureDistribution::CONSIDER_NEXT): {
-    //             // TODO: put a control point
-    //             const data::Position2D controlPoint {
-    //               startPoint.x + (kBezierSmoothRatio * firstSegmentLength),
-    //               startPoint.y + (kBezierSmoothRatio * firstSegmentLength)};
-    //             break;
-    //         }
-    //         case (data::CurvatureDistribution::CONSIDER_BOTH): {
-    //             std::fprintf(stderr,
-    //                          "Invalid curvature property at route first vertex, ignore it\r\n");
-    //             break;
-    //         }
-    //         case (data::CurvatureDistribution::CONSTANT_NEXT): {
-    //             std::fprintf(stderr,
-    //                          "Invalid curvature property at route first vertex, ignore it\r\n");
-    //             break;
-    //         }
-    //         case (data::CurvatureDistribution::DONT_CARE): {
-    //             break;
-    //         }
-    //         default: {
-    //             std::fprintf(stderr, "program should not go here\r\n");
-    //             break;
-    //         }
-    //     }
-    // }
+    routeProfile[routeTopic.polyline.length()] = lastControlPoints;
 }
 }    // namespace reference_path
 }    // namespace intent
