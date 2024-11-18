@@ -26,7 +26,7 @@
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "args": [
-                "--filter=FrenetTest.PoiBeyondEndOfPolyline"
+                "--filter=ReferencePathIntentTest.TwoPointsTest"
             ],
             "launchCompleteCommand": "exec-run",
             "linux": {

@@ -16,6 +16,10 @@ constexpr float kBezierSmoothRatio {0.3F};
 
 
 void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile) {
+    const std::size_t totalVertexNumber {routeTopic.polyline.length()};
+    if (totalVertexNumber < 2U) {
+        return;
+    }
     std::vector<data::Position2D> previousControlPoints;
     const data::Position2D &firstPoint {routeTopic.polyline[0U]};
     previousControlPoints.push_back(firstPoint);
@@ -56,7 +60,7 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     // process all vertexes in the middle of route
-    for (std::size_t i {1U}; i < RouteTopic::kMaxPolylineSegmentNumber; ++i) {
+    for (std::size_t i {1U}; i < (totalVertexNumber - 1U); ++i) {
         std::vector<data::Position2D> nextControlPoints;
         const data::Position2D &currentVertex {routeTopic.polyline[i]};
         nextControlPoints.push_back(currentVertex);
@@ -139,7 +143,7 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
 
     const data::Position2D lastVertex {routeTopic.polyline.back()};
     const data::CurvatureDistribution &lastVertexProperty {
-      routeTopic.connectivityProperties[routeTopic.polyline.length() - 1U]};
+      routeTopic.connectivityProperties[totalVertexNumber - 1U]};
     const data::Vector2D &lastSegment {previousSegment};
     std::vector<data::Position2D> &lastControlPoints {previousControlPoints};
 
