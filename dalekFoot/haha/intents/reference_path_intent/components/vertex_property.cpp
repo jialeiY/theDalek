@@ -160,6 +160,7 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
             lastControlPoints.push_back(
               {lastVertex.x - (detail::kBezierSmoothRatio * lastSegment.x),
                lastVertex.y - (detail::kBezierSmoothRatio * lastSegment.y)});
+            break;
         }
         case (data::CurvatureDistribution::CONSIDER_NEXT): {
             std::fprintf(stderr, "Invalid curvature property at route last vertex, ignore it\r\n");
@@ -182,7 +183,7 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
         }
     }
     lastControlPoints.push_back(lastVertex);
-    routeProfile[routeTopic.polyline.length()] = lastControlPoints;
+    routeProfile[routeTopic.polyline.length() - 2U] = lastControlPoints;
 }
 }    // namespace reference_path
 }    // namespace intent
