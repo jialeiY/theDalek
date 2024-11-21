@@ -10,10 +10,6 @@ namespace cooboc {
 namespace intent {
 namespace reference_path {
 
-namespace detail {
-constexpr float kBezierSmoothRatio {0.3F};
-}    // namespace detail
-
 
 void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile) {
     const std::size_t totalVertexNumber {routeTopic.polyline.length()};
@@ -107,15 +103,18 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
                 break;
             }
             case (data::CurvatureDistribution::CONSTANT_NEXT): {
-                previousControlPoints.push_back(
-                  {currentVertex.x -
-                     (detail::kBezierSmoothRatio * nextNormalizedVector.x * previousSegmentLength),
-                   currentVertex.y - (detail::kBezierSmoothRatio * nextNormalizedVector.y *
-                                      previousSegmentLength)});
+                // TODO: Not implemented
+                std::fprintf(stderr, "Not Implemented, ignore it\r\n");
+                // previousControlPoints.push_back(
+                //   {currentVertex.x -
+                //      (detail::kBezierSmoothRatio * nextNormalizedVector.x *
+                //      previousSegmentLength),
+                //    currentVertex.y - (detail::kBezierSmoothRatio * nextNormalizedVector.y *
+                //                       previousSegmentLength)});
 
-                nextControlPoints.push_back(
-                  {currentVertex.x + (detail::kBezierSmoothRatio * nextSegment.x),
-                   currentVertex.y + (detail::kBezierSmoothRatio * nextSegment.y)});
+                // nextControlPoints.push_back(
+                //   {currentVertex.x + (detail::kBezierSmoothRatio * nextSegment.x),
+                //    currentVertex.y + (detail::kBezierSmoothRatio * nextSegment.y)});
 
                 break;
             }
@@ -185,6 +184,8 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
     lastControlPoints.push_back(lastVertex);
     routeProfile[routeTopic.polyline.length() - 2U] = lastControlPoints;
 }
+
+
 }    // namespace reference_path
 }    // namespace intent
 }    // namespace cooboc

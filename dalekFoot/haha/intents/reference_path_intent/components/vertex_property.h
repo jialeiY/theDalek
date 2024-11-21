@@ -9,6 +9,10 @@ namespace cooboc {
 namespace intent {
 namespace reference_path {
 
+namespace detail {
+constexpr float kBezierSmoothRatio {0.3F};
+}    // namespace detail
+
 
 // RouteProfile is the list for control points for each segment in route
 using RouteProfile =

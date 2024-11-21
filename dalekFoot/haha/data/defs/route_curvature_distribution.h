@@ -4,7 +4,7 @@
 
 
 #include <cstdint>
-
+#include <map>
 
 namespace cooboc {
 namespace data {
@@ -20,6 +20,20 @@ enum class CurvatureDistribution : std::uint8_t {
     CONSTANT_NEXT = 3,
     DONT_CARE     = 4,
 };
+
+const char* toString(CurvatureDistribution e) {
+    static const std::map<CurvatureDistribution, const char*> enumStrings {
+      {CurvatureDistribution::CONSIDER_PREVIOUS, "CONSIDER_PREVIOUS"},
+      {CurvatureDistribution::CONSIDER_NEXT, "CONSIDER_NEXT"},
+      {CurvatureDistribution::CONSIDER_BOTH, "CONSIDER_BOTH"},
+      {CurvatureDistribution::CONSTANT_NEXT, "CONSTANT_NEXT"},
+      {CurvatureDistribution::DONT_CARE, "DONT_CARE"},
+    };
+
+    auto it = enumStrings.find(e);
+    return it == enumStrings.end() ? "Out of range" : it->second;
+}
+
 
 }    // namespace data
 }    // namespace cooboc
