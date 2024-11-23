@@ -121,7 +121,7 @@ UTEST(ReferencePathIntentTest, MiddlePointTest) {
 
     std::vector<std::tuple<CD, std::size_t, std::size_t>> parameterList {
       {CD::CONSIDER_PREVIOUS, 3U, 3U},
-      {CD::CONSIDER_NEXT, 2U, 3U},
+      {CD::CONSIDER_NEXT, 3U, 3U},
       {CD::CONSIDER_BOTH, 3U, 3U},
       {CD::CONSTANT_NEXT, 2U, 2U},
       {CD::DONT_CARE, 2U, 2U},
@@ -181,12 +181,27 @@ UTEST_F(ReferencePathIntentMathematicsTestFixture, ConsiderPreviousSmokeTest) {
       cooboc::utils::math::equals(utest_fixture->routeProfile[0U][1U], {0.700000F, 0.000000F}));
     EXPECT_TRUE(
       cooboc::utils::math::equals(utest_fixture->routeProfile[1U][1U], {1.300000F, 0.000000F}));
+}
+
+
+UTEST_F(ReferencePathIntentMathematicsTestFixture, ConsiderNextSmokeTest) {
+    using CD                                             = cooboc::data::CurvatureDistribution;
+    utest_fixture->routeTopic.connectivityProperties[1U] = CD::CONSIDER_NEXT;
+
+    // RUN
+    utest_fixture->run();
+
+    // TEST
+    EXPECT_TRUE(
+      cooboc::utils::math::equals(utest_fixture->routeProfile[0U][1U], {1.000000F, -0.300000F}));
+    EXPECT_TRUE(
+      cooboc::utils::math::equals(utest_fixture->routeProfile[1U][1U], {1.000000F, 0.300000F}));
     std::printf("point position: (%f, %f)\r\n",
                 utest_fixture->routeProfile[1U][1U].x,
                 utest_fixture->routeProfile[1U][1U].y);
 }
 
-UTEST_F(ReferencePathIntentMathematicsTestFixture, BothConsiderSmokeTest) {
+UTEST_F(ReferencePathIntentMathematicsTestFixture, ConsiderBothSmokeTest) {
     using CD                                             = cooboc::data::CurvatureDistribution;
     utest_fixture->routeTopic.connectivityProperties[1U] = CD::CONSIDER_BOTH;
 
