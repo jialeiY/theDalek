@@ -21,7 +21,7 @@ enum class CurvatureDistribution : std::uint8_t {
     DONT_CARE     = 4,
 };
 
-const char* toString(CurvatureDistribution e) {
+static inline const char* toString(CurvatureDistribution e) {
     static const std::map<CurvatureDistribution, const char*> enumStrings {
       {CurvatureDistribution::CONSIDER_PREVIOUS, "CONSIDER_PREVIOUS"},
       {CurvatureDistribution::CONSIDER_NEXT, "CONSIDER_NEXT"},

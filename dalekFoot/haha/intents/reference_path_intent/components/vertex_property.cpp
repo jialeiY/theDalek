@@ -71,6 +71,12 @@ void updateRouteProfile(const RouteTopic &routeTopic, RouteProfile &routeProfile
                 previousControlPoints.push_back(
                   {currentVertex.x - (detail::kBezierSmoothRatio * previousSegment.x),
                    currentVertex.y - (detail::kBezierSmoothRatio * previousSegment.y)});
+                nextControlPoints.push_back(
+                  {currentVertex.x +
+                     (detail::kBezierSmoothRatio * previousNormalizedVector.x * nextSegmentLength),
+                   currentVertex.y + (detail::kBezierSmoothRatio * previousNormalizedVector.y *
+                                      nextSegmentLength)});
+
                 break;
             }
             case (data::CurvatureDistribution::CONSIDER_NEXT): {
