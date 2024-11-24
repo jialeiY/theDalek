@@ -111,6 +111,7 @@ OBJECTS_HIL := $(BUILD_DIR)/vehicle_hil.o
 
 TEST_CPP_SOURCES += test/main.cpp
 TEST_CPP_SOURCES += test/intents/common/frenet_test.cpp
+TEST_CPP_SOURCES += test/intents/reference_path_intent/reference_path_intent_test.cpp
 TEST_CPP_SOURCES += test/intents/reference_path_intent/components/vertex_property_test.cpp
 TEST_OBJECTS := $(addprefix $(BUILD_DIR)/, $(addsuffix .o, $(basename $(TEST_CPP_SOURCES))))
 

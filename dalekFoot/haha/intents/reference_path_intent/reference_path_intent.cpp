@@ -46,6 +46,8 @@ void ReferencePathIntent::resetCache() {
 // ReferencePathIntent reads the RouteTopic and output a runnable trajectory
 void ReferencePathIntent::tick() {
     if (shared::routeTopic.id == data::kInvalidRouteId) {
+        resetCache();
+    } else {
         if (shared::routeTopic.id != referencePathTopic_.id) {
             // TODO: need update route profile
             reference_path::updateRouteProfile(shared::routeTopic, routeProfile_);
@@ -53,8 +55,6 @@ void ReferencePathIntent::tick() {
             // do nothing, keep using cache
         }
         // TODO: update reference path
-    } else {
-        resetCache();
     }
     shared::referencePathTopic = referencePathTopic_;
 }

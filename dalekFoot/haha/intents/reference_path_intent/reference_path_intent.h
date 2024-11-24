@@ -26,15 +26,11 @@ class ReferencePathIntent : public IntentBase {
     virtual void setup() override;
     virtual void tick() override;
 
-  private:
+  protected:
     intent::ReferencePathTopic referencePathTopic_ {};
-
     void resetCache();
-
     void makeReferencePath(const OdometryTopic &odometryTopic, const RouteTopic &routeTopic);
-
     reference_path::RouteProfile routeProfile_;
-
 
     // reference_path::PassingPointList passingPointList_ {};
     // reference_path::PassingPointsSegment passingPointsSegment_ {};

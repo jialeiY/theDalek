@@ -26,6 +26,7 @@ struct ReferencePathTopic {
     // data::PassingPoint passingPoint[kReferencePathPassingPointCapacity];
 };
 
+
 }    // namespace intent
 }    // namespace cooboc
 
