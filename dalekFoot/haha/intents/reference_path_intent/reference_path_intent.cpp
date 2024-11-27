@@ -30,8 +30,8 @@ void ReferencePathIntent::setup() {
 }
 
 void ReferencePathIntent::resetCache() {
-    referencePathTopic_.id           = data::kInvalidReferencePathId;
-    referencePathTopic_.routeId      = data::kInvalidRouteId;
+    referencePathTopic_.id = data::kInvalidReferencePathId;
+    referencePathTopic_.routeId = data::kInvalidRouteId;
     referencePathTopic_.pointsNumber = 0U;
     for (std::size_t i {0U}; i < ReferencePathTopic::kReferencePathPointsCapacity; ++i) {
         referencePathTopic_.points[i] = {0.0F, 0.0F};
@@ -49,11 +49,11 @@ void ReferencePathIntent::tick() {
         resetCache();
     } else {
         if (shared::routeTopic.id != referencePathTopic_.id) {
-            // TODO: need update route profile
             reference_path::updateRouteProfile(shared::routeTopic, routeProfile_);
         } else {
             // do nothing, keep using cache
         }
+
         // TODO: update reference path
     }
     shared::referencePathTopic = referencePathTopic_;
