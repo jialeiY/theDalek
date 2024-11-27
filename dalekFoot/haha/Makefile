@@ -188,9 +188,9 @@ runtest: $(BUILD_DIR)/$(TARGET_TEST)
 
 coverage: $(BUILD_DIR)/$(TARGET_TEST)
 	./$(BUILD_DIR)/$(TARGET_TEST)
-	lcov --directory ./$(BUILD_DIR)/ --ignore-errors mismatch --capture --output-file ./$(BUILD_DIR)/$(TARGET_TEST).info
-	lcov --remove $(BUILD_DIR)/$(TARGET_TEST).info '/usr/include/*' 'test/*' 'third_party/*' -o $(BUILD_DIR)/$(TARGET_TEST)_filtered.info
-	genhtml -o $(BUILD_DIR)/html_report $(BUILD_DIR)/$(TARGET_TEST)_filtered.info
+	lcov --rc lcov_branch_coverage=1 --directory ./$(BUILD_DIR)/ --ignore-errors mismatch --capture --output-file ./$(BUILD_DIR)/$(TARGET_TEST).info
+	lcov --rc lcov_branch_coverage=1 --remove $(BUILD_DIR)/$(TARGET_TEST).info '/usr/include/*' 'test/*' 'third_party/*' -o $(BUILD_DIR)/$(TARGET_TEST)_filtered.info
+	genhtml --rc lcov_branch_coverage=1 --legend -o $(BUILD_DIR)/html_report $(BUILD_DIR)/$(TARGET_TEST)_filtered.info
 	
 
 
