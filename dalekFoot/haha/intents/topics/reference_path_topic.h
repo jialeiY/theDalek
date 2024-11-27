@@ -18,6 +18,8 @@ struct ReferencePathTopic {
 
     data::ReferencePathId id {data::kInvalidReferencePathId};
     data::RouteId routeId {data::kInvalidRouteId};
+    std::size_t beginRouteIdx {0U};
+    std::size_t endRouteIdx {0U};
 
     std::size_t pointsNumber {0U};
     data::Position2D points[kReferencePathPointsCapacity];

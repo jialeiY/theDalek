@@ -48,33 +48,46 @@ void ReferencePathIntent::tick() {
     if (shared::routeTopic.id == data::kInvalidRouteId) {
         resetCache();
     } else {
-        if (shared::routeTopic.id != referencePathTopic_.id) {
+        // TODO: validate route?
+        if (shared::routeTopic.id != referencePathTopic_.routeId) {
             reference_path::updateRouteProfile(shared::routeTopic, routeProfile_);
         } else {
             // do nothing, keep using cache
         }
 
-        // TODO: update reference path
+        const data::Position2D &egoPos {shared::odometryTopic.pose.position};
+        const intent::RouteTopic::Polyline &route {shared::routeTopic.polyline};
+        const frenet::PositionInFrenetPolyline egoPosInFrenet = frenet::locateSegmentInPolyline(egoPos, route);
+        std::int32_t routeIdx = egoPosInFrenet.polylineIdx;
+        std::size_t beginIdx = static_cast<std::size_t>(std::max(routeIdx - 1, 0));
+        std::int32_t segmentNumber = shared::routeTopic.polyline.length() - 1U;
+        std::size_t endIdx = static_cast<std::size_t>(std::min(routeIdx + 1, segmentNumber));
+
+        if (needUpdateReferencePath(shared::routeTopic.id, beginIdx, endIdx)) {
+            makeReferencePath()
+        }
     }
     shared::referencePathTopic = referencePathTopic_;
 }
 
+bool ReferencePathIntent::needUpdateReferencePath(const data::RouteId &routeId,
+                                                  const std::size_t &beginRouteIdx,
+                                                  const std::size_t &endRouteIdx) const {
+    if (referencePathTopic_.id == data::kInvalidReferencePathId) {
+        return true;
+    }
 
-void ReferencePathIntent::makeReferencePath(const OdometryTopic &odometryTopic,
-                                            const RouteTopic &routeTopic) {
-    frenet::locateSegmentInPolyline(odometryTopic.pose.position, routeTopic.polyline);
+    if ((referencePathTopic_.routeId == routeId) && (referencePathTopic_.beginRouteIdx == beginRouteIdx) &&
+        (referencePathTopic_.endRouteIdx == endRouteIdx)) {
+        return false;
+    }
 
-    // bool isRouteTopicValid {routeTopic.id != data::kInvalidRouteId};
-    // bool isRoutePolylineValid {routeTopic.polyline.size > 1U};
+    return true;
+}
 
-    // const data::Pose2D &egoPose {odometryTopic.pose};
 
-    // if (isRouteTopicValid && isRoutePolylineValid) {
-    //     // Find out which route segment the ego is on
-    //     frenet::locateSegmentInPolyline(egoPose.position, routeTopic.polyline);
-    // } else {
-    //     resetCache();
-    // }
+void ReferencePathIntent::makeReferencePath() {
+    referencePathTopic_.id = makeReferencePathId();
 }
 
 

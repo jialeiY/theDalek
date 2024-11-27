@@ -8,7 +8,9 @@ package cooboc.proto;
 message ReferencePathTopic {
     optional bool         hasValue         = 1 [default = false];
     optional uint64       referencePathId  = 2 [default = 0];
-    optional uint32       passingPointSize = 3 [default = 0];
-    repeated PassingPoint passingPoint     = 4;
-    optional uint64       routeId          = 5 [default = 0];
+    optional uint64       routeId          = 3 [default = 0];
+    optional uint32       beginRouteIdx    = 4 [default = 0];
+    optional uint32       endRouteIdx      = 5 [default = 0];
+    optional uint32       passingPointSize = 6 [default = 0];
+    repeated PassingPoint passingPoint     = 7;
 }

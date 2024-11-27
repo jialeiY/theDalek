@@ -29,7 +29,11 @@ class ReferencePathIntent : public IntentBase {
   protected:
     intent::ReferencePathTopic referencePathTopic_ {};
     void resetCache();
-    void makeReferencePath(const OdometryTopic &odometryTopic, const RouteTopic &routeTopic);
+    bool needUpdateReferencePath(const data::RouteId &routeId,
+                                 const std::size_t &beginRouteIdx,
+                                 const std::size_t &endRouteIdx) const;
+    void makeReferencePath();
+
     reference_path::RouteProfile routeProfile_;
 
     // reference_path::PassingPointList passingPointList_ {};
