@@ -61,10 +61,10 @@ void ReferencePathIntent::tick() {
         std::int32_t routeIdx = egoPosInFrenet.polylineIdx;
         std::size_t beginIdx = static_cast<std::size_t>(std::max(routeIdx - 1, 0));
         std::int32_t segmentNumber = shared::routeTopic.polyline.length() - 1U;
-        std::size_t endIdx = static_cast<std::size_t>(std::min(routeIdx + 1, segmentNumber));
+        std::size_t endIdx = static_cast<std::size_t>(std::min(routeIdx + 2, segmentNumber));
 
         if (needUpdateReferencePath(shared::routeTopic.id, beginIdx, endIdx)) {
-            makeReferencePath()
+            makeReferencePath(beginIdx, endIdx);
         }
     }
     shared::referencePathTopic = referencePathTopic_;
@@ -86,9 +86,31 @@ bool ReferencePathIntent::needUpdateReferencePath(const data::RouteId &routeId,
 }
 
 
-void ReferencePathIntent::makeReferencePath() {
+void ReferencePathIntent::makeReferencePath(const data::RouteId &routeId,
+                                            const std::size_t beginIdx,
+                                            const std::size_t endIdx) {
     referencePathTopic_.id = makeReferencePathId();
+    referencePathTopic_.routeId = routeId;
+    referencePathTopic_.beginRouteIdx = beginIdx;
+    referencePathTopic_.endRouteIdx = endIdx;
+
+    data::StaticPolylinePod<ReferencePathTopic::kReferencePathPointsCapacity> polyline;
+    // Put the first point
+    polyline.push_back(routeProfile_[0U][0U]);
+    for (std::size_t i {beginIdx}; i < endIdx; ++i) {
+        makeSegmentByProfile(routeProfile_[i], );
+    }
 }
+
+
+data::ReferencePathId ReferencePathIntent::makeReferencePathId() const {
+    static data::ReferencePathId id {1U};
+    return id++;
+}
+
+void ReferencePathIntent::makeSegmentByProfile(const std::vector<data::Position2D> &routeSegmentProfile,
+                                               ReferencePathTopic::Points &points,
+                                               size_t outputIndex) const {}
 
 
 // void ReferencePathIntent::outputTopic() {

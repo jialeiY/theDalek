@@ -15,6 +15,7 @@ namespace intent {
 
 struct ReferencePathTopic {
     static constexpr std::size_t kReferencePathPointsCapacity {1000U};
+    using Points = data::Position2D[kReferencePathPointsCapacity];
 
     data::ReferencePathId id {data::kInvalidReferencePathId};
     data::RouteId routeId {data::kInvalidRouteId};
@@ -22,7 +23,7 @@ struct ReferencePathTopic {
     std::size_t endRouteIdx {0U};
 
     std::size_t pointsNumber {0U};
-    data::Position2D points[kReferencePathPointsCapacity];
+    Points points;
 
     // std::size_t passingPointSize {0U};
     // data::PassingPoint passingPoint[kReferencePathPassingPointCapacity];

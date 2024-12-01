@@ -32,7 +32,11 @@ class ReferencePathIntent : public IntentBase {
     bool needUpdateReferencePath(const data::RouteId &routeId,
                                  const std::size_t &beginRouteIdx,
                                  const std::size_t &endRouteIdx) const;
-    void makeReferencePath();
+    void makeReferencePath(const data::RouteId &routeId, const std::size_t beginIdx, const std::size_t endIdx);
+    data::ReferencePathId makeReferencePathId() const;
+    void makeSegmentByProfile(const std::vector<data::Position2D> &routeSegmentProfile,
+                              ReferencePathTopic::Points &points,
+                              size_t outputIndex) const;
 
     reference_path::RouteProfile routeProfile_;
 
